@@ -1,76 +1,72 @@
-# Pour poursuivre, le travail sur `b2smtlib`
+# To continue the work on b2smtlib
 
-## Fonctionnement du code
+## Code Structure
 
-Le code de `b2smtlib` se divise en trois modules :
+The b2smtlib code is divided into three main modules:
 
- - `smtlib`, qui contient les fonctions de traduction.
-   Au cours du parcours du pog à traduire, une objet `decls` (de classe `PreludeBuilder`) est maintenue à jour. C'est elle qui sera utilisée pour fournir le "prélude", à savoir la définition et l'axiomatisation des symboles de fonction.
- - `PreludeBuilder`, la classe permettant de créer le prélude.
-   `PreludeBuilder` renvoie les noms de symboles a utiliser, et met à jour l'ensemble des définitions dont on a besoin. Ces axiomes sont créées à l'aide des schémas contenus dans `axiom_templates`.
- - `axiom_templates`, qui contient les templates d'axiomes et les dépendances.
+- `smtlib`, which contains the translation functions.
+  During the traversal of the POG to be translated, a decls object (of the PreludeBuilder class) is maintained. This object is responsible for providing the "prelude," which includes the definition and axiomatization of function symbols.
 
-## Travail restant
+- `PreludeBuilder`, the class responsible for creating the prelude.
+  PreludeBuilder returns the names of the symbols to use and updates the set of required definitions. These axioms are generated using schemas from axiom_templates.
 
-Voici quelques pistes de développements pour compléter et améliorer le code de `b2smtlib`.
+- `axiom_templates`, which contains the templates for axioms and their dependencies.
 
-### Dépendances entre axiomes et symboles polymorphes
+## Remaining Work
 
-En l'état, pour gérer les dépendances entres définitions (la définition d'un symbole a besoin de la définition d''un ou plusieurs autres symboles), on utilise `baxioms::AxiomInstantiator::axiom_dependencies`. Le problème, c'est que cette représentation des dépendances ne tient pas compte des types avec lesquels on utilise les axiomes en question.
- Par exemple, `dom` est une fonction `P (C U V) -> P U`. Mais pour l'utiliser, on a besoin de `mem` (`:`, en B) pour le type `U` (une fonction de type `U, (P U) -> Bool`).
+Here are some development directions to complete and enhance the b2smtlib code.
 
-Une première façon de faire cela est d'ajouter à la main les définitions.
-C'est ce qui est fait pour ce cas particulier, où on utilise `addAxiom` dans `getAxiomatisation`. Ce faisant, on n'a plus besoin d'une structure pour contenir le graphe des dépendances.
+### Dependencies Between Axioms and Polymorphic Symbols
 
-Si on veut utiliser une structure de données pour contenir les dépendances, il faut qu'elle représente les types avec lesquels les symboles sont ajoutés, et qu'on soit capable d'exprimer les types les uns en fonction des autres. Par exemple, pour dom, il faut être capable d'exprimer que `(dom, P (C U V))` dépend de `(mem, U)`, où `U` et `V` sont des types arbitraires.
+Currently, to handle dependencies between definitions (e.g., defining one symbol requires the definition of one or more others), we use `baxioms::AxiomInstantiator::axiom_dependencies`. However, this representation does not account for the types used with these axioms.
+For instance, dom is a function `P (C U V) -> P U`. But to use it, we need `mem` (:, in B) for the type `U` (a function of type `U`, `(P U) -> Bool`).
 
-A noter que certains des symboles ne sont pas polymorphes (par exemple, `pred` ou `NATURAL` sont monomorphes, mais dépendent de mem pour les types `C Int Int` et `Int` respectivement). Il faut être capable de gérer cela.
+One approach is to manually add the definitions.
+This is done for specific cases, such as using `addAxiom` in getAxiomatisation. This eliminates the need for a data structure to manage the dependency graph.
 
-### Utiliser les enums de BAST
+If a data structure is used to represent dependencies, it must handle the types associated with symbols and allow us to express types in relation to one another. For example, for `dom`, we must express that `(dom, P (C U V))` depends on `(mem, U)`, where `U` and `V` are arbitrary types.
 
-Moins utiliser de string, et davantage de valeurs d'enum (les `Expr::BinaryOp`, etc) dans les appels. (dans `prelude_builder::addSymbol`, `prelude_builder::getAxiomatisation`, `SmtFunDecl::addAxiom`).
+It’s also worth noting that some symbols are not polymorphic (e.g., `pred` or `NATURAL` are monomorphic but depend on mem for the types `C Int Int` and `Int`, respectively). This needs to be managed as well.
 
-### Ne plus utiliser QString
+### Using BAST Enums
 
-Pour formatter les (schémas) d'axiomes, utiliser autre chose que QString.
+Reduce the use of strings and rely more on enum values (e.g., `Expr::BinaryOp`, etc.) in calls, such as in prelude_builder::addSymbol, `prelude_builder::getAxiomatisation`, and `SmtFunDecl::addAxiom`.
 
-Il y a toujours une dépendance à Qt dans POGLoader.
+### Reduce external dependencies
 
-### Ajouter des triggers aux axiomes.
+For formatting axioms (and axiom schemas), replace `QString` with an alternative.
 
-Il faut pour cela skolémiser les formules.
-Ça risque de demander un petit travail pour pouvoir générer des noms de variables frais pour les formules quantifiées existentiellement.
+For filesystem access, replace `QDir`, `QFile` etc. with `std::filesystem`.
 
-Pour l'écriture de triggers, Defourné présente dans sa thèse la stratégie qu'elle a suivi (section 5.3).
+Note that there is still a dependency on Qt within `POGLoader`.
 
-### Nary expressions : SET et SEQ
+### Adding Triggers to Axioms
 
-Elle ne sont pas gérées pour l'instant. Les symboles `SET` (ensemble énuméré) et `SEQ` (suite) sont des reliques de `pog2smt`.
+This requires skolemization of formulas.
+It might involve generating fresh variable names for existentially quantified formulas.
 
-Un possibilité pour les ensembles énumérés est d'ajouter un nom d'ensemble (comme c'est fait pour les ensembles définis par compréhension), et de rajouter aux axiomes l'axioms pour l'appartenance.
-Par exemple, traduire
-```B
-myset = {1, 2, 3, 4}
-```
-en
-```SMT-LIB
-(declare-const myset (P Int))
+For writing triggers, Defourné’s thesis presents a strategy (see Section 5.3).
 
-(declare-fun mem_0 (Int (P Int)) Bool)
+### N-ary Expressions: SET and SEQ
 
-(assert (forall ((x Int))
-  (=
-    (mem_0 x S)
-    (or (= x 1) (= x 2) (= x 3) (= x 4))
-  )
-))
-```
+These are currently unsupported. The `SET` (enumerated set) and `SEQ` (sequence) symbols are remnants of pog2smt.
 
-Pour les suites, une possibilité est de construire l'ensemble énuméré associé:
-```B
-[5, 3, 6] -> {(1 |-> 5), (2 |-> 3), (3 |-> 6)}
-```
+For enumerated sets, one possibility is to add a set name (as is done for comprehension-defined sets) and include membership axioms. For example, translating:
 
-### Ensembles définis par compréhension
+> myset = {1, 2, 3, 4}
 
-L'implémentation pour les ensembles définis par compréhension (QuantifiedSet) n'est pas complète.
+into:
+
+> (declare-const myset (P Int))
+>
+> (declare-fun mem_0 (Int (P Int)) Bool)
+>
+> (assert (forall ((x Int)) (= (mem_0 x myset) (or (= x 1) (= x 2) (= x 3) (= x 4)))))
+
+For sequences, one option is to build the associated enumerated set:
+
+> [5, 3, 6] -> {(1 |-> 5), (2 |-> 3), (3 |-> 6)}
+
+### Comprehension-Defined Sets
+
+The implementation for comprehension-defined sets (QuantifiedSet) is incomplete.
