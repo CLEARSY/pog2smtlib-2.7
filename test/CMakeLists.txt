@@ -6,7 +6,7 @@ find_program(TEST_SHELL
         NAMES bash sh
         PATHS env PATH)
 
-file(GENERATE OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/setenv.sh INPUT ${CMAKE_CURRENT_SOURCE_DIR}/setenv.sh.model TARGET b2smtlib)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/setenv.sh.model ${CMAKE_CURRENT_SOURCE_DIR}/setenv.sh @ONLY)
 
 # Add a test that runs the program with the given arguments and checks the output, the error and the exit code
 macro(add_cl_test id)
