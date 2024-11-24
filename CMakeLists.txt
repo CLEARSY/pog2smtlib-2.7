@@ -8,10 +8,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(Qt5 COMPONENTS Core Xml REQUIRED)
 
-
 # configure compilers
 if(CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID MATCHES Clang$)
   add_compile_options(-Wall)
+  add_compile_options(-Wextra)
   add_compile_options(-fno-threadsafe-statics)
 endif()
 
@@ -44,3 +44,7 @@ endif()
 
 add_subdirectory(src/B2SMTLIB)
 
+if(PROJECT_IS_TOP_LEVEL)
+  include (CTest)
+  add_subdirectory(test)
+endif()
