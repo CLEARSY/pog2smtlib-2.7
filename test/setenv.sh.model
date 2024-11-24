@@ -1,0 +1,3 @@
+#!/bin/bash
+
+program=$<TARGET_FILE:b2smtlib>
