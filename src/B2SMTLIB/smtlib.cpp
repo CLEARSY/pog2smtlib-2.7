@@ -967,14 +967,18 @@ void writeSmtLibFileIncr(Logic logic, const pog::Pog &pog,
     for (const auto &def : pog.defines) {
         std::string fm;
         int nbChildren = 0;
-        for (const auto &c : def.contents) {
-            std::set<std::string> dummy;
-            if (std::holds_alternative<pog::Set>(c)) {
-                fm += " " + setToSmtLib(std::get<pog::Set>(c), decls, dummy);
-            } else {
-                fm += " " + predToSmtLib(std::get<Pred>(c), decls, {}, dummy);
+        if (def.name != "B definitions") {
+            for (const auto &c : def.contents) {
+                std::set<std::string> dummy;
+                if (std::holds_alternative<pog::Set>(c)) {
+                    fm +=
+                        " " + setToSmtLib(std::get<pog::Set>(c), decls, dummy);
+                } else {
+                    fm +=
+                        " " + predToSmtLib(std::get<Pred>(c), decls, {}, dummy);
+                }
+                nbChildren++;
             }
-            nbChildren++;
         }
         switch (nbChildren) {
         case 0:
