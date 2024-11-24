@@ -17,6 +17,12 @@ cmake -B build
 cmake --build build
 ```
 
+## Contributing
+
+We welcome external contributors to b2smtlib!
+
+Please carefully read the CONTRIBUTING.md file in this repository in case you consider contributing.
+
 ## Licensing
 
 This code is distributed under the license: "GNU GENERAL PUBLIC LICENSE, Version 3".
