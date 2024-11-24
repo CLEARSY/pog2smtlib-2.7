@@ -7,4 +7,4 @@ jobs:
       - uses: actions/checkout@v2
       - uses: RafikFarhad/clang-format-github-action@v3
         with:
-          sources: "src/B2SMTLIB/**/*.h,src/B2SMTLIB/**/*.cpp
+          sources: "src/B2SMTLIB/**/*.h,src/B2SMTLIB/**/*.cpp"
