@@ -63,7 +63,7 @@ To contribute code, follow these steps:
 7. **Open a pull request**: Once you consider your work is ready, and verified it has not introduced a regression, open a pull request. 
 
 8. **Pull request check-list**:
-  - If this is your first contribution, attach a copy of the [Contributor License Agreement](#contributor-license-agreement-cla) with our signature to the pull request.
+  - If this is your first contribution, attach a copy of the [Contributor License Agreement](#contributor-license-agreement-cla) with your signature to the pull request.
   - Make sure your branch is up-to-date with the main branch.
   - Make sure your branch did not introduce any regression.
   - In your PR description, explain what changes you've made and why. Link to any related issues.
