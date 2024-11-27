@@ -30,6 +30,7 @@ AxiomInstantiator::AxiomInstantiator() {
     types_suffix_number = {{BType::INT, 0}, {BType::REAL, 1}};
     axiom_dependencies = {
         {"interval", {"mem"}}, // (string type)
+        {"empty", {"mem"}},
         {"INT", {"mem"}},
         {"INTEGER", {"mem"}},
         {"NAT", {"mem"}},
@@ -139,26 +140,39 @@ AxiomInstantiator::AxiomInstantiator() {
 }
 
 string AxiomInstantiator::getTypeSuffixString(const BType &type) {
-    try {
-        int res = types_suffix_number.at(type);
-        return "_" + std::to_string(res);
-    } catch (const std::out_of_range) {
-        int res = types_suffix_number.size();
-        types_suffix_number[type] = res;
-        return "_" + std::to_string(res);
+    int id;
+    const auto itri = types_suffix_number.find(type);
+    if (itri == types_suffix_number.end()) {
+        types_suffix_number[type] = types_suffix_number.size();
+        id = types_suffix_number[type];
+    } else {
+        id = itri->second;
     }
+    string res;
+    const auto itrs = types_suffix.find(type);
+    if (itrs == types_suffix.end()) {
+        types_suffix[type] = "_" + std::to_string(id);
+        res = types_suffix[type];
+    } else {
+        res = itrs->second;
+    }
+    return res;
 };
 
-void getDependenciesAux(const std::map<string, std::vector<string>> dep_graph,
-                        const string symbol, std::vector<string> &res) {
-    for (auto dep : dep_graph.at(symbol))
-        getDependenciesAux(dep_graph, dep, res);
-    res.push_back(symbol);
-}
-
-std::vector<string> AxiomInstantiator::getDependencies(const string axiom) {
+std::vector<string> AxiomInstantiator::getDependencies(const string &symbol) {
     std::vector<string> res = {};
-    getDependenciesAux(axiom_dependencies, axiom, res);
+
+    std::function<void(const string &, std::vector<string> &)>
+        getDependenciesAux;
+    getDependenciesAux =
+        [this, &getDependenciesAux](const string &symbol,
+                                    std::vector<string> &res) -> void {
+        for (auto dep : axiom_dependencies.at(symbol))
+            getDependenciesAux(dep, res);
+        res.push_back(symbol);
+    };
+
+    getDependenciesAux(symbol, res);
     return res;
 }
 
@@ -171,10 +185,18 @@ const string sortC = R"(
 )";
 
 const string interval = R"(
-(declare-fun interval%2 (%1 %1) (P %1))
+(declare-fun interval (Int Int) (P Int))
 
-(assert (forall ((lb %1) (ub %1) (x %1))
-  (= (mem%2 x (interval%2 lb ub)) (and (<= lb x) (<= x ub)))
+(assert (forall ((lb Int) (ub Int) (x Int))
+  (= (mem_0 x (interval lb ub)) (and (<= lb x) (<= x ub)))
+))
+)";
+
+const string empty = R"(
+(declare-const empty%2 (P %1))
+
+(assert (forall ((x %1))
+  (not (mem%2 x empty%2))
 ))
 )";
 
@@ -432,12 +454,6 @@ const string rank = "; TODO"; // ?
 // Comparison Operators
 const string mem = R"(
 (declare-fun mem%2 (%1 (P %1)) Bool)
-
-(declare-const empty%2 (P %1))
-
-(assert (forall ((x %1))
-  (not (mem%2 x empty%2))
-))
 )";
 
 const string subset = R"(
