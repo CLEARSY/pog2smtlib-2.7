@@ -65,11 +65,11 @@ std::string varNameToString(const VarName &v) {
         return v.prefix();
     case VarName::Kind::WithSuffix:
         return v.prefix() + "$" + std::to_string(v.suffix());
-    case VarName::Kind::FreshId:
-    case VarName::Kind::Tmp:
+    default: // unreachable
         assert(false);
     }
-    assert(false); // unreachable
+    // unreachable
+    return string();
 }
 
 ///@todo Gérer des expressions de plusieurs types
@@ -700,14 +700,14 @@ using translation_t = std::pair<std::string, std::set<std::string>>;
 translation_t defToSmtLib(SmtFunDecl &decls,
                           const std::vector<pog::Define> &vec,
                           const std::string &d) {
-    int pos = -1;
-    for (int i = 0; i < vec.size(); i++) {
+    int pos = vec.size();
+    for (size_t i = 0; i < vec.size(); i++) {
         if (vec[i].name == d) {
             pos = i;
             break;
         }
     }
-    assert(pos >= 0);
+    assert(pos < vec.size());
     std::string fm;
     int nbChildren = 0;
     std::set<std::string> used_ids;
@@ -906,7 +906,7 @@ void saveSmtLibFileNonIncrGroupAll(
     std::map<int, translation_t> localHyps_tr;
     std::string prefix{utils::absoluteBasename(baseName) + "_" +
                        std::to_string(groupId) + "_"};
-    for (int i = 0; i < group.simpleGoals.size(); i++) {
+    for (size_t i = 0; i < group.simpleGoals.size(); i++) {
         std::string filename{prefix + std::to_string(i) + ".smt2"};
         writeNonIncrOutput(decls, defines, globalHyps, used_ids,
                            group.localHyps, localHyps_tr, group.tag, groupId, i,
@@ -915,7 +915,7 @@ void saveSmtLibFileNonIncrGroupAll(
 }
 
 void saveSmtLibFileNonIncrOne(Logic logic, const pog::Pog &pog, int groupId,
-                              int goalId, const std::string &output,
+                              size_t goalId, const std::string &output,
                               bool produce_model) {
     using std::map;
     using std::set;
@@ -959,7 +959,7 @@ std::string simpleGoalToSmtLib(const pog::PO &sg, SmtFunDecl &decls) {
     return "(=> " + accu + ") " + predToSmtLib(sg.goal, decls, {}, dummy) + ")";
 }
 
-void writeSmtLibFileIncr(Logic logic, const pog::Pog &pog,
+void writeSmtLibFileIncr(Logic, const pog::Pog &pog,
                          const std::string &filename, SmtFunDecl &decls,
                          const std::vector<Po> &pos, bool produce_model) {
     // Define Tags
@@ -1018,7 +1018,7 @@ void writeSmtLibFileIncr(Logic logic, const pog::Pog &pog,
             out << "(assert |def_" << def << "|)\n";
         for (auto &hyp : po.hypotheses)
             out << "(assert " << hyp << ")\n";
-        for (int i = 0; i < po.localHypotheses.size(); ++i)
+        for (size_t i = 0; i < po.localHypotheses.size(); ++i)
             out << "(define-fun lh_" << (i + 1) << " () Bool "
                 << po.localHypotheses[i] << ")\n";
         for (auto &sg : po.simpleGoals) {
@@ -1045,7 +1045,7 @@ void saveSmtLibFileIncrSome(Logic logic, const pog::Pog &pog,
     SmtFunDecl decls{logic};
     std::vector<Po> pos;
 
-    for (int group = 0; group < pog.pos.size(); ++group) {
+    for (size_t group = 0; group < pog.pos.size(); ++group) {
         auto it{goals.find(group)};
         if (it == goals.end())
             continue;
@@ -1068,7 +1068,7 @@ void saveSmtLibFileIncrSome(Logic logic, const pog::Pog &pog,
         }
 
         auto simple_goal_it{std::begin(simple_goal_ids)};
-        for (int i = 0; i < po.simpleGoals.size(); i++) {
+        for (size_t i = 0; i < po.simpleGoals.size(); i++) {
             if (simple_goal_it == simple_goal_ids.end())
                 break;
             if (i == *simple_goal_it) {
@@ -1087,7 +1087,7 @@ void saveSmtLibFileIncr(Logic logic, const pog::Pog &pog,
     SmtFunDecl decls{logic};
     std::vector<Po> pos;
 
-    for (int group = 0; group < pog.pos.size(); ++group) {
+    for (size_t group = 0; group < pog.pos.size(); ++group) {
         const pog::POGroup &po = pog.pos[group];
         smtlib::Po smtPo;
         smtPo.group = group;
@@ -1103,7 +1103,7 @@ void saveSmtLibFileIncr(Logic logic, const pog::Pog &pog,
             smtPo.localHypotheses.push_back(predToSmtLib(h, decls, {}, dummy));
         }
 
-        for (int i = 0; i < po.simpleGoals.size(); i++) {
+        for (size_t i = 0; i < po.simpleGoals.size(); i++) {
             smtPo.simpleGoals.push_back(
                 {i + 1, simpleGoalToSmtLib(po.simpleGoals[i], decls)});
         }
@@ -1116,8 +1116,8 @@ void saveSmtLibFileNonIncr(Logic logic, const pog::Pog &pog,
                            const std::string &output, bool produce_model) {
     std::map<std::string, translation_t> all_defines_tr;
     SmtFunDecl decls(logic);
-    for (int i = 0; i < pog.pos.size(); i++) {
-        const int groupId{i};
+    for (size_t i = 0; i < pog.pos.size(); i++) {
+        const size_t groupId{i};
         saveSmtLibFileNonIncrGroupAll(decls, pog.defines, all_defines_tr,
                                       groupId, pog.pos[groupId], output,
                                       produce_model);

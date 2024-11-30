@@ -97,7 +97,7 @@ string PreludeBuilder::BTypeToSMTString(const BType &t) {
         return addADTSymbol(t);
     case BType::Kind::AbstractSet: {
         auto &st = t.toAbstractSetType();
-        return "Set";
+        return st.getName();
     }
     case BType::Kind::EnumeratedSet: {
         SmtADT adt = SmtADTFromBType(t);
@@ -455,7 +455,7 @@ string PreludeBuilder::addSort(const string &name, int arity) {
     return res_name;
 }
 
-string PreludeBuilder::addComprehensionSet(const Expr::QuantifiedSet &s,
+string PreludeBuilder::addComprehensionSet(const Expr::QuantifiedSet &,
                                            const string varname, const BType &t,
                                            const string pred) {
     string set_name = "cset_" + std::to_string(comprehension_sets++);

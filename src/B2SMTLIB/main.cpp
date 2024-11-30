@@ -54,8 +54,8 @@ static void display_help() {
         << "\t\t\tprints help" << std::endl;
 }
 
-static void classifyGoals(const std::vector<std::pair<int, int>> &goals,
-                          std::map<int, std::vector<int>> &sgoals) {
+static void classifyGoals(const std::vector<std::pair<int, size_t>> &goals,
+                          goal_selection_t &sgoals) {
     for (auto &goal : goals) {
         if (sgoals.find(goal.first) == sgoals.end()) {
             sgoals.insert({goal.first, {}});
@@ -71,7 +71,7 @@ static void classifyGoals(const std::vector<std::pair<int, int>> &goals,
 int main(int argc, char **argv) {
     char *input{nullptr};
     char *output{nullptr};
-    std::vector<std::pair<int, int>> goals;
+    std::vector<std::pair<int, size_t>> goals;
     bool incr = true;
     bool produce_model = false;
 
@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
                 exit(EXIT_FAILURE);
             } else {
                 const int groupId{goals[0].first};
-                const int goalId{goals[0].second};
+                const size_t goalId{goals[0].second};
                 saveSmtLibFileNonIncrOne(logic, pog, groupId, goalId, output,
                                          produce_model);
             }

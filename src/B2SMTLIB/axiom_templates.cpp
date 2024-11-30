@@ -162,17 +162,17 @@ string AxiomInstantiator::getTypeSuffixString(const BType &type) {
 std::vector<string> AxiomInstantiator::getDependencies(const string &symbol) {
     std::vector<string> res = {};
 
-    std::function<void(const string &, std::vector<string> &)>
-        getDependenciesAux;
-    getDependenciesAux =
-        [this, &getDependenciesAux](const string &symbol,
-                                    std::vector<string> &res) -> void {
-        for (auto dep : axiom_dependencies.at(symbol))
-            getDependenciesAux(dep, res);
+    std::function<void(const string &, std::vector<string> &)> visit;
+
+    visit = [this, &visit](const string &symbol,
+                           std::vector<string> &res) -> void {
+        for (auto dep : axiom_dependencies.at(symbol)) {
+            visit(dep, res);
+        }
         res.push_back(symbol);
     };
 
-    getDependenciesAux(symbol, res);
+    visit(symbol, res);
     return res;
 }
 

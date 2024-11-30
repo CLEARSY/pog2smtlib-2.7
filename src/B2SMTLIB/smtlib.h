@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "pog.h"
 #include <QDomDocument>
 
-using goal_selection_t = std::map<int, std::vector<int>>;
+using goal_selection_t = std::map<int, std::vector<size_t>>;
 
 namespace smtlib {
 ///@todo ne devrait plus être utilisé
@@ -43,8 +43,11 @@ class SmtLibException : public std::exception {
 public:
     SmtLibException(const std::string desc) : description{desc} {}
     ~SmtLibException() throw() {}
-    const char *what() const throw() {
-        return ("b2smtlib: " + description).c_str();
+    const char *what() const noexcept override {
+        std::string message{"b2smtlib"};
+        message.append(description);
+        const char *res = message.c_str();
+        return res;
     }
 
 private:
@@ -60,7 +63,7 @@ extern void saveSmtLibFileIncr(Logic logic, const pog::Pog &pog,
                                const std::string &output, bool produce_model);
 
 extern void saveSmtLibFileNonIncrOne(Logic logic, const pog::Pog &pog,
-                                     int groupId, int goalId,
+                                     int groupId, size_t goalId,
                                      const std::string &output,
                                      bool produce_model);
 

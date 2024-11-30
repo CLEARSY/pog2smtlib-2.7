@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(B2SMTLIB)
 
-# require the compiler to use C++17
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -12,6 +11,8 @@ find_package(Qt5 COMPONENTS Core Xml REQUIRED)
 if(CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID MATCHES Clang$)
   add_compile_options(-Wall)
   add_compile_options(-Wextra)
+  add_compile_options(-pedantic)
+  add_compile_options(-Werror)
   add_compile_options(-fno-threadsafe-statics)
 endif()
 

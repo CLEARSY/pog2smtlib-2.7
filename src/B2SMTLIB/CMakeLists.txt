@@ -26,5 +26,5 @@ add_executable(b2smtlib
     ${B2SMTLIB_HEADERS}
     )
 
-target_link_libraries(b2smtlib -Bstatic BAST_LIB POGLoader_LIB -Bdynamic Qt5::Core Qt5::Xml)
+target_link_libraries(b2smtlib -Bstatic POGLoader_LIB -Bdynamic Qt5::Core Qt5::Xml)
 set(b2smtlib_EXE ${CMAKE_CURRENT_BINARY_DIR}/b2smtlib CACHE PATH "b2smtlib executable")
