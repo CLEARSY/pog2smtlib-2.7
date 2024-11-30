@@ -18,11 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SMTLIB_H
 #define SMTLIB_H
 
+#include <QDomDocument>
 #include <map>
 #include <vector>
 
 #include "pog.h"
-#include <QDomDocument>
 
 using goal_selection_t = std::map<int, std::vector<size_t>>;
 
@@ -31,27 +31,27 @@ namespace smtlib {
 enum class Logic { UF, QF_UF, UFNIA, QF_UFNIA, UFNRA, QF_UFNRA };
 
 class Po {
-public:
-    int group;
-    std::vector<std::string> definitions;
-    std::vector<std::string> hypotheses;
-    std::vector<std::string> localHypotheses;
-    std::vector<std::pair<int, std::string>> simpleGoals;
+ public:
+  int group;
+  std::vector<std::string> definitions;
+  std::vector<std::string> hypotheses;
+  std::vector<std::string> localHypotheses;
+  std::vector<std::pair<int, std::string>> simpleGoals;
 };
 
 class SmtLibException : public std::exception {
-public:
-    SmtLibException(const std::string desc) : description{desc} {}
-    ~SmtLibException() throw() {}
-    const char *what() const noexcept override {
-        std::string message{"b2smtlib"};
-        message.append(description);
-        const char *res = message.c_str();
-        return res;
-    }
+ public:
+  SmtLibException(const std::string desc) : description{desc} {}
+  ~SmtLibException() throw() {}
+  const char *what() const noexcept override {
+    std::string message{"b2smtlib"};
+    message.append(description);
+    const char *res = message.c_str();
+    return res;
+  }
 
-private:
-    std::string description;
+ private:
+  std::string description;
 };
 
 extern void saveSmtLibFileIncrSome(Logic logic, const pog::Pog &pog,
@@ -71,6 +71,6 @@ extern void saveSmtLibFileNonIncr(Logic logic, const pog::Pog &pog,
                                   const std::string &output,
                                   bool produce_model);
 
-} // namespace smtlib
+}  // namespace smtlib
 
-#endif // SMTLIB_H
+#endif  // SMTLIB_H

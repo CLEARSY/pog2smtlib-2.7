@@ -34,79 +34,76 @@ namespace preludebuilder {
  * name, and selectors names. We do not use testers.
  */
 struct SmtADT {
-    string name;
-    size_t arity;
-    std::vector<string> sort_params;
-    string constructor_name;
-    std::vector<string> selectors;
+  string name;
+  size_t arity;
+  std::vector<string> sort_params;
+  string constructor_name;
+  std::vector<string> selectors;
 
-    string getDeclaration() const {
-        string res = "(declare-datatype " + name;
+  string getDeclaration() const {
+    string res = "(declare-datatype " + name;
 
-        // add sort parameters
-        if (sort_params.size() > 0) {
-            res += " (par ";
-            for (string param : sort_params)
-                res += param + " ";
-            res += ")";
-        }
+    // add sort parameters
+    if (sort_params.size() > 0) {
+      res += " (par ";
+      for (string param : sort_params) res += param + " ";
+      res += ")";
+    }
 
-        // add constructor
-        res += (constructor_name == "" ? " (" : "((") + constructor_name;
-        for (auto field : selectors)
-            res += " (" + field + ")";
-        res += constructor_name == "" ? "))" : ")))";
-        return res;
-    };
+    // add constructor
+    res += (constructor_name == "" ? " (" : "((") + constructor_name;
+    for (auto field : selectors) res += " (" + field + ")";
+    res += constructor_name == "" ? "))" : ")))";
+    return res;
+  };
 
-    string getName() const { return name; };
+  string getName() const { return name; };
 };
 
 class PreludeBuilder {
-public:
-    PreludeBuilder();
+ public:
+  PreludeBuilder();
 
-    /** Return the prelude declaration  */
-    string getPrelude() const;
+  /** Return the prelude declaration  */
+  string getPrelude() const;
 
-    /** Updates declaration with necessary axioms and return the symbol name to
-     *  use.
-     */
-    string addSymbol(const string symb);
-    string addSymbol(const string symb, const BType &type);
-    string addSymbol(const string symb, const BType &ltype, const BType &rtype);
-    /** Add an ADT corresponding to BType and return its name. */
-    string addADTSymbol(const BType &type);
-    /** Add a sort of given name and arity */
-    string addSort(const string &name, int arity);
-    /** Add a comprehension set of predicate pred and type t, and return its
-     * name */
-    string addComprehensionSet(const Expr::QuantifiedSet &s,
-                               const string varname, const BType &t,
-                               const string pred);
-    /** Add an ADT corresponding to an enumerated set. */
-    string addEnumADT(const pog::Set &s);
+  /** Updates declaration with necessary axioms and return the symbol name to
+   *  use.
+   */
+  string addSymbol(const string symb);
+  string addSymbol(const string symb, const BType &type);
+  string addSymbol(const string symb, const BType &ltype, const BType &rtype);
+  /** Add an ADT corresponding to BType and return its name. */
+  string addADTSymbol(const BType &type);
+  /** Add a sort of given name and arity */
+  string addSort(const string &name, int arity);
+  /** Add a comprehension set of predicate pred and type t, and return its
+   * name */
+  string addComprehensionSet(const Expr::QuantifiedSet &s, const string varname,
+                             const BType &t, const string pred);
+  /** Add an ADT corresponding to an enumerated set. */
+  string addEnumADT(const pog::Set &s);
 
-    /** Returns the SMT-LIB string corresponding to a type. */
-    string BTypeToSMTString(const BType &type);
+  /** Returns the SMT-LIB string corresponding to a type. */
+  string BTypeToSMTString(const BType &type);
 
-private:
-    SmtADT SmtADTFromBType(const BType &type);
-    std::vector<string> declarations;
-    std::vector<SmtADT> adtSymbols;
-    // decl est instanciee
-    void addDeclaration(const string decl);
+ private:
+  SmtADT SmtADTFromBType(const BType &type);
+  std::vector<string> declarations;
+  std::vector<SmtADT> adtSymbols;
+  // decl est instanciee
+  void addDeclaration(const string decl);
 
-    // return instantiated axiom for `symbol`
-    string getAxiomatisation(const string symbol);
-    string getAxiomatisation(const string symbol, const BType &type);
-    string getAxiomatisation(const string symbol, const BType &typel,
-                             const BType &typer);
+  // return instantiated axiom for `symbol`
+  string getAxiomatisation(const string symbol);
+  string getAxiomatisation(const string symbol, const BType &type);
+  string getAxiomatisation(const string symbol, const BType &typel,
+                           const BType &typer);
 
-    int comprehension_sets;
-    baxioms::AxiomInstantiator axiom_generator;
+  int comprehension_sets;
+  baxioms::AxiomInstantiator axiom_generator;
 };
 
-} // namespace preludebuilder
+}  // namespace preludebuilder
 
 #endif

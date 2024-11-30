@@ -21,159 +21,160 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using std::string;
 
-#include "axiom_templates.h"
 #include <expr.h>
+
+#include "axiom_templates.h"
 
 namespace baxioms {
 
 AxiomInstantiator::AxiomInstantiator() {
-    types_suffix_number = {{BType::INT, 0}, {BType::REAL, 1}};
-    axiom_dependencies = {
-        {"interval", {"mem"}}, // (string type)
-        {"empty", {"mem"}},
-        {"INT", {"mem"}},
-        {"INTEGER", {"mem"}},
-        {"NAT", {"mem"}},
-        {"NAT1", {"mem"}},
-        {"NATURAL", {"mem"}},
-        {"NATURAL1", {"mem"}},
-        {"FLOAT", {"mem"}},
-        {"MaxInt", {}},
-        {"MinInt", {}},
-        {"STRING", {"mem"}},
-        {"REAL", {"mem"}},
+  types_suffix_number = {{BType::INT, 0}, {BType::REAL, 1}};
+  axiom_dependencies = {
+      {"interval", {"mem"}},  // (string type)
+      {"empty", {"mem"}},
+      {"INT", {"mem"}},
+      {"INTEGER", {"mem"}},
+      {"NAT", {"mem"}},
+      {"NAT1", {"mem"}},
+      {"NATURAL", {"mem"}},
+      {"NATURAL1", {"mem"}},
+      {"FLOAT", {"mem"}},
+      {"MaxInt", {}},
+      {"MinInt", {}},
+      {"STRING", {"mem"}},
+      {"REAL", {"mem"}},
 
-        // Binary Expression Operators
-        {"set_eq", {"mem"}},
-        {"set_prod", {}}, // (string typel, string typer);
-        {"set_diff", {"mem"}},
-        {"iexp", {}},
-        {"rexp", {}},
-        {"|+->|", {}},  // (string typel, string typer);
-        {"|+->>|", {}}, // (string typel, string typer);
-        {"|-->|", {}},  // (string typel, string typer);
-        {"|-->>|", {}}, // (string typel, string typer);
-        {"|<->|", {}},  // (string typel, string typer);
-        {"|>+>|", {}},  // (string typel, string typer);
-        {"|>->|", {}},  // (string typel, string typer);
-        {"|>+>>|", {}}, // (string typel, string typer);
-        {"|>->>|", {}}, // (string typel, string typer);
-        {"|->|", {}},   // (string typel, string typer);
-        {"composition", {}},
-        {"binary_inter", {}}, // (string type);
-        {"restriction_head", {}},
-        {"semicolon", {}},
-        {"|<+|", {}},
-        {"|<-|", {}},
-        {"domain_subtraction", {}},
-        {"domain_restriction", {}},
-        {"|><|", {}},
-        {"parallel_product", {}},
-        {"binary_union", {}},
-        {"restriction_tail", {}},
-        {"concatenate", {}},
-        {"range_restriction", {}},
-        {"range_subtraction", {}},
-        {"image", {}},
-        {"apply", {}},
-        {"prj1", {"mem"}},
-        {"prj2", {"mem"}},
-        {"iterate", {}},
-        {"|const|", {}},
-        {"rank", {}}, // ?
-        {"|+f|", {}},
-        {"|-f|", {}},
-        {"|*f|", {}},
-        {"|fdiv|", {}},
+      // Binary Expression Operators
+      {"set_eq", {"mem"}},
+      {"set_prod", {}},  // (string typel, string typer);
+      {"set_diff", {"mem"}},
+      {"iexp", {}},
+      {"rexp", {}},
+      {"|+->|", {}},   // (string typel, string typer);
+      {"|+->>|", {}},  // (string typel, string typer);
+      {"|-->|", {}},   // (string typel, string typer);
+      {"|-->>|", {}},  // (string typel, string typer);
+      {"|<->|", {}},   // (string typel, string typer);
+      {"|>+>|", {}},   // (string typel, string typer);
+      {"|>->|", {}},   // (string typel, string typer);
+      {"|>+>>|", {}},  // (string typel, string typer);
+      {"|>->>|", {}},  // (string typel, string typer);
+      {"|->|", {}},    // (string typel, string typer);
+      {"composition", {}},
+      {"binary_inter", {}},  // (string type);
+      {"restriction_head", {}},
+      {"semicolon", {}},
+      {"|<+|", {}},
+      {"|<-|", {}},
+      {"domain_subtraction", {}},
+      {"domain_restriction", {}},
+      {"|><|", {}},
+      {"parallel_product", {}},
+      {"binary_union", {}},
+      {"restriction_tail", {}},
+      {"concatenate", {}},
+      {"range_restriction", {}},
+      {"range_subtraction", {}},
+      {"image", {}},
+      {"apply", {}},
+      {"prj1", {"mem"}},
+      {"prj2", {"mem"}},
+      {"iterate", {}},
+      {"|const|", {}},
+      {"rank", {}},  // ?
+      {"|+f|", {}},
+      {"|-f|", {}},
+      {"|*f|", {}},
+      {"|fdiv|", {}},
 
-        // Comparison Operators
-        {"mem", {}},                   // (string type);
-        {"subset", {"mem"}},           // (string type);
-        {"strict_subset", {"subset"}}, // (string type);
-        {"|<=f|", {}},
-        {"|<f|", {}},
-        {"|>=f|", {}},
-        {"|>f|", {}},
+      // Comparison Operators
+      {"mem", {}},                    // (string type);
+      {"subset", {"mem"}},            // (string type);
+      {"strict_subset", {"subset"}},  // (string type);
+      {"|<=f|", {}},
+      {"|<f|", {}},
+      {"|>=f|", {}},
+      {"|>f|", {}},
 
-        // Unary Expression Operators
-        {"imax", {"mem"}},
-        {"imin", {"mem"}},
-        {"rmax", {"mem"}},
-        {"rmin", {"mem"}},
-        {"card", {""}}, // (string type);
-        {"dom", {}},    // (string typel, string typer);
-        {"ran", {}},    // (string typel, string typer);
-        {"POW", {"mem"}},
-        {"POW1", {"mem", "POW"}},
-        {"FIN", {}},      // (string type);
-        {"FIN1", {}},     // (string type);
-        {"union", {}},    // (string type);
-        {"inter", {}},    // (string type);
-        {"seq", {}},      // (string type);
-        {"seq1", {}},     // (string type);
-        {"iseq", {}},     // (string type);
-        {"iseq1", {}},    // (string type);
-        {"inverse", {}},  // (string type);
-        {"size", {}},     // (string type);
-        {"perm", {}},     // (string type);
-        {"first", {}},    // (string type);
-        {"last", {}},     // (string type);
-        {"id", {}},       // (string type);
-        {"closure", {}},  // (string typel, string typer);
-        {"closure1", {}}, // (string typel, string typer);
-        {"tail", {}},     // (string type);
-        {"front", {}},    // (string type);
-        {"reverse", {}},  // (string type);
-        {"rev", {}},      // (string type);
-        {"conc", {}},     // (string type);
-        {"succ", {}},
-        {"pred", {}},
-        {"rel", {}},
-        {"fnc", {}},
-        // string real(Int) Real)     ; utiliser la fonction to_real
-        // string floor (Real) Int)    ; utiliser la fonction to_int
-        {"ceiling", {}}
-        // Expression N-ary Operators
-        // string SEQ (%1) %1)
-        // string SET (%1) %1)
-    };
+      // Unary Expression Operators
+      {"imax", {"mem"}},
+      {"imin", {"mem"}},
+      {"rmax", {"mem"}},
+      {"rmin", {"mem"}},
+      {"card", {""}},  // (string type);
+      {"dom", {}},     // (string typel, string typer);
+      {"ran", {}},     // (string typel, string typer);
+      {"POW", {"mem"}},
+      {"POW1", {"mem", "POW"}},
+      {"FIN", {}},       // (string type);
+      {"FIN1", {}},      // (string type);
+      {"union", {}},     // (string type);
+      {"inter", {}},     // (string type);
+      {"seq", {}},       // (string type);
+      {"seq1", {}},      // (string type);
+      {"iseq", {}},      // (string type);
+      {"iseq1", {}},     // (string type);
+      {"inverse", {}},   // (string type);
+      {"size", {}},      // (string type);
+      {"perm", {}},      // (string type);
+      {"first", {}},     // (string type);
+      {"last", {}},      // (string type);
+      {"id", {}},        // (string type);
+      {"closure", {}},   // (string typel, string typer);
+      {"closure1", {}},  // (string typel, string typer);
+      {"tail", {}},      // (string type);
+      {"front", {}},     // (string type);
+      {"reverse", {}},   // (string type);
+      {"rev", {}},       // (string type);
+      {"conc", {}},      // (string type);
+      {"succ", {}},
+      {"pred", {}},
+      {"rel", {}},
+      {"fnc", {}},
+      // string real(Int) Real)     ; utiliser la fonction to_real
+      // string floor (Real) Int)    ; utiliser la fonction to_int
+      {"ceiling", {}}
+      // Expression N-ary Operators
+      // string SEQ (%1) %1)
+      // string SET (%1) %1)
+  };
 }
 
 string AxiomInstantiator::getTypeSuffixString(const BType &type) {
-    int id;
-    const auto itri = types_suffix_number.find(type);
-    if (itri == types_suffix_number.end()) {
-        types_suffix_number[type] = types_suffix_number.size();
-        id = types_suffix_number[type];
-    } else {
-        id = itri->second;
-    }
-    string res;
-    const auto itrs = types_suffix.find(type);
-    if (itrs == types_suffix.end()) {
-        types_suffix[type] = "_" + std::to_string(id);
-        res = types_suffix[type];
-    } else {
-        res = itrs->second;
-    }
-    return res;
+  int id;
+  const auto itri = types_suffix_number.find(type);
+  if (itri == types_suffix_number.end()) {
+    types_suffix_number[type] = types_suffix_number.size();
+    id = types_suffix_number[type];
+  } else {
+    id = itri->second;
+  }
+  string res;
+  const auto itrs = types_suffix.find(type);
+  if (itrs == types_suffix.end()) {
+    types_suffix[type] = "_" + std::to_string(id);
+    res = types_suffix[type];
+  } else {
+    res = itrs->second;
+  }
+  return res;
 };
 
 std::vector<string> AxiomInstantiator::getDependencies(const string &symbol) {
-    std::vector<string> res = {};
+  std::vector<string> res = {};
 
-    std::function<void(const string &, std::vector<string> &)> visit;
+  std::function<void(const string &, std::vector<string> &)> visit;
 
-    visit = [this, &visit](const string &symbol,
-                           std::vector<string> &res) -> void {
-        for (auto dep : axiom_dependencies.at(symbol)) {
-            visit(dep, res);
-        }
-        res.push_back(symbol);
-    };
+  visit = [this, &visit](const string &symbol,
+                         std::vector<string> &res) -> void {
+    for (auto dep : axiom_dependencies.at(symbol)) {
+      visit(dep, res);
+    }
+    res.push_back(symbol);
+  };
 
-    visit(symbol, res);
-    return res;
+  visit(symbol, res);
+  return res;
 }
 
 const string sortP = R"(
@@ -295,7 +296,7 @@ const string set_prod = R"(
     (and (mem%2 x s1) (mem%4 y s2))
   )
 ))
-)"; ///@todo
+)";  ///@todo
 
 const string set_diff = R"(
 (declare-fun set_diff%4 (%3 %3) %3)
@@ -445,7 +446,7 @@ const string prj2 = R"(
 
 const string iterate = "; TODO";
 // const string |const| = "; TODO";
-const string rank = "; TODO"; // ?
+const string rank = "; TODO";  // ?
 // const string |+f| = "; TODO";
 // const string |-f| = "; TODO";
 // const string |*f| = "; TODO";
@@ -723,4 +724,4 @@ const string ceiling = R"(
 // const string SEQ (%1) %1)
 // const string SET (%1) %1)
 
-} // namespace baxioms
+}  // namespace baxioms

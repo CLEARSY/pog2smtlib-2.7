@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(B2SMTLIB)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 find_package(Qt5 COMPONENTS Core Xml REQUIRED)
 
 # configure compilers
@@ -39,7 +35,7 @@ if(PROJECT_IS_TOP_LEVEL)
       message(FATAL_ERROR "Command : git submodule update --init --recursive.")
     endif()
   endforeach(submodule)
-  add_subdirectory(src/BAST)
+  add_subdirectory(src/BAST/src)
   add_subdirectory(src/POGLoader)
 endif()
 

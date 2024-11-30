@@ -28,21 +28,21 @@ namespace baxioms {
 
 /** @brief Utility class to instantiate axiom schematas */
 class AxiomInstantiator {
-public:
-    AxiomInstantiator();
+ public:
+  AxiomInstantiator();
 
-    /** @brief returns the distinguishing suffix of a type for monomorphisation
-     */
-    string getTypeSuffixString(const BType &type);
+  /** @brief returns the distinguishing suffix of a type for monomorphisation
+   */
+  string getTypeSuffixString(const BType &type);
 
-    /** @brief returns the set of symbols that are used (transitively) in the
-     * axiomatization of a symbol */
-    std::vector<string> getDependencies(const string &symbol);
+  /** @brief returns the set of symbols that are used (transitively) in the
+   * axiomatization of a symbol */
+  std::vector<string> getDependencies(const string &symbol);
 
-private:
-    std::map<string, std::vector<string>> axiom_dependencies;
-    std::map<BType, int> types_suffix_number;
-    std::map<BType, string> types_suffix;
+ private:
+  std::map<string, std::vector<string>> axiom_dependencies;
+  std::map<BType, int> types_suffix_number;
+  std::map<BType, string> types_suffix;
 };
 
 extern const string sortP;
@@ -101,7 +101,7 @@ extern const string prj1;
 extern const string prj2;
 extern const string iterate;
 // extern const string |const|;
-extern const string rank; // ?
+extern const string rank;  // ?
 // extern const string |+f|;
 // extern const string |-f|;
 // extern const string |*f|;
@@ -158,6 +158,6 @@ extern const string ceiling;
 // string SEQ (%1) %1)
 // string SET (%1) %1)
 
-} // namespace baxioms
+}  // namespace baxioms
 
 #endif

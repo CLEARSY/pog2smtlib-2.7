@@ -41,6 +41,6 @@ extern string absoluteBasename(const string &filename);
  */
 extern string absoluteFilePath(const string &filename);
 
-} // namespace utils
+}  // namespace utils
 
-#endif // UTILS_H
+#endif  // UTILS_H
