@@ -66,9 +66,9 @@ std::string varNameToString(const VarName &v) {
     case VarName::Kind::WithSuffix:
       return v.prefix() + "$" + std::to_string(v.suffix());
     default:  // unreachable
-      throw SmtLibException("b2smtlib: executing unreachable code")
+      throw SmtLibException("b2smtlib: executing unreachable code");
   }
-  throw SmtLibException("b2smtlib: executing unreachable code")
+  throw SmtLibException("b2smtlib: executing unreachable code");
 }
 
 ///@todo Gérer des expressions de plusieurs types
@@ -85,7 +85,7 @@ std::string getExprType(smtlib::Logic logic) {
     case smtlib::Logic::QF_UFNRA:
       return "Real";
   };
-  throw SmtLibException("b2smtlib: executing unreachable code")
+  throw SmtLibException("b2smtlib: executing unreachable code");
 };
 
 std::string SmtFunDecl::AddEnumeratedSet(const pog::Set &f) {
@@ -241,7 +241,7 @@ std::string unaryExprOpToSmtString(const Expr::UnaryExpr &e,
     default:
       throw SmtLibException("b2smtlib: executing unreachable code.");
   };
-  throw SmtLibException("b2smtlib: executing unreachable code")
+  throw SmtLibException("b2smtlib: executing unreachable code");
 };
 
 std::string binaryExprOpToSmtString(const Expr::BinaryExpr &e,
@@ -472,7 +472,7 @@ std::string predToSmtLib(const Pred &f, SmtFunDecl &decls,
           return "(|<=f| " + exprToSmtLib(p.lhs, decls, bv, used_ids) + " " +
                  exprToSmtLib(p.rhs, decls, bv, used_ids) + ")";
         default:
-          throw SmtLibException("b2smtlib: executing unreachable code")
+          throw SmtLibException("b2smtlib: executing unreachable code");
       }
     }
     case Pred::PKind::Negation: {
@@ -528,7 +528,7 @@ std::string predToSmtLib(const Pred &f, SmtFunDecl &decls,
              predToSmtLib(p.body, decls, bv2, used_ids) + ")";
     }
     default:
-      throw SmtLibException("b2smtlib: executing unreachable code")
+      throw SmtLibException("b2smtlib: executing unreachable code");
   };
   throw SmtLibException("b2smtlib: executing unreachable code.");
 };
@@ -604,7 +604,7 @@ std::string exprToSmtLib(const Expr &f, SmtFunDecl &decls,
         case Expr::NaryOp::Sequence:
           return "(SEQ " + accu + ")";
         default:
-          throw SmtLibException("b2smtlib: executing unreachable code")
+          throw SmtLibException("b2smtlib: executing unreachable code");
       };
     }
 
@@ -674,7 +674,7 @@ std::string exprToSmtLib(const Expr &f, SmtFunDecl &decls,
     case Expr::EKind::TernaryExpr:
       throw SmtLibException("Tree constructs not supported.");
     default:
-      throw SmtLibException("b2smtlib: executing unreachable code")
+      throw SmtLibException("b2smtlib: executing unreachable code");
   };
   throw SmtLibException("b2smtlib: executing unreachable code.");
 }
