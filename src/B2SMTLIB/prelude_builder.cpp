@@ -105,6 +105,7 @@ string PreludeBuilder::BTypeToSMTString(const BType &t) {
   }
   // unreachable
   assert(false);
+  return string();
 }
 
 PreludeBuilder::PreludeBuilder() {
@@ -201,8 +202,9 @@ string PreludeBuilder::getAxiomatisation(const string symb) {
     return QString(baxioms::ceiling.c_str())
         .arg(axiom_generator.getTypeSuffixString(restype).c_str())
         .toStdString();
-  } else
+  } else {
     return "; TODO";
+  }
 }
 
 string PreludeBuilder::getAxiomatisation(const string axiom,
@@ -353,8 +355,9 @@ string PreludeBuilder::getAxiomatisation(const string axiom,
         .arg(axiom_generator.getTypeSuffixString(ctype).c_str())
         .arg(axiom_generator.getTypeSuffixString(inty).c_str())
         .toStdString();
-  } else
+  } else {
     return "; TODO " + axiom;
+  }
 }
 
 string PreludeBuilder::getAxiomatisation(const string axiom, const BType &typel,
@@ -387,9 +390,9 @@ string PreludeBuilder::getAxiomatisation(const string axiom, const BType &typel,
                .arg(axiom_generator.getTypeSuffixString(typer).c_str())
                .arg(axiom_generator.getTypeSuffixString(t).c_str())
                .toStdString();
-  };
-
-  return "; TODO " + axiom;
+  } else {
+    return "; TODO " + axiom;
+  }
 }
 
 string PreludeBuilder::addSymbol(const string symb) {
