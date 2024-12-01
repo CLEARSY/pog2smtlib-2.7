@@ -66,10 +66,9 @@ std::string varNameToString(const VarName &v) {
     case VarName::Kind::WithSuffix:
       return v.prefix() + "$" + std::to_string(v.suffix());
     default:  // unreachable
-      assert(false);
+      throw SmtLibException("b2smtlib: executing unreachable code")
   }
-  // unreachable
-  return string();
+  throw SmtLibException("b2smtlib: executing unreachable code")
 }
 
 ///@todo Gérer des expressions de plusieurs types
@@ -86,7 +85,7 @@ std::string getExprType(smtlib::Logic logic) {
     case smtlib::Logic::QF_UFNRA:
       return "Real";
   };
-  assert(false);  // unreachable
+  throw SmtLibException("b2smtlib: executing unreachable code")
 };
 
 std::string SmtFunDecl::AddEnumeratedSet(const pog::Set &f) {
@@ -239,8 +238,10 @@ std::string unaryExprOpToSmtString(const Expr::UnaryExpr &e,
     case Expr::UnaryOp::Infix:
     case Expr::UnaryOp::Bin:
       throw SmtLibException("Tree constructs not supported.");
+    default:
+      throw SmtLibException("b2smtlib: executing unreachable code.");
   };
-  assert(false);  // unreachable
+  throw SmtLibException("b2smtlib: executing unreachable code")
 };
 
 std::string binaryExprOpToSmtString(const Expr::BinaryExpr &e,
@@ -344,9 +345,11 @@ std::string binaryExprOpToSmtString(const Expr::BinaryExpr &e,
     case Expr::BinaryOp::Father:
     case Expr::BinaryOp::Subtree:
     case Expr::BinaryOp::Arity:
-      throw SmtLibException("ppTrans: tree constructs not supported.");
+      throw SmtLibException("b2smtlib: tree constructs not supported.");
+    default:
+      throw SmtLibException("b2smtlib: executing unreachable code.");
   };
-  assert(false);  // unreachable
+  throw SmtLibException("b2smtlib: executing unreachable code.");
 };
 
 std::string exprToSmtLib(const Expr &f, SmtFunDecl &decls,
@@ -468,6 +471,8 @@ std::string predToSmtLib(const Pred &f, SmtFunDecl &decls,
         case Pred::ComparisonOp::Fle:
           return "(|<=f| " + exprToSmtLib(p.lhs, decls, bv, used_ids) + " " +
                  exprToSmtLib(p.rhs, decls, bv, used_ids) + ")";
+        default:
+          throw SmtLibException("b2smtlib: executing unreachable code")
       }
     }
     case Pred::PKind::Negation: {
@@ -522,8 +527,10 @@ std::string predToSmtLib(const Pred &f, SmtFunDecl &decls,
       return "(exists (" + vs + ") " +
              predToSmtLib(p.body, decls, bv2, used_ids) + ")";
     }
+    default:
+      throw SmtLibException("b2smtlib: executing unreachable code")
   };
-  assert(false);  // unreachable
+  throw SmtLibException("b2smtlib: executing unreachable code.");
 };
 
 std::string exprToSmtLib(const Expr &f, SmtFunDecl &decls,
@@ -596,6 +603,8 @@ std::string exprToSmtLib(const Expr &f, SmtFunDecl &decls,
           return "(SET " + accu + ")";
         case Expr::NaryOp::Sequence:
           return "(SEQ " + accu + ")";
+        default:
+          throw SmtLibException("b2smtlib: executing unreachable code")
       };
     }
 
@@ -662,11 +671,12 @@ std::string exprToSmtLib(const Expr &f, SmtFunDecl &decls,
       used_ids.insert(f);
       return "(" + f + vars + ")";
     };
-    case Expr::EKind::TernaryExpr: {
+    case Expr::EKind::TernaryExpr:
       throw SmtLibException("Tree constructs not supported.");
-    }
+    default:
+      throw SmtLibException("b2smtlib: executing unreachable code")
   };
-  assert(false);  // unreachable
+  throw SmtLibException("b2smtlib: executing unreachable code.");
 }
 
 // déclarer un set ?
