@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
+    <Define name="B definitions" hash="7128875304803749033">
+        <Exp_Comparison op="=">
+            <Id value="NAT" typref="0"/>
+            <Binary_Exp op=".." typref="0">
+                <Integer_Literal value="0" typref="1"/>
+                <Id value="MAXINT" typref="1"/>
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="INT" typref="0"/>
+            <Binary_Exp op=".." typref="0">
+                <Id value="MININT" typref="1"/>
+                <Id value="MAXINT" typref="1"/>
+            </Binary_Exp>
+        </Exp_Comparison>
+    </Define>
+    <Define name="ctx" hash="0"/>
+    <Define name="seext" hash="0"/>
+    <Define name="lprp" hash="0"/>
+    <Define name="inprp" hash="0"/>
+    <Define name="inext" hash="0"/>
+    <Define name="inv" hash="0"/>
+    <Define name="ass" hash="15416731475861440049">
+        <Quantified_Pred type="!">
+            <Variables>
+                <Id value="xx" typref="1"/>
+            </Variables>
+            <Body>
+                <Binary_Pred op="=&gt;">
+                    <Nary_Pred op="&amp;">
+                        <Exp_Comparison op=":">
+                            <Id value="xx" typref="1"/>
+                            <Id value="INTEGER" typref="0"/>
+                        </Exp_Comparison>
+                        <Exp_Comparison op=":">
+                            <Id value="xx" typref="1"/>
+                            <Binary_Exp op=".." typref="0">
+                                <Integer_Literal value="0" typref="1"/>
+                                <Integer_Literal value="10" typref="1"/>
+                            </Binary_Exp>
+                        </Exp_Comparison>
+                    </Nary_Pred>
+                    <Exp_Comparison op="&lt;i">
+                        <Binary_Exp op="+i" typref="1">
+                            <Id value="xx" typref="1"/>
+                            <Integer_Literal value="1" typref="1"/>
+                        </Binary_Exp>
+                        <Binary_Exp op="*i" typref="1">
+                            <Id value="xx" typref="1"/>
+                            <Id value="xx" typref="1"/>
+                        </Binary_Exp>
+                    </Exp_Comparison>
+                </Binary_Pred>
+            </Body>
+        </Quantified_Pred>
+        <Nary_Pred op="or">
+            <Exp_Comparison op=":">
+                <Integer_Literal value="0" typref="1"/>
+                <Nary_Exp op="{" typref="0">
+                    <Integer_Literal value="1" typref="1"/>
+                </Nary_Exp>
+            </Exp_Comparison>
+            <Quantified_Pred type="!">
+                <Variables>
+                    <Id value="xx" typref="1"/>
+                </Variables>
+                <Body>
+                    <Binary_Pred op="=&gt;">
+                        <Nary_Pred op="&amp;">
+                            <Exp_Comparison op=":">
+                                <Id value="xx" typref="1"/>
+                                <Id value="INTEGER" typref="0"/>
+                            </Exp_Comparison>
+                            <Exp_Comparison op=":">
+                                <Id value="xx" typref="1"/>
+                                <Binary_Exp op=".." typref="0">
+                                    <Integer_Literal value="0" typref="1"/>
+                                    <Integer_Literal value="10" typref="1"/>
+                                </Binary_Exp>
+                            </Exp_Comparison>
+                        </Nary_Pred>
+                        <Exp_Comparison op="&lt;i">
+                            <Binary_Exp op="+i" typref="1">
+                                <Id value="xx" typref="1"/>
+                                <Integer_Literal value="1" typref="1"/>
+                            </Binary_Exp>
+                            <Binary_Exp op="*i" typref="1">
+                                <Id value="xx" typref="1"/>
+                                <Id value="xx" typref="1"/>
+                            </Binary_Exp>
+                        </Exp_Comparison>
+                    </Binary_Pred>
+                </Body>
+            </Quantified_Pred>
+        </Nary_Pred>
+        <Quantified_Pred type="#">
+            <Variables>
+                <Id value="xx" typref="2"/>
+            </Variables>
+            <Body>
+                <Nary_Pred op="&amp;">
+                    <Exp_Comparison op=":">
+                        <Id value="xx" typref="2"/>
+                        <Id value="REAL" typref="3"/>
+                    </Exp_Comparison>
+                    <Exp_Comparison op="=">
+                        <Binary_Exp op="*r" typref="2">
+                            <Id value="xx" typref="2"/>
+                            <Id value="xx" typref="2"/>
+                        </Binary_Exp>
+                        <Binary_Exp op="+r" typref="2">
+                            <Id value="xx" typref="2"/>
+                            <Id value="xx" typref="2"/>
+                        </Binary_Exp>
+                    </Exp_Comparison>
+                </Nary_Pred>
+            </Body>
+        </Quantified_Pred>
+    </Define>
+    <Define name="cst" hash="0"/>
+    <Define name="sets" hash="0"/>
+    <Proof_Obligation goalHash="13058287395233198467">
+        <Tag>AssertionLemmas</Tag>
+        <Definition name="B definitions"/>
+        <Definition name="ctx"/>
+        <Definition name="cst"/>
+        <Definition name="lprp"/>
+        <Definition name="inprp"/>
+        <Definition name="inext"/>
+        <Definition name="seext"/>
+        <Definition name="inv"/>
+        <Local_Hyp num="1">
+            <Exp_Comparison op=":">
+                <Id value="xx" typref="1"/>
+                <Id value="INTEGER" typref="0"/>
+            </Exp_Comparison>
+        </Local_Hyp>
+        <Local_Hyp num="2">
+            <Exp_Comparison op=":">
+                <Id value="xx" typref="1"/>
+                <Binary_Exp op=".." typref="0">
+                    <Integer_Literal value="0" typref="1"/>
+                    <Integer_Literal value="10" typref="1"/>
+                </Binary_Exp>
+            </Exp_Comparison>
+        </Local_Hyp>
+        <Simple_Goal>
+            <Tag>Assertion is verified</Tag>
+            <Ref_Hyp num="1"/>
+            <Ref_Hyp num="2"/>
+            <Goal>
+                <Exp_Comparison op="&lt;i">
+                    <Binary_Exp op="+i" typref="1">
+                        <Id value="xx" typref="1"/>
+                        <Integer_Literal value="1" typref="1"/>
+                    </Binary_Exp>
+                    <Binary_Exp op="*i" typref="1">
+                        <Id value="xx" typref="1"/>
+                        <Id value="xx" typref="1"/>
+                    </Binary_Exp>
+                </Exp_Comparison>
+            </Goal>
+        </Simple_Goal>
+    </Proof_Obligation>
+    <Proof_Obligation goalHash="2705052293328201218">
+        <Tag>AssertionLemmas</Tag>
+        <Definition name="B definitions"/>
+        <Definition name="ctx"/>
+        <Definition name="cst"/>
+        <Definition name="lprp"/>
+        <Definition name="inprp"/>
+        <Definition name="inext"/>
+        <Definition name="seext"/>
+        <Definition name="inv"/>
+        <Hypothesis>
+            <Quantified_Pred type="!">
+                <Variables>
+                    <Id value="xx" typref="1"/>
+                </Variables>
+                <Body>
+                    <Binary_Pred op="=&gt;">
+                        <Nary_Pred op="&amp;">
+                            <Exp_Comparison op=":">
+                                <Id value="xx" typref="1"/>
+                                <Id value="INTEGER" typref="0"/>
+                            </Exp_Comparison>
+                            <Exp_Comparison op=":">
+                                <Id value="xx" typref="1"/>
+                                <Binary_Exp op=".." typref="0">
+                                    <Integer_Literal value="0" typref="1"/>
+                                    <Integer_Literal value="10" typref="1"/>
+                                </Binary_Exp>
+                            </Exp_Comparison>
+                        </Nary_Pred>
+                        <Exp_Comparison op="&lt;i">
+                            <Binary_Exp op="+i" typref="1">
+                                <Id value="xx" typref="1"/>
+                                <Integer_Literal value="1" typref="1"/>
+                            </Binary_Exp>
+                            <Binary_Exp op="*i" typref="1">
+                                <Id value="xx" typref="1"/>
+                                <Id value="xx" typref="1"/>
+                            </Binary_Exp>
+                        </Exp_Comparison>
+                    </Binary_Pred>
+                </Body>
+            </Quantified_Pred>
+        </Hypothesis>
+        <Simple_Goal>
+            <Tag>Assertion is verified</Tag>
+            <Goal>
+                <Nary_Pred op="or">
+                    <Exp_Comparison op=":">
+                        <Integer_Literal value="0" typref="1"/>
+                        <Nary_Exp op="{" typref="0">
+                            <Integer_Literal value="1" typref="1"/>
+                        </Nary_Exp>
+                    </Exp_Comparison>
+                    <Quantified_Pred type="!">
+                        <Variables>
+                            <Id value="xx" typref="1"/>
+                        </Variables>
+                        <Body>
+                            <Binary_Pred op="=&gt;">
+                                <Nary_Pred op="&amp;">
+                                    <Exp_Comparison op=":">
+                                        <Id value="xx" typref="1"/>
+                                        <Id value="INTEGER" typref="0"/>
+                                    </Exp_Comparison>
+                                    <Exp_Comparison op=":">
+                                        <Id value="xx" typref="1"/>
+                                        <Binary_Exp op=".." typref="0">
+                                            <Integer_Literal value="0" typref="1"/>
+                                            <Integer_Literal value="10" typref="1"/>
+                                        </Binary_Exp>
+                                    </Exp_Comparison>
+                                </Nary_Pred>
+                                <Exp_Comparison op="&lt;i">
+                                    <Binary_Exp op="+i" typref="1">
+                                        <Id value="xx" typref="1"/>
+                                        <Integer_Literal value="1" typref="1"/>
+                                    </Binary_Exp>
+                                    <Binary_Exp op="*i" typref="1">
+                                        <Id value="xx" typref="1"/>
+                                        <Id value="xx" typref="1"/>
+                                    </Binary_Exp>
+                                </Exp_Comparison>
+                            </Binary_Pred>
+                        </Body>
+                    </Quantified_Pred>
+                </Nary_Pred>
+            </Goal>
+        </Simple_Goal>
+    </Proof_Obligation>
+    <Proof_Obligation goalHash="13365924836864842685">
+        <Tag>AssertionLemmas</Tag>
+        <Definition name="B definitions"/>
+        <Definition name="ctx"/>
+        <Definition name="cst"/>
+        <Definition name="lprp"/>
+        <Definition name="inprp"/>
+        <Definition name="inext"/>
+        <Definition name="seext"/>
+        <Definition name="inv"/>
+        <Hypothesis>
+            <Quantified_Pred type="!">
+                <Variables>
+                    <Id value="xx" typref="1"/>
+                </Variables>
+                <Body>
+                    <Binary_Pred op="=&gt;">
+                        <Nary_Pred op="&amp;">
+                            <Exp_Comparison op=":">
+                                <Id value="xx" typref="1"/>
+                                <Id value="INTEGER" typref="0"/>
+                            </Exp_Comparison>
+                            <Exp_Comparison op=":">
+                                <Id value="xx" typref="1"/>
+                                <Binary_Exp op=".." typref="0">
+                                    <Integer_Literal value="0" typref="1"/>
+                                    <Integer_Literal value="10" typref="1"/>
+                                </Binary_Exp>
+                            </Exp_Comparison>
+                        </Nary_Pred>
+                        <Exp_Comparison op="&lt;i">
+                            <Binary_Exp op="+i" typref="1">
+                                <Id value="xx" typref="1"/>
+                                <Integer_Literal value="1" typref="1"/>
+                            </Binary_Exp>
+                            <Binary_Exp op="*i" typref="1">
+                                <Id value="xx" typref="1"/>
+                                <Id value="xx" typref="1"/>
+                            </Binary_Exp>
+                        </Exp_Comparison>
+                    </Binary_Pred>
+                </Body>
+            </Quantified_Pred>
+        </Hypothesis>
+        <Hypothesis>
+            <Nary_Pred op="or">
+                <Exp_Comparison op=":">
+                    <Integer_Literal value="0" typref="1"/>
+                    <Nary_Exp op="{" typref="0">
+                        <Integer_Literal value="1" typref="1"/>
+                    </Nary_Exp>
+                </Exp_Comparison>
+                <Quantified_Pred type="!">
+                    <Variables>
+                        <Id value="xx" typref="1"/>
+                    </Variables>
+                    <Body>
+                        <Binary_Pred op="=&gt;">
+                            <Nary_Pred op="&amp;">
+                                <Exp_Comparison op=":">
+                                    <Id value="xx" typref="1"/>
+                                    <Id value="INTEGER" typref="0"/>
+                                </Exp_Comparison>
+                                <Exp_Comparison op=":">
+                                    <Id value="xx" typref="1"/>
+                                    <Binary_Exp op=".." typref="0">
+                                        <Integer_Literal value="0" typref="1"/>
+                                        <Integer_Literal value="10" typref="1"/>
+                                    </Binary_Exp>
+                                </Exp_Comparison>
+                            </Nary_Pred>
+                            <Exp_Comparison op="&lt;i">
+                                <Binary_Exp op="+i" typref="1">
+                                    <Id value="xx" typref="1"/>
+                                    <Integer_Literal value="1" typref="1"/>
+                                </Binary_Exp>
+                                <Binary_Exp op="*i" typref="1">
+                                    <Id value="xx" typref="1"/>
+                                    <Id value="xx" typref="1"/>
+                                </Binary_Exp>
+                            </Exp_Comparison>
+                        </Binary_Pred>
+                    </Body>
+                </Quantified_Pred>
+            </Nary_Pred>
+        </Hypothesis>
+        <Simple_Goal>
+            <Tag>Assertion is verified</Tag>
+            <Goal>
+                <Quantified_Pred type="#">
+                    <Variables>
+                        <Id value="xx" typref="2"/>
+                    </Variables>
+                    <Body>
+                        <Nary_Pred op="&amp;">
+                            <Exp_Comparison op=":">
+                                <Id value="xx" typref="2"/>
+                                <Id value="REAL" typref="3"/>
+                            </Exp_Comparison>
+                            <Exp_Comparison op="=">
+                                <Binary_Exp op="*r" typref="2">
+                                    <Id value="xx" typref="2"/>
+                                    <Id value="xx" typref="2"/>
+                                </Binary_Exp>
+                                <Binary_Exp op="+r" typref="2">
+                                    <Id value="xx" typref="2"/>
+                                    <Id value="xx" typref="2"/>
+                                </Binary_Exp>
+                            </Exp_Comparison>
+                        </Nary_Pred>
+                    </Body>
+                </Quantified_Pred>
+            </Goal>
+        </Simple_Goal>
+    </Proof_Obligation>
+    <TypeInfos>
+        <Type id="0">
+            <Unary_Exp op="POW">
+                <Id value="INTEGER"/>
+            </Unary_Exp>
+        </Type>
+        <Type id="1">
+            <Id value="INTEGER"/>
+        </Type>
+        <Type id="2">
+            <Id value="REAL"/>
+        </Type>
+        <Type id="3">
+            <Unary_Exp op="POW">
+                <Id value="REAL"/>
+            </Unary_Exp>
+        </Type>
+    </TypeInfos>
+</Proof_Obligations>

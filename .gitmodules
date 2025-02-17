@@ -1,4 +1,3 @@
-[submodule "src/BAST"]
-	path = src/BAST
-	url = https://github.com/CLEARSY/BAST
-	branch = public
+[submodule "POGLIB"]
+	path = extern/POGLIB
+	url = git@github.com:CLEARSY/POGLIB.git

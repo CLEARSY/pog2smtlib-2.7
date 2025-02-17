@@ -1,16 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(B2SMTLIB)
-
-find_package(Qt5 COMPONENTS Core Xml REQUIRED)
-
-# configure compilers
-if(CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID MATCHES Clang$)
-  add_compile_options(-Wall)
-  add_compile_options(-Wextra)
-  add_compile_options(-pedantic)
-  add_compile_options(-Werror)
-  add_compile_options(-fno-threadsafe-statics)
-endif()
+project(pog2smtlib-2.7)
 
 # compile command database
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -29,17 +18,16 @@ endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   foreach(submodule
-      "${PROJECT_SOURCE_DIR}/src/BAST")
+      "${PROJECT_SOURCE_DIR}/extern/POGLIB")
     if(NOT EXISTS "${submodule}/CMakeLists.txt")
       message(FATAL_ERROR "Submodule ${submodule} is missing: update submodules and try again.")
       message(FATAL_ERROR "Command : git submodule update --init --recursive.")
     endif()
   endforeach(submodule)
-  add_subdirectory(src/BAST/src)
-  add_subdirectory(src/POGLoader)
+  add_subdirectory(extern/POGLIB)
 endif()
 
-add_subdirectory(src/B2SMTLIB)
+add_subdirectory(src/pog2smtlib-2.7)
 
 if(PROJECT_IS_TOP_LEVEL)
   include (CTest)

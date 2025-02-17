@@ -1,4 +1,4 @@
-project(B2SMTLIB_Test)
+project(pog2smtlib27_tests)
 
 # Search for a suitable shell program, so that the tests can be run under windows
 # if a unix-like shell is available
@@ -19,3 +19,7 @@ macro(add_cl_test id)
 endmacro(add_cl_test)
 
 add_cl_test("integer_const_expr")
+add_cl_test("expr_comparison_1")
+add_cl_test("expr_comparison_2")
+add_cl_test("boolean_expression_1")
+add_cl_test("quantified_expression_1")
