@@ -5,6 +5,17 @@
 
 B2SMTLIB is a translator from pog to SMT-LIB 2.6.
 
+## To do list
+
+- For a pure typing predicate such as `xx: INTEGER`, the signature contains `:_<INT>` and `INTEGER`, which entails that all
+  the prerequisites of `INTEGER` are pulled. **We do not want this**
+- BAST does not read the `RichTypeInfos` table from the POG file when it exists. We need to add this feature, which includes
+  reading the `richtypref` attribute when available instead of the `typref` attribute.
+- Refactorize symbol name generation so that smtSymbol functions are called to fill the templates from the derived classes
+  of `BConstruct`.
+- Have `POGsignatures` be a member of `POGtranslations` maybe?
+- Cover the full list of B expression operators.
+
 ## Usage
 
 ```sh

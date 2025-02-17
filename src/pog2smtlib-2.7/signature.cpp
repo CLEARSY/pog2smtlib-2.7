@@ -1,0 +1,876 @@
+#include "signature.h"
+
+#include <fmt/format.h>
+
+#include <iostream>
+#include <source_location>
+#include <tuple>
+#include <unordered_set>
+using std::unordered_set;
+
+#include "type-utils.h"
+
+static constexpr bool debug_me = true;
+
+class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
+ public:
+  GetSignatureVisitor() {}
+  ~GetSignatureVisitor() = default;
+  virtual void visitImplication(const Pred &lhs, const Pred &rhs) override;
+  virtual void visitEquivalence(const Pred &lhs, const Pred &rhs) override;
+  virtual void visitNegation(const Pred &p) override;
+  virtual void visitConjunction(const std::vector<Pred> &vec) override;
+  virtual void visitDisjunction(const std::vector<Pred> &vec) override;
+  virtual void visitForall(const std::vector<TypedVar> &vars,
+                           const Pred &p) override;
+  virtual void visitExists(const std::vector<TypedVar> &vars,
+                           const Pred &p) override;
+  virtual void visitTrue() override;
+  virtual void visitFalse() override;
+  virtual void visitExprComparison(Pred::ComparisonOp op, const Expr &lhs,
+                                   const Expr &rhs) override;
+  virtual void visitConstant(const BType &type,
+                             const std::vector<std::string> &bxmlTag,
+                             EConstant c) override;
+  virtual void visitIdent(const BType &type,
+                          const std::vector<std::string> &bxmlTag,
+                          const VarName &b) override;
+  virtual void visitIntegerLiteral(const BType &type,
+                                   const std::vector<std::string> &bxmlTag,
+                                   const std::string &i) override;
+  virtual void visitStringLiteral(const BType &type,
+                                  const std::vector<std::string> &bxmlTag,
+                                  const std::string &b) override;
+  virtual void visitRealLiteral(const BType &type,
+                                const std::vector<std::string> &bxmlTag,
+                                const Expr::Decimal &d) override;
+  virtual void visitUnaryExpression(const BType &type,
+                                    const std::vector<std::string> &bxmlTag,
+                                    Expr::UnaryOp op, const Expr &e) override;
+  virtual void visitBinaryExpression(const BType &type,
+                                     const std::vector<std::string> &bxmlTag,
+                                     Expr::BinaryOp op, const Expr &lhs,
+                                     const Expr &rhs) override;
+  virtual void visitTernaryExpression(const BType &type,
+                                      const std::vector<std::string> &bxmlTag,
+                                      Expr::TernaryOp op, const Expr &fst,
+                                      const Expr &snd,
+                                      const Expr &thd) override;
+  virtual void visitNaryExpression(const BType &type,
+                                   const std::vector<std::string> &bxmlTag,
+                                   Expr::NaryOp op,
+                                   const std::vector<Expr> &vec) override;
+  virtual void visitBooleanExpression(const BType &type,
+                                      const std::vector<std::string> &bxmlTag,
+                                      const Pred &p) override;
+  virtual void visitRecord(
+      const BType &type, const std::vector<std::string> &bxmlTag,
+      const std::vector<std::pair<std::string, Expr>> &fds) override;
+  virtual void visitStruct(
+      const BType &type, const std::vector<std::string> &bxmlTag,
+      const std::vector<std::pair<std::string, Expr>> &fds) override;
+  virtual void visitQuantifiedExpr(const BType &type,
+                                   const std::vector<std::string> &bxmlTag,
+                                   Expr::QuantifiedOp op,
+                                   const std::vector<TypedVar> vars,
+                                   const Pred &cond, const Expr &body) override;
+  virtual void visitQuantifiedSet(const BType &type,
+                                  const std::vector<std::string> &bxmlTag,
+                                  const std::vector<TypedVar> vars,
+                                  const Pred &cond) override;
+  virtual void visitRecordUpdate(const BType &type,
+                                 const std::vector<std::string> &bxmlTag,
+                                 const Expr &rec, const std::string &label,
+                                 const Expr &value) override;
+  virtual void visitRecordAccess(const BType &type,
+                                 const std::vector<std::string> &bxmlTag,
+                                 const Expr &rec,
+                                 const std::string &label) override;
+  Signature getSignature() const { return m_signature; }
+  const Signature &getSignatureRef() const { return m_signature; }
+
+  class Exception : public std::exception {
+   public:
+    Exception(const std::string &message) : m_msg(message) {}
+    virtual const char *what() const noexcept override { return m_msg.c_str(); }
+
+   private:
+    std::string m_msg;
+  };  // end class Exception
+
+ private:
+  void visitBinaryPred(const Pred &lhs, const Pred &rhs);
+  void visitUnaryPred(const Pred &p);
+  void visitNaryPred(const std::vector<Pred> &vec);
+  void visitNullaryPred();
+
+  Signature m_signature;  // the signature resulting from the last call to a
+  // visit function
+  unordered_set<VarName> m_bindings;
+
+  static constexpr const char *MSG_BAD_TYPE =
+      "Signature computation: application of {} operator is not typed as "
+      "expected";
+  static constexpr const char *MSG_NOT_SUPPORTED =
+      "Signature computation: application of {} operator is not supported";
+
+  const BType &elementOfPowerType(const BOperator &op, const BType &power);
+  const BType &elementOfSequenceType(const BOperator &op,
+                                     const BType &sequence);
+  const BType &lhsOfProductType(const BOperator &op, const BType &product);
+  const BType &rhsOfProductType(const BOperator &op, const BType &product);
+  std::tuple<const BType &, const BType &> argsOfProductType(
+      const BOperator &op, const BType &product);
+};
+
+/** @brief Overloads formatter to use the fmt library for BType values */
+template <typename T>
+struct fmt::formatter<std::shared_ptr<T>> : formatter<string_view> {
+  auto format(std::shared_ptr<T> ptr, format_context &ctx) const
+      -> format_context::iterator {
+    return fmt::formatter<T>().formatter<T>::format(*ptr, ctx);
+  }
+};
+
+size_t MonomorphizedOperator::opHash() const {
+  if (!m_hash_valid) {
+    size_t m_hash = 0;
+    m_hash ^= std::hash<BOperator>{}(m_operator) + 0x9e3779b9;
+
+    for (const auto &type_ptr : m_types) {
+      if (type_ptr) {  // Check for null pointers.
+        m_hash ^= std::hash<const BType>{}(*type_ptr) + 0x9e3779b9 +
+                  (m_hash << 6) + (m_hash >> 2);
+      }
+    }
+    m_hash_valid = true;
+  }
+  return m_hash;
+}
+
+std::string MonomorphizedOperator::to_string() const {
+  if (m_types.empty()) {
+    return fmt::format("{}", m_operator);
+  } else {
+    std::vector<BType> args;
+    for (const auto &type : m_types) {
+      args.push_back(*type);
+    }
+    return fmt::format("{}<{}>", m_operator, fmt::join(m_types, " "));
+  }
+}
+
+std::string Data::to_string() const { return m_name->show(); }
+
+Signature &operator+=(Signature &lhs, const Signature &rhs) {
+  lhs.m_operators.insert(rhs.m_operators.begin(), rhs.m_operators.end());
+  lhs.m_data.insert(rhs.m_data.begin(), rhs.m_data.end());
+  return lhs;
+}
+
+Signature &operator-=(Signature &lhs, const Signature &rhs) {
+  for (const auto &elem : rhs.m_operators) {
+    lhs.m_operators.erase(elem);
+  }
+  for (const auto &elem : rhs.m_data) {
+    lhs.m_data.erase(elem);
+  }
+  return lhs;
+}
+
+static void SignatureReset(Signature &target) {
+  target.m_operators.clear();
+  target.m_data.clear();
+}
+
+/**
+ * @brief Moves the contents of one Signature object into another.
+ *
+ * This function efficiently transfers the data from the `source` Signature
+ * object to the `target` Signature object. After the move, the `source`
+ * object is left in a valid but unspecified state, typically empty. This is
+ * similar to a move constructor or move assignment operator.
+ *
+ * @param target The Signature object to which the data will be moved.
+ * @param source The Signature object from which the data will be moved.  The
+ * source object will be modified and should be considered to be in a valid
+ * but unspecified state after the move.
+ */
+static void SignatureMoveInto(Signature &target, Signature &source) {
+  target.m_operators.insert(std::make_move_iterator(source.m_operators.begin()),
+                            std::make_move_iterator(source.m_operators.end()));
+  target.m_data.insert(std::make_move_iterator(source.m_data.begin()),
+                       std::make_move_iterator(source.m_data.end()));
+  SignatureReset(source);
+}
+
+void GetSignatureVisitor::visitBinaryPred(const Pred &lhs, const Pred &rhs) {
+  SignatureReset(m_signature);
+  Signature sig;
+  lhs.accept(*this);
+  sig = std::move(m_signature);
+  rhs.accept(*this);
+  SignatureMoveInto(sig, m_signature);
+  m_signature = std::move(sig);
+}
+
+void GetSignatureVisitor::visitUnaryPred([[maybe_unused]] const Pred &p) {
+  SignatureReset(m_signature);
+  p.accept(*this);
+}
+
+void GetSignatureVisitor::visitNaryPred(const std::vector<Pred> &vec) {
+  SignatureReset(m_signature);
+  Signature sig;
+  for (const Pred &p : vec) {
+    p.accept(*this);
+    SignatureMoveInto(sig, m_signature);
+  }
+  m_signature = std::move(sig);
+}
+
+void GetSignatureVisitor::visitNullaryPred() { SignatureReset(m_signature); }
+
+void GetSignatureVisitor::visitImplication(const Pred &lhs, const Pred &rhs) {
+  visitBinaryPred(lhs, rhs);
+}
+
+void GetSignatureVisitor::visitEquivalence(const Pred &lhs, const Pred &rhs) {
+  visitBinaryPred(lhs, rhs);
+}
+
+void GetSignatureVisitor::visitNegation(const Pred &p) { visitUnaryPred(p); }
+
+void GetSignatureVisitor::visitConjunction(const std::vector<Pred> &vec) {
+  visitNaryPred(vec);
+}
+
+void GetSignatureVisitor::visitDisjunction(const std::vector<Pred> &vec) {
+  visitNaryPred(vec);
+}
+
+void GetSignatureVisitor::visitForall(const std::vector<TypedVar> &vars,
+                                      const Pred &p) {
+  for (auto v : vars) {
+    m_bindings.insert(v.name);
+  }
+  visitUnaryPred(p);
+  for (auto v : vars) {
+    m_bindings.erase(v.name);
+  }
+}
+
+void GetSignatureVisitor::visitExists(
+    [[maybe_unused]] const std::vector<TypedVar> &vars, const Pred &p) {
+  for (auto v : vars) {
+    m_bindings.insert(v.name);
+  }
+  visitUnaryPred(p);
+  for (auto v : vars) {
+    m_bindings.erase(v.name);
+  }
+}
+
+void GetSignatureVisitor::visitTrue() { visitNullaryPred(); }
+
+void GetSignatureVisitor::visitFalse() { visitNullaryPred(); }
+
+void GetSignatureVisitor::visitExprComparison(Pred::ComparisonOp op,
+                                              const Expr &lhs,
+                                              const Expr &rhs) {
+  Signature sig;
+  SignatureReset(m_signature);
+  lhs.accept(*this);
+  SignatureMoveInto(sig, m_signature);
+  rhs.accept(*this);
+  SignatureMoveInto(sig, m_signature);
+  /*
+  The arguments of a comparison operator are either of the same type or
+  the comparison operator is the membership operator and the type of the
+  right-hand side is a set of the type of the left-hand side. The
+  corresponding monomorphized operator only retains the type of the left-hand
+  side.
+  */
+  switch (op) {
+    case Pred::ComparisonOp::Membership:
+      sig.m_operators.emplace(
+          MonomorphizedOperator{op, std::make_shared<BType>(lhs.getType())});
+      break;
+    case Pred::ComparisonOp::Subset:
+    case Pred::ComparisonOp::Strict_Subset:
+      sig.m_operators.emplace(MonomorphizedOperator{
+          op, std::make_shared<BType>(elementType(lhs.getType()))});
+      break;
+    /*
+      enum class ComparisonOp {
+        Equality,
+        Ige, Igt, Ilt, Ile,
+        Fge, Fgt, Flt, Fle,
+        Rle, Rlt, Rge, Rgt
+      };
+    */
+    default:
+      break;
+  }
+  m_signature = std::move(sig);
+}
+
+void GetSignatureVisitor::visitConstant(
+    const BType &type, [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    Expr::Visitor::EConstant c) {
+  SignatureReset(m_signature);
+  // the only polymorphic constant is the empty set
+  if (c == Expr::Visitor::EConstant::EmptySet) {
+    if (type.getKind() != BType::Kind::PowerType) {
+      throw Exception("Empty set constant must have a powerset type");
+    }
+    m_signature.m_operators.emplace(MonomorphizedOperator{
+        c, std::make_shared<BType>(type.toPowerType().content)});
+  } else if (c == Expr::Visitor::EConstant::INTEGER) {
+    m_signature.m_operators.emplace(MonomorphizedOperator{c});
+  }
+}
+
+void GetSignatureVisitor::visitIdent(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const VarName &b) {
+  SignatureReset(m_signature);
+  if (!m_bindings.contains(b)) {
+    struct Data data{.m_name = std::make_shared<VarName>(b), .m_type = type};
+    m_signature.m_data.emplace(data);
+  }
+}
+
+void GetSignatureVisitor::visitIntegerLiteral(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const std::string &i) {
+  SignatureReset(m_signature);
+}
+
+void GetSignatureVisitor::visitStringLiteral(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const std::string &b) {
+  SignatureReset(m_signature);
+}
+
+void GetSignatureVisitor::visitRealLiteral(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const Expr::Decimal &d) {
+  SignatureReset(m_signature);
+}
+
+void GetSignatureVisitor::visitUnaryExpression(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag, Expr::UnaryOp op,
+    const Expr &e) {
+  SignatureReset(m_signature);
+  e.accept(*this);
+  switch (op) {
+    case Expr::UnaryOp::Cardinality:
+    case Expr::UnaryOp::Subsets:
+    case Expr::UnaryOp::Non_Empty_Subsets:
+    case Expr::UnaryOp::Finite_Subsets:
+    case Expr::UnaryOp::Non_Empty_Finite_Subsets:
+    case Expr::UnaryOp::Sequences:
+    case Expr::UnaryOp::Non_Empty_Sequences:
+    case Expr::UnaryOp::Injective_Sequences:
+    case Expr::UnaryOp::Non_Empty_Injective_Sequences:
+    case Expr::UnaryOp::Permutations: {
+      const auto &etype1 = e.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      m_signature.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
+      break;
+    }
+    case Expr::UnaryOp::Domain:
+    case Expr::UnaryOp::Range:
+    case Expr::UnaryOp::Inverse:
+    case Expr::UnaryOp::Identity:
+    case Expr::UnaryOp::Fnc: {
+      const auto &etype1 = e.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      auto [lhstype, rhstype] = argsOfProductType(op, etype2);
+      m_signature.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(lhstype),
+                                std::make_shared<BType>(rhstype)));
+      break;
+    }
+    case Expr::UnaryOp::Rel: {
+      const auto &etype1 = e.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      auto [lhstype, etype3] = argsOfProductType(op, etype2);
+      const auto &rhstype = elementOfPowerType(op, etype3);
+      m_signature.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(lhstype),
+                                std::make_shared<BType>(rhstype)));
+      break;
+    }
+    case Expr::UnaryOp::Union:
+    case Expr::UnaryOp::Intersection: {
+      const auto &etype1 = e.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = elementOfPowerType(op, etype2);
+      m_signature.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3)));
+      break;
+    }
+    case Expr::UnaryOp::Size:
+    case Expr::UnaryOp::First:
+    case Expr::UnaryOp::Last:
+    case Expr::UnaryOp::Tail:
+    case Expr::UnaryOp::Front:
+    case Expr::UnaryOp::Reverse:
+    case Expr::UnaryOp::Closure:
+    case Expr::UnaryOp::Transitive_Closure: {
+      const auto &etype1 = e.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = rhsOfProductType(op, etype2);
+      m_signature.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3)));
+      break;
+    }
+    case Expr::UnaryOp::Concatenation: {
+      const auto &etype1 = e.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = elementOfPowerType(op, etype2);
+      const auto &etype4 = rhsOfProductType(op, etype3);
+      m_signature.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype4)));
+      break;
+    }
+    case Expr::UnaryOp::IMinimum:
+    case Expr::UnaryOp::IMaximum:
+    case Expr::UnaryOp::RMinimum:
+    case Expr::UnaryOp::RMaximum:
+    case Expr::UnaryOp::IMinus:
+    case Expr::UnaryOp::RMinus:
+    case Expr::UnaryOp::Real:
+    case Expr::UnaryOp::Floor:
+    case Expr::UnaryOp::Ceiling: {
+      m_signature.m_operators.emplace(MonomorphizedOperator(op));
+      break;
+    }
+    case Expr::UnaryOp::Tree:
+    case Expr::UnaryOp::Btree:
+    case Expr::UnaryOp::Top:
+    case Expr::UnaryOp::Sons:
+    case Expr::UnaryOp::Prefix:
+    case Expr::UnaryOp::Postfix:
+    case Expr::UnaryOp::Sizet:
+    case Expr::UnaryOp::Mirror:
+    case Expr::UnaryOp::Left:
+    case Expr::UnaryOp::Right:
+    case Expr::UnaryOp::Infix:
+    case Expr::UnaryOp::Bin: {
+      throw Exception(fmt::format(MSG_NOT_SUPPORTED, Expr::to_string(op)));
+      break;
+    }
+  }
+}
+
+void GetSignatureVisitor::visitBinaryExpression(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag, Expr::BinaryOp op,
+    const Expr &lhs, const Expr &rhs) {
+  SignatureReset(m_signature);
+  Signature sig;
+  lhs.accept(*this);
+  SignatureMoveInto(sig, m_signature);
+  rhs.accept(*this);
+  SignatureMoveInto(sig, m_signature);
+  switch (op) {
+      /* Set_Difference, Intersection, */
+    case Expr::BinaryOp::Set_Difference:
+    case Expr::BinaryOp::Intersection:
+    case Expr::BinaryOp::Union: {
+      const auto &etype1 = lhs.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
+      break;
+    }
+      /* Mapplet */
+    case Expr::BinaryOp::Mapplet: {
+      const auto &etype1 = lhs.getType();
+      const auto &etype2 = rhs.getType();
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype1),
+                                std::make_shared<BType>(etype2)));
+      break;
+    }
+    /*
+    Cartesian_Product, Partial_Functions, Partial_Surjections,
+    Total_Functions, Total_Surjections, Partial_Injections, Total_Injections,
+    Partial_Bijections, Total_Bijections, Relations,
+    */
+    case Expr::BinaryOp::Cartesian_Product:
+    case Expr::BinaryOp::Partial_Functions:
+    case Expr::BinaryOp::Partial_Surjections:
+    case Expr::BinaryOp::Total_Functions:
+    case Expr::BinaryOp::Total_Surjections:
+    case Expr::BinaryOp::Partial_Injections:
+    case Expr::BinaryOp::Total_Injections:
+    case Expr::BinaryOp::Partial_Bijections:
+    case Expr::BinaryOp::Total_Bijections:
+    case Expr::BinaryOp::Relations: {
+      const auto &etype1 = lhs.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = rhs.getType();
+      const auto &etype4 = elementOfPowerType(op, etype3);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2),
+                                std::make_shared<BType>(etype4)));
+      break;
+    }
+    /*
+    Interval,
+    IAddition, ISubtraction, IMultiplication, IDivision,
+    IExponentiation, RAddition, RSubtraction, RMultiplication, RDivision,
+    RExponentiation, FAddition, FSubtraction, FMultiplication, FDivision,
+    Modulo,
+    */
+    case Expr::BinaryOp::Interval:
+    case Expr::BinaryOp::IAddition:
+    case Expr::BinaryOp::ISubtraction:
+    case Expr::BinaryOp::IMultiplication:
+    case Expr::BinaryOp::IDivision:
+    case Expr::BinaryOp::IExponentiation:
+    case Expr::BinaryOp::RAddition:
+    case Expr::BinaryOp::RSubtraction:
+    case Expr::BinaryOp::RMultiplication:
+    case Expr::BinaryOp::RDivision:
+    case Expr::BinaryOp::RExponentiation:
+    case Expr::BinaryOp::FAddition:
+    case Expr::BinaryOp::FSubtraction:
+    case Expr::BinaryOp::FMultiplication:
+    case Expr::BinaryOp::FDivision:
+    case Expr::BinaryOp::Modulo: {
+      sig.m_operators.emplace(MonomorphizedOperator(op));
+      break;
+    }
+    /*
+    Head_Insertion,
+    Tail_Insertion,
+    Head_Restriction,
+    Tail_Restriction,
+    */
+    case Expr::BinaryOp::Head_Insertion: {
+      const auto &etype1 = lhs.getType();
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype1)));
+      break;
+    }
+    case Expr::BinaryOp::Tail_Insertion: {
+      const auto &etype1 = rhs.getType();
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype1)));
+      break;
+    }
+    case Expr::BinaryOp::Head_Restriction:
+    case Expr::BinaryOp::Tail_Restriction: {
+      const auto &etype1 = lhs.getType();  // sequence type
+      const auto &etype2 = elementOfSequenceType(op, etype1);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
+      break;
+    }
+    /*
+    Composition,
+              */
+    case Expr::BinaryOp::Composition: {
+      const auto &etype1 = lhs.getType();
+      const auto &etype2 = lhsOfProductType(op, etype1);
+      const auto &etype3 = rhsOfProductType(op, etype1);
+      const auto &etype4 = rhs.getType();
+      const auto &etype5 = rhsOfProductType(op, etype4);
+      sig.m_operators.emplace(MonomorphizedOperator(
+          op, std::make_shared<BType>(etype2), std::make_shared<BType>(etype3),
+          std::make_shared<BType>(etype5)));
+      break;
+    }
+    /*     Surcharge, ,
+     */
+    case Expr::BinaryOp::Surcharge: {
+      const auto &etype1 = lhs.getType();
+      const auto &[etype2, etype3] = argsOfProductType(op, etype1);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2),
+                                std::make_shared<BType>(etype3)));
+      break;
+    }
+    /*     Domain_Subtraction, Domain_Restriction,
+     */
+    case Expr::BinaryOp::Domain_Subtraction:
+    case Expr::BinaryOp::Domain_Restriction: {
+      const auto &etype1 = rhs.getType();
+      const auto &[etype2, etype3] = argsOfProductType(op, etype1);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2),
+                                std::make_shared<BType>(etype3)));
+      break;
+    }
+    /* Direct_Product */
+    case Expr::BinaryOp::Direct_Product: {
+      const auto &etype1 = lhs.getType();
+      const auto &etype2 = rhs.getType();
+      const auto &[etype3, etype4] = argsOfProductType(op, etype1);
+      const auto &etype5 = rhsOfProductType(op, etype2);
+      sig.m_operators.emplace(MonomorphizedOperator(
+          op, std::make_shared<BType>(etype3), std::make_shared<BType>(etype4),
+          std::make_shared<BType>(etype5)));
+      break;
+    }
+    /* Parallel_Product */
+    case Expr::BinaryOp::Parallel_Product: {
+      const auto &etype1 = lhs.getType();
+      const auto &etype2 = rhs.getType();
+      const auto &[etype3, etype4] = argsOfProductType(op, etype1);
+      const auto &[etype5, etype6] = argsOfProductType(op, etype2);
+      sig.m_operators.emplace(MonomorphizedOperator(
+          op, std::make_shared<BType>(etype3), std::make_shared<BType>(etype4),
+          std::make_shared<BType>(etype5), std::make_shared<BType>(etype6)));
+      break;
+    }
+    /* Concatenation */
+    case Expr::BinaryOp::Concatenation: {
+      const auto &etype1 = lhs.getType();
+      const auto &etype2 = rhsOfProductType(op, etype1);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
+      break;
+    }
+    /* Range_Restriction, Range_Subtraction, Image, Application */
+    case Expr::BinaryOp::Range_Restriction:
+    case Expr::BinaryOp::Range_Subtraction:
+    case Expr::BinaryOp::Image:
+    case Expr::BinaryOp::Application: {
+      const auto &etype1 = lhs.getType();
+      const auto &[etype2, etype3] = argsOfProductType(op, etype1);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2),
+                                std::make_shared<BType>(etype3)));
+      break;
+    }
+    /* Iteration */
+    case Expr::BinaryOp::Iteration: {
+      const auto &etype1 = lhs.getType();
+      const auto &etype2 = lhsOfProductType(op, etype1);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
+      break;
+    }
+    /* First_Projection, Second_Projection */
+    case Expr::BinaryOp::First_Projection:
+    case Expr::BinaryOp::Second_Projection: {
+      const auto &etype1 = lhs.getType();
+      const auto &etype2 = rhs.getType();
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype1),
+                                std::make_shared<BType>(etype2)));
+      break;
+    }
+    /* Const, Rank, Father, Subtree, Arity */
+    case Expr::BinaryOp::Const:
+    case Expr::BinaryOp::Rank:
+    case Expr::BinaryOp::Father:
+    case Expr::BinaryOp::Subtree:
+    case Expr::BinaryOp::Arity: {
+      throw Exception(fmt::format(MSG_NOT_SUPPORTED, Expr::to_string(op)));
+      break;
+    }
+  }
+  m_signature = std::move(sig);
+}
+
+void GetSignatureVisitor::visitTernaryExpression(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    Expr::TernaryOp op, [[maybe_unused]] const Expr &fst,
+    [[maybe_unused]] const Expr &snd, [[maybe_unused]] const Expr &thd) {
+  throw Exception(fmt::format(MSG_NOT_SUPPORTED, Expr::to_string(op)));
+}
+
+void GetSignatureVisitor::visitNaryExpression(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] Expr::NaryOp op,
+    [[maybe_unused]] const std::vector<Expr> &vec) {
+  SignatureReset(m_signature);
+  Signature sig;
+  for (const Expr &e : vec) {
+    e.accept(*this);
+    SignatureMoveInto(sig, m_signature);
+  }
+  switch (op) {
+    case Expr::NaryOp::Sequence: {
+      const auto &etype1 = elementOfPowerType(op, type);
+      const auto &etype2 = rhsOfProductType(op, etype1);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
+      break;
+    }
+    case Expr::NaryOp::Set: {
+      const auto &etype1 = elementOfPowerType(op, type);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype1)));
+      break;
+    }
+    default:
+      break;
+  }
+  m_signature = std::move(sig);
+}
+
+void GetSignatureVisitor::visitBooleanExpression(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const Pred &p) {
+  SignatureReset(m_signature);
+  p.accept(*this);
+}
+
+void GetSignatureVisitor::visitRecord(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {}
+
+void GetSignatureVisitor::visitStruct(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {}
+
+void GetSignatureVisitor::visitQuantifiedExpr(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] Expr::QuantifiedOp op,
+    [[maybe_unused]] const std::vector<TypedVar> vars,
+    [[maybe_unused]] const Pred &cond, [[maybe_unused]] const Expr &body) {
+  SignatureReset(m_signature);
+  Signature sig;
+  for (auto v : vars) {
+    m_bindings.insert(v.name);
+  }
+  cond.accept(*this);
+  SignatureMoveInto(sig, m_signature);
+  body.accept(*this);
+  SignatureMoveInto(m_signature, sig);
+  for (auto v : vars) {
+    m_bindings.erase(v.name);
+  }
+}
+
+void GetSignatureVisitor::visitQuantifiedSet(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const std::vector<TypedVar> vars,
+    [[maybe_unused]] const Pred &cond) {
+  SignatureReset(m_signature);
+  for (auto v : vars) {
+    m_bindings.insert(v.name);
+  }
+  cond.accept(*this);
+  const auto &etype = elementOfPowerType(Expr::EKind::QuantifiedSet, type);
+  m_signature.m_operators.emplace(MonomorphizedOperator{
+      Expr::EKind::QuantifiedSet, std::make_shared<BType>(etype)});
+  for (auto v : vars) {
+    m_bindings.erase(v.name);
+  }
+}
+
+void GetSignatureVisitor::visitRecordUpdate(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const Expr &rec, [[maybe_unused]] const std::string &label,
+    [[maybe_unused]] const Expr &value) {}
+
+void GetSignatureVisitor::visitRecordAccess(
+    [[maybe_unused]] const BType &type,
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    [[maybe_unused]] const Expr &rec,
+    [[maybe_unused]] const std::string &label) {}
+
+Signature predicateSignature(const Pred &pred) {
+  GetSignatureVisitor visitor;
+  pred.accept(visitor);
+  Signature result = visitor.getSignature();
+  return result;
+}
+
+const BType &GetSignatureVisitor::elementOfPowerType(const BOperator &op,
+                                                     const BType &power) {
+  if (power.getKind() != BType::Kind::PowerType) {
+    throw Exception(fmt::format(MSG_BAD_TYPE, op));
+  }
+  return power.toPowerType().content;
+};
+
+const BType &GetSignatureVisitor::lhsOfProductType(const BOperator &op,
+                                                   const BType &product) {
+  if (product.getKind() != BType::Kind::ProductType) {
+    throw Exception(fmt::format(MSG_BAD_TYPE, op));
+  }
+  return product.toProductType().lhs;
+};
+
+const BType &GetSignatureVisitor::rhsOfProductType(const BOperator &op,
+                                                   const BType &product) {
+  if (product.getKind() != BType::Kind::ProductType) {
+    throw Exception(fmt::format(MSG_BAD_TYPE, op));
+  }
+  return product.toProductType().rhs;
+};
+
+std::tuple<const BType &, const BType &> GetSignatureVisitor::argsOfProductType(
+    const BOperator &op, const BType &product) {
+  if (product.getKind() != BType::Kind::ProductType) {
+    throw Exception(fmt::format(MSG_BAD_TYPE, op));
+  }
+  return std::make_tuple(product.toProductType().lhs,
+                         product.toProductType().rhs);
+};
+
+const BType &GetSignatureVisitor::elementOfSequenceType(const BOperator &op,
+                                                        const BType &sequence) {
+  if (sequence.getKind() != BType::Kind::PowerType) {
+    throw Exception(fmt::format(MSG_BAD_TYPE, op));
+  }
+  const auto &etype1 = elementOfPowerType(op, sequence);
+  if (etype1.getKind() != BType::Kind::ProductType) {
+    throw Exception(fmt::format(MSG_BAD_TYPE, op));
+  }
+  const auto &[etype2, etype3] = argsOfProductType(op, etype1);
+  if (etype2.getKind() != BType::Kind::INTEGER) {
+    throw Exception(fmt::format(MSG_BAD_TYPE, op));
+  }
+  return etype3;
+};
+
+std::string toString(const Signature &sig) {
+  std::vector<std::string> op_strs;
+  std::vector<std::string> dt_strs;
+  for (const auto &op : sig.m_operators) {
+    op_strs.push_back(op.to_string());
+  }
+  for (const auto &dt : sig.m_data) {
+    dt_strs.push_back(dt.to_string());
+  }
+  return fmt::format("[{} | {}]", fmt::join(op_strs, ", "),
+                     fmt::join(dt_strs, ", "));
+}
+
+bool operator==(const std::vector<std::shared_ptr<BType>> &lhs,
+                const std::vector<std::shared_ptr<BType>> &rhs) {
+  if (lhs.size() != rhs.size()) {
+    return false;
+  }
+  for (size_t i = 0; i < lhs.size(); ++i) {
+    if (*lhs[i] != *rhs[i]) {
+      return false;
+    }
+  }
+  return true;
+}
