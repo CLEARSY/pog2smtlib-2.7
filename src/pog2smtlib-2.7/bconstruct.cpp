@@ -131,6 +131,10 @@ shared_ptr<Abstract> Factory::Subtraction() {
   return get<BConstruct::Expression::Subtraction>(m_Subtraction);
 }
 
+shared_ptr<Abstract> Factory::Multiplication() {
+  return get<BConstruct::Expression::Multiplication>(m_Multiplication);
+}
+
 shared_ptr<Abstract> Factory::Integer() {
   return get<BConstruct::Expression::Integer>(m_Integer);
 }
