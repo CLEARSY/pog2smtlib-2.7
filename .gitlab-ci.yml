@@ -7,9 +7,9 @@ before_script:
     git config --global http.extraheader "PRIVATE-TOKEN: $CI_JOB_TOKEN"
 
 stages:
-  - build_and_test
+  - build
 
-build_and_test:
+build:
   image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/debian-11
   stage: build
   tags:
