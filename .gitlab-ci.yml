@@ -1,0 +1,29 @@
+---
+variables:
+  GIT_STRATEGY: clone
+
+before_script:
+  - |
+    git config --global http.extraheader "PRIVATE-TOKEN: $CI_JOB_TOKEN"
+
+stages:
+  - build_and_test
+
+build_and_test:
+  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/debian-11
+  stage: build
+  tags:
+    - docker
+    - linux
+  script:
+    - mkdir -p build
+    - cd build
+    - cmake -G Ninja ..
+    - cmake --build .
+    - ctest
+    - cd ..
+  artifacts:
+    paths:
+      - build/Testing/Temporary/LastTest.log
+    when: always
+    expire_in: 1 week

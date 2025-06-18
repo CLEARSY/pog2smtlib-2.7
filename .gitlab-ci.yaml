@@ -1,29 +1,22 @@
----
 variables:
-  GIT_STRATEGY: clone
-
-before_script:
-  - |
-    git config --global http.extraheader "PRIVATE-TOKEN: $CI_JOB_TOKEN"
+  GIT_SUBMODULE_STRATEGY: recursive
 
 stages:
-  - build_and_test
+  - build
 
-build_and_test:
-  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/debian-11
-  stage: build
+build:
+  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/ubuntu-24.04
   tags:
     - docker
     - linux
+  stage: build
   script:
-    - mkdir -p build
+    - cmake -B build
+    - cmake --build build
     - cd build
-    - cmake -G Ninja ..
-    - cmake --build .
     - ctest
-    - cd ..
   artifacts:
     paths:
       - build/Testing/Temporary/LastTest.log
     when: always
-    expire_in: 1 week
+    expire_in: 1 month
