@@ -33,6 +33,7 @@ class Data;
 class BooleanExpression;
 class CartesianProduct;
 class Addition;
+class Subtraction;
 class Integer;
 class Maxint;
 class Minint;
@@ -80,6 +81,7 @@ class Factory {
   std::shared_ptr<Abstract> Maxint();
   std::shared_ptr<Abstract> Minint();
   std::shared_ptr<Abstract> Addition();
+  std::shared_ptr<Abstract> Subtraction();
   std::shared_ptr<Abstract> Integer();
   std::shared_ptr<Abstract> Real();
   std::shared_ptr<Abstract> Bool();
@@ -149,8 +151,9 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::BooleanExpression>
       m_BooleanExpression;
   std::shared_ptr<BConstruct::Expression::Maxint> m_Maxint;
-  std::shared_ptr<BConstruct::Expression::Maxint> m_Minint;
+  std::shared_ptr<BConstruct::Expression::Minint> m_Minint;
   std::shared_ptr<BConstruct::Expression::Addition> m_Addition;
+  std::shared_ptr<BConstruct::Expression::Subtraction> m_Subtraction;
   std::shared_ptr<BConstruct::Expression::Integer> m_Integer;
   std::shared_ptr<BConstruct::Expression::Real> m_Real;
   std::shared_ptr<BConstruct::Expression::Bool> m_Bool;
@@ -394,6 +397,12 @@ class Addition : public Uniform {
  public:
   explicit Addition() { m_label = "+"; }
   virtual ~Addition() = default;
+};
+
+class Subtraction : public Uniform {
+ public:
+  explicit Subtraction() { m_label = "_"; }
+  virtual ~Subtraction() = default;
 };
 
 /* 5.7 Classes for Building Set */
