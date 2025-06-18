@@ -8,9 +8,10 @@
 #include <unordered_set>
 using std::unordered_set;
 
+#include "pure-typing.h"
 #include "type-utils.h"
 
-static constexpr bool debug_me = true;
+static constexpr bool debug_me = false;
 
 class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
  public:
@@ -353,7 +354,6 @@ void GetSignatureVisitor::visitIdent(
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const VarName &b) {
   SignatureReset(m_signature);
-  std::cerr << "GetSignatureVisitor::visitIdent " << b.show() << std::endl;
   if (!m_bindings.contains(b)) {
     struct Data data{.m_name = std::make_shared<VarName>(b), .m_type = type};
     m_signature.m_data.emplace(data);
@@ -815,6 +815,9 @@ Signature predicateSignature(const Pred &pred) {
   GetSignatureVisitor visitor;
   pred.accept(visitor);
   Signature result = visitor.getSignature();
+  if (pureTypingPredicate(pred)) {
+    result.m_operators.clear();
+  }
   return result;
 }
 
