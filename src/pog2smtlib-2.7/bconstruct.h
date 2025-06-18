@@ -35,6 +35,7 @@ class CartesianProduct;
 class Addition;
 class Subtraction;
 class Multiplication;
+class IntegerDivision;
 class Integer;
 class Maxint;
 class Minint;
@@ -84,6 +85,7 @@ class Factory {
   std::shared_ptr<Abstract> Addition();
   std::shared_ptr<Abstract> Subtraction();
   std::shared_ptr<Abstract> Multiplication();
+  std::shared_ptr<Abstract> IntegerDivision();
   std::shared_ptr<Abstract> Integer();
   std::shared_ptr<Abstract> Real();
   std::shared_ptr<Abstract> Bool();
@@ -157,6 +159,7 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Addition> m_Addition;
   std::shared_ptr<BConstruct::Expression::Subtraction> m_Subtraction;
   std::shared_ptr<BConstruct::Expression::Multiplication> m_Multiplication;
+  std::shared_ptr<BConstruct::Expression::IntegerDivision> m_IntegerDivision;
   std::shared_ptr<BConstruct::Expression::Integer> m_Integer;
   std::shared_ptr<BConstruct::Expression::Real> m_Real;
   std::shared_ptr<BConstruct::Expression::Bool> m_Bool;
@@ -412,6 +415,12 @@ class Multiplication : public Uniform {
  public:
   explicit Multiplication() { m_label = "*"; }
   virtual ~Multiplication() = default;
+};
+
+class IntegerDivision : public Uniform {
+ public:
+  explicit IntegerDivision();
+  virtual ~IntegerDivision() = default;
 };
 
 /* 5.7 Classes for Building Set */

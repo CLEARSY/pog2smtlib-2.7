@@ -76,6 +76,27 @@ string smtSymbol(Pred::ComparisonOp op, const BType& type) {
   }
 }
 
+static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
+    {Expr::BinaryOp::IAddition, "+"},
+    {Expr::BinaryOp::RAddition, "+"},
+    {Expr::BinaryOp::ISubtraction, "-"},
+    {Expr::BinaryOp::RSubtraction, "-"},
+    {Expr::BinaryOp::IMultiplication, "*"},
+    {Expr::BinaryOp::RMultiplication, "*"},
+    {Expr::BinaryOp::IDivision, "|int.div|"},
+};
+
+std::string smtSymbol(Expr::BinaryOp op) {
+  const auto itr = binOpExprToStringMap.find(op);
+  if (itr == binOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format(
+        "{}:{} unexpected operator {}",
+        std::source_location::current().file_name(),
+        std::source_location::current().line(), Expr::to_string(op)));
+  }
+  return itr->second;
+}
+
 static std::unordered_map<Expr::Visitor::EConstant, std::string>
     constantToStringMap = {
         {Expr::Visitor::EConstant::MaxInt, "MAXINT"},

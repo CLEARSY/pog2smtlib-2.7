@@ -299,23 +299,14 @@ void SmtTranslatorVisitor::visitBinaryExpression(
   switch (op) {
     case Expr::BinaryOp::IAddition:
     case Expr::BinaryOp::RAddition:
-      m_translation.append("(+ ");
-      lhs.accept(*this);
-      m_translation.push_back(' ');
-      rhs.accept(*this);
-      m_translation.push_back(')');
-      break;
     case Expr::BinaryOp::ISubtraction:
     case Expr::BinaryOp::RSubtraction:
-      m_translation.append("(- ");
-      lhs.accept(*this);
-      m_translation.push_back(' ');
-      rhs.accept(*this);
-      m_translation.push_back(')');
-      break;
     case Expr::BinaryOp::IMultiplication:
     case Expr::BinaryOp::RMultiplication:
-      m_translation.append("(* ");
+    case Expr::BinaryOp::IDivision:
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op));
+      m_translation.push_back(' ');
       lhs.accept(*this);
       m_translation.push_back(' ');
       rhs.accept(*this);
@@ -352,7 +343,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Range_Subtraction:
     case Expr::BinaryOp::Image:
     case Expr::BinaryOp::Application:
-    case Expr::BinaryOp::IDivision:
     case Expr::BinaryOp::IExponentiation:
     case Expr::BinaryOp::RDivision:
     case Expr::BinaryOp::RExponentiation:
