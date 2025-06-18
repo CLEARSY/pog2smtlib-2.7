@@ -1,0 +1,12 @@
+(set-option :print-success false)
+(set-logic ALL)
+(define-sort |REAL| () Real)
+(declare-const c2 |REAL|)
+(declare-const c3 |REAL|)
+(declare-const c1 |REAL|)
+(assert (!
+  (not (= (+ c1 (* c2 c3)) (/ (- c1 c2) c3)))
+  :named |Goal|)
+)
+(check-sat)
+(exit)

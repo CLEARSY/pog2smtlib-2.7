@@ -289,20 +289,12 @@ void SmtTranslatorVisitor::visitUnaryExpression(
   switch (op) {
     case Expr::UnaryOp::Real:
     case Expr::UnaryOp::Floor:
+    case Expr::UnaryOp::Ceiling:
       m_translation.push_back('(');
       m_translation.append(smtSymbol(op));
       m_translation.push_back(' ');
       e.accept(*this);
       m_translation.push_back(')');
-      break;
-    case Expr::UnaryOp::Ceiling:
-      m_translation.push_back('(');
-      m_translation.append(smtSymbol(Expr::BinaryOp::IAddition));
-      m_translation.append(" (");
-      m_translation.append(smtSymbol(Expr::UnaryOp::Floor));
-      m_translation.push_back(' ');
-      e.accept(*this);
-      m_translation.append(") 1)");
       break;
     default:
       throw std::runtime_error(
