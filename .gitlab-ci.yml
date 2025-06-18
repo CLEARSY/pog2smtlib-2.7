@@ -1,22 +1,26 @@
+---
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SUBMODULE_FORCE_HTTPS: "true"
 
 stages:
   - build
 
 build:
-  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/ubuntu-24.04
+  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/debian-11
+  stage: build
   tags:
     - docker
     - linux
-  stage: build
   script:
-    - cmake -B build
-    - cmake --build build
+    - mkdir -p build
     - cd build
+    - cmake -G Ninja ..
+    - cmake --build .
     - ctest
+    - cd ..
   artifacts:
     paths:
       - build/Testing/Temporary/LastTest.log
     when: always
-    expire_in: 1 month
+    expire_in: 1 week
