@@ -13,7 +13,7 @@ using std::string;
 using std::string_view;
 using std::unordered_set;
 
-static constexpr bool debug_me = true;
+static constexpr bool debug_me = false;
 
 static string assertDefineHypothesisCommand(const string &formula,
                                             const string &name, int i);

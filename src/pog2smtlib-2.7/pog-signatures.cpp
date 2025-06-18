@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <source_location>
 
-static constexpr bool debug_me = true;
+static constexpr bool debug_me = false;
 
 POGSignatures::POGSignatures(const pog::pog &pog)
     : m_defines{}, m_groups{pog.pos.size(), std::nullopt}, m_pog(pog) {}
