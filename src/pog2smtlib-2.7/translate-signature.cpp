@@ -233,6 +233,9 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::BinaryOp::ISubtraction:
             construct = BConstruct::Factory::factory().Subtraction();
             break;
+          case Expr::BinaryOp::IMultiplication:
+            construct = BConstruct::Factory::factory().Multiplication();
+            break;
           default:
             throw std::runtime_error(
                 fmt::format("{}:{} Unknown binary operator {}",
