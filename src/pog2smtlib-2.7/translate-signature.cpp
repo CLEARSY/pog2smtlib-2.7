@@ -204,9 +204,29 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                 Injective_Sequences, Non_Empty_Injective_Sequences, IMinus, RMinus,
                 Inverse, Size, Permutations, First, Last, Identity, Closure,
                 Transitive_Closure, Tail, Front, Reverse, Concatenation, Rel, Fnc,
-                Real, Floor, Ceiling, RMinimum, RMaximum, Tree, Btree, Top, Sons,
+                RMinimum, RMaximum, Tree, Btree, Top, Sons,
                 Prefix, Postfix, Sizet, Mirror, Left, Right, Infix, Bin */
-      throw std::runtime_error(fmt::format("Unknown unary operator {}", op));
+      {
+        const auto unop = std::get<Expr::UnaryOp>(op);
+        switch (unop) {
+          /* case of operators having a counterpart in SMT theory ALL*/
+          case Expr::UnaryOp::Floor:
+            construct = BConstruct::Factory::factory().Floor();
+            break;
+          case Expr::UnaryOp::Ceiling:
+            construct = BConstruct::Factory::factory().Ceiling();
+            break;
+          case Expr::UnaryOp::Real:
+            construct = BConstruct::Factory::factory().ToReal();
+            break;
+          default:
+            throw std::runtime_error(
+                fmt::format("{}:{} Unknown unary operator {}",
+                            std::source_location::current().file_name(),
+                            std::source_location::current().line(), op));
+        }
+        break;
+      }
     case 2:  // Expr::BinaryOp
       /* Mapplet, Cartesian_Product, Partial_Functions, Partial_Surjections,
           Set_Difference, Total_Functions, Total_Surjections, Head_Insertion,
@@ -257,11 +277,16 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                       std::source_location::current().line()));
     case 4:  // Expr::NaryOp
       /* Sequence, Set */
-      throw std::runtime_error(fmt::format("Unknown variadic operator {}", op));
+      throw std::runtime_error(
+          fmt::format("{}:{} Unknown operator {}",
+                      std::source_location::current().file_name(),
+                      std::source_location::current().line(), op));
     case 5:  // Expr::QuantifiedOp
       /* Lambda, Intersection, Union, ISum, IProduct, RSum, RProduct */
       throw std::runtime_error(
-          fmt::format("Unknown quantified operator {}", op));
+          fmt::format("{}:{} Unknown operator {}",
+                      std::source_location::current().file_name(),
+                      std::source_location::current().line(), op));
     case 6:  // Expr::Visitor::EConstant => duplicate with Expr::EKind !!
              /* MaxInt, MinInt, INTEGER, NATURAL, NATURAL1, INT, NAT, NAT1,
                 STRING, BOOL, REAL, FLOAT, TRUE, FALSE, EmptySet, Successor,
@@ -286,10 +311,13 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Bool();
             break;
           case Expr::Visitor::EConstant::EmptySet:
-            if (types.size() != 1)
+            if (types.size() != 1) {
               throw std::runtime_error(
                   fmt::format("Erroneous typing information associated to "
-                              "empty set operator"));
+                              "empty set operator",
+                              std::source_location::current().file_name(),
+                              std::source_location::current().line()));
+            }
             construct = BConstruct::Factory::factory().EmptySet(*types.at(0));
             break;
           default:
@@ -301,13 +329,16 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
         break;
       }
     case 7:  // Expr::EKind
-      /* MaxInt, MinInt, INTEGER, NATURAL, NATURAL1, INT, NAT, NAT1,
-         STRING, BOOL, REAL, FLOAT, TRUE, FALSE, EmptySet, IntegerLiteral,
-             StringLiteral, RealLiteral, Id, BooleanExpr, QuantifiedExpr,
-             QuantifiedSet, UnaryExpr, BinaryExpr, NaryExpr, Struct,
-         Record, TernaryExpr, Record_Field_Access, Record_Field_Update,
-         Successor, Predecessor */
-      throw std::runtime_error(fmt::format("Unknown operator {}", op));
+             /* MaxInt, MinInt, INTEGER, NATURAL, NATURAL1, INT, NAT, NAT1,
+                STRING, BOOL, REAL, FLOAT, TRUE, FALSE, EmptySet, IntegerLiteral,
+                    StringLiteral, RealLiteral, Id, BooleanExpr, QuantifiedExpr,
+                    QuantifiedSet, UnaryExpr, BinaryExpr, NaryExpr, Struct,
+                Record, TernaryExpr, Record_Field_Access, Record_Field_Update,
+                Successor, Predecessor */
+      throw std::runtime_error(
+          fmt::format("{}:{} Unknown operator {}",
+                      std::source_location::current().file_name(),
+                      std::source_location::current().line(), op));
   }
 
   if (construct != nullptr && !context.contains(construct)) {

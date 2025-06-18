@@ -50,8 +50,8 @@ string POGTranslations::ofGoal(int group, int goal) {
   assert(goal <= static_cast<int>(POGroup.simpleGoals.size()) - 1);
 
   string result;
-  BConstruct::Context
-      context;  // contains the constructs that have already been translated
+  BConstruct::Context context;  // contains the constructs that have already
+                                // been translated (initially it is empty)
   const string_view strGroupPrelude = groupPrelude(group, context);
   result.append(strGroupPrelude);
   Signature localHypSignature;
