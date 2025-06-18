@@ -304,6 +304,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::IMultiplication:
     case Expr::BinaryOp::RMultiplication:
     case Expr::BinaryOp::IDivision:
+    case Expr::BinaryOp::RDivision:
       m_translation.push_back('(');
       m_translation.append(smtSymbol(op));
       m_translation.push_back(' ');
@@ -344,7 +345,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Image:
     case Expr::BinaryOp::Application:
     case Expr::BinaryOp::IExponentiation:
-    case Expr::BinaryOp::RDivision:
     case Expr::BinaryOp::RExponentiation:
     case Expr::BinaryOp::FAddition:
     case Expr::BinaryOp::FSubtraction:
