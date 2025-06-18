@@ -1,10 +1,7 @@
 ---
 variables:
-  GIT_STRATEGY: clone
-
-before_script:
-  - |
-    git config --global http.extraheader "PRIVATE-TOKEN: $CI_JOB_TOKEN"
+  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SUBMODULE_FORCE_HTTPS: "true"
 
 stages:
   - build
