@@ -222,7 +222,7 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
          First_Projection, Second_Projection, Const, Rank, Father, Subtree,
           Arity */
       {
-        const auto binop = std::get<Expr::BinaryOp>(op);
+        const Expr::BinaryOp binop = std::get<Expr::BinaryOp>(op);
         switch (binop) {
           case Expr::BinaryOp::Cartesian_Product:
             construct = BConstruct::Factory::factory().CartesianProduct();
@@ -230,15 +230,24 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::BinaryOp::IAddition:
             construct = BConstruct::Factory::factory().Addition();
             break;
+          case Expr::BinaryOp::ISubtraction:
+            construct = BConstruct::Factory::factory().Subtraction();
+            break;
           default:
             throw std::runtime_error(
-                fmt::format("Unknown binary operator {}", op));
+                fmt::format("{}:{} Unknown binary operator {}",
+                            std::source_location::current().file_name(),
+                            std::source_location::current().line(),
+                            Expr::to_string(binop)));
         }
         break;
       }
     case 3:  // Expr::TernaryOp
       /* Son, Bin */
-      throw std::runtime_error(fmt::format("Unknown ternary operator {}", op));
+      throw std::runtime_error(
+          fmt::format("{}:{} Ternary operator are not supported",
+                      std::source_location::current().file_name(),
+                      std::source_location::current().line()));
     case 4:  // Expr::NaryOp
       /* Sequence, Set */
       throw std::runtime_error(fmt::format("Unknown variadic operator {}", op));
@@ -254,6 +263,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
       {
         const auto econst = std::get<Expr::Visitor::EConstant>(op);
         switch (econst) {
+          case Expr::Visitor::EConstant::MaxInt:
+            construct = BConstruct::Factory::factory().Maxint();
+            break;
+          case Expr::Visitor::EConstant::MinInt:
+            construct = BConstruct::Factory::factory().Minint();
+            break;
           case Expr::Visitor::EConstant::INTEGER:
             construct = BConstruct::Factory::factory().Integer();
             break;
@@ -272,7 +287,9 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           default:
             throw std::runtime_error(
-                fmt::format("Unknown constant expression {}", op));
+                fmt::format("{}:{} Unknown constant expression {}",
+                            std::source_location::current().file_name(),
+                            std::source_location::current().line(), op));
         }
         break;
       }

@@ -319,15 +319,32 @@ void GetSignatureVisitor::visitConstant(
     const BType &type, [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     Expr::Visitor::EConstant c) {
   SignatureReset(m_signature);
-  // the only polymorphic constant is the empty set
-  if (c == Expr::Visitor::EConstant::EmptySet) {
-    if (type.getKind() != BType::Kind::PowerType) {
-      throw Exception("Empty set constant must have a powerset type");
-    }
-    m_signature.m_operators.emplace(MonomorphizedOperator{
-        c, std::make_shared<BType>(type.toPowerType().content)});
-  } else if (c == Expr::Visitor::EConstant::INTEGER) {
-    m_signature.m_operators.emplace(MonomorphizedOperator{c});
+  switch (c) {
+    case Expr::Visitor::EConstant::MaxInt:
+    case Expr::Visitor::EConstant::MinInt:
+    case Expr::Visitor::EConstant::INTEGER:
+    case Expr::Visitor::EConstant::NATURAL:
+    case Expr::Visitor::EConstant::NATURAL1:
+    case Expr::Visitor::EConstant::INT:
+    case Expr::Visitor::EConstant::NAT:
+    case Expr::Visitor::EConstant::NAT1:
+    case Expr::Visitor::EConstant::STRING:
+    case Expr::Visitor::EConstant::BOOL:
+    case Expr::Visitor::EConstant::REAL:
+    case Expr::Visitor::EConstant::FLOAT:
+    case Expr::Visitor::EConstant::TRUE:
+    case Expr::Visitor::EConstant::FALSE:
+      m_signature.m_operators.emplace(MonomorphizedOperator{c});
+      break;
+    case Expr::Visitor::EConstant::EmptySet:
+      if (type.getKind() != BType::Kind::PowerType) {
+        throw Exception("Empty set constant must have a powerset type");
+      }
+      m_signature.m_operators.emplace(MonomorphizedOperator{
+          c, std::make_shared<BType>(type.toPowerType().content)});
+    case Expr::Visitor::EConstant::Successor:
+    case Expr::Visitor::EConstant::Predecessor:
+      break;
   }
 }
 
@@ -336,6 +353,7 @@ void GetSignatureVisitor::visitIdent(
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const VarName &b) {
   SignatureReset(m_signature);
+  std::cerr << "GetSignatureVisitor::visitIdent " << b.show() << std::endl;
   if (!m_bindings.contains(b)) {
     struct Data data{.m_name = std::make_shared<VarName>(b), .m_type = type};
     m_signature.m_data.emplace(data);

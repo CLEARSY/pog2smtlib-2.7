@@ -38,6 +38,7 @@ extern std::string smtSymbol(Expr::TernaryOp);
 extern std::string smtSymbol(Expr::NaryOp, const BType&);
 extern std::string smtSymbol(Expr::QuantifiedOp);
 extern std::string smtSymbol(Expr::Visitor::EConstant, const BType&);
+extern std::string smtSymbol(Expr::Visitor::EConstant);
 extern std::string smtSymbol(const VarName&);
 
 #endif  // TRANSLATE_OPERATOR_H
