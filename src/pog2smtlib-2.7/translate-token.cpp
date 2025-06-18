@@ -76,6 +76,23 @@ string smtSymbol(Pred::ComparisonOp op, const BType& type) {
   }
 }
 
+static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
+    {Expr::UnaryOp::Real, "|int.real|"},
+    {Expr::UnaryOp::Floor, "|real.floor|"},
+    {Expr::UnaryOp::Ceiling, "|real.ceiling|"},
+};
+
+std::string smtSymbol(Expr::UnaryOp op) {
+  const auto itr = unOpExprToStringMap.find(op);
+  if (itr == unOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format(
+        "{}:{} unexpected operator {}",
+        std::source_location::current().file_name(),
+        std::source_location::current().line(), Expr::to_string(op)));
+  }
+  return itr->second;
+}
+
 static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::IAddition, "+"},
     {Expr::BinaryOp::RAddition, "+"},

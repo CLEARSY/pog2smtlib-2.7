@@ -39,6 +39,9 @@ class IntegerDivision;
 class Integer;
 class Maxint;
 class Minint;
+class Floor;
+class Ceiling;
+class ToReal;
 class Real;
 class EmptySet;
 };  // namespace Expression
@@ -82,6 +85,9 @@ class Factory {
   std::shared_ptr<Abstract> BooleanExpression();
   std::shared_ptr<Abstract> Maxint();
   std::shared_ptr<Abstract> Minint();
+  std::shared_ptr<Abstract> Floor();
+  std::shared_ptr<Abstract> Ceiling();
+  std::shared_ptr<Abstract> ToReal();
   std::shared_ptr<Abstract> Addition();
   std::shared_ptr<Abstract> Subtraction();
   std::shared_ptr<Abstract> Multiplication();
@@ -160,6 +166,9 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Subtraction> m_Subtraction;
   std::shared_ptr<BConstruct::Expression::Multiplication> m_Multiplication;
   std::shared_ptr<BConstruct::Expression::IntegerDivision> m_IntegerDivision;
+  std::shared_ptr<BConstruct::Expression::Floor> m_Floor;
+  std::shared_ptr<BConstruct::Expression::Ceiling> m_Ceiling;
+  std::shared_ptr<BConstruct::Expression::ToReal> m_ToReal;
   std::shared_ptr<BConstruct::Expression::Integer> m_Integer;
   std::shared_ptr<BConstruct::Expression::Real> m_Real;
   std::shared_ptr<BConstruct::Expression::Bool> m_Bool;
@@ -421,6 +430,24 @@ class IntegerDivision : public Uniform {
  public:
   explicit IntegerDivision();
   virtual ~IntegerDivision() = default;
+};
+
+class Floor : public Uniform {
+ public:
+  explicit Floor();
+  virtual ~Floor() = default;
+};
+
+class Ceiling : public Uniform {
+ public:
+  explicit Ceiling();
+  virtual ~Ceiling() = default;
+};
+
+class ToReal : public Uniform {
+ public:
+  explicit ToReal();
+  virtual ~ToReal() = default;
 };
 
 /* 5.7 Classes for Building Set */

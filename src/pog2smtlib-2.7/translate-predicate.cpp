@@ -286,11 +286,32 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] Expr::UnaryOp op, [[maybe_unused]] const Expr &e) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  switch (op) {
+    case Expr::UnaryOp::Real:
+    case Expr::UnaryOp::Floor:
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    case Expr::UnaryOp::Ceiling:
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(Expr::BinaryOp::IAddition));
+      m_translation.append(" (");
+      m_translation.append(smtSymbol(Expr::UnaryOp::Floor));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.append(") 1)");
+      break;
+    default:
+      throw std::runtime_error(
+          fmt::format("{}:{} Construct not covered (todo)",
+                      std::source_location::current().file_name(),
+                      std::source_location::current().line()));
+  }
 }
+
 void SmtTranslatorVisitor::visitBinaryExpression(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,

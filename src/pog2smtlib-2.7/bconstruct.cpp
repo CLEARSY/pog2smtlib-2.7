@@ -139,6 +139,18 @@ shared_ptr<Abstract> Factory::IntegerDivision() {
   return get<BConstruct::Expression::IntegerDivision>(m_IntegerDivision);
 }
 
+shared_ptr<Abstract> Factory::Floor() {
+  return get<BConstruct::Expression::Floor>(m_Floor);
+}
+
+shared_ptr<Abstract> Factory::Ceiling() {
+  return get<BConstruct::Expression::Ceiling>(m_Ceiling);
+}
+
+shared_ptr<Abstract> Factory::ToReal() {
+  return get<BConstruct::Expression::ToReal>(m_ToReal);
+}
+
 shared_ptr<Abstract> Factory::Integer() {
   return get<BConstruct::Expression::Integer>(m_Integer);
 }
