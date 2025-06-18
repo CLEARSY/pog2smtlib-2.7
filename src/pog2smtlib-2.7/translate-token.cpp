@@ -84,6 +84,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::IMultiplication, "*"},
     {Expr::BinaryOp::RMultiplication, "*"},
     {Expr::BinaryOp::IDivision, "|int.div|"},
+    {Expr::BinaryOp::RDivision, "/"},
 };
 
 std::string smtSymbol(Expr::BinaryOp op) {

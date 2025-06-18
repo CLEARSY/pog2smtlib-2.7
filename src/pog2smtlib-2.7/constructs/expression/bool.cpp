@@ -5,6 +5,8 @@ namespace BConstruct::Expression {
 
 Bool::Bool() {
   m_script = universeScript("BOOL", BType::BOOL);
+  m_prerequisites.insert(
+      std::make_shared<Predicate::SetMembership>(BType::BOOL));
   m_label = "BOOL";
   m_debug_string = "BOOL";
 }

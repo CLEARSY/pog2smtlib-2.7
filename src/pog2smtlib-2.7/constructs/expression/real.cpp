@@ -5,6 +5,8 @@ namespace BConstruct::Expression {
 
 Real::Real() {
   m_script = universeScript("REAL", BType::REAL);
+  m_prerequisites.insert(
+      std::make_shared<Predicate::SetMembership>(BType::REAL));
   m_label = "REAL";
   m_debug_string = "REAL";
 }

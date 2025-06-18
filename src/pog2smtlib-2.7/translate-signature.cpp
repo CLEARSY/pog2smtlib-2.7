@@ -224,17 +224,18 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
       {
         const Expr::BinaryOp binop = std::get<Expr::BinaryOp>(op);
         switch (binop) {
+          /* the following have counterparts in SMT theory ALL*/
+          case Expr::BinaryOp::IAddition:
+          case Expr::BinaryOp::ISubtraction:
+          case Expr::BinaryOp::IMultiplication:
+          case Expr::BinaryOp::RAddition:
+          case Expr::BinaryOp::RSubtraction:
+          case Expr::BinaryOp::RMultiplication:
+          case Expr::BinaryOp::RDivision:
+            construct = nullptr;
+            break;
           case Expr::BinaryOp::Cartesian_Product:
             construct = BConstruct::Factory::factory().CartesianProduct();
-            break;
-          case Expr::BinaryOp::IAddition:
-            construct = BConstruct::Factory::factory().Addition();
-            break;
-          case Expr::BinaryOp::ISubtraction:
-            construct = BConstruct::Factory::factory().Subtraction();
-            break;
-          case Expr::BinaryOp::IMultiplication:
-            construct = BConstruct::Factory::factory().Multiplication();
             break;
           case Expr::BinaryOp::IDivision:
             construct = BConstruct::Factory::factory().IntegerDivision();
