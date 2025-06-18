@@ -313,6 +313,14 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       rhs.accept(*this);
       m_translation.push_back(')');
       break;
+    case Expr::BinaryOp::IMultiplication:
+    case Expr::BinaryOp::RMultiplication:
+      m_translation.append("(* ");
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
     case Expr::BinaryOp::Mapplet:
     case Expr::BinaryOp::Cartesian_Product:
     case Expr::BinaryOp::Partial_Functions:
@@ -344,10 +352,8 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Range_Subtraction:
     case Expr::BinaryOp::Image:
     case Expr::BinaryOp::Application:
-    case Expr::BinaryOp::IMultiplication:
     case Expr::BinaryOp::IDivision:
     case Expr::BinaryOp::IExponentiation:
-    case Expr::BinaryOp::RMultiplication:
     case Expr::BinaryOp::RDivision:
     case Expr::BinaryOp::RExponentiation:
     case Expr::BinaryOp::FAddition:
