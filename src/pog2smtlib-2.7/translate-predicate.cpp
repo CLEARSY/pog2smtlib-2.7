@@ -17,6 +17,7 @@
 
 #include <fmt/core.h>
 
+#include <source_location>
 #include <unordered_map>
 #include <vector>
 
@@ -267,19 +268,28 @@ void SmtTranslatorVisitor::visitStringLiteral(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::string &b) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitRealLiteral(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Expr::Decimal &d) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitUnaryExpression(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] Expr::UnaryOp op, [[maybe_unused]] const Expr &e) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitBinaryExpression(
     [[maybe_unused]] const BType &type,
@@ -290,6 +300,14 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::IAddition:
     case Expr::BinaryOp::RAddition:
       m_translation.append("(+ ");
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    case Expr::BinaryOp::ISubtraction:
+    case Expr::BinaryOp::RSubtraction:
+      m_translation.append("(- ");
       lhs.accept(*this);
       m_translation.push_back(' ');
       rhs.accept(*this);
@@ -326,11 +344,9 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Range_Subtraction:
     case Expr::BinaryOp::Image:
     case Expr::BinaryOp::Application:
-    case Expr::BinaryOp::ISubtraction:
     case Expr::BinaryOp::IMultiplication:
     case Expr::BinaryOp::IDivision:
     case Expr::BinaryOp::IExponentiation:
-    case Expr::BinaryOp::RSubtraction:
     case Expr::BinaryOp::RMultiplication:
     case Expr::BinaryOp::RDivision:
     case Expr::BinaryOp::RExponentiation:
@@ -341,47 +357,69 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Iteration:
     case Expr::BinaryOp::First_Projection:
     case Expr::BinaryOp::Second_Projection:
+      throw std::runtime_error(
+          fmt::format("{}:{} Construct not covered (todo)",
+                      std::source_location::current().file_name(),
+                      std::source_location::current().line()));
       return;
     case Expr::BinaryOp::Const:
     case Expr::BinaryOp::Rank:
     case Expr::BinaryOp::Father:
     case Expr::BinaryOp::Subtree:
     case Expr::BinaryOp::Arity:
+      throw std::runtime_error(
+          fmt::format("{}:{} Construct not supported (deprecated)",
+                      std::source_location::current().file_name(),
+                      std::source_location::current().line()));
       return;
   }
-  // TODO
 }
 void SmtTranslatorVisitor::visitTernaryExpression(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] Expr::TernaryOp op, [[maybe_unused]] const Expr &fst,
     [[maybe_unused]] const Expr &snd, [[maybe_unused]] const Expr &thd) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitNaryExpression(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] Expr::NaryOp op,
     [[maybe_unused]] const std::vector<Expr> &vec) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitBooleanExpression(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Pred &p) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitRecord(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitStruct(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitQuantifiedExpr(
     [[maybe_unused]] const BType &type,
@@ -389,26 +427,38 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
     [[maybe_unused]] Expr::QuantifiedOp op,
     [[maybe_unused]] const std::vector<TypedVar> vars,
     [[maybe_unused]] const Pred &cond, [[maybe_unused]] const Expr &body) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitQuantifiedSet(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<TypedVar> vars,
     [[maybe_unused]] const Pred &cond) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitRecordUpdate(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Expr &rec, [[maybe_unused]] const std::string &label,
     [[maybe_unused]] const Expr &value) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }
 void SmtTranslatorVisitor::visitRecordAccess(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Expr &rec,
     [[maybe_unused]] const std::string &label) {
-  // TODO
+  throw std::runtime_error(
+      fmt::format("{}:{} Construct not covered (todo)",
+                  std::source_location::current().file_name(),
+                  std::source_location::current().line()));
 }

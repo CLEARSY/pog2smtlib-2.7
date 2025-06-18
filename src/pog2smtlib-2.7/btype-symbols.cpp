@@ -77,7 +77,7 @@ std::string symbol(const BType &btype) {
   return result;
 }
 
-extern std::string symbolInner(const BType &btype) {
+std::string symbolInner(const BType &btype) {
   std::string result;
   BTypeSymbolVisitor visitor;
   visitor.m_symbol.clear();

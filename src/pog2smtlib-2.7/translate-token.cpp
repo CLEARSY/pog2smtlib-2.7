@@ -94,11 +94,22 @@ static std::unordered_map<Expr::Visitor::EConstant, std::string>
         {Expr::Visitor::EConstant::Predecessor, "pred"},
 };
 
+std::string smtSymbol(Expr::Visitor::EConstant c) {
+  if (c == Expr::Visitor::EConstant::EmptySet) {
+    throw std::runtime_error(
+        fmt::format("{}:{} unexpected parameter value",
+                    std::source_location::current().file_name(),
+                    std::source_location::current().line()));
+  } else {
+    return constantToStringMap[c];
+  }
+}
+
 std::string smtSymbol(Expr::Visitor::EConstant c, const BType& type) {
   if (c == Expr::Visitor::EConstant::EmptySet) {
     return fmt::format("|set.empty {0}|", symbolInner(type));
   } else {
-    return constantToStringMap[c];
+    return smtSymbol(c);
   }
 }
 
@@ -108,8 +119,9 @@ std::string smtSymbol(const VarName& token) {
   } else if (token.kind() == VarName::Kind::WithSuffix) {
     return fmt::format("{}${}", token.prefix(), token.suffix());
   } else {
-    throw std::runtime_error(fmt::format(
-        "Function {} : invalid kind() return for VarName parameter ({})",
-        std::source_location::current().function_name(), token.prefix()));
+    throw std::runtime_error(
+        fmt::format("{}:{} Invalid kind() return for VarName parameter ({})",
+                    std::source_location::current().file_name(),
+                    std::source_location::current().line(), token.prefix()));
   }
 }

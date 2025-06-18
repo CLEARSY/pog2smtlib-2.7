@@ -120,11 +120,15 @@ shared_ptr<Abstract> Factory::Maxint() {
 }
 
 shared_ptr<Abstract> Factory::Minint() {
-  return get<BConstruct::Expression::Maxint>(m_Minint);
+  return get<BConstruct::Expression::Minint>(m_Minint);
 }
 
 shared_ptr<Abstract> Factory::Addition() {
   return get<BConstruct::Expression::Addition>(m_Addition);
+}
+
+shared_ptr<Abstract> Factory::Subtraction() {
+  return get<BConstruct::Expression::Subtraction>(m_Subtraction);
 }
 
 shared_ptr<Abstract> Factory::Integer() {
