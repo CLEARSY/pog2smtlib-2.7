@@ -107,15 +107,17 @@ shared_ptr<Abstract> Factory::NumberComparison() {
   return get<BConstruct::Predicate::NumberComparison>(m_NumberComparison);
 }
 
-shared_ptr<Abstract> Factory::Data(const struct Data& data) {
-  return get(data);
-}
-
 shared_ptr<Abstract> Factory::BooleanExpression() {
   return get<BConstruct::Expression::BooleanExpression>(m_BooleanExpression);
 }
 
-/* 5.3 Arithmetical Expressions */
+/* 5.1 Primary Expressions */
+
+shared_ptr<Abstract> Factory::Data(const struct Data& data) {
+  return get(data);
+}
+
+/* 5.3 Arithmetical Expressions 1 */
 
 shared_ptr<Abstract> Factory::Maxint() {
   return get<BConstruct::Expression::Maxint>(m_Maxint);
@@ -153,11 +155,13 @@ shared_ptr<Abstract> Factory::ToReal() {
   return get<BConstruct::Expression::ToReal>(m_ToReal);
 }
 
-/* 5.4 Expression of Couples */
+/* 5.5 Expression of Couples */
 
 shared_ptr<Abstract> Factory::Maplet() {
   return get<BConstruct::Expression::Maplet>(m_Maplet);
 }
+
+/* 5.6 Building Sets */
 
 shared_ptr<Abstract> Factory::Integer() {
   return get<BConstruct::Expression::Integer>(m_Integer);

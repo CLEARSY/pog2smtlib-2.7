@@ -1,9 +1,9 @@
-/* boolean_expression_2
- * Author:
- * Creation date: 11/04/2025
- */
 MACHINE
     boolean_expression_2
+CONSTANTS
+    c1
+PROPERTIES
+    c1 : BOOL
 ASSERTIONS
-    bool(1+0 = 2) = TRUE
+    FALSE = c1
 END

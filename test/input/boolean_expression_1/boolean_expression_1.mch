@@ -1,9 +1,9 @@
-/* boolean_expression_1
- * Author:
- * Creation date: 11/04/2025
- */
 MACHINE
     boolean_expression_1
+CONSTANTS
+    c1
+PROPERTIES
+    c1 : BOOL
 ASSERTIONS
-    bool(card({0, 1, 0}) = 2) = FALSE
+    TRUE = c1
 END

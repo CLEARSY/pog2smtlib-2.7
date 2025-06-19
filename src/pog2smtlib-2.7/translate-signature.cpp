@@ -298,6 +298,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
       {
         const auto econst = std::get<Expr::Visitor::EConstant>(op);
         switch (econst) {
+          /* 5.1 Boolean Expressions */
+          case Expr::Visitor::EConstant::TRUE:
+          case Expr::Visitor::EConstant::FALSE:
+            construct = nullptr;
+            break;
+          /* 5.2 Arithmetical Expressions I */
           case Expr::Visitor::EConstant::MaxInt:
             construct = BConstruct::Factory::factory().Maxint();
             break;

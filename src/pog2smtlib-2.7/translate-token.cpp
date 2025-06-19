@@ -77,6 +77,7 @@ string smtSymbol(Pred::ComparisonOp op, const BType& type) {
 }
 
 static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
+    /* 5.3 Arithmetical Expressions I */
     {Expr::UnaryOp::Real, "|int.real|"},
     {Expr::UnaryOp::Floor, "|real.floor|"},
     {Expr::UnaryOp::Ceiling, "|real.ceiling|"},
@@ -94,7 +95,7 @@ std::string smtSymbol(Expr::UnaryOp op) {
 }
 
 static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
-    /* 5.3 Arithmetical Expressions */
+    /* 5.3 Arithmetical Expressions I */
     {Expr::BinaryOp::IAddition, "+"},
     {Expr::BinaryOp::RAddition, "+"},
     {Expr::BinaryOp::ISubtraction, "-"},
@@ -103,7 +104,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::RMultiplication, "*"},
     {Expr::BinaryOp::IDivision, "|int.div|"},
     {Expr::BinaryOp::RDivision, "/"},
-    /* 5.4 Expression of Couples */
+    /* 5.5s Expression of Couples */
     {Expr::BinaryOp::Mapplet, "maplet"},
 };
 
@@ -120,8 +121,15 @@ std::string smtSymbol(Expr::BinaryOp op) {
 
 static std::unordered_map<Expr::Visitor::EConstant, std::string>
     constantToStringMap = {
+        /* 5.2 Boolean Expressions */
+        {Expr::Visitor::EConstant::TRUE, "true"},
+        {Expr::Visitor::EConstant::FALSE, "false"},
+        /* 5.3 Arithmetical Expressions I */
         {Expr::Visitor::EConstant::MaxInt, "MAXINT"},
         {Expr::Visitor::EConstant::MinInt, "MININT"},
+        {Expr::Visitor::EConstant::Successor, "succ"},
+        {Expr::Visitor::EConstant::Predecessor, "pred"},
+        /* 5.6 Building Sets */
         {Expr::Visitor::EConstant::INTEGER, "INTEGER"},
         {Expr::Visitor::EConstant::NATURAL, "NATURAL"},
         {Expr::Visitor::EConstant::NATURAL1, "NATURAL1"},
@@ -132,8 +140,6 @@ static std::unordered_map<Expr::Visitor::EConstant, std::string>
         {Expr::Visitor::EConstant::STRING, "STRING"},
         {Expr::Visitor::EConstant::REAL, "REAL"},
         {Expr::Visitor::EConstant::FLOAT, "FLOAT"},
-        {Expr::Visitor::EConstant::Successor, "succ"},
-        {Expr::Visitor::EConstant::Predecessor, "pred"},
 };
 
 std::string smtSymbol(Expr::Visitor::EConstant c) {
@@ -142,9 +148,15 @@ std::string smtSymbol(Expr::Visitor::EConstant c) {
         fmt::format("{}:{} unexpected parameter value",
                     std::source_location::current().file_name(),
                     std::source_location::current().line()));
-  } else {
-    return constantToStringMap[c];
   }
+  const auto itr = constantToStringMap.find(c);
+  if (itr == constantToStringMap.end()) {
+    throw std::runtime_error(
+        fmt::format("{}:{} unexpected constant",
+                    std::source_location::current().file_name(),
+                    std::source_location::current().line()));
+  }
+  return itr->second;
 }
 
 std::string smtSymbol(Expr::Visitor::EConstant c, const BType& type) {

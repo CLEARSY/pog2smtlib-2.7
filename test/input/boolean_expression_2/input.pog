@@ -18,27 +18,24 @@
     </Define>
     <Define name="ctx" hash="0"/>
     <Define name="seext" hash="0"/>
-    <Define name="lprp" hash="0"/>
+    <Define name="lprp" hash="3346334535668688401">
+        <Exp_Comparison op=":">
+            <Id value="c1" typref="2" tag="boolean_expression_2.bxml:1:2:1:1"/>
+            <Id value="BOOL" typref="3" tag="boolean_expression_2.bxml:1:2:1:2"/>
+        </Exp_Comparison>
+    </Define>
     <Define name="inprp" hash="0"/>
     <Define name="inext" hash="0"/>
     <Define name="inv" hash="0"/>
-    <Define name="ass" hash="4803643553659487541">
+    <Define name="ass" hash="5112713154476116106">
         <Exp_Comparison op="=">
-            <Boolean_Exp typref="2">
-                <Exp_Comparison op="=">
-                    <Binary_Exp op="+i" typref="1">
-                        <Integer_Literal value="1" typref="1"/>
-                        <Integer_Literal value="0" typref="1"/>
-                    </Binary_Exp>
-                    <Integer_Literal value="2" typref="1"/>
-                </Exp_Comparison>
-            </Boolean_Exp>
-            <Boolean_Literal value="TRUE" typref="2"/>
+            <Boolean_Literal value="FALSE" typref="2" tag="boolean_expression_2.bxml:1:4:1:1"/>
+            <Id value="c1" typref="2" tag="boolean_expression_2.bxml:1:4:1:2"/>
         </Exp_Comparison>
     </Define>
     <Define name="cst" hash="0"/>
     <Define name="sets" hash="0"/>
-    <Proof_Obligation goalHash="10914205921204515574">
+    <Proof_Obligation goalHash="5112713016344433757">
         <Tag>AssertionLemmas</Tag>
         <Definition name="B definitions"/>
         <Definition name="ctx"/>
@@ -52,11 +49,8 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op="=">
-                    <Binary_Exp op="+i" typref="1">
-                        <Integer_Literal value="1" typref="1"/>
-                        <Integer_Literal value="0" typref="1"/>
-                    </Binary_Exp>
-                    <Integer_Literal value="2" typref="1"/>
+                    <Boolean_Literal value="FALSE" typref="2" tag="boolean_expression_2.bxml:1:4:1:1"/>
+                    <Id value="c1" typref="2" tag="boolean_expression_2.bxml:1:4:1:2"/>
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
@@ -72,6 +66,11 @@
         </Type>
         <Type id="2">
             <Id value="BOOL"/>
+        </Type>
+        <Type id="3">
+            <Unary_Exp op="POW">
+                <Id value="BOOL"/>
+            </Unary_Exp>
         </Type>
     </TypeInfos>
 </Proof_Obligations>

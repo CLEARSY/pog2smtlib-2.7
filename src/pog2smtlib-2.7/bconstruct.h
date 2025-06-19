@@ -157,11 +157,15 @@ class Factory {
       m_StrictInclusions;
 
   std::shared_ptr<BConstruct::Predicate::NumberComparison> m_NumberComparison;
+  std::shared_ptr<BConstruct::Expression::BooleanExpression>
+      m_BooleanExpression;
+
+  /* 5.1 Primary Expressions */
   std::unordered_map<std::shared_ptr<const struct Data>,
                      std::shared_ptr<BConstruct::Expression::Data>, DataHash>
       m_data;
-  std::shared_ptr<BConstruct::Expression::BooleanExpression>
-      m_BooleanExpression;
+
+  /* 5.3 Arithmetical Expressions I */
   std::shared_ptr<BConstruct::Expression::Maxint> m_Maxint;
   std::shared_ptr<BConstruct::Expression::Minint> m_Minint;
   std::shared_ptr<BConstruct::Expression::Addition> m_Addition;
@@ -171,17 +175,18 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Floor> m_Floor;
   std::shared_ptr<BConstruct::Expression::Ceiling> m_Ceiling;
   std::shared_ptr<BConstruct::Expression::ToReal> m_ToReal;
-  std::shared_ptr<BConstruct::Expression::Integer> m_Integer;
-  std::shared_ptr<BConstruct::Expression::Real> m_Real;
-  std::shared_ptr<BConstruct::Expression::Bool> m_Bool;
 
+  /* 5.5 Expression of Couples */
+  std::shared_ptr<BConstruct::Expression::Maplet> m_Maplet;
+
+  /* 5.6 Building Sets */
   std::unordered_map<std::shared_ptr<const BType>,
                      std::shared_ptr<BConstruct::Expression::EmptySet>,
                      BTypeHash>
       m_EmptySets;
-
-  /* 5.4 Expression of Couples */
-  std::shared_ptr<BConstruct::Expression::Maplet> m_Maplet;
+  std::shared_ptr<BConstruct::Expression::Integer> m_Integer;
+  std::shared_ptr<BConstruct::Expression::Real> m_Real;
+  std::shared_ptr<BConstruct::Expression::Bool> m_Bool;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -393,14 +398,13 @@ class Data : public std::enable_shared_from_this<Data>, public Uniform {
   const std::string m_name;
 };
 
-/* 5.2 Classes for Boolean expressions */
 class BooleanExpression : public Uniform {
  public:
   explicit BooleanExpression() { m_label = "bool()"; }
   virtual ~BooleanExpression() = default;
 };
 
-/* 5.3 Classes for Arithmetical Expressions */
+/* 5.2 Classes for Arithmetical Expressions I */
 class Maxint : public Uniform {
  public:
   explicit Maxint();
@@ -462,8 +466,8 @@ class Maplet : public Uniform {
   explicit Maplet();
   virtual ~Maplet() = default;
 };
-/* 5.7 Classes for Building Set */
 
+/* 5.7 Classes for Building Set */
 class EmptySet : public UnaryBType {
  public:
   /** @param t type of the elements of the set (even empty set must be strictly

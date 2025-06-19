@@ -29,6 +29,13 @@ add_cl_test("expr_comparison_9")
 add_cl_test("expr_comparison_10")
 add_cl_test("expr_comparison_11")
 
+# 5.1 Boolean Expressions
+
+add_cl_test("boolean_expression_1")
+add_cl_test("boolean_expression_2")
+
+# 5.2 Arithmetical Expressions I
+
 add_cl_test("integer_const_expr")
 add_cl_test("arithmetical_expression_1")
 add_cl_test("arithmetical_expression_2")
@@ -40,3 +47,10 @@ add_cl_test("arithmetical_expression_7")
 add_cl_test("arithmetical_expression_10")
 add_cl_test("arithmetical_expression_11")
 add_cl_test("arithmetical_expression_12")
+
+# 5.3 Arithmetical Expressions II
+
+# 5.4 Expression of Couples
+
+add_cl_test("expr_couple_1")
+add_cl_test("expr_couple_2")
