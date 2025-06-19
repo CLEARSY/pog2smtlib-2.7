@@ -7,7 +7,7 @@ stages:
   - build
 
 build:
-  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/debian-11
+  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/ubuntu-24.04
   stage: build
   tags:
     - docker
