@@ -51,12 +51,12 @@ ctest
 [x] Cartesian Product Types
 [ ] Record
 [x] Belonging Predicates
-[ ] Equality Predicates
+[x] Equality Predicates
     [x] Set Equality
 [ ] Inclusion Predicates
     [x] Inclusion
     [ ] Strict Inclusion
-[ ] Boolean Expressions
+[x] Boolean Expressions
 [ ] Arithmetical Expressions I
     [x] MAXINT
     [x] MININT
