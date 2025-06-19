@@ -513,11 +513,7 @@ void GetSignatureVisitor::visitBinaryExpression(
     }
       /* Mapplet */
     case Expr::BinaryOp::Mapplet: {
-      const auto &etype1 = lhs.getType();
-      const auto &etype2 = rhs.getType();
-      sig.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype1),
-                                std::make_shared<BType>(etype2)));
+      sig.m_operators.emplace(MonomorphizedOperator(op));
       break;
     }
     /*

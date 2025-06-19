@@ -260,6 +260,9 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::BinaryOp::IDivision:
             construct = BConstruct::Factory::factory().IntegerDivision();
             break;
+          case Expr::BinaryOp::Mapplet:
+            construct = BConstruct::Factory::factory().Maplet();
+            break;
           default:
             throw std::runtime_error(
                 fmt::format("{}:{} Unknown binary operator {}",
