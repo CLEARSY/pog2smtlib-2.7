@@ -13,7 +13,8 @@ build:
     - docker
     - linux
   script:
-    - apt install libfmt-dev
+    - apt -qq update
+    - apt -q -y install libfmt-dev
     - mkdir -p build
     - cd build
     - cmake -G Ninja ..
