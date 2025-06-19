@@ -94,6 +94,7 @@ std::string smtSymbol(Expr::UnaryOp op) {
 }
 
 static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
+    /* 5.3 Arithmetical Expressions */
     {Expr::BinaryOp::IAddition, "+"},
     {Expr::BinaryOp::RAddition, "+"},
     {Expr::BinaryOp::ISubtraction, "-"},
@@ -102,6 +103,8 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::RMultiplication, "*"},
     {Expr::BinaryOp::IDivision, "|int.div|"},
     {Expr::BinaryOp::RDivision, "/"},
+    /* 5.4 Expression of Couples */
+    {Expr::BinaryOp::Mapplet, "maplet"},
 };
 
 std::string smtSymbol(Expr::BinaryOp op) {
