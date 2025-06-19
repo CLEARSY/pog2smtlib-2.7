@@ -7,12 +7,14 @@ stages:
   - build
 
 build:
-  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/debian-11
+  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/ubuntu-24.04
   stage: build
   tags:
     - docker
     - linux
   script:
+    - apt -qq update
+    - apt -q -y install libfmt-dev
     - mkdir -p build
     - cd build
     - cmake -G Ninja ..
