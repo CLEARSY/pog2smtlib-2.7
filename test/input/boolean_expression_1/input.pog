@@ -18,30 +18,24 @@
     </Define>
     <Define name="ctx" hash="0"/>
     <Define name="seext" hash="0"/>
-    <Define name="lprp" hash="0"/>
+    <Define name="lprp" hash="3346334535668688401">
+        <Exp_Comparison op=":">
+            <Id value="c1" typref="2" tag="boolean_expression_1.bxml:1:2:1:1"/>
+            <Id value="BOOL" typref="3" tag="boolean_expression_1.bxml:1:2:1:2"/>
+        </Exp_Comparison>
+    </Define>
     <Define name="inprp" hash="0"/>
     <Define name="inext" hash="0"/>
     <Define name="inv" hash="0"/>
-    <Define name="ass" hash="3118398613329464554">
+    <Define name="ass" hash="5112713154476145115">
         <Exp_Comparison op="=">
-            <Boolean_Exp typref="2">
-                <Exp_Comparison op="=">
-                    <Unary_Exp op="card" typref="1">
-                        <Nary_Exp op="{" typref="0">
-                            <Integer_Literal value="0" typref="1"/>
-                            <Integer_Literal value="1" typref="1"/>
-                            <Integer_Literal value="0" typref="1"/>
-                        </Nary_Exp>
-                    </Unary_Exp>
-                    <Integer_Literal value="2" typref="1"/>
-                </Exp_Comparison>
-            </Boolean_Exp>
-            <Boolean_Literal value="FALSE" typref="2"/>
+            <Boolean_Literal value="TRUE" typref="2" tag="boolean_expression_1.bxml:1:4:1:1"/>
+            <Id value="c1" typref="2" tag="boolean_expression_1.bxml:1:4:1:2"/>
         </Exp_Comparison>
     </Define>
     <Define name="cst" hash="0"/>
     <Define name="sets" hash="0"/>
-    <Proof_Obligation goalHash="278210288093938001">
+    <Proof_Obligation goalHash="5112713016344437836">
         <Tag>AssertionLemmas</Tag>
         <Definition name="B definitions"/>
         <Definition name="ctx"/>
@@ -54,47 +48,9 @@
         <Simple_Goal>
             <Tag>Assertion is verified</Tag>
             <Goal>
-                <Unary_Pred op="not">
-                    <Exp_Comparison op="=">
-                        <Unary_Exp op="card" typref="1">
-                            <Nary_Exp op="{" typref="0">
-                                <Integer_Literal value="0" typref="1"/>
-                                <Integer_Literal value="1" typref="1"/>
-                                <Integer_Literal value="0" typref="1"/>
-                            </Nary_Exp>
-                        </Unary_Exp>
-                        <Integer_Literal value="2" typref="1"/>
-                    </Exp_Comparison>
-                </Unary_Pred>
-            </Goal>
-        </Simple_Goal>
-    </Proof_Obligation>
-    <Proof_Obligation goalHash="3118398613329464558">
-        <Tag>WellDefinednessAssertions</Tag>
-        <Definition name="B definitions"/>
-        <Definition name="ctx"/>
-        <Definition name="cst"/>
-        <Definition name="lprp"/>
-        <Definition name="inprp"/>
-        <Definition name="inext"/>
-        <Definition name="seext"/>
-        <Definition name="inv"/>
-        <Simple_Goal>
-            <Tag>Assertion is well defined</Tag>
-            <Goal>
-                <Exp_Comparison op=":">
-                    <Nary_Exp op="{" typref="0">
-                        <Integer_Literal value="0" typref="1"/>
-                        <Integer_Literal value="1" typref="1"/>
-                        <Integer_Literal value="0" typref="1"/>
-                    </Nary_Exp>
-                    <Unary_Exp op="FIN" typref="3">
-                        <Nary_Exp op="{" typref="0">
-                            <Integer_Literal value="0" typref="1"/>
-                            <Integer_Literal value="1" typref="1"/>
-                            <Integer_Literal value="0" typref="1"/>
-                        </Nary_Exp>
-                    </Unary_Exp>
+                <Exp_Comparison op="=">
+                    <Boolean_Literal value="TRUE" typref="2" tag="boolean_expression_1.bxml:1:4:1:1"/>
+                    <Id value="c1" typref="2" tag="boolean_expression_1.bxml:1:4:1:2"/>
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
@@ -113,9 +69,7 @@
         </Type>
         <Type id="3">
             <Unary_Exp op="POW">
-                <Unary_Exp op="POW">
-                    <Id value="INTEGER"/>
-                </Unary_Exp>
+                <Id value="BOOL"/>
             </Unary_Exp>
         </Type>
     </TypeInfos>

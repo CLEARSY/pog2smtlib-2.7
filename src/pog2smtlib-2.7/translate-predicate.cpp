@@ -310,7 +310,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     [[maybe_unused]] Expr::BinaryOp op, [[maybe_unused]] const Expr &lhs,
     [[maybe_unused]] const Expr &rhs) {
   switch (op) {
-    /* 5.3 Arithmetical Expressions */
+    /* 5.2 Arithmetical Expressions I */
     case Expr::BinaryOp::IAddition:
     case Expr::BinaryOp::RAddition:
     case Expr::BinaryOp::ISubtraction:
@@ -319,7 +319,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::RMultiplication:
     case Expr::BinaryOp::IDivision:
     case Expr::BinaryOp::RDivision:
-    /* 5.3 Expression of Couples */
+    /* 5.4 Expression of Couples */
     case Expr::BinaryOp::Mapplet:
       m_translation.push_back('(');
       m_translation.append(smtSymbol(op));
@@ -329,6 +329,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       rhs.accept(*this);
       m_translation.push_back(')');
       break;
+    /* todo */
     case Expr::BinaryOp::Cartesian_Product:
     case Expr::BinaryOp::Partial_Functions:
     case Expr::BinaryOp::Partial_Surjections:
