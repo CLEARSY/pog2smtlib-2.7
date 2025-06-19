@@ -115,6 +115,8 @@ shared_ptr<Abstract> Factory::BooleanExpression() {
   return get<BConstruct::Expression::BooleanExpression>(m_BooleanExpression);
 }
 
+/* 5.3 Arithmetical Expressions */
+
 shared_ptr<Abstract> Factory::Maxint() {
   return get<BConstruct::Expression::Maxint>(m_Maxint);
 }
@@ -149,6 +151,12 @@ shared_ptr<Abstract> Factory::Ceiling() {
 
 shared_ptr<Abstract> Factory::ToReal() {
   return get<BConstruct::Expression::ToReal>(m_ToReal);
+}
+
+/* 5.4 Expression of Couples */
+
+shared_ptr<Abstract> Factory::Maplet() {
+  return get<BConstruct::Expression::Maplet>(m_Maplet);
 }
 
 shared_ptr<Abstract> Factory::Integer() {

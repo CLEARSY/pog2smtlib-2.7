@@ -31,6 +31,64 @@ cmake -B build
 cmake --build build
 ```
 
+## Testing
+
+To test the project (after compilation), run the following commands:
+
+```sh
+cd build
+ctest
+```
+
+## Specification Coverage
+
+[x] Predefined Types
+[ ] User-defined Types
+    [ ] Abstract Sets
+    [ ] Enumerated Sets
+    Il faut être capable de charger un fichier POG qui contient des informations de type riches (richTypeInfos).
+[x] Powerset Types
+[x] Cartesian Product Types
+[ ] Record
+[x] Belonging Predicates
+[ ] Equality Predicates
+    [x] Set Equality
+[ ] Inclusion Predicates
+    [x] Inclusion
+    [ ] Strict Inclusion
+[ ] Boolean Expressions
+[ ] Arithmetical Expressions I
+    [x] MAXINT
+    [x] MININT
+    [x] +
+    [x] -
+    [x] *
+    [x] /
+    [ ] mod
+    [ ] **
+    [ ] succ
+    [ ] pred
+    [x] floor
+    [x] ceiling
+    [x] real
+[ ] Arithmetical Expressions II
+[ ] Generalized Product
+[x] Expression of Couples
+[ ] Building Sets
+[ ] Set List Expressions
+[ ] Set List Expressions (Continued)
+[ ] Record Expressions
+[ ] Sets of Relations
+[ ] Expressions of Relations I
+[ ] Expressions of Relations II
+[ ] Expressions of Relations III
+[ ] Expressions of Relations IV
+[ ] Sets of Functions
+[ ] Expressions of Functions
+[ ] Sets of Sequences
+[ ] Sequences Expressions I
+[ ] Sequences Expressions II
+
 ## Contributing
 
 We welcome external contributors to b2smtlib!

@@ -44,6 +44,7 @@ class Ceiling;
 class ToReal;
 class Real;
 class EmptySet;
+class Maplet;
 };  // namespace Expression
 
 class Factory {
@@ -97,6 +98,7 @@ class Factory {
   std::shared_ptr<Abstract> Bool();
   std::shared_ptr<Abstract> CartesianProduct(const BType &, const BType &);
   std::shared_ptr<Abstract> EmptySet(const BType &);
+  std::shared_ptr<Abstract> Maplet();
 
   class Exception : public std::exception {
    public:
@@ -177,6 +179,9 @@ class Factory {
                      std::shared_ptr<BConstruct::Expression::EmptySet>,
                      BTypeHash>
       m_EmptySets;
+
+  /* 5.4 Expression of Couples */
+  std::shared_ptr<BConstruct::Expression::Maplet> m_Maplet;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -450,6 +455,13 @@ class ToReal : public Uniform {
   virtual ~ToReal() = default;
 };
 
+/* 5.4 Classes for Expression of Couples */
+
+class Maplet : public Uniform {
+ public:
+  explicit Maplet();
+  virtual ~Maplet() = default;
+};
 /* 5.7 Classes for Building Set */
 
 class EmptySet : public UnaryBType {
