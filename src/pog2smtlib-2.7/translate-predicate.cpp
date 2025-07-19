@@ -17,10 +17,10 @@
 
 #include <fmt/core.h>
 
-#include <source_location>
 #include <unordered_map>
 #include <vector>
 
+#include "cc-compatibility.h"
 #include "expr.h"
 #include "pred.h"
 #include "pure-typing.h"
@@ -268,19 +268,15 @@ void SmtTranslatorVisitor::visitStringLiteral(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::string &b) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitRealLiteral(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Expr::Decimal &d) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitUnaryExpression(
     [[maybe_unused]] const BType &type,
@@ -297,10 +293,8 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       m_translation.push_back(')');
       break;
     default:
-      throw std::runtime_error(
-          fmt::format("{}:{} Construct not covered (todo)",
-                      std::source_location::current().file_name(),
-                      std::source_location::current().line()));
+      throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                           FILE_NAME, LINE_NUMBER));
   }
 }
 
@@ -369,10 +363,8 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Iteration:
     case Expr::BinaryOp::First_Projection:
     case Expr::BinaryOp::Second_Projection:
-      throw std::runtime_error(
-          fmt::format("{}:{} Construct not covered (todo)",
-                      std::source_location::current().file_name(),
-                      std::source_location::current().line()));
+      throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                           FILE_NAME, LINE_NUMBER));
       return;
     case Expr::BinaryOp::Const:
     case Expr::BinaryOp::Rank:
@@ -380,9 +372,8 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Subtree:
     case Expr::BinaryOp::Arity:
       throw std::runtime_error(
-          fmt::format("{}:{} Construct not supported (deprecated)",
-                      std::source_location::current().file_name(),
-                      std::source_location::current().line()));
+          fmt::format("{}:{} Construct not supported (deprecated)", FILE_NAME,
+                      LINE_NUMBER));
       return;
   }
 }
@@ -391,47 +382,37 @@ void SmtTranslatorVisitor::visitTernaryExpression(
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] Expr::TernaryOp op, [[maybe_unused]] const Expr &fst,
     [[maybe_unused]] const Expr &snd, [[maybe_unused]] const Expr &thd) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitNaryExpression(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] Expr::NaryOp op,
     [[maybe_unused]] const std::vector<Expr> &vec) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitBooleanExpression(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Pred &p) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitRecord(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitStruct(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitQuantifiedExpr(
     [[maybe_unused]] const BType &type,
@@ -439,38 +420,30 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
     [[maybe_unused]] Expr::QuantifiedOp op,
     [[maybe_unused]] const std::vector<TypedVar> vars,
     [[maybe_unused]] const Pred &cond, [[maybe_unused]] const Expr &body) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitQuantifiedSet(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<TypedVar> vars,
     [[maybe_unused]] const Pred &cond) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitRecordUpdate(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Expr &rec, [[maybe_unused]] const std::string &label,
     [[maybe_unused]] const Expr &value) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitRecordAccess(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Expr &rec,
     [[maybe_unused]] const std::string &label) {
-  throw std::runtime_error(
-      fmt::format("{}:{} Construct not covered (todo)",
-                  std::source_location::current().file_name(),
-                  std::source_location::current().line()));
+  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                       FILE_NAME, LINE_NUMBER));
 }

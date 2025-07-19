@@ -16,16 +16,15 @@ else()
   set(PROJECT_IS_TOP_LEVEL FALSE)
 endif()
 
-if(PROJECT_IS_TOP_LEVEL)
-  foreach(submodule
-      "${PROJECT_SOURCE_DIR}/extern/POGLIB")
-    if(NOT EXISTS "${submodule}/CMakeLists.txt")
-      message(FATAL_ERROR "Submodule ${submodule} is missing: update submodules and try again.")
-      message(FATAL_ERROR "Command : git submodule update --init --recursive.")
-    endif()
-  endforeach(submodule)
-  add_subdirectory(extern/POGLIB)
-endif()
+foreach(submodule
+    "${PROJECT_SOURCE_DIR}/extern/POGLIB")
+  if(NOT EXISTS "${submodule}/CMakeLists.txt")
+    message(FATAL_ERROR "Submodule ${submodule} is missing: update submodules and try again.")
+    message(FATAL_ERROR "Command : git submodule update --init --recursive.")
+  endif()
+endforeach(submodule)
+
+add_subdirectory(extern)
 
 add_subdirectory(src/pog2smtlib-2.7)
 

@@ -12,6 +12,9 @@ build:
   tags:
     - docker
     - linux
+  before_script:
+    - git submodule
+    - git submodule foreach --recursive git submodule
   script:
     - apt -qq update
     - apt -q -y install libfmt-dev

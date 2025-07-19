@@ -18,12 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "translate-signature.h"
 
 #include <queue>
-#include <source_location>
 #include <stack>
 #include <vector>
 
 #include "bconstruct-utils.h"
 #include "bconstruct.h"
+#include "cc-compatibility.h"
 #include "signature.h"
 #include "symbols.h"
 
@@ -78,7 +78,7 @@ std::string translate(const Signature &signature,
   while (!sequence.empty()) {
     const auto construct = sequence.top();
     sequence.pop();
-    if (!context.contains(construct)) {
+    if (context.find(construct) == context.end()) {
       result.append(construct->script());
       context.insert(construct);
     }
@@ -105,7 +105,7 @@ static stack<BConstructPtr> sortConstructsAndPrerequisites(
       all.insert(construct);
       in_degree[construct] = 0;
       for (const auto &p : construct->prerequisites()) {
-        if (!context.contains(p)) {
+        if (context.find(p) == context.end()) {
           init.push(p);
         }
       }
@@ -149,7 +149,7 @@ static void buildAndQueueConstruct(const struct Data &dt,
                                    const BConstruct::Context &context) {
   BConstructPtr construct;
   construct = BConstruct::Factory::factory().Data(dt);
-  if (construct != nullptr && !context.contains(construct)) {
+  if (construct != nullptr && context.find(construct) == context.end()) {
     queue.push(construct);
   }
 }
@@ -220,10 +220,8 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().ToReal();
             break;
           default:
-            throw std::runtime_error(
-                fmt::format("{}:{} Unknown unary operator {}",
-                            std::source_location::current().file_name(),
-                            std::source_location::current().line(), op));
+            throw std::runtime_error(fmt::format(
+                "{}:{} Unknown unary operator {}", FILE_NAME, LINE_NUMBER, op));
         }
         break;
       }
@@ -265,31 +263,23 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           default:
             throw std::runtime_error(
-                fmt::format("{}:{} Unknown binary operator {}",
-                            std::source_location::current().file_name(),
-                            std::source_location::current().line(),
-                            Expr::to_string(binop)));
+                fmt::format("{}:{} Unknown binary operator {}", FILE_NAME,
+                            LINE_NUMBER, Expr::to_string(binop)));
         }
         break;
       }
     case 3:  // Expr::TernaryOp
       /* Son, Bin */
-      throw std::runtime_error(
-          fmt::format("{}:{} Ternary operator are not supported",
-                      std::source_location::current().file_name(),
-                      std::source_location::current().line()));
+      throw std::runtime_error(fmt::format(
+          "{}:{} Ternary operator are not supported", FILE_NAME, LINE_NUMBER));
     case 4:  // Expr::NaryOp
       /* Sequence, Set */
       throw std::runtime_error(
-          fmt::format("{}:{} Unknown operator {}",
-                      std::source_location::current().file_name(),
-                      std::source_location::current().line(), op));
+          fmt::format("{}:{} Unknown operator {}", FILE_NAME, LINE_NUMBER, op));
     case 5:  // Expr::QuantifiedOp
       /* Lambda, Intersection, Union, ISum, IProduct, RSum, RProduct */
       throw std::runtime_error(
-          fmt::format("{}:{} Unknown operator {}",
-                      std::source_location::current().file_name(),
-                      std::source_location::current().line(), op));
+          fmt::format("{}:{} Unknown operator {}", FILE_NAME, LINE_NUMBER, op));
     case 6:  // Expr::Visitor::EConstant => duplicate with Expr::EKind !!
              /* MaxInt, MinInt, INTEGER, NATURAL, NATURAL1, INT, NAT, NAT1,
                 STRING, BOOL, REAL, FLOAT, TRUE, FALSE, EmptySet, Successor,
@@ -324,16 +314,14 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
               throw std::runtime_error(
                   fmt::format("Erroneous typing information associated to "
                               "empty set operator",
-                              std::source_location::current().file_name(),
-                              std::source_location::current().line()));
+                              FILE_NAME, LINE_NUMBER));
             }
             construct = BConstruct::Factory::factory().EmptySet(*types.at(0));
             break;
           default:
             throw std::runtime_error(
-                fmt::format("{}:{} Unknown constant expression {}",
-                            std::source_location::current().file_name(),
-                            std::source_location::current().line(), op));
+                fmt::format("{}:{} Unknown constant expression {}", FILE_NAME,
+                            LINE_NUMBER, op));
         }
         break;
       }
@@ -345,12 +333,10 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                 Record, TernaryExpr, Record_Field_Access, Record_Field_Update,
                 Successor, Predecessor */
       throw std::runtime_error(
-          fmt::format("{}:{} Unknown operator {}",
-                      std::source_location::current().file_name(),
-                      std::source_location::current().line(), op));
+          fmt::format("{}:{} Unknown operator {}", FILE_NAME, LINE_NUMBER, op));
   }
 
-  if (construct != nullptr && !context.contains(construct)) {
+  if (construct != nullptr && context.find(construct) == context.end()) {
     queue.push(construct);
   }
 }
