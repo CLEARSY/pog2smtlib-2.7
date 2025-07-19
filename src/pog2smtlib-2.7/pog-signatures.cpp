@@ -1,7 +1,8 @@
 #include "pog-signatures.h"
 
 #include <cstddef>
-#include <source_location>
+
+#include "cc-compatibility.h"
 
 static constexpr bool debug_me = false;
 
@@ -37,9 +38,7 @@ insert:
 
 void POGSignatures::initGroupSignatures(int group) {
   if (debug_me) {
-    std::cerr << fmt::format("{0} group = {1}\n",
-                             std::source_location::current().function_name(),
-                             group);
+    std::cerr << fmt::format("{0} group = {1}\n", FILE_NAME, group);
   };
   const pog::POGroup &pogroup = m_pog.pos.at(group);
   if (m_groups.at(group) == std::nullopt) {
@@ -111,9 +110,7 @@ const Signature POGSignatures::ofGoal(int group, int goal) {
 
 const Signature &POGSignatures::ofGroup(int group) {
   if (debug_me) {
-    std::cerr << fmt::format("{0} group = {1}\n",
-                             std::source_location::current().function_name(),
-                             group);
+    std::cerr << fmt::format("{0} group = {1}\n", FILE_NAME, group);
   };
   initGroupSignatures(group);
   return m_groups.at(group)->common.value();

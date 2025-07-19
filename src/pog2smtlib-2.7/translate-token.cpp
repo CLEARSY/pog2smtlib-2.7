@@ -17,10 +17,11 @@
 #include <fmt/core.h>
 
 #include <exception>
-#include <source_location>
 #include <unordered_map>
 
 #include "btype-symbols.h"
+#include "cc-compatibility.h"
+
 using std::string;
 using std::string_view;
 
@@ -86,10 +87,9 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
 std::string smtSymbol(Expr::UnaryOp op) {
   const auto itr = unOpExprToStringMap.find(op);
   if (itr == unOpExprToStringMap.end()) {
-    throw std::runtime_error(fmt::format(
-        "{}:{} unexpected operator {}",
-        std::source_location::current().file_name(),
-        std::source_location::current().line(), Expr::to_string(op)));
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
   }
   return itr->second;
 }
@@ -111,10 +111,9 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
 std::string smtSymbol(Expr::BinaryOp op) {
   const auto itr = binOpExprToStringMap.find(op);
   if (itr == binOpExprToStringMap.end()) {
-    throw std::runtime_error(fmt::format(
-        "{}:{} unexpected operator {}",
-        std::source_location::current().file_name(),
-        std::source_location::current().line(), Expr::to_string(op)));
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
   }
   return itr->second;
 }
@@ -144,17 +143,13 @@ static std::unordered_map<Expr::Visitor::EConstant, std::string>
 
 std::string smtSymbol(Expr::Visitor::EConstant c) {
   if (c == Expr::Visitor::EConstant::EmptySet) {
-    throw std::runtime_error(
-        fmt::format("{}:{} unexpected parameter value",
-                    std::source_location::current().file_name(),
-                    std::source_location::current().line()));
+    throw std::runtime_error(fmt::format("{}:{} unexpected parameter value",
+                                         FILE_NAME, LINE_NUMBER));
   }
   const auto itr = constantToStringMap.find(c);
   if (itr == constantToStringMap.end()) {
     throw std::runtime_error(
-        fmt::format("{}:{} unexpected constant",
-                    std::source_location::current().file_name(),
-                    std::source_location::current().line()));
+        fmt::format("{}:{} unexpected constant", FILE_NAME, LINE_NUMBER));
   }
   return itr->second;
 }
@@ -175,7 +170,6 @@ std::string smtSymbol(const VarName& token) {
   } else {
     throw std::runtime_error(
         fmt::format("{}:{} Invalid kind() return for VarName parameter ({})",
-                    std::source_location::current().file_name(),
-                    std::source_location::current().line(), token.prefix()));
+                    FILE_NAME, LINE_NUMBER, token.prefix()));
   }
 }

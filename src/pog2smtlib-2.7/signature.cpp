@@ -133,6 +133,14 @@ struct fmt::formatter<std::shared_ptr<T>> : formatter<string_view> {
   }
 };
 
+namespace std {
+template <>
+struct hash<BType> {
+  std::size_t operator()(const BType &b) const noexcept {
+    return b.hash_combine(0);
+  }
+};
+}  // namespace std
 size_t MonomorphizedOperator::opHash() const {
   if (!m_hash_valid) {
     size_t m_hash = 0;
@@ -140,8 +148,8 @@ size_t MonomorphizedOperator::opHash() const {
 
     for (const auto &type_ptr : m_types) {
       if (type_ptr) {  // Check for null pointers.
-        m_hash ^= std::hash<const BType>{}(*type_ptr) + 0x9e3779b9 +
-                  (m_hash << 6) + (m_hash >> 2);
+        m_hash ^= std::hash<BType>{}(*type_ptr) + 0x9e3779b9 + (m_hash << 6) +
+                  (m_hash >> 2);
       }
     }
     m_hash_valid = true;
@@ -354,8 +362,8 @@ void GetSignatureVisitor::visitIdent(
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const VarName &b) {
   SignatureReset(m_signature);
-  if (!m_bindings.contains(b)) {
-    struct Data data{.m_name = std::make_shared<VarName>(b), .m_type = type};
+  if (m_bindings.find(b) == m_bindings.end()) {
+    struct Data data{std::make_shared<VarName>(b), type};
     m_signature.m_data.emplace(data);
   }
 }
