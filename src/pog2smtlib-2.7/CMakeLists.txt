@@ -1,7 +1,7 @@
 project(pog2smtlib27_program)
 message(STATUS "Processing ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt")
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 # configure compilers
@@ -13,8 +13,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID MATCHES Clang$)
   add_compile_options(-fno-threadsafe-statics)
 endif()
 
-find_package(fmt REQUIRED)
-
 add_subdirectory(constructs/type)
 add_subdirectory(constructs/expression)
 add_subdirectory(constructs/predicate)
@@ -24,6 +22,7 @@ set(POG2SMTLIB27_HEADERS
     bconstruct.h
     bconstruct-utils.h
     btype-symbols.h
+    cc-compatibility.h
     parameters.h
     pog-signatures.h
     pog-translation.h
@@ -64,6 +63,7 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${POGLIB_SOURCE_DIR}
   ${LIBBAST_SOURCE_DIR}
+  ${FMT_CXX_SOURCE_DIR}/include/
   )
 
 add_executable(pog2smtlib27
@@ -71,5 +71,5 @@ add_executable(pog2smtlib27
     ${POG2SMTLIB27_HEADERS}
     )
 
-target_link_libraries(pog2smtlib27 -Bstatic POGLIB BAST tinyxml2::tinyxml2 fmt::fmt)
+target_link_libraries(pog2smtlib27 PRIVATE fmt::fmt-header-only -Bstatic POGLIB BAST tinyxml2::tinyxml2)
 set(pog2smtlib27_EXE ${CMAKE_CURRENT_BINARY_DIR}/pog2smtlib27 CACHE PATH "pog2smtlib27 executable")

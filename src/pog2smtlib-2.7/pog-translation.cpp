@@ -1,9 +1,9 @@
 #include "pog-translation.h"
 
-#include <source_location>
 #include <unordered_set>
 #include <variant>
 
+#include "cc-compatibility.h"
 #include "pure-typing.h"
 #include "translate-predicate.h"
 #include "translate-signature.h"
@@ -31,9 +31,7 @@ inline string POGTranslations::assertGoalCommand(const string &formula) {
 
 string POGTranslations::ofGoal(int group, int goal) {
   if (debug_me) {
-    std::cerr << fmt::format("{0} {1} {2}\n",
-                             std::source_location::current().function_name(),
-                             group, goal);
+    std::cerr << fmt::format("{0} {1} {2}\n", FILE_NAME, group, goal);
   }
   /*
   result is the concatenation of :
@@ -131,8 +129,7 @@ string_view POGTranslations::groupPrelude(int group,
   }
   const Signature &signature = m_pogSignatures.ofGroup(group);
   if (debug_me) {
-    std::cerr << fmt::format("{0} signature = {1}\n",
-                             std::source_location::current().function_name(),
+    std::cerr << fmt::format("{0} signature = {1}\n", FILE_NAME,
                              toString(signature));
   }
   string script = translate(signature, context);
