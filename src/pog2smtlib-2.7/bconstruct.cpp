@@ -2,7 +2,7 @@
 
 #include <fmt/core.h>
 
-#include <source_location>
+#include <functional>
 #include <string>
 
 #include "btype-symbols.h"
@@ -12,6 +12,8 @@
 
 namespace BConstruct {
 
+using std::make_pair;
+using std::make_shared;
 using std::pair;
 using std::shared_ptr;
 using std::string;
@@ -44,6 +46,22 @@ shared_ptr<Abstract> Factory::get(
     return it->second;
   }
   auto construct = std::make_shared<T>(t);
+  m[pt] = construct;
+  return construct;
+}
+
+template <typename T>
+shared_ptr<Abstract> Factory::get(
+    unordered_map<pair<shared_ptr<const BType>, shared_ptr<const BType>>,
+                  shared_ptr<T>, Factory::BinaryBTypeHash>& m,
+    const BType& tl, const BType& tr) {
+  pair<shared_ptr<const BType>, shared_ptr<const BType>> pt =
+      make_pair(make_shared<const BType>(tl), make_shared<const BType>(tr));
+  auto it = m.find(pt);
+  if (it != m.end()) {
+    return it->second;
+  }
+  auto construct = make_shared<T>(tl, tr);
   m[pt] = construct;
   return construct;
 }
@@ -177,6 +195,12 @@ shared_ptr<Abstract> Factory::Bool() {
 
 shared_ptr<Abstract> Factory::EmptySet(const BType& t) {
   return get<BConstruct::Expression::EmptySet>(m_EmptySets, t);
+}
+
+shared_ptr<Abstract> Factory::ExpressionCartesianProduct(const BType& t1,
+                                                         const BType& t2) {
+  return get<BConstruct::Expression::CartesianProduct>(
+      m_ExpressionCartesianProducts, t1, t2);
 }
 
 size_t Factory::size() { return m_index.size(); }
