@@ -28,7 +28,6 @@ class NumberComparison;
 };  // namespace Predicate
 
 namespace Expression {
-class Bool;
 class Data;
 class BooleanExpression;
 class CartesianProduct;
@@ -36,15 +35,16 @@ class Addition;
 class Subtraction;
 class Multiplication;
 class IntegerDivision;
-class Integer;
 class Maxint;
 class Minint;
 class Floor;
 class Ceiling;
 class ToReal;
-class Real;
-class EmptySet;
 class Maplet;
+class EmptySet;
+class Bool;
+class Integer;
+class Real;
 };  // namespace Expression
 
 class Factory {
@@ -98,6 +98,8 @@ class Factory {
   std::shared_ptr<Abstract> Bool();
   std::shared_ptr<Abstract> CartesianProduct(const BType &, const BType &);
   std::shared_ptr<Abstract> EmptySet(const BType &);
+  std::shared_ptr<Abstract> ExpressionCartesianProduct(const BType &,
+                                                       const BType &);
   std::shared_ptr<Abstract> Maplet();
 
   class Exception : public std::exception {
@@ -117,9 +119,9 @@ class Factory {
     }
   };
   struct BinaryBTypeHash {
-    size_t operator()(const std::shared_ptr<const BType> &t1,
-                      const std::shared_ptr<const BType> &t2) const {
-      return t2->hash_combine(t1->hash_combine(0));
+    size_t operator()(const std::pair<std::shared_ptr<const BType>,
+                                      std::shared_ptr<const BType>> &p) const {
+      return p.second->hash_combine(p.first->hash_combine(0));
     }
   };
   struct DataHash {
@@ -187,6 +189,11 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Integer> m_Integer;
   std::shared_ptr<BConstruct::Expression::Real> m_Real;
   std::shared_ptr<BConstruct::Expression::Bool> m_Bool;
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::CartesianProduct>,
+      BinaryBTypeHash>
+      m_ExpressionCartesianProducts;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -199,6 +206,13 @@ class Factory {
       std::unordered_map<std::shared_ptr<const BType>, std::shared_ptr<T>,
                          BTypeHash> &m,
       const BType &t);
+
+  template <typename T>
+  std::shared_ptr<Abstract> get(
+      std::unordered_map<
+          std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+          std::shared_ptr<T>, BinaryBTypeHash> &m,
+      const BType &tl, const BType &tr);
 
   std::shared_ptr<Abstract> get(const struct Data &t);
 };
@@ -404,7 +418,7 @@ class BooleanExpression : public Uniform {
   virtual ~BooleanExpression() = default;
 };
 
-/* 5.2 Classes for Arithmetical Expressions I */
+/* 5.3 Classes for Arithmetical Expressions I */
 class Maxint : public Uniform {
  public:
   explicit Maxint();
@@ -459,7 +473,7 @@ class ToReal : public Uniform {
   virtual ~ToReal() = default;
 };
 
-/* 5.4 Classes for Expression of Couples */
+/* 5.5 Classes for Expression of Couples */
 
 class Maplet : public Uniform {
  public:

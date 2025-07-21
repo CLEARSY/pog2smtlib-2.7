@@ -41,5 +41,11 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+diff "$outdir/output_0_0.po2" "$refdir/output.smt"
+if [ $? -ne 0 ]; then
+    echo "Test failed: produced SMT differs"
+    exit 1
+fi
+
 echo "Test passed"
 exit 0

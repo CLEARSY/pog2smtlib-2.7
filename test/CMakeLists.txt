@@ -54,3 +54,8 @@ add_cl_test("arithmetical_expression_12")
 
 add_cl_test("expr_couple_1")
 add_cl_test("expr_couple_2")
+
+# 5.7 Set List Expressions
+
+add_cl_test("cartesian_product_1")
+add_cl_test("cartesian_product_2")
