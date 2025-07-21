@@ -26,7 +26,6 @@ set(POG2SMTLIB27_HEADERS
     parameters.h
     pog-signatures.h
     pog-translation.h
-    prelude-builder.h
     pure-typing.h
     signature.h
     smtlib.h

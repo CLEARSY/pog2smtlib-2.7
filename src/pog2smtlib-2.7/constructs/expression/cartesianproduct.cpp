@@ -3,24 +3,25 @@
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../parameters.h"
+#include "../../translate-token.h"
 #include "btype.h"
 
 namespace BConstruct::Expression {
 
 static constexpr std::string_view SCRIPT = R"(
-(declare-fun |set.product {0} {2}| ({1} {3}) ({5})))
+(declare-fun {0} ({1} {2}) {3})
 (assert (!
-  (forall ((s1 {1}) (s2 {3}))
+  (forall ((s1 {1}) (s2 {2}))
     (forall ((p {4}))
-      (= (|set.in {4}| p (|set.product {0} {2}| s1 s2))
-         (and (|set.in {0}| (fst p) s1) (|set.in {2}| (snd p) s2)))))
-  :named |ax.set.in.product.1 {0}|))
+      (= ({5} p ({0} s1 s2))
+        (and ({6} (fst p) s1) ({7} (snd p) s2)))))
+  :named |ax.set.in.product.1 {8}|))
 (assert (!
-  (forall ((s1 {1}) (s2 {3}))
-    (forall ((x1 {0}) (x2 {2}))
-      (= (|set.in {4}| (maplet x1 x2) (|set.product {0} {2}| s1 s2))
-         (and (|set.in {0}| x1 s1) (|set.in {2}| x2 s2)))))
-      :named |ax.set.in.product.2 {0}|))
+  (forall ((s1 {1}) (s2 {2}))
+    (forall ((x1 {9}) (x2 {10}))
+      (= ({5} (maplet x1 x2) ({0} s1 s2))
+        (and ({6} x1 s1) ({7} x2 s2)))))
+  :named |ax.set.in.product.2 {8}|))
 )";
 
 CartesianProduct::CartesianProduct(const BType &U, const BType &V)
@@ -29,8 +30,19 @@ CartesianProduct::CartesianProduct(const BType &U, const BType &V)
   const auto PV = BType::POW(V);
   const auto UxV = BType::PROD(U, V);
   const auto PUxV = BType::POW(UxV);
-  m_script = fmt::format(SCRIPT, symbolInner(U), symbol(PU), symbolInner(V),
-                         symbol(PV), symbolInner(UxV), symbol(PUxV));
+  m_script =
+      fmt::format(SCRIPT,
+                  /*0*/ smtSymbol(Expr::BinaryOp::Cartesian_Product, U, V),
+                  /*1*/ symbol(PU),
+                  /*2*/ symbol(PV),
+                  /*3*/ symbol(PUxV),
+                  /*4*/ symbol(UxV),
+                  /*5*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
+                  /*6*/ smtSymbol(Pred::ComparisonOp::Membership, U),
+                  /*7*/ smtSymbol(Pred::ComparisonOp::Membership, V),
+                  /*8*/ symbolInner(UxV),
+                  /*9*/ symbol(U),
+                  /*10*/ symbol(V));
   m_label = "*";
   m_prerequisites.insert(
       {std::make_shared<BConstruct::Predicate::SetMembership>(U),

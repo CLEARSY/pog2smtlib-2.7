@@ -104,8 +104,10 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::RMultiplication, "*"},
     {Expr::BinaryOp::IDivision, "|int.div|"},
     {Expr::BinaryOp::RDivision, "/"},
-    /* 5.5s Expression of Couples */
+    /* 5.5 Expression of Couples */
     {Expr::BinaryOp::Mapplet, "maplet"},
+    /* 5.6 Expression of Sets */
+    {Expr::BinaryOp::Cartesian_Product, "set.product"},
 };
 
 std::string smtSymbol(Expr::BinaryOp op) {
@@ -116,6 +118,17 @@ std::string smtSymbol(Expr::BinaryOp op) {
                                          Expr::to_string(op)));
   }
   return itr->second;
+}
+
+std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2) {
+  const auto itr = binOpExprToStringMap.find(op);
+  if (itr == binOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
+  }
+  string& str = itr->second;
+  return fmt::format("|{0} {1} {2}|", str, symbolInner(t1), symbolInner(t2));
 }
 
 static std::unordered_map<Expr::Visitor::EConstant, std::string>
