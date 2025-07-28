@@ -78,10 +78,14 @@ string smtSymbol(Pred::ComparisonOp op, const BType& type) {
 }
 
 static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
-    /* 5.3 Arithmetical Expressions I */
+    /* 5.3 Arithmetical Expressions */
     {Expr::UnaryOp::Real, "|int.real|"},
     {Expr::UnaryOp::Floor, "|real.floor|"},
     {Expr::UnaryOp::Ceiling, "|real.ceiling|"},
+
+    /* 5.4 Arithmetical Expressions (continued) */
+    {Expr::UnaryOp::IMaximum, "|max|"},
+    {Expr::UnaryOp::IMinimum, "|min|"},
 
     /* 5.7 Set List Expressions */
     {Expr::UnaryOp::Subsets, "sub-sets"},
@@ -143,6 +147,10 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::Cartesian_Product, "set.product"},
     {Expr::BinaryOp::Interval, "|interval|"},
 
+    {Expr::BinaryOp::Set_Difference, "set.diff"},
+    {Expr::BinaryOp::Union, "set.union"},
+    {Expr::BinaryOp::Intersection, "set.inter"},
+
     /* 5.13 Expressions of Relations */
     {Expr::BinaryOp::Image, "rel.image"}
 };
@@ -156,6 +164,18 @@ std::string smtSymbol(Expr::BinaryOp op) {
   }
   return itr->second;
 }
+
+std::string smtSymbol(Expr::BinaryOp op, const BType& t) {
+  const auto itr = binOpExprToStringMap.find(op);
+  if (itr == binOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
+  }
+  string& str = itr->second;
+  return fmt::format("|{0} {1}|", str, symbolInner(t));
+}
+
 
 std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2) {
   const auto itr = binOpExprToStringMap.find(op);

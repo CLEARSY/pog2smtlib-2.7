@@ -221,7 +221,7 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
         switch (unop) {
           /* case of operators having a counterpart in SMT theory ALL*/
 
-          /* 5.3 Expressions arithmétiques */
+          /* 5.3 Arithmetical Expressions */
           case Expr::UnaryOp::Floor:
             construct = BConstruct::Factory::factory().Floor();
             break;
@@ -232,13 +232,23 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().ToReal();
             break;
 
-          /* 5.7 Expressions ensemblistes */
+          /* 5.4 Arithmetical Expressions (continued) */
+          case Expr::UnaryOp::IMaximum:
+            construct = BConstruct::Factory::factory().Max();
+            break;
+          case Expr::UnaryOp::IMinimum:
+            construct = BConstruct::Factory::factory().Min();
+            break;
+
+          /* 5.7 Set List Expressions */
           case Expr::UnaryOp::Subsets:
             construct = BConstruct::Factory::factory().PowerSet(*types.at(0));
             break;
           case Expr::UnaryOp::Non_Empty_Subsets:
             construct = BConstruct::Factory::factory().PowerSet1(*types.at(0));
             break;
+
+          /* 5.8 Set List Expressions */
 
           /* 5.13 Expressions of Relations */
           case Expr::UnaryOp::Domain:

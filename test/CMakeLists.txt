@@ -51,6 +51,10 @@ add_cl_test("arithmetical_expression_11")
 add_cl_test("arithmetical_expression_12")
 
 # 5.4 Arithmetical Expressions (Continued)
+add_cl_test("max_1")
+add_cl_test("max_2")
+add_cl_test("min_1")
+add_cl_test("min_2")
 
 # 5.5 Expression of Couples
 
@@ -84,6 +88,8 @@ add_cl_test("set_1")
 add_cl_test("set_2")
 add_cl_test("quantified_set_1")
 add_cl_test("quantified_set_2")
+
+# 5.8 Set List Expressions
 
 # 5.13 Expressions of Relations
 
