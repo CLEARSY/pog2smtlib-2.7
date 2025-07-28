@@ -33,14 +33,12 @@
   :named |ax.set.in.INT|))
 
 (declare-fun |sub-sets Z| (|POW Z|) |POW POW Z|)
- (assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-        (=
-            (|set.in POW Z| s (|sub-sets Z| t))
-            (|set.subseteq Z| s t)
-        )
-     )
- :named |ax.sub-sets Z|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (|set.in POW Z| s (|sub-sets Z| t))
+      (|set.subseteq Z| s t)))
+  :named |ax.sub-sets Z|))
 (assert (!
   (not (|set.in POW Z| INTEGER (|sub-sets Z| INT)))
   :named |Goal|)

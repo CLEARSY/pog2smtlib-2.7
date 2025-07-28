@@ -9,7 +9,7 @@
 namespace BConstruct::Expression {
 
 static constexpr std::string_view SCRIPT = R"(
-(declare-fun {|injections {0} {1}|} ({2} {3}) {4})
+(declare-fun |injections {0} {1}| ({2} {3}) {4})
 (assert (!
   (forall ((X {2}) (Y {3}) (f {5}))
      (= ({6} f (|injections {0} {1}| X Y))

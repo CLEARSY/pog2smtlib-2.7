@@ -24,14 +24,12 @@
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 
 (declare-fun |sub-sets (Z x Z)| (|POW (Z x Z)|) |POW POW (Z x Z)|)
- (assert (!
-    (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-        (=
-            (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
-            (|set.subseteq (Z x Z)| s t)
-        )
-     )
- :named |ax.sub-sets (Z x Z)|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
+      (|set.subseteq (Z x Z)| s t)))
+  :named |ax.sub-sets (Z x Z)|))
 
 (declare-fun |set.product Z Z| (|POW Z| |POW Z|) |POW (Z x Z)|)
 (assert (!

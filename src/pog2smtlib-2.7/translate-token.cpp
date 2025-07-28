@@ -86,19 +86,21 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     /* 5.4 Arithmetical Expressions (continued) */
     {Expr::UnaryOp::IMaximum, "|max|"},
     {Expr::UnaryOp::IMinimum, "|min|"},
+    {Expr::UnaryOp::Cardinality, "card"},
 
     /* 5.7 Set List Expressions */
     {Expr::UnaryOp::Subsets, "sub-sets"},
     {Expr::UnaryOp::Non_Empty_Subsets, "non empty sub-sets"},
+    {Expr::UnaryOp::Finite_Subsets, "finite sub-sets"},
+    {Expr::UnaryOp::Non_Empty_Finite_Subsets, "non empty finite sub-sets"},
 
-    /* 5.8 Set List Expressions */
+    /* 5.8 Set List Expressions (continued) */
     {Expr::UnaryOp::Union, "union"},
     {Expr::UnaryOp::Intersection, "inter"},
 
     /* 5.13 Expressions of Relations */
     {Expr::UnaryOp::Domain, "rel.domain"},
-    {Expr::UnaryOp::Range, "rel.range"}
-};
+    {Expr::UnaryOp::Range, "rel.range"}};
 
 std::string smtSymbol(Expr::UnaryOp op) {
   const auto itr = unOpExprToStringMap.find(op);
@@ -132,7 +134,6 @@ std::string smtSymbol(Expr::UnaryOp op, const BType& t1, const BType& t2) {
   return fmt::format("|{0} {1} {2}|", str, symbolInner(t1), symbolInner(t2));
 }
 
-
 static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     /* 5.3 Arithmetical Expressions I */
     {Expr::BinaryOp::IAddition, "+"},
@@ -146,7 +147,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
 
     /* 5.5 Expression of Couples */
     {Expr::BinaryOp::Mapplet, "maplet"},
-    
+
     /* 5.7 Set List Expressions */
     {Expr::BinaryOp::Cartesian_Product, "set.product"},
     {Expr::BinaryOp::Interval, "|interval|"},
@@ -187,7 +188,6 @@ std::string smtSymbol(Expr::BinaryOp op, const BType& t) {
   return fmt::format("|{0} {1}|", str, symbolInner(t));
 }
 
-
 std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2) {
   const auto itr = binOpExprToStringMap.find(op);
   if (itr == binOpExprToStringMap.end()) {
@@ -199,7 +199,8 @@ std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2) {
   return fmt::format("|{0} {1} {2}|", str, symbolInner(t1), symbolInner(t2));
 }
 
-std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2, const BType& t3) {
+std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2,
+                      const BType& t3) {
   const auto itr = binOpExprToStringMap.find(op);
   if (itr == binOpExprToStringMap.end()) {
     throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
@@ -207,13 +208,13 @@ std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2, const
                                          Expr::to_string(op)));
   }
   string& str = itr->second;
-  return fmt::format("|{0} {1} {2} {3}|", str, symbolInner(t1), symbolInner(t2), symbolInner(t3));
+  return fmt::format("|{0} {1} {2} {3}|", str, symbolInner(t1), symbolInner(t2),
+                     symbolInner(t3));
 }
 
 static std::unordered_map<Expr::NaryOp, std::string> nOpExprToStringMap = {
     /* 5.7 Set List Expressions */
-    {Expr::NaryOp::Set, "set.intent"}
-};
+    {Expr::NaryOp::Set, "set.intent"}};
 
 string smtSymbol(Expr::NaryOp op, const BType& type) {
   const auto itr = nOpExprToStringMap.find(op);
@@ -237,7 +238,7 @@ static std::unordered_map<Expr::Visitor::EConstant, std::string>
         {Expr::Visitor::EConstant::MinInt, "MININT"},
         {Expr::Visitor::EConstant::Successor, "succ"},
         {Expr::Visitor::EConstant::Predecessor, "pred"},
-        
+
         /* 5.6 Building Sets */
         {Expr::Visitor::EConstant::INTEGER, "INTEGER"},
         {Expr::Visitor::EConstant::NATURAL, "NATURAL"},
