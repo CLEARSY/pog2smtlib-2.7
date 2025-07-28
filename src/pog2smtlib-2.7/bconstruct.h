@@ -46,6 +46,8 @@ class Ceiling;
 class ToReal;
 
 /* 5.4 Arithmetical Expressions (continued) */
+class Max;
+class Min;
 
 /* 5.5 Expression of Couples */
 class Maplet;
@@ -68,10 +70,14 @@ class Interval;
 class CartesianProduct;
 class Set;
 
+/* 5.8 Set List Expressions */
+
 /* 5.13 Expressions of Relations */
 class Domain;
 class Range;
 class Image;
+
+/* 5.15 Sets of Functions */
 
 };  // namespace Expression
 
@@ -129,6 +135,8 @@ class Factory {
   std::shared_ptr<Abstract> ToReal();
 
   /* 5.4 Arithmetical Expressions (continued) */
+  std::shared_ptr<Abstract> Max();
+  std::shared_ptr<Abstract> Min();
 
   /* 5.5 Expression of Couples */
   std::shared_ptr<Abstract> Maplet();
@@ -152,10 +160,14 @@ class Factory {
                                                        const BType &);
   std::shared_ptr<Abstract> Set(const BType &);
 
+  /* 5.8 Set List Expressions */
+
   /* 5.13 Expressions of Relations */
   std::shared_ptr<Abstract> Domain(const BType &, const BType &);
   std::shared_ptr<Abstract> Range(const BType &, const BType &);
   std::shared_ptr<Abstract> Image(const BType &, const BType &);
+
+  /* 5.15 Sets of Functions */
 
   class Exception : public std::exception {
    public:
@@ -228,7 +240,7 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::BooleanExpression>
       m_BooleanExpression;
 
-  /* 5.3 Arithmetical Expressions I */
+  /* 5.3 Arithmetical Expressions */
   std::shared_ptr<BConstruct::Expression::Maxint> m_Maxint;
   std::shared_ptr<BConstruct::Expression::Minint> m_Minint;
   std::shared_ptr<BConstruct::Expression::Addition> m_Addition;
@@ -238,6 +250,10 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Floor> m_Floor;
   std::shared_ptr<BConstruct::Expression::Ceiling> m_Ceiling;
   std::shared_ptr<BConstruct::Expression::ToReal> m_ToReal;
+
+  /* 5.4 Arithmetical Expressions (continued) */
+  std::shared_ptr<BConstruct::Expression::Max> m_Max;
+  std::shared_ptr<BConstruct::Expression::Min> m_Min;
 
   /* 5.5 Expression of Couples */
   std::shared_ptr<BConstruct::Expression::Maplet> m_Maplet;
@@ -496,6 +512,7 @@ class NumberComparison : public Uniform {
 namespace Expression {
 
 /* 5.1 Classes for Primary expressions */
+
 class Data : public std::enable_shared_from_this<Data>, public Uniform {
  public:
   explicit Data(const struct ::Data &dt);
@@ -573,6 +590,20 @@ class ToReal : public Uniform {
   virtual ~ToReal() = default;
 };
 
+/* 5.4 Arithmetical Expressions (continued) */
+
+class Max : public Uniform {
+ public:
+  explicit Max();
+  virtual ~Max() = default;
+};
+
+class Min : public Uniform {
+ public:
+  explicit Min();
+  virtual ~Min() = default;
+};
+
 /* 5.5 Expression of Couples */
 
 class Maplet : public Uniform {
@@ -581,7 +612,8 @@ class Maplet : public Uniform {
   virtual ~Maplet() = default;
 };
 
-/* 5.6 Classes for Building Sets */
+/* 5.6 Building Sets */
+
 class EmptySet : public UnaryBType {
  public:
   /** @param t type of the elements of the set (even empty set must be strictly
@@ -637,7 +669,8 @@ class Int : public Uniform {
   virtual ~Int() = default;
 };
 
-/* 5.7 Classes for Set List Expressions */
+/* 5.7 Set List Expressions */
+
 class PowerSet : public UnaryBType {
  public:
   explicit PowerSet(const BType &);
@@ -668,7 +701,10 @@ class Set : public UnaryBType {
   virtual ~Set() = default;
 };
 
+/* 5.8 Set List Expressions */
+
 /* 5.13 Expressions of Relations */
+
 class Domain : public BinaryBType {
  public:
   explicit Domain(const BType &, const BType &);
@@ -686,6 +722,8 @@ class Image : public BinaryBType {
   explicit Image(const BType &, const BType &);
   virtual ~Image() = default;
 };
+
+/* 5.15 Sets of Functions */
 
 };  // namespace Expression
 

@@ -177,6 +177,16 @@ shared_ptr<Abstract> Factory::ToReal() {
   return get<BConstruct::Expression::ToReal>(m_ToReal);
 }
 
+/* 5.4 Arithmetical Expressions (continued) */
+
+shared_ptr<Abstract> Factory::Max() {
+  return get<BConstruct::Expression::Max>(m_Max);
+}
+
+shared_ptr<Abstract> Factory::Min() {
+  return get<BConstruct::Expression::Min>(m_Min);
+}
+
 /* 5.5 Expression of Couples */
 
 shared_ptr<Abstract> Factory::Maplet() {
@@ -245,7 +255,10 @@ shared_ptr<Abstract> Factory::Set(const BType& t) {
   return get<BConstruct::Expression::Set>(m_Sets, t);
 }
 
+/* 5.8 Set List Expressions */
+
 /* 5.13 Expressions of Relations */
+
 shared_ptr<Abstract> Factory::Domain(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Domain>(m_Domains, lhs, rhs);
 }
@@ -296,4 +309,5 @@ string BinaryBType::to_string() const {
   return fmt::format("{}_<{}, {}>", m_label, m_type1->to_string(),
                      m_type2->to_string());
 }
+
 }  // namespace BConstruct
