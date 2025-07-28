@@ -22,9 +22,9 @@
     <Define name="inprp" hash="0"/>
     <Define name="inext" hash="0"/>
     <Define name="inv" hash="0"/>
-    <Define name="ass" hash="3313670411498416241">
+    <Define name="ass" hash="17610029853909230724">
         <Exp_Comparison op=":">
-            <Integer_Literal value="3" typref="1" tag="quantified_set_1.bxml:1:2:1:1"/>
+            <Integer_Literal value="3" typref="1" tag="quantified_set_2.bxml:1:2:1:1"/>
             <Quantified_Set typref="0">
                 <Variables>
                     <Id value="xx" typref="1"/>
@@ -32,12 +32,15 @@
                 <Body>
                     <Nary_Pred op="&amp;">
                         <Exp_Comparison op=":">
-                            <Id value="xx" typref="1" tag="quantified_set_1.bxml:1:2:1:2:2:1:1:1"/>
-                            <Id value="INTEGER" typref="0" tag="quantified_set_1.bxml:1:2:1:2:2:1:1:2"/>
+                            <Id value="xx" typref="1" tag="quantified_set_2.bxml:1:2:1:2:2:1:1:1"/>
+                            <Id value="INTEGER" typref="0" tag="quantified_set_2.bxml:1:2:1:2:2:1:1:2"/>
                         </Exp_Comparison>
-                        <Exp_Comparison op="=">
-                            <Id value="xx" typref="1" tag="quantified_set_1.bxml:1:2:1:2:2:1:2:1"/>
-                            <Integer_Literal value="2" typref="1" tag="quantified_set_1.bxml:1:2:1:2:2:1:2:2"/>
+                        <Exp_Comparison op="&lt;i">
+                            <Binary_Exp op="*i" typref="1">
+                                <Id value="xx" typref="1" tag="quantified_set_2.bxml:1:2:1:2:2:1:2:1:1"/>
+                                <Id value="xx" typref="1" tag="quantified_set_2.bxml:1:2:1:2:2:1:2:1:2"/>
+                            </Binary_Exp>
+                            <Integer_Literal value="10" typref="1" tag="quantified_set_2.bxml:1:2:1:2:2:1:2:2"/>
                         </Exp_Comparison>
                     </Nary_Pred>
                 </Body>
@@ -46,7 +49,7 @@
     </Define>
     <Define name="cst" hash="0"/>
     <Define name="sets" hash="0"/>
-    <Proof_Obligation goalHash="12050654119405807178">
+    <Proof_Obligation goalHash="2037185078409158748">
         <Tag>AssertionLemmas</Tag>
         <Definition name="B definitions"/>
         <Definition name="ctx"/>
@@ -60,7 +63,7 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op=":">
-                    <Integer_Literal value="3" typref="1" tag="quantified_set_1.bxml:1:2:1:1"/>
+                    <Integer_Literal value="3" typref="1" tag="quantified_set_2.bxml:1:2:1:1"/>
                     <Quantified_Set typref="0">
                         <Variables>
                             <Id value="xx" typref="1"/>
@@ -68,12 +71,15 @@
                         <Body>
                             <Nary_Pred op="&amp;">
                                 <Exp_Comparison op=":">
-                                    <Id value="xx" typref="1" tag="quantified_set_1.bxml:1:2:1:2:2:1:1:1"/>
-                                    <Id value="INTEGER" typref="0" tag="quantified_set_1.bxml:1:2:1:2:2:1:1:2"/>
+                                    <Id value="xx" typref="1" tag="quantified_set_2.bxml:1:2:1:2:2:1:1:1"/>
+                                    <Id value="INTEGER" typref="0" tag="quantified_set_2.bxml:1:2:1:2:2:1:1:2"/>
                                 </Exp_Comparison>
-                                <Exp_Comparison op="=">
-                                    <Id value="xx" typref="1" tag="quantified_set_1.bxml:1:2:1:2:2:1:2:1"/>
-                                    <Integer_Literal value="2" typref="1" tag="quantified_set_1.bxml:1:2:1:2:2:1:2:2"/>
+                                <Exp_Comparison op="&lt;i">
+                                    <Binary_Exp op="*i" typref="1">
+                                        <Id value="xx" typref="1" tag="quantified_set_2.bxml:1:2:1:2:2:1:2:1:1"/>
+                                        <Id value="xx" typref="1" tag="quantified_set_2.bxml:1:2:1:2:2:1:2:1:2"/>
+                                    </Binary_Exp>
+                                    <Integer_Literal value="10" typref="1" tag="quantified_set_2.bxml:1:2:1:2:2:1:2:2"/>
                                 </Exp_Comparison>
                             </Nary_Pred>
                         </Body>

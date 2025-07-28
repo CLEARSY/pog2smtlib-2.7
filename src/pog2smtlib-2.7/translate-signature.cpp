@@ -220,7 +220,7 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
         const auto unop = std::get<Expr::UnaryOp>(op);
         switch (unop) {
           /* case of operators having a counterpart in SMT theory ALL*/
-          
+
           /* 5.3 Expressions arithmétiques */
           case Expr::UnaryOp::Floor:
             construct = BConstruct::Factory::factory().Floor();
@@ -321,8 +321,8 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
       }
     case 5:  // Expr::QuantifiedOp
       /* Lambda, Intersection, Union, ISum, IProduct, RSum, RProduct */
-      throw std::runtime_error(
-          fmt::format("{}:{} Unknown operator {}", FILE_NAME, LINE_NUMBER, op));
+      throw std::runtime_error(fmt::format("{}:{} operator {} is not supported",
+                                           FILE_NAME, LINE_NUMBER, op));
     case 6:  // Expr::Visitor::EConstant => duplicate with Expr::EKind !!
              /* MaxInt, MinInt, INTEGER, NATURAL, NATURAL1, INT, NAT, NAT1,
                 STRING, BOOL, REAL, FLOAT, TRUE, FALSE, EmptySet, Successor,
@@ -394,8 +394,20 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                     QuantifiedSet, UnaryExpr, BinaryExpr, NaryExpr, Struct,
                 Record, TernaryExpr, Record_Field_Access, Record_Field_Update,
                 Successor, Predecessor */
-      throw std::runtime_error(
-          fmt::format("{}:{} Unknown operator {}", FILE_NAME, LINE_NUMBER, op));
+      {
+        const Expr::EKind ekind = std::get<Expr::EKind>(op);
+        switch (ekind) {
+          /* 5.7 Set List Expressions */
+          case Expr::EKind::QuantifiedSet:
+            construct = BConstruct::Factory::factory().Set(*types.at(0));
+            break;
+          default:
+            throw std::runtime_error(
+                fmt::format("{}:{} operator {} is not supported", FILE_NAME,
+                            LINE_NUMBER, op));
+        }
+        break;
+      }
   }
 
   if (construct != nullptr && context.find(construct) == context.end()) {
