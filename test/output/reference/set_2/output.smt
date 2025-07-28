@@ -29,7 +29,7 @@
     :named |set.in.intent Z|)
  )
 (assert (!
-  (= vset (|set.intent Z| (lambda ((x Z)) (or (= x 1)(= x 2)(= x 3)(= x 4)(= x 10)))))
+  (= vset (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)(= x 4)(= x 10)))))
   :named |Define:lprp:1|)
 )
 (assert (!

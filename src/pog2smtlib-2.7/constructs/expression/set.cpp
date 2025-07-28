@@ -36,7 +36,7 @@ Set::Set(const BType &T)
                          /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T));
   m_label = "?";
   m_prerequisites.insert(
-      std::make_shared<BConstruct::Predicate::Equality>(T));
+      std::make_shared<BConstruct::Predicate::SetMembership>(T));
   m_debug_string = fmt::format("?_{}", T.to_string());
 }
 
