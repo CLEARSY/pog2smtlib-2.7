@@ -36,7 +36,7 @@ SMT_EXE="/usr/bin/cvc5 --tlimit=10000" # timeout in ms
 #
 function prepare_test_output() {
   id=$1
-  $TRANSLATOR_EXE -i input/$id/input.pog -o output > stdout 2> stderr
+  $TRANSLATOR_EXE -a 0 0 -i input/$id/input.pog -o output > stdout 2> stderr
   echo $? > exitcode
   mv output_0_0.po2 output.smt
   echo "> exitcode:"

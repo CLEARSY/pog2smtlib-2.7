@@ -299,6 +299,17 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       break;
     }
 
+    /* 5.4 Arithmetical Expressions (continued) */
+    case Expr::UnaryOp::IMaximum:
+    case Expr::UnaryOp::IMinimum: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+    
     /* 5.7 Set List Expressions */
     case Expr::UnaryOp::Subsets:
     case Expr::UnaryOp::Non_Empty_Subsets: {
@@ -310,6 +321,8 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       m_translation.push_back(')');
       break;
     }
+
+    /* 5.8 Set List Expressions */
 
     /* 5.13 Expressions of Relations */
     case Expr::UnaryOp::Domain:
@@ -368,6 +381,8 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       m_translation.push_back(')');
       break;
     }
+
+    /* 5.8 Set List Expressions */
 
     case Expr::BinaryOp::Cartesian_Product: {
       m_translation.push_back('(');
@@ -539,7 +554,7 @@ void SmtTranslatorVisitor::visitQuantifiedSet(
       types.push_back(current.toProductType().rhs);
       current = current.toProductType().lhs;
     } else {
-      types.push_back(current);  // le dernier (tout à gauche)
+      types.push_back(current); // le dernier (tout à gauche)
     }
   }
 
@@ -552,7 +567,7 @@ void SmtTranslatorVisitor::visitQuantifiedSet(
     m_translation.push_back(')');
   }
 
-  m_translation.push_back(')');
+  m_translation.push_back(')'); 
   m_translation.push_back(' ');
 
   cond.accept(*this);
