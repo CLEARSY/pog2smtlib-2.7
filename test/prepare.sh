@@ -22,8 +22,8 @@ function prepare_pog() {
 
 export -f prepare_pog
 
-TRANSLATOR_EXE=../build/src/pog2smtlib-2.7/pog2smtlib27
-SMT_EXE="/usr/bin/cvc5"
+TRANSLATOR_EXE=../build-17/src/pog2smtlib-2.7/pog2smtlib27
+SMT_EXE="/usr/bin/cvc5 --tlimit=10000" # timeout in ms
 
 #
 # - prepare_test_output:
@@ -47,7 +47,7 @@ function prepare_test_output() {
   cat stderr
   echo "> output:"
   cat output.smt
-  echo "> CVC4 says "
+  echo "> CVC5 says "
   $SMT_EXE output.smt
 }
 

@@ -439,7 +439,7 @@ void SmtTranslatorVisitor::visitNaryExpression(
       m_translation.push_back('(');
       m_translation.push_back('x');
       m_translation.push_back(' ');
-      m_translation.append(symbolInner(type.toPowerType().content));
+      m_translation.append(symbol(type.toPowerType().content));
       m_translation.push_back(')');
       m_translation.push_back(')'); 
       m_translation.push_back(' ');
@@ -496,8 +496,41 @@ void SmtTranslatorVisitor::visitQuantifiedSet(
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<TypedVar> vars,
     [[maybe_unused]] const Pred &cond) {
-  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
-                                       FILE_NAME, LINE_NUMBER));
+
+    m_translation.push_back('(');
+    m_translation.append(smtSymbol(Expr::NaryOp::Set, type.toPowerType().content));
+    m_translation.append(" (lambda (");
+
+    // Étape 1 : Récupérer les différentes types produits
+    std::vector<BType> types;
+    BType current = type.toPowerType().content;
+
+    for (size_t i = 0; i < vars.size(); ++i) {
+      if (i < vars.size() - 1) {
+        types.push_back(current.toProductType().rhs);
+        current = current.toProductType().lhs;
+      } else {
+        types.push_back(current); // le dernier (tout à gauche)
+      }
+    }
+
+    // Étape 2 : Générer les variables avec leur type, dans le bon ordre
+    for (size_t i = 0; i < vars.size(); ++i) {
+      m_translation.push_back('(');
+      m_translation.append(vars[i].name.show());
+      m_translation.push_back(' ');
+      m_translation.append(symbol(types[vars.size() - 1 - i]));
+      m_translation.push_back(')');
+    }
+
+    m_translation.push_back(')'); 
+    m_translation.push_back(' ');
+
+    cond.accept(*this);
+
+    m_translation.push_back(')');
+    m_translation.push_back(')');
+    m_translation.push_back(')'); 
 }
 void SmtTranslatorVisitor::visitRecordUpdate(
     [[maybe_unused]] const BType &type,
