@@ -187,6 +187,14 @@ shared_ptr<Abstract> Factory::Min() {
   return get<BConstruct::Expression::Min>(m_Min);
 }
 
+shared_ptr<Abstract> Factory::Cardinals() {
+  return get<BConstruct::Expression::Cardinals>(m_Cardinals);
+}
+
+shared_ptr<Abstract> Factory::Card(const BType &t) {
+  return get<BConstruct::Expression::Card>(m_Cards, t);
+}
+
 /* 5.5 Expression of Couples */
 
 shared_ptr<Abstract> Factory::Maplet() {
@@ -255,15 +263,15 @@ shared_ptr<Abstract> Factory::Set(const BType& t) {
   return get<BConstruct::Expression::Set>(m_Sets, t);
 }
 
-/* 5.8 Set List Expressions */
-
-/* 5.10 Set of Relations */
-
-shared_ptr<Abstract> Factory::Relation(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Relation>(m_Relations, lhs, rhs);
+shared_ptr<Abstract> Factory::Fin(const BType& t) {
+  return get<BConstruct::Expression::Fin>(m_Fins, t);
 }
 
-/* 5.8 Set List Expressions */
+shared_ptr<Abstract> Factory::Fin1(const BType& t) {
+  return get<BConstruct::Expression::Fin1>(m_Fin1s, t);
+}
+
+/* 5.8 Set List Expressions (continued) */
 
 shared_ptr<Abstract> Factory::Difference(const BType& t) {
   return get<BConstruct::Expression::Difference>(m_Differences, t);
@@ -285,8 +293,13 @@ shared_ptr<Abstract> Factory::GeneralizedUnion(const BType& t) {
   return get<BConstruct::Expression::GeneralizedUnion>(m_GeneralizedUnions, t);
 }
 
-/* 5.13 Expressions of Relations */
+/* 5.10 Set of Relations */
 
+shared_ptr<Abstract> Factory::Relation(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Relation>(m_Relations, lhs, rhs);
+}
+
+/* 5.13 Expressions of Relations */
 shared_ptr<Abstract> Factory::Domain(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Domain>(m_Domains, lhs, rhs);
 }

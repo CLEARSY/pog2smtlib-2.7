@@ -27,14 +27,12 @@
 (define-sort |POW POW (Z x POW (Z x Z))| () (P |POW (Z x POW (Z x Z))|))
 
 (declare-fun |sub-sets (Z x Z)| (|POW (Z x Z)|) |POW POW (Z x Z)|)
- (assert (!
-    (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-        (=
-            (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
-            (|set.subseteq (Z x Z)| s t)
-        )
-     )
- :named |ax.sub-sets (Z x Z)|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
+      (|set.subseteq (Z x Z)| s t)))
+  :named |ax.sub-sets (Z x Z)|))
 
 (declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
 (assert (!
@@ -58,13 +56,13 @@
 
 (declare-fun |set.in POW (Z x POW (Z x Z))| (|POW (Z x POW (Z x Z))| |POW POW (Z x POW (Z x Z))|) Bool)
 
- (declare-fun |non empty sub-sets (Z x Z)| (|POW (Z x Z)|) |POW POW (Z x Z)|)
- (assert (!
-    (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-        (= (|set.in POW (Z x Z)| s (|non empty sub-sets (Z x Z)| t))
-            (and (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
-                (not (= s |set.empty (Z x Z)|)))))
-        :named |ax.non empty sub-sets (Z x Z)|))
+(declare-fun |non empty sub-sets (Z x Z)| (|POW (Z x Z)|) |POW POW (Z x Z)|)
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (= (|set.in POW (Z x Z)| s (|non empty sub-sets (Z x Z)| t))
+       (and (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
+            (not (= s |set.empty (Z x Z)|)))))
+  :named |ax.non empty sub-sets (Z x Z)|))
 
 (declare-const INT |POW Z|)
 (assert (!
@@ -91,14 +89,12 @@
   :named |ax.set.in.product.2 (Z x POW (Z x Z))|))
 
 (declare-fun |sub-sets (Z x POW (Z x Z))| (|POW (Z x POW (Z x Z))|) |POW POW (Z x POW (Z x Z))|)
- (assert (!
-    (forall ((s |POW (Z x POW (Z x Z))|) (t |POW (Z x POW (Z x Z))|))
-        (=
-            (|set.in POW (Z x POW (Z x Z))| s (|sub-sets (Z x POW (Z x Z))| t))
-            (|set.subseteq (Z x POW (Z x Z))| s t)
-        )
-     )
- :named |ax.sub-sets (Z x POW (Z x Z))|))
+(assert (!
+  (forall ((s |POW (Z x POW (Z x Z))|) (t |POW (Z x POW (Z x Z))|))
+    (=
+      (|set.in POW (Z x POW (Z x Z))| s (|sub-sets (Z x POW (Z x Z))| t))
+      (|set.subseteq (Z x POW (Z x Z))| s t)))
+  :named |ax.sub-sets (Z x POW (Z x Z))|))
 
 (declare-fun |set.product Z Z| (|POW Z| |POW Z|) |POW (Z x Z)|)
 (assert (!

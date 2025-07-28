@@ -309,10 +309,20 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       m_translation.push_back(')');
       break;
     }
+    case Expr::UnaryOp::Cardinality: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, type));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
 
     /* 5.7 Set List Expressions */
     case Expr::UnaryOp::Subsets:
-    case Expr::UnaryOp::Non_Empty_Subsets: {
+    case Expr::UnaryOp::Non_Empty_Subsets:
+    case Expr::UnaryOp::Finite_Subsets:
+    case Expr::UnaryOp::Non_Empty_Finite_Subsets: {
       m_translation.push_back('(');
       m_translation.append(
           smtSymbol(op, (type.toPowerType().content).toPowerType().content));
@@ -553,8 +563,8 @@ void SmtTranslatorVisitor::visitNaryExpression(
       m_translation.push_back(')');
 
       m_translation.push_back(')');
-      m_translation.push_back(')');
-      break;
+      m_translation.push_back(')'); 
+    break;
     default:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));

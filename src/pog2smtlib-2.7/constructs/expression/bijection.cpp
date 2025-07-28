@@ -33,7 +33,7 @@ Bijection::Bijection(const BType &U, const BType &V) : BinaryBType(U, V) {
                          /*4*/ symbol(PPUxV),
                          /*5*/ symbol(PUxV),
                          /*6*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
-                         /*8*/ symbolInner(UxV));
+                         /*7*/ symbolInner(UxV));
   m_label = "bij";
   m_prerequisites.insert(
       {std::make_shared<BConstruct::Predicate::SetMembership>(PUxV),

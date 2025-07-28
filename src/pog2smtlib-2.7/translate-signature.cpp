@@ -239,6 +239,9 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::UnaryOp::IMinimum:
             construct = BConstruct::Factory::factory().Min();
             break;
+          case Expr::UnaryOp::Cardinality:
+            construct = BConstruct::Factory::factory().Card(*types.at(0));
+            break;
 
           /* 5.7 Set List Expressions */
           case Expr::UnaryOp::Subsets:
@@ -246,6 +249,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           case Expr::UnaryOp::Non_Empty_Subsets:
             construct = BConstruct::Factory::factory().PowerSet1(*types.at(0));
+            break;
+          case Expr::UnaryOp::Finite_Subsets:
+            construct = BConstruct::Factory::factory().Fin(*types.at(0));
+            break;
+          case Expr::UnaryOp::Non_Empty_Finite_Subsets:
+            construct = BConstruct::Factory::factory().Fin1(*types.at(0));
             break;
 
           /* 5.8 Set List Expressions (continued) */

@@ -4,6 +4,10 @@
 (declare-sort P 1)
 (define-sort |POW BOOL| () (P |BOOL|))
 (declare-const vset |POW BOOL|)
+(define-sort |Z| () Int)
+(define-sort |POW Z| () (P |Z|))
+
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 
 (declare-fun |set.in BOOL| (|BOOL| |POW BOOL|) Bool)
 

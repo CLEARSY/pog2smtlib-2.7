@@ -1,0 +1,10 @@
+MACHINE
+    fin1_1
+CONSTANTS
+    p1, p2
+PROPERTIES
+    p1 <: FIN1(INTEGER) &
+    p2 <: FIN1(INTEGER)
+ASSERTIONS
+    FIN1(p2) <: FIN1(p1)
+END

@@ -48,6 +48,8 @@ class ToReal;
 /* 5.4 Arithmetical Expressions (continued) */
 class Max;
 class Min;
+class Cardinals;
+class Card;
 
 /* 5.5 Expression of Couples */
 class Maplet;
@@ -69,18 +71,18 @@ class PowerSet1;
 class Interval;
 class CartesianProduct;
 class Set;
+class Fin;
+class Fin1;
 
-/* 5.8 Set List Expressions */
-
-/* 5.10 Set of Relations */
-class Relation;
-
-/* 5.8 Set List Expressions */
+/* 5.8 Set List Expressions (continued) */
 class Difference;
 class Union;
 class Intersection;
 class GeneralizedUnion;
 class GeneralizedIntersection;
+
+/* 5.10 Set of Relations */
+class Relation;
 
 /* 5.13 Expressions of Relations */
 class Domain;
@@ -154,6 +156,9 @@ class Factory {
   /* 5.4 Arithmetical Expressions (continued) */
   std::shared_ptr<Abstract> Max();
   std::shared_ptr<Abstract> Min();
+  std::shared_ptr<Abstract> Cardinals();
+  std::shared_ptr<Abstract> Card(const BType&);
+
   /* 5.5 Expression of Couples */
   std::shared_ptr<Abstract> Maplet();
 
@@ -176,17 +181,18 @@ class Factory {
                                                        const BType &);
   std::shared_ptr<Abstract> Set(const BType &);
 
-  /* 5.8 Set List Expressions */
+  std::shared_ptr<Abstract> Fin(const BType &);
+  std::shared_ptr<Abstract> Fin1(const BType &);
 
-  /* 5.10 Set of Relations */
-  std::shared_ptr<Abstract> Relation(const BType &, const BType &);
-
-  /* 5.8 Set List Expressions */
+  /* 5.8 Set List Expressions (continued) */
   std::shared_ptr<Abstract> Difference(const BType &);
   std::shared_ptr<Abstract> Union(const BType &);
   std::shared_ptr<Abstract> Intersection(const BType &);
   std::shared_ptr<Abstract> GeneralizedUnion(const BType &);
   std::shared_ptr<Abstract> GeneralizedIntersection(const BType &);
+
+  /* 5.10 Set of Relations */
+  std::shared_ptr<Abstract> Relation(const BType &, const BType &);
 
   /* 5.13 Expressions of Relations */
   std::shared_ptr<Abstract> Domain(const BType &, const BType &);
@@ -286,6 +292,11 @@ class Factory {
   /* 5.4 Arithmetical Expressions (continued) */
   std::shared_ptr<BConstruct::Expression::Max> m_Max;
   std::shared_ptr<BConstruct::Expression::Min> m_Min;
+  std::shared_ptr<BConstruct::Expression::Cardinals> m_Cardinals;
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Card>,
+                     BTypeHash>
+      m_Cards;
 
   /* 5.5 Expression of Couples */
   std::shared_ptr<BConstruct::Expression::Maplet> m_Maplet;
@@ -327,13 +338,17 @@ class Factory {
                      std::shared_ptr<BConstruct::Expression::Set>, BTypeHash>
       m_Sets;
 
-  /* 5.10 Set of Relations */
-  std::unordered_map<
-      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-      std::shared_ptr<BConstruct::Expression::Relation>, BinaryBTypeHash>
-      m_Relations;
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Fin>,
+                     BTypeHash>
+      m_Fins;
 
-  /* 5.8 Set List Expressions */
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Fin1>,
+                     BTypeHash>
+      m_Fin1s;
+
+  /* 5.8 Set List Expressions (continued) */
   std::unordered_map<std::shared_ptr<const BType>,
                      std::shared_ptr<BConstruct::Expression::Difference>,
                      BTypeHash>
@@ -359,41 +374,42 @@ class Factory {
       BTypeHash>
       m_GeneralizedIntersections;
 
-  /* 5.13 Expressions of Relations */
+  /* 5.10 Set of Relations */
   std::unordered_map<
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-      std::shared_ptr<BConstruct::Expression::Domain>, BinaryBTypeHash>
+      std::shared_ptr<BConstruct::Expression::Relation>, BinaryBTypeHash>
+      m_Relations;
+
+  /* 5.13 Expressions of Relations */
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Domain>,
+                     BinaryBTypeHash>
       m_Domains;
 
-  std::unordered_map<
-      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-      std::shared_ptr<BConstruct::Expression::Range>, BinaryBTypeHash>
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Range>,
+                     BinaryBTypeHash>
       m_Ranges;
 
-  std::unordered_map<
-      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-      std::shared_ptr<BConstruct::Expression::Image>, BinaryBTypeHash>
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Image>,
+                     BinaryBTypeHash>
       m_Images;
 
   /* 5.15 Sets of Functions */
-  std::unordered_map<
-      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-      std::shared_ptr<BConstruct::Expression::Total_Relation>, BinaryBTypeHash>
-      m_Total_Relations;
-
-  std::unordered_map<
-      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-      std::shared_ptr<BConstruct::Expression::Injection>, BinaryBTypeHash>
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Injection>,
+                     BinaryBTypeHash>
       m_Injections;
 
-  std::unordered_map<
-      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-      std::shared_ptr<BConstruct::Expression::Surjection>, BinaryBTypeHash>
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Surjection>,
+                     BinaryBTypeHash>
       m_Surjections;
 
-  std::unordered_map<
-      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-      std::shared_ptr<BConstruct::Expression::Bijection>, BinaryBTypeHash>
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Bijection>,
+                     BinaryBTypeHash>
       m_Bijections;
 
   std::unordered_map<
@@ -613,7 +629,6 @@ class NumberComparison : public Uniform {
 namespace Expression {
 
 /* 5.1 Classes for Primary expressions */
-
 class Data : public std::enable_shared_from_this<Data>, public Uniform {
  public:
   explicit Data(const struct ::Data &dt);
@@ -704,6 +719,20 @@ class Min : public Uniform {
   virtual ~Min() = default;
 };
 
+class Cardinals : public Uniform {
+ public:
+  explicit Cardinals();
+  virtual ~Cardinals() = default;
+};
+
+class Card : public UnaryBType {
+ public:
+  explicit Card(const BType &t);
+  virtual ~Card() = default;
+};
+
+/* 5.5 Expression of Couples */
+
 class Maplet : public Uniform {
  public:
   explicit Maplet();
@@ -711,7 +740,6 @@ class Maplet : public Uniform {
 };
 
 /* 5.6 Classes for Building Sets */
-
 class EmptySet : public UnaryBType {
  public:
   /** @param t type of the elements of the set (even empty set must be strictly
@@ -768,7 +796,6 @@ class Int : public Uniform {
 };
 
 /* 5.7 Classes for Set List Expressions */
-
 class PowerSet : public UnaryBType {
  public:
   explicit PowerSet(const BType &);
@@ -797,6 +824,18 @@ class Set : public UnaryBType {
  public:
   explicit Set(const BType &);
   virtual ~Set() = default;
+};
+
+class Fin : public UnaryBType {
+ public:
+  explicit Fin(const BType &);
+  virtual ~Fin() = default;
+};
+
+class Fin1 : public UnaryBType {
+ public:
+  explicit Fin1(const BType &);
+  virtual ~Fin1() = default;
 };
 
 /* 5.8 Classes for Set List Expressions (continued) */
@@ -840,7 +879,6 @@ class Relation : public BinaryBType {
 };
 
 /* 5.13 Expressions of Relations */
-
 class Domain : public BinaryBType {
  public:
   explicit Domain(const BType &, const BType &);

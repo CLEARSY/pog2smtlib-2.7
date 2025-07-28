@@ -18,33 +18,43 @@
     </Define>
     <Define name="ctx" hash="0"/>
     <Define name="seext" hash="0"/>
-    <Define name="lprp" hash="15363330609682804601">
-        <Exp_Comparison op=":">
+    <Define name="lprp" hash="12588671601208375852">
+        <Exp_Comparison op="=">
             <Id value="vset" typref="2" tag="inter_2.bxml:1:2:1:1"/>
-            <Unary_Exp op="POW1" typref="3">
-                <Unary_Exp op="POW1" typref="2">
-                    <Id value="INTEGER" typref="0" tag="inter_2.bxml:1:2:1:2:1:1"/>
-                </Unary_Exp>
-            </Unary_Exp>
+            <Nary_Exp op="{" typref="2">
+                <Nary_Exp op="{" typref="0">
+                    <Integer_Literal value="0" typref="1" tag="inter_2.bxml:1:2:1:2:1:1"/>
+                    <Integer_Literal value="1" typref="1" tag="inter_2.bxml:1:2:1:2:1:2"/>
+                </Nary_Exp>
+                <Nary_Exp op="{" typref="0">
+                    <Integer_Literal value="0" typref="1" tag="inter_2.bxml:1:2:1:2:2:1"/>
+                    <Integer_Literal value="2" typref="1" tag="inter_2.bxml:1:2:1:2:2:2"/>
+                </Nary_Exp>
+                <Nary_Exp op="{" typref="0">
+                    <Integer_Literal value="0" typref="1" tag="inter_2.bxml:1:2:1:2:3:1"/>
+                    <Integer_Literal value="1" typref="1" tag="inter_2.bxml:1:2:1:2:3:2"/>
+                    <Integer_Literal value="2" typref="1" tag="inter_2.bxml:1:2:1:2:3:3"/>
+                </Nary_Exp>
+            </Nary_Exp>
         </Exp_Comparison>
     </Define>
     <Define name="inprp" hash="0"/>
     <Define name="inext" hash="0"/>
     <Define name="inv" hash="0"/>
-    <Define name="ass" hash="14240422303553836819">
-        <Exp_Comparison op=":">
+    <Define name="ass" hash="5220140726200264577">
+        <Exp_Comparison op="=">
             <Unary_Exp op="inter" typref="0">
                 <Id value="vset" typref="2" tag="inter_2.bxml:1:4:1:1:1"/>
             </Unary_Exp>
-            <Unary_Exp op="POW" typref="2">
-                <Id value="INTEGER" typref="0" tag="inter_2.bxml:1:4:1:2:1"/>
-            </Unary_Exp>
+            <Nary_Exp op="{" typref="0">
+                <Integer_Literal value="0" typref="1" tag="inter_2.bxml:1:4:1:2:1"/>
+            </Nary_Exp>
         </Exp_Comparison>
     </Define>
     <Define name="cst" hash="0"/>
     <Define name="sets" hash="0"/>
-    <Proof_Obligation goalHash="14240422303553836823">
-        <Tag>WellDefinednessAssertions</Tag>
+    <Proof_Obligation goalHash="7499128438729567525">
+        <Tag>AssertionLemmas</Tag>
         <Definition name="B definitions"/>
         <Definition name="ctx"/>
         <Definition name="cst"/>
@@ -54,14 +64,16 @@
         <Definition name="seext"/>
         <Definition name="inv"/>
         <Simple_Goal>
-            <Tag>Assertion is well defined</Tag>
+            <Tag>Assertion is verified</Tag>
             <Goal>
-                <Unary_Pred op="not">
-                    <Exp_Comparison op="=">
+                <Exp_Comparison op="=">
+                    <Unary_Exp op="inter" typref="0">
                         <Id value="vset" typref="2" tag="inter_2.bxml:1:4:1:1:1"/>
-                        <EmptySet typref="2"/>
-                    </Exp_Comparison>
-                </Unary_Pred>
+                    </Unary_Exp>
+                    <Nary_Exp op="{" typref="0">
+                        <Integer_Literal value="0" typref="1" tag="inter_2.bxml:1:4:1:2:1"/>
+                    </Nary_Exp>
+                </Exp_Comparison>
             </Goal>
         </Simple_Goal>
     </Proof_Obligation>
@@ -78,15 +90,6 @@
             <Unary_Exp op="POW">
                 <Unary_Exp op="POW">
                     <Id value="INTEGER"/>
-                </Unary_Exp>
-            </Unary_Exp>
-        </Type>
-        <Type id="3">
-            <Unary_Exp op="POW">
-                <Unary_Exp op="POW">
-                    <Unary_Exp op="POW">
-                        <Id value="INTEGER"/>
-                    </Unary_Exp>
                 </Unary_Exp>
             </Unary_Exp>
         </Type>
