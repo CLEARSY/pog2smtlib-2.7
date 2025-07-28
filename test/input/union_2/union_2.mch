@@ -3,10 +3,8 @@ MACHINE
 CONSTANTS
     vset
 PROPERTIES
-    vset : POW1(POW1(INTEGER))
+    vset : POW1(POW1(INTEGER)) &
+    vset = { {0}, {1, 2} }
 ASSERTIONS
-    union(vset) : POW(INTEGER) 
+    union(vset) = { 0, 1, 2 }
 END
-
-
-

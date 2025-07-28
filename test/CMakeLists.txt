@@ -55,6 +55,8 @@ add_cl_test("max_1")
 add_cl_test("max_2")
 add_cl_test("min_1")
 add_cl_test("min_2")
+# add_cl_test("card_1")
+# add_cl_test("card_2")
 
 # 5.5 Expression of Couples
 
@@ -86,10 +88,14 @@ add_cl_test("interval_1")
 add_cl_test("interval_2")
 add_cl_test("set_1")
 add_cl_test("set_2")
+add_cl_test("fin_1")
+add_cl_test("fin_2")
+add_cl_test("fin1_1")
+add_cl_test("fin1_2")
 add_cl_test("quantified_set_1")
 add_cl_test("quantified_set_2")
 
-# 5.8 Set List Expressions
+# 5.8 Set List Expressions (continued)
 
 add_cl_test("set_diff_1")
 add_cl_test("set_diff_2")

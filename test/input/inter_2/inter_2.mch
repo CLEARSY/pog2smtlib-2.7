@@ -3,10 +3,7 @@ MACHINE
 CONSTANTS
     vset
 PROPERTIES
-    vset : POW1(POW1(INTEGER))
+    vset = { { 0, 1}, {0, 2}, {0, 1, 2} }
 ASSERTIONS
-    inter(vset) : POW(INTEGER) 
+    inter(vset) = {0}
 END
-
-
-

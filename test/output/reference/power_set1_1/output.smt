@@ -23,14 +23,12 @@
 (define-const MAXINT |Z| 2147483647)
 
 (declare-fun |sub-sets Z| (|POW Z|) |POW POW Z|)
- (assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-        (=
-            (|set.in POW Z| s (|sub-sets Z| t))
-            (|set.subseteq Z| s t)
-        )
-     )
- :named |ax.sub-sets Z|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (|set.in POW Z| s (|sub-sets Z| t))
+      (|set.subseteq Z| s t)))
+  :named |ax.sub-sets Z|))
 
 (declare-const |set.empty Z| |POW Z|)
 (assert (!
@@ -42,13 +40,13 @@
   (forall ((e |Z|)) (= (|set.in Z| e INT) (and (<= MININT e) (<= e MAXINT))))
   :named |ax.set.in.INT|))
 
- (declare-fun |non empty sub-sets Z| (|POW Z|) |POW POW Z|)
- (assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-        (= (|set.in POW Z| s (|non empty sub-sets Z| t))
-            (and (|set.in POW Z| s (|sub-sets Z| t))
-                (not (= s |set.empty Z|)))))
-        :named |ax.non empty sub-sets Z|))
+(declare-fun |non empty sub-sets Z| (|POW Z|) |POW POW Z|)
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (= (|set.in POW Z| s (|non empty sub-sets Z| t))
+       (and (|set.in POW Z| s (|sub-sets Z| t))
+            (not (= s |set.empty Z|)))))
+  :named |ax.non empty sub-sets Z|))
 
 (declare-const INTEGER |POW Z|)
 (assert (!

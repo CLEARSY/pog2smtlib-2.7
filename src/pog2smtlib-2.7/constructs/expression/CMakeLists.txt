@@ -16,7 +16,8 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   # 5.4 Arithmetical Expressions (continued)
   ${CMAKE_CURRENT_SOURCE_DIR}/max.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/min.cpp
-
+  ${CMAKE_CURRENT_SOURCE_DIR}/card.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/cardinals.cpp
 
   # 5.5 Expression of Couples
   ${CMAKE_CURRENT_SOURCE_DIR}/maplet.cpp
@@ -39,8 +40,10 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/interval.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/cartesianproduct.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/set.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/fin.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/fin1.cpp
   
-  # 5.8 Set List Expressions
+  # 5.8 Set List Expressions (continued)
   ${CMAKE_CURRENT_SOURCE_DIR}/diff.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/union.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/intersection.cpp 

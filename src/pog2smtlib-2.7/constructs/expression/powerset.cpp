@@ -10,22 +10,19 @@ namespace BConstruct::Expression {
 
 static constexpr std::string_view SCRIPT = R"(
 (declare-fun {0} ({2}) {3})
- (assert (!
-    (forall ((s {2}) (t {2}))
-        (=
-            ({1} s ({0} t))
-            ({4} s t)
-        )
-     )
- :named |ax.sub-sets {5}|))
+(assert (!
+  (forall ((s {2}) (t {2}))
+    (=
+      ({1} s ({0} t))
+      ({4} s t)))
+  :named |ax.sub-sets {5}|))
 )";
 
-PowerSet::PowerSet(const BType &T)
-    : UnaryBType(T) {
+PowerSet::PowerSet(const BType &T) : UnaryBType(T) {
   const auto PT = BType::POW(T);
   const auto PPT = BType::POW(PT);
-  m_script = fmt::format(SCRIPT, 
-                         /*0*/ smtSymbol(Expr::UnaryOp::Subsets, T),                
+  m_script = fmt::format(SCRIPT,
+                         /*0*/ smtSymbol(Expr::UnaryOp::Subsets, T),
                          /*1*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
                          /*2*/ symbol(PT),
                          /*3*/ symbol(PPT),
