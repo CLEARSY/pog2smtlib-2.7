@@ -28,23 +28,41 @@ class NumberComparison;
 };  // namespace Predicate
 
 namespace Expression {
+/* 5.1 Primary Expressions */
 class Data;
+
+/* 5.2 Boolean Expressions */
 class BooleanExpression;
-class CartesianProduct;
+
+/* 5.3 Arithmetical Expressions */
+class Maxint;
+class Minint;
 class Addition;
 class Subtraction;
 class Multiplication;
 class IntegerDivision;
-class Maxint;
-class Minint;
 class Floor;
 class Ceiling;
 class ToReal;
+
+/* 5.4 Arithmetical Expressions (continued) */
+
+/* 5.5 Expression of Couples */
 class Maplet;
+
+/* 5.6 Building Sets */
 class EmptySet;
-class Bool;
 class Integer;
+class Natural;
+class Natural1;
+class Nat;
+class Nat1;
 class Real;
+class Bool;
+class Int;
+
+/* 5.7 Set List Expressions */
+class CartesianProduct;
 };  // namespace Expression
 
 class Factory {
@@ -82,25 +100,43 @@ class Factory {
   std::shared_ptr<Abstract> Inclusion(const BType &);
   std::shared_ptr<Abstract> StrictInclusion(const BType &);
   std::shared_ptr<Abstract> NumberComparison();
+
+  /* 5.1 Primary Expressions */
   std::shared_ptr<Abstract> Data(const Data &);
+  
+  /* 5.2 Boolean Expressions */
   std::shared_ptr<Abstract> BooleanExpression();
+  
+  /* 5.3 Arithmetical Expressions */
   std::shared_ptr<Abstract> Maxint();
   std::shared_ptr<Abstract> Minint();
-  std::shared_ptr<Abstract> Floor();
-  std::shared_ptr<Abstract> Ceiling();
-  std::shared_ptr<Abstract> ToReal();
   std::shared_ptr<Abstract> Addition();
   std::shared_ptr<Abstract> Subtraction();
   std::shared_ptr<Abstract> Multiplication();
   std::shared_ptr<Abstract> IntegerDivision();
+  std::shared_ptr<Abstract> Floor();
+  std::shared_ptr<Abstract> Ceiling();
+  std::shared_ptr<Abstract> ToReal();
+  
+  /* 5.4 Arithmetical Expressions (continued) */
+  
+  /* 5.5 Expression of Couples */
+  std::shared_ptr<Abstract> Maplet();
+  
+  /* 5.6 Building Sets */
+  std::shared_ptr<Abstract> EmptySet(const BType &);
   std::shared_ptr<Abstract> Integer();
+  std::shared_ptr<Abstract> Natural();
+  std::shared_ptr<Abstract> Natural1();
+  std::shared_ptr<Abstract> Nat();
+  std::shared_ptr<Abstract> Nat1();
   std::shared_ptr<Abstract> Real();
   std::shared_ptr<Abstract> Bool();
-  std::shared_ptr<Abstract> CartesianProduct(const BType &, const BType &);
-  std::shared_ptr<Abstract> EmptySet(const BType &);
+  std::shared_ptr<Abstract> Int();
+
+  /* 5.7 Set List Expressions */
   std::shared_ptr<Abstract> ExpressionCartesianProduct(const BType &,
                                                        const BType &);
-  std::shared_ptr<Abstract> Maplet();
 
   class Exception : public std::exception {
    public:
@@ -130,6 +166,7 @@ class Factory {
     }
   };
 
+  /* Type */
   std::vector<std::shared_ptr<BConstruct::Abstract>> m_index;
   std::unordered_map<std::shared_ptr<const BType>,
                      std::shared_ptr<BConstruct::Type::Type>, BTypeHash>
@@ -137,6 +174,8 @@ class Factory {
 
   std::shared_ptr<BConstruct::Type::PowerSet> m_PowerSet;
   std::shared_ptr<BConstruct::Type::CartesianProduct> m_CartesianProduct;
+
+  /* Predicate */
 
   std::unordered_map<std::shared_ptr<const BType>,
                      std::shared_ptr<BConstruct::Predicate::SetMembership>,
@@ -159,13 +198,15 @@ class Factory {
       m_StrictInclusions;
 
   std::shared_ptr<BConstruct::Predicate::NumberComparison> m_NumberComparison;
-  std::shared_ptr<BConstruct::Expression::BooleanExpression>
-      m_BooleanExpression;
 
   /* 5.1 Primary Expressions */
   std::unordered_map<std::shared_ptr<const struct Data>,
                      std::shared_ptr<BConstruct::Expression::Data>, DataHash>
       m_data;
+  
+  /* 5.2 Boolean Expressions */
+  std::shared_ptr<BConstruct::Expression::BooleanExpression>
+      m_BooleanExpression;
 
   /* 5.3 Arithmetical Expressions I */
   std::shared_ptr<BConstruct::Expression::Maxint> m_Maxint;
@@ -187,8 +228,15 @@ class Factory {
                      BTypeHash>
       m_EmptySets;
   std::shared_ptr<BConstruct::Expression::Integer> m_Integer;
+  std::shared_ptr<BConstruct::Expression::Natural> m_Natural;
+  std::shared_ptr<BConstruct::Expression::Natural1> m_Natural1;
+  std::shared_ptr<BConstruct::Expression::Nat> m_Nat;
+  std::shared_ptr<BConstruct::Expression::Nat1> m_Nat1;
   std::shared_ptr<BConstruct::Expression::Real> m_Real;
   std::shared_ptr<BConstruct::Expression::Bool> m_Bool;
+  std::shared_ptr<BConstruct::Expression::Int> m_Int;
+
+  /* 5.7 Set List Expressions */
   std::unordered_map<
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
       std::shared_ptr<BConstruct::Expression::CartesianProduct>,
@@ -412,13 +460,14 @@ class Data : public std::enable_shared_from_this<Data>, public Uniform {
   const std::string m_name;
 };
 
+/* 5.1 Boolean Expressions */
 class BooleanExpression : public Uniform {
  public:
   explicit BooleanExpression() { m_label = "bool()"; }
   virtual ~BooleanExpression() = default;
 };
 
-/* 5.3 Classes for Arithmetical Expressions I */
+/* 5.3 Arithmetical Expressions */
 class Maxint : public Uniform {
  public:
   explicit Maxint();
@@ -473,7 +522,7 @@ class ToReal : public Uniform {
   virtual ~ToReal() = default;
 };
 
-/* 5.5 Classes for Expression of Couples */
+/* 5.5 Expression of Couples */
 
 class Maplet : public Uniform {
  public:
@@ -481,7 +530,7 @@ class Maplet : public Uniform {
   virtual ~Maplet() = default;
 };
 
-/* 5.7 Classes for Building Set */
+/* 5.6 Classes for Building Sets */
 class EmptySet : public UnaryBType {
  public:
   /** @param t type of the elements of the set (even empty set must be strictly
@@ -495,6 +544,30 @@ class Integer : public Uniform {
   virtual ~Integer() = default;
 };
 
+class Natural : public Uniform {
+ public:
+  explicit Natural();
+  virtual ~Natural() = default;
+};
+
+class Natural1 : public Uniform {
+ public:
+  explicit Natural1();
+  virtual ~Natural1() = default;
+};
+
+class Nat : public Uniform {
+ public:
+  explicit Nat();
+  virtual ~Nat() = default;
+};
+
+class Nat1 : public Uniform {
+ public:
+  explicit Nat1();
+  virtual ~Nat1() = default;
+};
+
 class Real : public Uniform {
  public:
   explicit Real();
@@ -505,6 +578,12 @@ class Bool : public Uniform {
  public:
   explicit Bool();
   virtual ~Bool() = default;
+};
+
+class Int : public Uniform {
+ public:
+  explicit Int();
+  virtual ~Int() = default;
 };
 
 /* 5.7 Classes for Set List Expressions */

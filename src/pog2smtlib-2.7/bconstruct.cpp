@@ -93,6 +93,8 @@ shared_ptr<Abstract> Factory::Type(const BType& t) {
 }
 */
 
+/* Type */
+
 shared_ptr<Abstract> Factory::Type(const BType& t) {
   return get<BConstruct::Predicate::SetMembership>(m_SetMemberships, t);
 }
@@ -104,6 +106,8 @@ shared_ptr<Abstract> Factory::PowerSet() {
 shared_ptr<Abstract> Factory::CartesianProduct() {
   return get<BConstruct::Type::CartesianProduct>(m_CartesianProduct);
 }
+
+/* Predicate */
 
 shared_ptr<Abstract> Factory::SetMembership(const BType& t) {
   return get<BConstruct::Predicate::SetMembership>(m_SetMemberships, t);
@@ -125,11 +129,11 @@ shared_ptr<Abstract> Factory::NumberComparison() {
   return get<BConstruct::Predicate::NumberComparison>(m_NumberComparison);
 }
 
+/* 5.1 Primary Expressions */
+
 shared_ptr<Abstract> Factory::BooleanExpression() {
   return get<BConstruct::Expression::BooleanExpression>(m_BooleanExpression);
 }
-
-/* 5.1 Primary Expressions */
 
 shared_ptr<Abstract> Factory::Data(const struct Data& data) {
   return get(data);
@@ -196,6 +200,28 @@ shared_ptr<Abstract> Factory::Bool() {
 shared_ptr<Abstract> Factory::EmptySet(const BType& t) {
   return get<BConstruct::Expression::EmptySet>(m_EmptySets, t);
 }
+
+shared_ptr<Abstract> Factory::Natural() {
+  return get<BConstruct::Expression::Natural>(m_Natural);
+}
+
+shared_ptr<Abstract> Factory::Natural1() {
+  return get<BConstruct::Expression::Natural1>(m_Natural1);
+}
+
+shared_ptr<Abstract> Factory::Nat() {
+  return get<BConstruct::Expression::Nat>(m_Nat);
+}
+
+shared_ptr<Abstract> Factory::Nat1() {
+  return get<BConstruct::Expression::Nat1>(m_Nat1);
+}
+
+shared_ptr<Abstract> Factory::Int() {
+  return get<BConstruct::Expression::Int>(m_Int);
+}
+
+/* 5.7 Set List Expressions */
 
 shared_ptr<Abstract> Factory::ExpressionCartesianProduct(const BType& t1,
                                                          const BType& t2) {

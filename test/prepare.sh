@@ -22,15 +22,15 @@ function prepare_pog() {
 
 export -f prepare_pog
 
-TRANSLATOR_EXE=../build-17/src/pog2smtlib-2.7/pog2smtlib27
-SMT_EXE="/usr/bin/cvc5"
+TRANSLATOR_EXE=../build/src/pog2smtlib-2.7/pog2smtlib27
+SMT_EXE="/usr/bin/cvc4 --lang=smt2 "
 
 #
 # - prepare_test_output:
 #   - description: permet de préparer les fichiers de référence pour un test.
 #   - conditions d'utilisation:
 #     - exécuter dans le dossier racine des tests
-#     - le paramètre est le nom du test (nom de la machine contenant le test)
+#     - le paramètre est le nom du test (e la machine (nom de la machine contenant le test)
 #     - le dossier input/<nom du test> doit exister et contenir un fichier input.pog (cf. fonction prepare_pog)
 #     - les chemins TRANSLATOR_EXE et SMT_EXE doivent être configurés
 #
@@ -47,7 +47,7 @@ function prepare_test_output() {
   cat stderr
   echo "> output:"
   cat output.smt
-  echo "> CVC5 says "
+  echo "> CVC4 says "
   $SMT_EXE output.smt
 }
 
