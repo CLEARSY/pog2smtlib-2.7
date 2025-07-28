@@ -104,8 +104,10 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::RMultiplication, "*"},
     {Expr::BinaryOp::IDivision, "|int.div|"},
     {Expr::BinaryOp::RDivision, "/"},
+
     /* 5.5 Expression of Couples */
     {Expr::BinaryOp::Mapplet, "maplet"},
+    
     /* 5.6 Expression of Sets */
     {Expr::BinaryOp::Cartesian_Product, "set.product"},
 };
@@ -136,11 +138,13 @@ static std::unordered_map<Expr::Visitor::EConstant, std::string>
         /* 5.2 Boolean Expressions */
         {Expr::Visitor::EConstant::TRUE, "true"},
         {Expr::Visitor::EConstant::FALSE, "false"},
+
         /* 5.3 Arithmetical Expressions I */
         {Expr::Visitor::EConstant::MaxInt, "MAXINT"},
         {Expr::Visitor::EConstant::MinInt, "MININT"},
         {Expr::Visitor::EConstant::Successor, "succ"},
         {Expr::Visitor::EConstant::Predecessor, "pred"},
+        
         /* 5.6 Building Sets */
         {Expr::Visitor::EConstant::INTEGER, "INTEGER"},
         {Expr::Visitor::EConstant::NATURAL, "NATURAL"},

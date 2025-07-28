@@ -253,6 +253,8 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
         const Expr::BinaryOp binop = std::get<Expr::BinaryOp>(op);
         switch (binop) {
           /* the following have counterparts in SMT theory ALL*/
+
+          /* 5.3 Arithmetical Expressions */
           case Expr::BinaryOp::IAddition:
           case Expr::BinaryOp::ISubtraction:
           case Expr::BinaryOp::IMultiplication:
@@ -262,16 +264,20 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::BinaryOp::RDivision:
             construct = nullptr;
             break;
+          case Expr::BinaryOp::IDivision:
+            construct = BConstruct::Factory::factory().IntegerDivision();
+            break;
+
+          /* 5.5 Expression of Couples */
+          case Expr::BinaryOp::Mapplet:
+            construct = BConstruct::Factory::factory().Maplet();
+            break;
+
+          /* 5.7 Set List Expressions */
           case Expr::BinaryOp::Cartesian_Product:
             construct =
                 BConstruct::Factory::factory().ExpressionCartesianProduct(
                     *types.at(0), *types.at(1));
-            break;
-          case Expr::BinaryOp::IDivision:
-            construct = BConstruct::Factory::factory().IntegerDivision();
-            break;
-          case Expr::BinaryOp::Mapplet:
-            construct = BConstruct::Factory::factory().Maplet();
             break;
           default:
             throw std::runtime_error(
@@ -305,13 +311,16 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::Visitor::EConstant::FALSE:
             construct = nullptr;
             break;
-          /* 5.2 Arithmetical Expressions I */
+
+          /* 5.3 Arithmetical Expressions */
           case Expr::Visitor::EConstant::MaxInt:
             construct = BConstruct::Factory::factory().Maxint();
             break;
           case Expr::Visitor::EConstant::MinInt:
             construct = BConstruct::Factory::factory().Minint();
             break;
+
+          /* 5.6 Building Sets */
           case Expr::Visitor::EConstant::INTEGER:
             construct = BConstruct::Factory::factory().Integer();
             break;
@@ -321,6 +330,22 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::Visitor::EConstant::BOOL:
             construct = BConstruct::Factory::factory().Bool();
             break;
+          case Expr::Visitor::EConstant::NAT:
+            construct = BConstruct::Factory::factory().Nat();
+            break;
+          case Expr::Visitor::EConstant::NAT1:
+            construct = BConstruct::Factory::factory().Nat1();
+            break;
+          case Expr::Visitor::EConstant::NATURAL:
+            construct = BConstruct::Factory::factory().Natural();
+            break;
+          case Expr::Visitor::EConstant::NATURAL1:
+            construct = BConstruct::Factory::factory().Natural1();
+            break;
+          case Expr::Visitor::EConstant::INT:
+            construct = BConstruct::Factory::factory().Int();
+            break;
+
           case Expr::Visitor::EConstant::EmptySet:
             if (types.size() != 1) {
               throw std::runtime_error(
