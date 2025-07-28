@@ -233,10 +233,13 @@ void SmtTranslatorVisitor::visitExprComparison(Pred::ComparisonOp op,
 void SmtTranslatorVisitor::visitConstant(
     const BType &type, [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     EConstant c) {
-  if (c == EConstant::EmptySet) {
-    m_translation.append(smtSymbol(c, type.toPowerType().content));
-  } else {
-    m_translation.append(smtSymbol(c, type));
+  switch (c) {
+    case EConstant::EmptySet:
+      m_translation.append(smtSymbol(c, type.toPowerType().content));
+      break;
+    default:
+      m_translation.append(smtSymbol(c, type));
+      break;
   }
 }
 

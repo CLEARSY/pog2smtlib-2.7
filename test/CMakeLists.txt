@@ -29,12 +29,14 @@ add_cl_test("expr_comparison_9")
 add_cl_test("expr_comparison_10")
 add_cl_test("expr_comparison_11")
 
+# 5.1 Primary Expressions
+
 # 5.1 Boolean Expressions
 
 add_cl_test("boolean_expression_1")
 add_cl_test("boolean_expression_2")
 
-# 5.2 Arithmetical Expressions I
+# 5.3 Arithmetical Expressions
 
 add_cl_test("integer_const_expr")
 add_cl_test("arithmetical_expression_1")
@@ -48,12 +50,25 @@ add_cl_test("arithmetical_expression_10")
 add_cl_test("arithmetical_expression_11")
 add_cl_test("arithmetical_expression_12")
 
-# 5.3 Arithmetical Expressions II
+# 5.4 Arithmetical Expressions (Continued)
 
 # 5.4 Expression of Couples
 
 add_cl_test("expr_couple_1")
 add_cl_test("expr_couple_2")
+
+# 5.6 Building Sets
+
+add_cl_test("building_set_natural_1")
+add_cl_test("building_set_natural_2")
+add_cl_test("building_set_natural1_1")
+add_cl_test("building_set_natural1_2")
+add_cl_test("building_set_nat_1")
+add_cl_test("building_set_nat_2")
+add_cl_test("building_set_nat1_1")
+add_cl_test("building_set_nat1_2")
+add_cl_test("building_set_int_1")
+add_cl_test("building_set_int_2")
 
 # 5.7 Set List Expressions
 
