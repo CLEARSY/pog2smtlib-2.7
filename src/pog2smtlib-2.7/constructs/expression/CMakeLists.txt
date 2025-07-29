@@ -71,6 +71,11 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/totalbijections.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/totalinjections.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/totalsurjections.cpp
+
+  # 5.16 Expressions of Functions
+  ${CMAKE_CURRENT_SOURCE_DIR}/eval.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/intofunction.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/intorelation.cpp
   
   PARENT_SCOPE
 )

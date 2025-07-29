@@ -55,8 +55,10 @@ add_cl_test("max_1")
 add_cl_test("max_2")
 add_cl_test("min_1")
 add_cl_test("min_2")
-# add_cl_test("card_1")
-# add_cl_test("card_2")
+add_cl_test("card_1")
+add_cl_test("card_2")
+add_cl_test("card_3")
+add_cl_test("card_4")
 
 # 5.5 Expression of Couples
 
@@ -138,3 +140,12 @@ add_cl_test("surjections_total_1")
 add_cl_test("surjections_total_2")
 add_cl_test("bijections_total_1")
 add_cl_test("bijections_total_2")
+
+# 5.16 Expressions of Functions
+
+add_cl_test("application_1")
+add_cl_test("application_2")
+add_cl_test("fnc_1")
+add_cl_test("fnc_2")
+add_cl_test("rel_1")
+add_cl_test("rel_2")

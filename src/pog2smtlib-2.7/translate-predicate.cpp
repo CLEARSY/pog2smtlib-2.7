@@ -309,11 +309,16 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       m_translation.push_back(')');
       break;
     }
+
     case Expr::UnaryOp::Cardinality: {
       m_translation.push_back('(');
-      m_translation.append(smtSymbol(op, type));
+      m_translation.append("Value");
+      m_translation.push_back(' ');
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, elementType(e.getType())));
       m_translation.push_back(' ');
       e.accept(*this);
+      m_translation.push_back(')');
       m_translation.push_back(')');
       break;
     }
@@ -332,7 +337,7 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       break;
     }
 
-    /* 5.8 Set List Expressions (continued) */
+    /* 5.8 Set List Expressions */
     case Expr::UnaryOp::Union:
     case Expr::UnaryOp::Intersection: {
       m_translation.push_back('(');
@@ -355,6 +360,33 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       m_translation.push_back(')');
       break;
     }
+
+    /* 5.16 Expressions of Functions */
+    case Expr::UnaryOp::Fnc: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op, (type.toPowerType().content).toProductType().lhs,
+                    ((type.toPowerType().content).toProductType().rhs)
+                        .toPowerType()
+                        .content));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+    case Expr::UnaryOp::Rel: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op, elementType(e.getType()).toProductType().lhs,
+                    (elementType(e.getType()).toProductType().rhs)
+                        .toPowerType()
+                        .content));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     default:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));
@@ -486,6 +518,20 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       break;
     }
 
+    /* 5.16 Expressions of Functions */
+    case Expr::BinaryOp::Application: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op, elementType(lhs.getType()).toProductType().lhs,
+                    elementType(lhs.getType()).toProductType().rhs));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     /* todo */
     case Expr::BinaryOp::Head_Insertion:
     case Expr::BinaryOp::Head_Restriction:
@@ -502,7 +548,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Modulo:
     case Expr::BinaryOp::Range_Restriction:
     case Expr::BinaryOp::Range_Subtraction:
-    case Expr::BinaryOp::Application:
     case Expr::BinaryOp::IExponentiation:
     case Expr::BinaryOp::RExponentiation:
     case Expr::BinaryOp::FAddition:
@@ -563,8 +608,8 @@ void SmtTranslatorVisitor::visitNaryExpression(
       m_translation.push_back(')');
 
       m_translation.push_back(')');
-      m_translation.push_back(')'); 
-    break;
+      m_translation.push_back(')');
+      break;
     default:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));

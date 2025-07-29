@@ -47,7 +47,6 @@
           (=> (and (|set.in (Z x Z)| p1 f) (|set.in (Z x Z)| p2 f) (= (snd p1) (snd p2)))
               (= (fst p1) (fst p2))))))
   :named |ax:set.in.injections (Z x Z)|))
-(define-sort |POW POW Z| () (P |POW Z|))
 
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 
@@ -66,47 +65,6 @@
          (and (|set.in POW (Z x Z)| f (|injections Z Z| X Y))
               (|set.in POW (Z x Z)| f (|surjections Z Z| X Y))))))
   :named |ax:set.in.bijections (Z x Z)|))
-(declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
-(assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-      (=
-        (|set.subseteq Z| s t)
-        (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq Z|))
-
-(declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
-
-(declare-fun |card Z| (|POW Z|) Cardinals)
-(assert (!
-  (forall ((s |POW Z|))
-    (or (= (|card Z| s) Infinite)
-        (exists ((f |POW (Z x Z)|))
-          (|set.in POW (Z x Z)| f (|bijections Z Z| s (|interval| 1 (Value (|card Z| s))))))))
-  :named |ax.card.definition Z|))
-
-(declare-fun |sub-sets Z| (|POW Z|) |POW POW Z|)
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (=
-      (|set.in POW Z| s (|sub-sets Z| t))
-      (|set.subseteq Z| s t)))
-  :named |ax.sub-sets Z|))
-
-(declare-fun |finite sub-sets Z| (|POW Z|) |POW POW Z|)
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (= (|set.in POW Z| s (|finite sub-sets Z| t))
-       (and
-         (|set.in POW Z| s (|sub-sets Z| t))
-         (not (= (|card Z| s) Infinite)))))
-  :named |ax.finite sub-sets Z|))
-
-(declare-const INTEGER |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
 
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
@@ -116,12 +74,16 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
+
+(declare-fun |card Z| (|POW Z|) Cardinals)
 (assert (!
-  (|set.in POW Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 3)(= x 5)))) (|finite sub-sets Z| INTEGER))
-  :named |Define:lprp:1|)
-)
+  (forall ((s |POW Z|))
+    (or (= (|card Z| s) Infinite)
+        (exists ((f |POW (Z x Z)|))
+          (|set.in POW (Z x Z)| f (|bijections Z Z| s (|interval| 1 (Value (|card Z| s))))))))
+  :named |ax.card.definition Z|))
 (assert (!
-  (not (= (Value (|card Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 3)(= x 5)))))) 3))
+  (not (= (Value (|card Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4)))))) 3))
   :named |Goal|)
 )
 (check-sat)
