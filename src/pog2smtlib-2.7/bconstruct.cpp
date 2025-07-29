@@ -358,6 +358,20 @@ shared_ptr<Abstract> Factory::Total_Bijection(const BType& lhs, const BType& rhs
   return get<BConstruct::Expression::Total_Bijection>(m_Total_Bijections, lhs, rhs);
 }
 
+/* 5.16 Expressions of Functions */
+
+shared_ptr<Abstract> Factory::Evaluation(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Evaluation>(m_Evaluations, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Transformed_Into_Function(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Transformed_Into_Function>(m_Transformed_Into_Functions, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Transformed_Into_Relation>(m_Transformed_Into_Relations, lhs, rhs);
+}
+
 size_t Factory::size() { return m_index.size(); }
 
 shared_ptr<Abstract> Factory::at(size_t index) { return m_index.at(index); }

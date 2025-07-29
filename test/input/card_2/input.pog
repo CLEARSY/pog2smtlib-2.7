@@ -18,36 +18,25 @@
     </Define>
     <Define name="ctx" hash="0"/>
     <Define name="seext" hash="0"/>
-    <Define name="lprp" hash="6685758318862808729">
-        <Exp_Comparison op=":">
-            <Nary_Exp op="{" typref="0">
-                <Integer_Literal value="1" typref="1" tag="card_2.bxml:1:1:1:1:1"/>
-                <Integer_Literal value="3" typref="1" tag="card_2.bxml:1:1:1:1:2"/>
-                <Integer_Literal value="5" typref="1" tag="card_2.bxml:1:1:1:1:3"/>
-            </Nary_Exp>
-            <Unary_Exp op="FIN" typref="2">
-                <Id value="INTEGER" typref="0" tag="card_2.bxml:1:1:1:2:1"/>
-            </Unary_Exp>
-        </Exp_Comparison>
-    </Define>
+    <Define name="lprp" hash="0"/>
     <Define name="inprp" hash="0"/>
     <Define name="inext" hash="0"/>
     <Define name="inv" hash="0"/>
-    <Define name="ass" hash="4141312451271394949">
+    <Define name="ass" hash="6620294023431287912">
         <Exp_Comparison op="=">
             <Unary_Exp op="card" typref="1">
                 <Nary_Exp op="{" typref="0">
-                    <Integer_Literal value="1" typref="1" tag="card_2.bxml:1:3:1:1:1:1"/>
-                    <Integer_Literal value="3" typref="1" tag="card_2.bxml:1:3:1:1:1:2"/>
-                    <Integer_Literal value="5" typref="1" tag="card_2.bxml:1:3:1:1:1:3"/>
+                    <Integer_Literal value="1" typref="1" tag="card_2.bxml:1:2:1:1:1:1"/>
+                    <Integer_Literal value="2" typref="1" tag="card_2.bxml:1:2:1:1:1:2"/>
+                    <Integer_Literal value="4" typref="1" tag="card_2.bxml:1:2:1:1:1:3"/>
                 </Nary_Exp>
             </Unary_Exp>
-            <Integer_Literal value="3" typref="1" tag="card_2.bxml:1:3:1:2"/>
+            <Integer_Literal value="3" typref="1" tag="card_2.bxml:1:2:1:2"/>
         </Exp_Comparison>
     </Define>
     <Define name="cst" hash="0"/>
     <Define name="sets" hash="0"/>
-    <Proof_Obligation goalHash="15367463596048203858">
+    <Proof_Obligation goalHash="12838577822416101251">
         <Tag>AssertionLemmas</Tag>
         <Definition name="B definitions"/>
         <Definition name="ctx"/>
@@ -63,12 +52,12 @@
                 <Exp_Comparison op="=">
                     <Unary_Exp op="card" typref="1">
                         <Nary_Exp op="{" typref="0">
-                            <Integer_Literal value="1" typref="1" tag="card_2.bxml:1:3:1:1:1:1"/>
-                            <Integer_Literal value="3" typref="1" tag="card_2.bxml:1:3:1:1:1:2"/>
-                            <Integer_Literal value="5" typref="1" tag="card_2.bxml:1:3:1:1:1:3"/>
+                            <Integer_Literal value="1" typref="1" tag="card_2.bxml:1:2:1:1:1:1"/>
+                            <Integer_Literal value="2" typref="1" tag="card_2.bxml:1:2:1:1:1:2"/>
+                            <Integer_Literal value="4" typref="1" tag="card_2.bxml:1:2:1:1:1:3"/>
                         </Nary_Exp>
                     </Unary_Exp>
-                    <Integer_Literal value="3" typref="1" tag="card_2.bxml:1:3:1:2"/>
+                    <Integer_Literal value="3" typref="1" tag="card_2.bxml:1:2:1:2"/>
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
@@ -81,13 +70,6 @@
         </Type>
         <Type id="1">
             <Id value="INTEGER"/>
-        </Type>
-        <Type id="2">
-            <Unary_Exp op="POW">
-                <Unary_Exp op="POW">
-                    <Id value="INTEGER"/>
-                </Unary_Exp>
-            </Unary_Exp>
         </Type>
     </TypeInfos>
 </Proof_Obligations>

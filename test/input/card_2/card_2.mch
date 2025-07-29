@@ -1,7 +1,5 @@
 MACHINE
     card_2
-PROPERTIES
-    {1, 3, 5} : FIN(INTEGER)
 ASSERTIONS
-    card({1, 3, 5}) = 3
+    card({1, 2, 4}) = 3
 END
