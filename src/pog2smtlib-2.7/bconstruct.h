@@ -104,6 +104,11 @@ class Partial_Surjection;
 class Total_Surjection;
 class Total_Bijection;
 
+/* 5.16 Expressions of Functions */
+class Evaluation;
+class Transformed_Into_Function;
+class Transformed_Into_Relation;
+
 };  // namespace Expression
 
 class Factory {
@@ -219,6 +224,11 @@ class Factory {
   std::shared_ptr<Abstract> Total_Surjection(const BType &, const BType &);
   std::shared_ptr<Abstract> Total_Bijection(const BType &, const BType &);
     
+  /* 5.16 Expressions of Functions */
+  std::shared_ptr<Abstract> Evaluation(const BType &, const BType &);
+  std::shared_ptr<Abstract> Transformed_Into_Function(const BType &, const BType &);
+  std::shared_ptr<Abstract> Transformed_Into_Relation(const BType &, const BType &);
+
   class Exception : public std::exception {
    public:
     Exception(const std::string &msg) : msg{msg} {}
@@ -468,6 +478,22 @@ class Factory {
                      std::shared_ptr<BConstruct::Expression::Total_Bijection>,
                      BinaryBTypeHash>
       m_Total_Bijections;
+
+  /* 5.16 Expressions of Functions */
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Evaluation>,
+                     BinaryBTypeHash>
+      m_Evaluations;
+
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Transformed_Into_Function>,
+                     BinaryBTypeHash>
+      m_Transformed_Into_Functions;
+
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Transformed_Into_Relation>,
+                     BinaryBTypeHash>
+      m_Transformed_Into_Relations;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -1015,6 +1041,26 @@ class Total_Bijection : public BinaryBType {
  public:
   explicit Total_Bijection(const BType &, const BType &);
   virtual ~Total_Bijection() = default;
+};
+
+/* 5.16 Expressions of Functions */
+
+class Evaluation : public BinaryBType {
+ public:
+  explicit Evaluation(const BType &, const BType &);
+  virtual ~Evaluation() = default;
+};
+
+class Transformed_Into_Function : public BinaryBType {
+ public:
+  explicit Transformed_Into_Function(const BType &, const BType &);
+  virtual ~Transformed_Into_Function() = default;
+};
+
+class Transformed_Into_Relation : public BinaryBType {
+ public:
+  explicit Transformed_Into_Relation(const BType &, const BType &);
+  virtual ~Transformed_Into_Relation() = default;
 };
 
 };  // namespace Expression

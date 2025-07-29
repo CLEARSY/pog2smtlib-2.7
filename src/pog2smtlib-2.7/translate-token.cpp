@@ -100,7 +100,12 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
 
     /* 5.13 Expressions of Relations */
     {Expr::UnaryOp::Domain, "rel.domain"},
-    {Expr::UnaryOp::Range, "rel.range"}};
+    {Expr::UnaryOp::Range, "rel.range"},
+
+    /* 5.15 Sets of Functions */
+    {Expr::UnaryOp::Fnc, "fnc"},
+    {Expr::UnaryOp::Rel, "rel"}
+};
 
 std::string smtSymbol(Expr::UnaryOp op) {
   const auto itr = unOpExprToStringMap.find(op);
@@ -133,6 +138,7 @@ std::string smtSymbol(Expr::UnaryOp op, const BType& t1, const BType& t2) {
   string& str = itr->second;
   return fmt::format("|{0} {1} {2}|", str, symbolInner(t1), symbolInner(t2));
 }
+
 
 static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     /* 5.3 Arithmetical Expressions I */
@@ -169,7 +175,10 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::Total_Injections, "injections.total"},
     {Expr::BinaryOp::Partial_Surjections, "surjections.partial"},
     {Expr::BinaryOp::Total_Surjections, "surjections.total"},
-    {Expr::BinaryOp::Total_Bijections, "bijections.total"}
+    {Expr::BinaryOp::Total_Bijections, "bijections.total"},
+
+    /* 5.15 Sets of Functions */
+    {Expr::BinaryOp::Application, "fun.eval"}
 };
 
 std::string smtSymbol(Expr::BinaryOp op) {
@@ -192,6 +201,7 @@ std::string smtSymbol(Expr::BinaryOp op, const BType& t) {
   string& str = itr->second;
   return fmt::format("|{0} {1}|", str, symbolInner(t));
 }
+
 
 std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2) {
   const auto itr = binOpExprToStringMap.find(op);
@@ -230,6 +240,30 @@ string smtSymbol(Expr::NaryOp op, const BType& type) {
   }
   string& str = itr->second;
   return fmt::format("|{0} {1}|", str, symbolInner(type));
+}
+
+static std::unordered_map<Expr::QuantifiedOp, std::string> qOpExprToStringMap = {
+};
+
+std::string smtSymbol(Expr::QuantifiedOp op) {
+  const auto itr = qOpExprToStringMap.find(op);
+  if (itr == qOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
+  }
+  return itr->second;
+}
+
+std::string smtSymbol(Expr::QuantifiedOp op, const BType& t1, const BType& t2) {
+  const auto itr = qOpExprToStringMap.find(op);
+  if (itr == qOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
+  }
+  string& str = itr->second;
+  return fmt::format("|{0} {1} {2}|", str, symbolInner(t1), symbolInner(t2));
 }
 
 static std::unordered_map<Expr::Visitor::EConstant, std::string>

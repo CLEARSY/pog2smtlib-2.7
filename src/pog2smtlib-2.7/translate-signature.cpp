@@ -276,6 +276,16 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Range(*types.at(0),
                                                              *types.at(1));
             break;
+
+          /* 5.16 Expressions of Functions */
+          case Expr::UnaryOp::Fnc:
+            construct = BConstruct::Factory::factory().Transformed_Into_Function(*types.at(0),
+                                                              *types.at(1));
+            break;
+          case Expr::UnaryOp::Rel:
+            construct = BConstruct::Factory::factory().Transformed_Into_Relation(*types.at(0),
+                                                             *types.at(1));
+            break;
           default:
             throw std::runtime_error(fmt::format(
                 "{}:{} Unknown unary operator {}", FILE_NAME, LINE_NUMBER, op));
@@ -381,6 +391,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           case Expr::BinaryOp::Total_Bijections:
             construct = BConstruct::Factory::factory().Total_Bijection(
+                *types.at(0), *types.at(1));
+            break;
+
+          /* 5.16 Expressions of Functions */
+          case Expr::BinaryOp::Application:
+            construct = BConstruct::Factory::factory().Evaluation(
                 *types.at(0), *types.at(1));
             break;
           default:
