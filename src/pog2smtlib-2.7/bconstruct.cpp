@@ -372,6 +372,32 @@ shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType& lhs, const 
   return get<BConstruct::Expression::Transformed_Into_Relation>(m_Transformed_Into_Relations, lhs, rhs);
 }
 
+/* 5.17 Set of Sequences */
+
+shared_ptr<Abstract> Factory::Seq(const BType& t) {
+  return get<BConstruct::Expression::Seq>(m_Seqs, t);
+}
+
+shared_ptr<Abstract> Factory::Seq1(const BType& t) {
+  return get<BConstruct::Expression::Seq1>(m_Seq1s, t);
+}
+
+shared_ptr<Abstract> Factory::Injective_Seq(const BType& t) {
+  return get<BConstruct::Expression::Injective_Seq>(m_Injective_Seqs, t);
+}
+
+shared_ptr<Abstract> Factory::Injective_Seq1(const BType& t) {
+  return get<BConstruct::Expression::Injective_Seq1>(m_Injective_Seq1s, t);
+}
+
+shared_ptr<Abstract> Factory::Perm(const BType& t) {
+  return get<BConstruct::Expression::Perm>(m_Perms, t);
+}
+
+shared_ptr<Abstract> Factory::EmptySeq(const BType& t) {
+  return get<BConstruct::Expression::EmptySeq>(m_EmptySeqs, t);
+}
+
 size_t Factory::size() { return m_index.size(); }
 
 shared_ptr<Abstract> Factory::at(size_t index) { return m_index.at(index); }

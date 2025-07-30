@@ -286,6 +286,23 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Transformed_Into_Relation(*types.at(0),
                                                              *types.at(1));
             break;
+
+          /* 5.17 Set of Sequences */
+          case Expr::UnaryOp::Sequences:
+            construct = BConstruct::Factory::factory().Seq(*types.at(0));
+            break;
+          case Expr::UnaryOp::Non_Empty_Sequences:
+            construct = BConstruct::Factory::factory().Seq1(*types.at(0));
+            break;
+          case Expr::UnaryOp::Injective_Sequences:
+            construct = BConstruct::Factory::factory().Injective_Seq(*types.at(0));
+            break;
+          case Expr::UnaryOp::Non_Empty_Injective_Sequences:
+            construct = BConstruct::Factory::factory().Injective_Seq1(*types.at(0));
+            break;
+          case Expr::UnaryOp::Permutations:
+            construct = BConstruct::Factory::factory().Perm(*types.at(0));
+            break;
           default:
             throw std::runtime_error(fmt::format(
                 "{}:{} Unknown unary operator {}", FILE_NAME, LINE_NUMBER, op));
@@ -418,6 +435,9 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           /* 5.7 Set List Expressions */
           case Expr::NaryOp::Set:
             construct = BConstruct::Factory::factory().Set(*types.at(0));
+            break;
+          case Expr::NaryOp::Sequence:
+            construct = BConstruct::Factory::factory().Set(BType::PROD(BType::INT, *types.at(0)));
             break;
           default:
             throw std::runtime_error(

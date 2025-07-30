@@ -1,0 +1,5 @@
+MACHINE
+    seq1_2
+ASSERTIONS
+    [1, 2, 4, 0] : seq1(INTEGER)
+END

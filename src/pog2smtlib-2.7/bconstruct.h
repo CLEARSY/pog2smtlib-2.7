@@ -109,6 +109,14 @@ class Evaluation;
 class Transformed_Into_Function;
 class Transformed_Into_Relation;
 
+/* 5.17 Set of Sequences */
+class Seq;
+class Seq1;
+class Injective_Seq;
+class Injective_Seq1;
+class Perm;
+class EmptySeq;
+
 };  // namespace Expression
 
 class Factory {
@@ -228,6 +236,14 @@ class Factory {
   std::shared_ptr<Abstract> Evaluation(const BType &, const BType &);
   std::shared_ptr<Abstract> Transformed_Into_Function(const BType &, const BType &);
   std::shared_ptr<Abstract> Transformed_Into_Relation(const BType &, const BType &);
+
+  /* 5.17 Set of Sequences */
+  std::shared_ptr<Abstract> Seq(const BType &);
+  std::shared_ptr<Abstract> Seq1(const BType &);
+  std::shared_ptr<Abstract> Injective_Seq(const BType &);
+  std::shared_ptr<Abstract> Injective_Seq1(const BType &);
+  std::shared_ptr<Abstract> Perm(const BType &);
+  std::shared_ptr<Abstract> EmptySeq(const BType &);
 
   class Exception : public std::exception {
    public:
@@ -494,6 +510,37 @@ class Factory {
                      std::shared_ptr<BConstruct::Expression::Transformed_Into_Relation>,
                      BinaryBTypeHash>
       m_Transformed_Into_Relations;
+
+  /* 5.17 Set of Sequences */
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Seq>,
+                     BTypeHash>
+      m_Seqs;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Seq1>,
+                     BTypeHash>
+      m_Seq1s;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Injective_Seq>,
+                     BTypeHash>
+      m_Injective_Seqs;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Injective_Seq1>,
+                     BTypeHash>
+      m_Injective_Seq1s;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Perm>,
+                     BTypeHash>
+      m_Perms;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::EmptySeq>,
+                     BTypeHash>
+      m_EmptySeqs;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -1061,6 +1108,44 @@ class Transformed_Into_Relation : public BinaryBType {
  public:
   explicit Transformed_Into_Relation(const BType &, const BType &);
   virtual ~Transformed_Into_Relation() = default;
+};
+
+/* 5.17 Set of Sequences */
+
+class Seq : public UnaryBType {
+ public:
+  explicit Seq(const BType &);
+  virtual ~Seq() = default;
+};
+
+class Seq1 : public UnaryBType {
+ public:
+  explicit Seq1(const BType &);
+  virtual ~Seq1() = default;
+};
+
+class Injective_Seq : public UnaryBType {
+ public:
+  explicit Injective_Seq(const BType &);
+  virtual ~Injective_Seq() = default;
+};
+
+class Injective_Seq1 : public UnaryBType {
+ public:
+  explicit Injective_Seq1(const BType &);
+  virtual ~Injective_Seq1() = default;
+};
+
+class Perm : public UnaryBType {
+ public:
+  explicit Perm(const BType &);
+  virtual ~Perm() = default;
+};
+
+class EmptySeq : public UnaryBType {
+ public:
+  explicit EmptySeq(const BType &);
+  virtual ~EmptySeq() = default;
 };
 
 };  // namespace Expression

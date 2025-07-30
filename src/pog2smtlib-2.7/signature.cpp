@@ -349,6 +349,12 @@ void GetSignatureVisitor::visitConstant(
       if (type.getKind() != BType::Kind::PowerType) {
         throw Exception("Empty set constant must have a powerset type");
       }
+    /*  
+    case Expr::Visitor::EConstant::EmptySeq:
+      if (type.getKind() != BType::Kind::PowerType) {
+        throw Exception("Empty set constant must have a powerset type");
+      }
+    */
       m_signature.m_operators.emplace(MonomorphizedOperator{
           c, std::make_shared<BType>(type.toPowerType().content)});
     case Expr::Visitor::EConstant::Successor:

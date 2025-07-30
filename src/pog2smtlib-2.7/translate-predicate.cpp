@@ -387,6 +387,20 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       break;
     }
 
+    /* 5.17 Set of Sequences */
+    case Expr::UnaryOp::Sequences:
+    case Expr::UnaryOp::Non_Empty_Sequences:
+    case Expr::UnaryOp::Injective_Sequences:
+    case Expr::UnaryOp::Non_Empty_Injective_Sequences:
+    case Expr::UnaryOp::Permutations: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, elementType(e.getType())));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     default:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));
@@ -586,7 +600,7 @@ void SmtTranslatorVisitor::visitNaryExpression(
     [[maybe_unused]] const std::vector<Expr> &vec) {
   switch (op) {
     /* 5.7 Set List Expressions */
-    case Expr::NaryOp::Set:
+    case Expr::NaryOp::Set: {
       m_translation.push_back('(');
       m_translation.append(smtSymbol(op, type.toPowerType().content));
       m_translation.append(" (lambda (");
@@ -610,6 +624,38 @@ void SmtTranslatorVisitor::visitNaryExpression(
       m_translation.push_back(')');
       m_translation.push_back(')');
       break;
+    }
+    case Expr::NaryOp::Sequence: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, type.toPowerType().content));
+      m_translation.append(" (lambda (");
+
+      m_translation.push_back('(');
+      m_translation.push_back('x');
+      m_translation.push_back(' ');
+      m_translation.append(symbol(type.toPowerType().content));
+      m_translation.push_back(')');
+      m_translation.push_back(')');
+      m_translation.push_back(' ');
+
+      int i = 0;
+
+      m_translation.append("(or ");
+      for (const Expr &v : vec) {
+        m_translation.append("(= x (maplet ");
+        m_translation.append(std::to_string(i));
+        m_translation.push_back(' ');
+        v.accept(*this);
+        m_translation.push_back(')');
+        m_translation.push_back(')');
+        i++;
+      }
+      m_translation.push_back(')');
+
+      m_translation.push_back(')');
+      m_translation.push_back(')');
+      break;
+    }
     default:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));
