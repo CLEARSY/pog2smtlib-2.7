@@ -104,8 +104,15 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
 
     /* 5.15 Sets of Functions */
     {Expr::UnaryOp::Fnc, "fnc"},
-    {Expr::UnaryOp::Rel, "rel"}
-};
+    {Expr::UnaryOp::Rel, "rel"},
+
+    /* 5.17 Set of Sequences */
+    {Expr::UnaryOp::Sequences, "seq"},
+    {Expr::UnaryOp::Non_Empty_Sequences, "seq1"},
+    {Expr::UnaryOp::Injective_Sequences, "iseq"},
+    {Expr::UnaryOp::Non_Empty_Injective_Sequences, "iseq1"},
+    {Expr::UnaryOp::Permutations, "perm"}
+  };
 
 std::string smtSymbol(Expr::UnaryOp op) {
   const auto itr = unOpExprToStringMap.find(op);
@@ -229,7 +236,9 @@ std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2,
 
 static std::unordered_map<Expr::NaryOp, std::string> nOpExprToStringMap = {
     /* 5.7 Set List Expressions */
-    {Expr::NaryOp::Set, "set.intent"}};
+    {Expr::NaryOp::Set, "set.intent"},
+    {Expr::NaryOp::Sequence, "set.intent"}
+};
 
 string smtSymbol(Expr::NaryOp op, const BType& type) {
   const auto itr = nOpExprToStringMap.find(op);
@@ -307,7 +316,9 @@ std::string smtSymbol(Expr::Visitor::EConstant c) {
 std::string smtSymbol(Expr::Visitor::EConstant c, const BType& type) {
   if (c == Expr::Visitor::EConstant::EmptySet) {
     return fmt::format("|set.empty {0}|", symbolInner(type));
-  } else {
+  } /* else if (c == Expr::Visitor::EConstant::EmptySeq) {
+    return fmt::format("|seq.empty {0}|", symbolInner(type));
+  } */ else {
     return smtSymbol(c);
   }
 }
