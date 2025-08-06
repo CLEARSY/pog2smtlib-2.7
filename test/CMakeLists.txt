@@ -72,5 +72,9 @@ add_cl_test("building_set_int_2")
 
 # 5.7 Set List Expressions
 
+add_cl_test("power_set_1")
+add_cl_test("power_set_2")
+add_cl_test("power_set1_1")
+add_cl_test("power_set1_2")
 add_cl_test("cartesian_product_1")
 add_cl_test("cartesian_product_2")

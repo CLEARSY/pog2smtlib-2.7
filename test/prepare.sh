@@ -30,7 +30,7 @@ SMT_EXE="/usr/bin/cvc5"
 #   - description: permet de préparer les fichiers de référence pour un test.
 #   - conditions d'utilisation:
 #     - exécuter dans le dossier racine des tests
-#     - le paramètre est le nom du test (e la machine (nom de la machine contenant le test)
+#     - le paramètre est le nom du test (nom de la machine contenant le test)
 #     - le dossier input/<nom du test> doit exister et contenir un fichier input.pog (cf. fonction prepare_pog)
 #     - les chemins TRANSLATOR_EXE et SMT_EXE doivent être configurés
 #

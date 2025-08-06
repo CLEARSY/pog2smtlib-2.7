@@ -25,7 +25,9 @@ EmptySet::EmptySet(const BType &t) : UnaryBType(t) {
   const BType pt = BType::POW(t);
   m_script = fmt::format(SCRIPT, emptySetOperatorStr, isElementOfOperatorStr,
                          symbol(pt), symbol(t), symbolInner(t));
-  m_prerequisites.insert(std::make_shared<BConstruct::Type::Type>(pt));
+  m_prerequisites.insert(
+      {std::make_shared<BConstruct::Type::Type>(pt),
+       std::make_shared<BConstruct::Predicate::SetMembership>(t)});
   m_label = "{}";
   m_debug_string = fmt::format("{{}}_<{}>", t.to_string());
 }

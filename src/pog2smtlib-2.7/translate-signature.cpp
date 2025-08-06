@@ -220,6 +220,8 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
         const auto unop = std::get<Expr::UnaryOp>(op);
         switch (unop) {
           /* case of operators having a counterpart in SMT theory ALL*/
+          
+          /* 5.3 Expressions arithmétiques */
           case Expr::UnaryOp::Floor:
             construct = BConstruct::Factory::factory().Floor();
             break;
@@ -228,6 +230,14 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           case Expr::UnaryOp::Real:
             construct = BConstruct::Factory::factory().ToReal();
+            break;
+
+          /* 5.7 Expressions ensemblistes */
+          case Expr::UnaryOp::Subsets:
+            construct = BConstruct::Factory::factory().PowerSet(*types.at(0));
+            break;
+          case Expr::UnaryOp::Non_Empty_Subsets:
+            construct = BConstruct::Factory::factory().PowerSet1(*types.at(0));
             break;
           default:
             throw std::runtime_error(fmt::format(
