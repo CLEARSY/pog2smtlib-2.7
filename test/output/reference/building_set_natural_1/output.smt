@@ -9,8 +9,8 @@
 
 (declare-const NATURAL |POW Z|)
 (assert (!
-    (forall ((e |Z|)) (= (|set.in Z| e NATURAL) (<= 0 e)))
-    :named |ax.set.in.NATURAL|))
+  (forall ((e |Z|)) (= (|set.in Z| e NATURAL) (<= 0 e)))
+  :named |ax.set.in.NATURAL|))
 (assert (!
   (< v1 0)
   :named |Define:lprp:2|)

@@ -10,9 +10,9 @@
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 
 (declare-const NAT |POW Z|)
- (assert (!
- (forall ((e |Z|)) (= (|set.in Z| e NAT) (and (<= 0 e) (<= e MAXINT))))
- :named |ax.set.in.NAT|))
+(assert (!
+  (forall ((e |Z|)) (= (|set.in Z| e NAT) (and (<= 0 e) (<= e MAXINT))))
+  :named |ax.set.in.NAT|))
 (assert (!
   (< v1 0)
   :named |Define:lprp:2|)
