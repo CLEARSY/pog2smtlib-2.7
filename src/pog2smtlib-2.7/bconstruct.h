@@ -62,6 +62,8 @@ class Bool;
 class Int;
 
 /* 5.7 Set List Expressions */
+class PowerSet;
+class PowerSet1;
 class CartesianProduct;
 };  // namespace Expression
 
@@ -135,6 +137,8 @@ class Factory {
   std::shared_ptr<Abstract> Int();
 
   /* 5.7 Set List Expressions */
+  std::shared_ptr<Abstract> PowerSet(const BType &);
+  std::shared_ptr<Abstract> PowerSet1(const BType &);
   std::shared_ptr<Abstract> ExpressionCartesianProduct(const BType &,
                                                        const BType &);
 
@@ -237,6 +241,16 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Int> m_Int;
 
   /* 5.7 Set List Expressions */
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::PowerSet>,
+                     BTypeHash>
+      m_PowerSets;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::PowerSet1>,
+                     BTypeHash>
+      m_PowerSet1s;
+      
   std::unordered_map<
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
       std::shared_ptr<BConstruct::Expression::CartesianProduct>,
@@ -587,6 +601,18 @@ class Int : public Uniform {
 };
 
 /* 5.7 Classes for Set List Expressions */
+class PowerSet : public UnaryBType {
+ public:
+  explicit PowerSet(const BType &);
+  virtual ~PowerSet() = default;
+};
+
+class PowerSet1 : public UnaryBType {
+ public:
+  explicit PowerSet1(const BType &);
+  virtual ~PowerSet1() = default;
+};
+
 class CartesianProduct : public BinaryBType {
  public:
   explicit CartesianProduct(const BType &lhs, const BType &rhs);

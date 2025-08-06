@@ -1,0 +1,5 @@
+MACHINE
+    power_set_1
+ASSERTIONS
+    INTEGER : POW(INT)
+END

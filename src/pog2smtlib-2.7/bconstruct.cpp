@@ -223,6 +223,14 @@ shared_ptr<Abstract> Factory::Int() {
 
 /* 5.7 Set List Expressions */
 
+shared_ptr<Abstract> Factory::PowerSet(const BType& t) {
+  return get<BConstruct::Expression::PowerSet>(m_PowerSets, t);
+}
+
+shared_ptr<Abstract> Factory::PowerSet1(const BType& t) {
+  return get<BConstruct::Expression::PowerSet1>(m_PowerSet1s, t);
+}
+
 shared_ptr<Abstract> Factory::ExpressionCartesianProduct(const BType& t1,
                                                          const BType& t2) {
   return get<BConstruct::Expression::CartesianProduct>(

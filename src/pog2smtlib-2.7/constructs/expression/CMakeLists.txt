@@ -29,6 +29,8 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/int.cpp
 
   # 5.7 Set List Expressions
+  ${CMAKE_CURRENT_SOURCE_DIR}/powerset.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/powerset1.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/cartesianproduct.cpp
 
   PARENT_SCOPE
