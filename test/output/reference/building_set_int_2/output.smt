@@ -12,9 +12,9 @@
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 
 (declare-const INT |POW Z|)
- (assert (!
-    (forall ((e |Z|)) (= (|set.in Z| e |INT|) (and (<= |MININT| e) (<= e |MAXINT|))))
-    :named |ax.set.in.INT|))
+(assert (!
+  (forall ((e |Z|)) (= (|set.in Z| e INT) (and (<= MININT e) (<= e MAXINT))))
+  :named |ax.set.in.INT|))
 (assert (!
   (< 2 v1)
   :named |Define:lprp:2|)
