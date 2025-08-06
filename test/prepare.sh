@@ -23,7 +23,7 @@ function prepare_pog() {
 export -f prepare_pog
 
 TRANSLATOR_EXE=../build/src/pog2smtlib-2.7/pog2smtlib27
-SMT_EXE="/usr/bin/cvc4 --lang=smt2 "
+SMT_EXE="/usr/bin/cvc5"
 
 #
 # - prepare_test_output:
