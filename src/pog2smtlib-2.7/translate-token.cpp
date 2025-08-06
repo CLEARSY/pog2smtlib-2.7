@@ -82,6 +82,10 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     {Expr::UnaryOp::Real, "|int.real|"},
     {Expr::UnaryOp::Floor, "|real.floor|"},
     {Expr::UnaryOp::Ceiling, "|real.ceiling|"},
+
+    /* 5.6 Ensembles prédéfinis */
+    {Expr::UnaryOp::Subsets, "sub-sets"},
+    {Expr::UnaryOp::Non_Empty_Subsets, "non empty sub-sets"}
 };
 
 std::string smtSymbol(Expr::UnaryOp op) {
@@ -92,6 +96,17 @@ std::string smtSymbol(Expr::UnaryOp op) {
                                          Expr::to_string(op)));
   }
   return itr->second;
+}
+
+std::string smtSymbol(Expr::UnaryOp op, const BType& t) {
+  const auto itr = unOpExprToStringMap.find(op);
+  if (itr == unOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
+  }
+  string& str = itr->second;
+  return fmt::format("|{0} {1}|", str, symbolInner(t));
 }
 
 static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
