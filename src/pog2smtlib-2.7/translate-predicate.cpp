@@ -286,7 +286,7 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] Expr::UnaryOp op, [[maybe_unused]] const Expr &e) {
   switch (op) {
-    /* 5.3 Expressions arithmétiques */
+    /* 5.3 Arithmetical Expressions */
     case Expr::UnaryOp::Real:
     case Expr::UnaryOp::Floor:
     case Expr::UnaryOp::Ceiling:
@@ -297,7 +297,7 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       m_translation.push_back(')');
       break;
 
-    /* 5.7 Expressions ensemblistes */
+    /* 5.7 Set List Expressions */
     case Expr::UnaryOp::Subsets:
     case Expr::UnaryOp::Non_Empty_Subsets:
       m_translation.push_back('(');
@@ -329,7 +329,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::RDivision:
 
     /* 5.5 Expression of Couples */
-    case Expr::BinaryOp::Mapplet:
+    case Expr::BinaryOp::Mapplet: {
       m_translation.push_back('(');
       m_translation.append(smtSymbol(op));
       m_translation.push_back(' ');
@@ -338,8 +338,20 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       rhs.accept(*this);
       m_translation.push_back(')');
       break;
-      
-    /* 5.6 Expression of Sets */
+    }
+
+    /* 5.7 Set List Expressions */
+    case Expr::BinaryOp::Interval: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     case Expr::BinaryOp::Cartesian_Product: {
       m_translation.push_back('(');
       m_translation.append(smtSymbol(op, elementType(lhs.getType()),
@@ -358,7 +370,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Total_Functions:
     case Expr::BinaryOp::Total_Surjections:
     case Expr::BinaryOp::Head_Insertion:
-    case Expr::BinaryOp::Interval:
     case Expr::BinaryOp::Intersection:
     case Expr::BinaryOp::Head_Restriction:
     case Expr::BinaryOp::Composition:

@@ -284,6 +284,9 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
 
           /* 5.7 Set List Expressions */
+          case Expr::BinaryOp::Interval:
+            construct = BConstruct::Factory::factory().Interval();
+            break;
           case Expr::BinaryOp::Cartesian_Product:
             construct =
                 BConstruct::Factory::factory().ExpressionCartesianProduct(
