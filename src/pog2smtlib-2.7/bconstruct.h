@@ -72,6 +72,9 @@ class Set;
 
 /* 5.8 Set List Expressions */
 
+/* 5.10 Set of Relations */
+class Relation;
+
 /* 5.13 Expressions of Relations */
 class Domain;
 class Range;
@@ -162,13 +165,15 @@ class Factory {
 
   /* 5.8 Set List Expressions */
 
+  /* 5.10 Set of Relations */
+  std::shared_ptr<Abstract> Relation(const BType &, const BType &);
+
   /* 5.13 Expressions of Relations */
   std::shared_ptr<Abstract> Domain(const BType &, const BType &);
   std::shared_ptr<Abstract> Range(const BType &, const BType &);
   std::shared_ptr<Abstract> Image(const BType &, const BType &);
 
   /* 5.15 Sets of Functions */
-
   class Exception : public std::exception {
    public:
     Exception(const std::string &msg) : msg{msg} {}
@@ -191,7 +196,6 @@ class Factory {
       return p.second->hash_combine(p.first->hash_combine(0));
     }
   };
-
   struct DataHash {
     size_t operator()(const std::shared_ptr<const struct Data> &dt) const {
       return dt->m_name->hash_combine(0);
@@ -294,6 +298,12 @@ class Factory {
   std::unordered_map<std::shared_ptr<const BType>,
                      std::shared_ptr<BConstruct::Expression::Set>, BTypeHash>
       m_Sets;
+
+  /* 5.10 Set of Relations */
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Relation>, BinaryBTypeHash>
+      m_Relations;
 
   /* 5.13 Expressions of Relations */
   std::unordered_map<
@@ -721,6 +731,14 @@ class Image : public BinaryBType {
  public:
   explicit Image(const BType &, const BType &);
   virtual ~Image() = default;
+};
+
+/* 5.10 Set of Relations  */
+
+class Relation : public BinaryBType {
+ public:
+  explicit Relation(const BType &, const BType &);
+  virtual ~Relation() = default;
 };
 
 /* 5.15 Sets of Functions */

@@ -396,6 +396,25 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       break;
     }
 
+    /* 5.10 Set of Relations */
+    case Expr::BinaryOp::Relations: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op,
+                    ((type.toPowerType().content).toPowerType().content)
+                        .toProductType()
+                        .lhs,
+                    ((type.toPowerType().content).toPowerType().content)
+                        .toProductType()
+                        .rhs));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     /* 5.13 Expressions of Relations */
     case Expr::BinaryOp::Image: {
       m_translation.push_back('(');
@@ -419,7 +438,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Intersection:
     case Expr::BinaryOp::Head_Restriction:
     case Expr::BinaryOp::Surcharge:
-    case Expr::BinaryOp::Relations:
     case Expr::BinaryOp::Composition:
     case Expr::BinaryOp::Tail_Insertion:
     case Expr::BinaryOp::Domain_Subtraction:
@@ -532,8 +550,18 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
     [[maybe_unused]] Expr::QuantifiedOp op,
     [[maybe_unused]] const std::vector<TypedVar> vars,
     [[maybe_unused]] const Pred &cond, [[maybe_unused]] const Expr &body) {
-  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
-                                       FILE_NAME, LINE_NUMBER));
+  switch (op) {
+    case Expr::QuantifiedOp::Lambda:
+    case Expr::QuantifiedOp::ISum:
+    case Expr::QuantifiedOp::IProduct:
+    case Expr::QuantifiedOp::Union:
+    case Expr::QuantifiedOp::Intersection:
+    case Expr::QuantifiedOp::RSum:
+    case Expr::QuantifiedOp::RProduct:
+      throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                           FILE_NAME, LINE_NUMBER));
+      return;
+  }
 }
 void SmtTranslatorVisitor::visitQuantifiedSet(
     [[maybe_unused]] const BType &type,

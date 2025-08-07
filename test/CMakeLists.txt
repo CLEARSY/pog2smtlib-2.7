@@ -91,6 +91,11 @@ add_cl_test("quantified_set_2")
 
 # 5.8 Set List Expressions
 
+# 5.10 Set of Relations
+
+add_cl_test("relations_1")
+add_cl_test("relations_2")
+
 # 5.13 Expressions of Relations
 
 add_cl_test("domain_1")
