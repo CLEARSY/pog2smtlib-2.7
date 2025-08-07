@@ -305,8 +305,20 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           "{}:{} Ternary operator are not supported", FILE_NAME, LINE_NUMBER));
     case 4:  // Expr::NaryOp
       /* Sequence, Set */
-      throw std::runtime_error(
-          fmt::format("{}:{} Unknown operator {}", FILE_NAME, LINE_NUMBER, op));
+      {
+        const Expr::NaryOp nop = std::get<Expr::NaryOp>(op);
+        switch (nop) {
+          /* 5.7 Set List Expressions */
+          case Expr::NaryOp::Set:
+            construct = BConstruct::Factory::factory().Set(*types.at(0));
+            break;
+          default:
+            throw std::runtime_error(
+                fmt::format("{}:{} Unknown Nary operator {}", FILE_NAME,
+                            LINE_NUMBER, Expr::to_string(nop)));
+        }
+        break;
+      }
     case 5:  // Expr::QuantifiedOp
       /* Lambda, Intersection, Union, ISum, IProduct, RSum, RProduct */
       throw std::runtime_error(

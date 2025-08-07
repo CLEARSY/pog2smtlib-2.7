@@ -1,5 +1,5 @@
 (set-option :print-success false)
-(set-logic ALL)
+(set-logic HO_ALL)
 (define-sort |Z| () Int)
 (declare-sort P 1)
 (define-sort |REAL| () Real)

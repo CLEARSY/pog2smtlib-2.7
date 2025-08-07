@@ -1,5 +1,5 @@
 (set-option :print-success false)
-(set-logic ALL)
+(set-logic HO_ALL)
 (define-sort |REAL| () Real)
 (declare-const wreal |REAL|)
 (declare-const vreal |REAL|)

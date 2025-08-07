@@ -35,6 +35,7 @@ extern std::string smtSymbol(Expr::UnaryOp, const BType&, const BType&);
 extern std::string smtSymbol(Expr::BinaryOp);
 extern std::string smtSymbol(Expr::BinaryOp, const BType&);
 extern std::string smtSymbol(Expr::BinaryOp, const BType&, const BType&);
+extern std::string smtSymbol(Expr::BinaryOp, const BType&, const BType&, const BType&);
 extern std::string smtSymbol(Expr::TernaryOp);
 extern std::string smtSymbol(Expr::NaryOp, const BType&);
 extern std::string smtSymbol(Expr::QuantifiedOp);

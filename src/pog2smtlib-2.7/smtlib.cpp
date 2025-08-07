@@ -58,7 +58,7 @@ static void translateAndSave([[maybe_unused]] POGSignatures &pogSignatures,
   if (setProduceModel) {
     out << "(set-option :produce-models true)\n";
   }
-  out << "(set-logic ALL)\n";
+  out << "(set-logic HO_ALL)\n";
   out << result;
   out << "(check-sat)\n";
   if (setProduceUnsatCore) {

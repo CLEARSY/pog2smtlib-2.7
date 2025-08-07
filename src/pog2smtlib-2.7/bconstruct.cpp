@@ -241,6 +241,10 @@ shared_ptr<Abstract> Factory::ExpressionCartesianProduct(const BType& t1,
       m_ExpressionCartesianProducts, t1, t2);
 }
 
+shared_ptr<Abstract> Factory::Set(const BType& t) {
+  return get<BConstruct::Expression::Set>(m_Sets, t);
+}
+
 size_t Factory::size() { return m_index.size(); }
 
 shared_ptr<Abstract> Factory::at(size_t index) { return m_index.at(index); }
@@ -279,5 +283,4 @@ string BinaryBType::to_string() const {
   return fmt::format("{}_<{}, {}>", m_label, m_type1->to_string(),
                      m_type2->to_string());
 }
-
 }  // namespace BConstruct
