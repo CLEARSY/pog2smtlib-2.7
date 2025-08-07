@@ -83,7 +83,7 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     {Expr::UnaryOp::Floor, "|real.floor|"},
     {Expr::UnaryOp::Ceiling, "|real.ceiling|"},
 
-    /* 5.6 Ensembles prédéfinis */
+    /* 5.7 Set List Expressions */
     {Expr::UnaryOp::Subsets, "sub-sets"},
     {Expr::UnaryOp::Non_Empty_Subsets, "non empty sub-sets"}
 };
@@ -123,8 +123,9 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     /* 5.5 Expression of Couples */
     {Expr::BinaryOp::Mapplet, "maplet"},
     
-    /* 5.6 Expression of Sets */
+    /* 5.7 Set List Expressions */
     {Expr::BinaryOp::Cartesian_Product, "set.product"},
+    {Expr::BinaryOp::Interval, "interval"}
 };
 
 std::string smtSymbol(Expr::BinaryOp op) {
