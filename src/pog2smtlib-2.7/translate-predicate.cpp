@@ -20,10 +20,10 @@
 #include <unordered_map>
 #include <vector>
 
+#include "btype-symbols.h"
 #include "cc-compatibility.h"
 #include "expr.h"
 #include "pred.h"
-#include "btype-symbols.h"
 #include "pure-typing.h"
 #include "symbols.h"
 #include "translate-token.h"
@@ -290,23 +290,39 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     /* 5.3 Arithmetical Expressions */
     case Expr::UnaryOp::Real:
     case Expr::UnaryOp::Floor:
-    case Expr::UnaryOp::Ceiling:
+    case Expr::UnaryOp::Ceiling: {
       m_translation.push_back('(');
       m_translation.append(smtSymbol(op));
       m_translation.push_back(' ');
       e.accept(*this);
       m_translation.push_back(')');
       break;
+    }
 
     /* 5.7 Set List Expressions */
     case Expr::UnaryOp::Subsets:
-    case Expr::UnaryOp::Non_Empty_Subsets:
+    case Expr::UnaryOp::Non_Empty_Subsets: {
       m_translation.push_back('(');
-      m_translation.append(smtSymbol(op, (type.toPowerType().content).toPowerType().content));
+      m_translation.append(
+          smtSymbol(op, (type.toPowerType().content).toPowerType().content));
       m_translation.push_back(' ');
       e.accept(*this);
       m_translation.push_back(')');
       break;
+    }
+
+    /* 5.13 Expressions of Relations */
+    case Expr::UnaryOp::Domain:
+    case Expr::UnaryOp::Range: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op, elementType(e.getType()).toProductType().lhs,
+                    elementType(e.getType()).toProductType().rhs));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
     default:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));
@@ -364,6 +380,20 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       m_translation.push_back(')');
       break;
     }
+
+    /* 5.13 Expressions of Relations */
+    case Expr::BinaryOp::Image: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op, elementType(lhs.getType()).toProductType().lhs,
+                    elementType(lhs.getType()).toProductType().rhs));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
     /* todo */
     case Expr::BinaryOp::Partial_Functions:
     case Expr::BinaryOp::Partial_Surjections:
@@ -391,7 +421,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Modulo:
     case Expr::BinaryOp::Range_Restriction:
     case Expr::BinaryOp::Range_Subtraction:
-    case Expr::BinaryOp::Image:
     case Expr::BinaryOp::Application:
     case Expr::BinaryOp::IExponentiation:
     case Expr::BinaryOp::RExponentiation:
@@ -441,7 +470,7 @@ void SmtTranslatorVisitor::visitNaryExpression(
       m_translation.push_back(' ');
       m_translation.append(symbol(type.toPowerType().content));
       m_translation.push_back(')');
-      m_translation.push_back(')'); 
+      m_translation.push_back(')');
       m_translation.push_back(' ');
 
       m_translation.append("(or ");
@@ -450,11 +479,11 @@ void SmtTranslatorVisitor::visitNaryExpression(
         v.accept(*this);
         m_translation.push_back(')');
       }
-      m_translation.push_back(')'); 
+      m_translation.push_back(')');
 
       m_translation.push_back(')');
-      m_translation.push_back(')'); 
-    break;
+      m_translation.push_back(')');
+      break;
     default:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));
@@ -496,41 +525,41 @@ void SmtTranslatorVisitor::visitQuantifiedSet(
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<TypedVar> vars,
     [[maybe_unused]] const Pred &cond) {
+  m_translation.push_back('(');
+  m_translation.append(
+      smtSymbol(Expr::NaryOp::Set, type.toPowerType().content));
+  m_translation.append(" (lambda (");
 
+  // Étape 1 : Récupérer les différentes types produits
+  std::vector<BType> types;
+  BType current = type.toPowerType().content;
+
+  for (size_t i = 0; i < vars.size(); ++i) {
+    if (i < vars.size() - 1) {
+      types.push_back(current.toProductType().rhs);
+      current = current.toProductType().lhs;
+    } else {
+      types.push_back(current);  // le dernier (tout à gauche)
+    }
+  }
+
+  // Étape 2 : Générer les variables avec leur type, dans le bon ordre
+  for (size_t i = 0; i < vars.size(); ++i) {
     m_translation.push_back('(');
-    m_translation.append(smtSymbol(Expr::NaryOp::Set, type.toPowerType().content));
-    m_translation.append(" (lambda (");
-
-    // Étape 1 : Récupérer les différentes types produits
-    std::vector<BType> types;
-    BType current = type.toPowerType().content;
-
-    for (size_t i = 0; i < vars.size(); ++i) {
-      if (i < vars.size() - 1) {
-        types.push_back(current.toProductType().rhs);
-        current = current.toProductType().lhs;
-      } else {
-        types.push_back(current); // le dernier (tout à gauche)
-      }
-    }
-
-    // Étape 2 : Générer les variables avec leur type, dans le bon ordre
-    for (size_t i = 0; i < vars.size(); ++i) {
-      m_translation.push_back('(');
-      m_translation.append(vars[i].name.show());
-      m_translation.push_back(' ');
-      m_translation.append(symbol(types[vars.size() - 1 - i]));
-      m_translation.push_back(')');
-    }
-
-    m_translation.push_back(')'); 
+    m_translation.append(vars[i].name.show());
     m_translation.push_back(' ');
-
-    cond.accept(*this);
-
+    m_translation.append(symbol(types[vars.size() - 1 - i]));
     m_translation.push_back(')');
-    m_translation.push_back(')');
-    m_translation.push_back(')'); 
+  }
+
+  m_translation.push_back(')');
+  m_translation.push_back(' ');
+
+  cond.accept(*this);
+
+  m_translation.push_back(')');
+  m_translation.push_back(')');
+  m_translation.push_back(')');
 }
 void SmtTranslatorVisitor::visitRecordUpdate(
     [[maybe_unused]] const BType &type,

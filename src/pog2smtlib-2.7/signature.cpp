@@ -419,20 +419,22 @@ void GetSignatureVisitor::visitUnaryExpression(
     case Expr::UnaryOp::Fnc: {
       const auto &etype1 = e.getType();
       const auto &etype2 = elementOfPowerType(op, etype1);
-      auto [lhstype, rhstype] = argsOfProductType(op, etype2);
+      const auto &etype3 = lhsOfProductType(op, etype2);
+      const auto &etype4 = rhsOfProductType(op, etype2);
       m_signature.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(lhstype),
-                                std::make_shared<BType>(rhstype)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3),
+                                std::make_shared<BType>(etype4)));
       break;
     }
     case Expr::UnaryOp::Rel: {
       const auto &etype1 = e.getType();
       const auto &etype2 = elementOfPowerType(op, etype1);
-      auto [lhstype, etype3] = argsOfProductType(op, etype2);
-      const auto &rhstype = elementOfPowerType(op, etype3);
+      const auto &etype3 = lhsOfProductType(op, etype2);
+      const auto &etype4 = rhsOfProductType(op, etype2);
+      const auto &etype5 = elementOfPowerType(op, etype4);
       m_signature.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(lhstype),
-                                std::make_shared<BType>(rhstype)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3),
+                                std::make_shared<BType>(etype5)));
       break;
     }
     case Expr::UnaryOp::Union:
@@ -671,10 +673,12 @@ void GetSignatureVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Image:
     case Expr::BinaryOp::Application: {
       const auto &etype1 = lhs.getType();
-      const auto &[etype2, etype3] = argsOfProductType(op, etype1);
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = lhsOfProductType(op, etype2);
+      const auto &etype4 = rhsOfProductType(op, etype2);
       sig.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype2),
-                                std::make_shared<BType>(etype3)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3),
+                                std::make_shared<BType>(etype4)));
       break;
     }
     /* Iteration */

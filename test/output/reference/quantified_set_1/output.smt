@@ -6,19 +6,14 @@
 
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 
- (define-sort |? Z| () (-> |Z| Bool))
- (declare-const |set.intent Z| (-> |? Z| |POW Z|))
- (assert
-    (! 
-        (forall ((p |? Z|))
-            (forall ((x |Z|))
-                (= (|set.in Z| x (|set.intent Z| p))
-                    (p x)
-                )
-            )
-        )
-    :named |set.in.intent Z|)
- )
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 
 (declare-const INTEGER |POW Z|)
 (assert (!

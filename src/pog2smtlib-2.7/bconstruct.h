@@ -68,6 +68,11 @@ class Interval;
 class CartesianProduct;
 class Set;
 
+/* 5.13 Expressions of Relations */
+class Domain;
+class Range;
+class Image;
+
 };  // namespace Expression
 
 class Factory {
@@ -146,6 +151,11 @@ class Factory {
   std::shared_ptr<Abstract> ExpressionCartesianProduct(const BType &,
                                                        const BType &);
   std::shared_ptr<Abstract> Set(const BType &);
+
+  /* 5.13 Expressions of Relations */
+  std::shared_ptr<Abstract> Domain(const BType &, const BType &);
+  std::shared_ptr<Abstract> Range(const BType &, const BType &);
+  std::shared_ptr<Abstract> Image(const BType &, const BType &);
 
   class Exception : public std::exception {
    public:
@@ -268,6 +278,22 @@ class Factory {
   std::unordered_map<std::shared_ptr<const BType>,
                      std::shared_ptr<BConstruct::Expression::Set>, BTypeHash>
       m_Sets;
+
+  /* 5.13 Expressions of Relations */
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Domain>, BinaryBTypeHash>
+      m_Domains;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Range>, BinaryBTypeHash>
+      m_Ranges;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Image>, BinaryBTypeHash>
+      m_Images;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -640,6 +666,25 @@ class Set : public UnaryBType {
  public:
   explicit Set(const BType &);
   virtual ~Set() = default;
+};
+
+/* 5.13 Expressions of Relations */
+class Domain : public BinaryBType {
+ public:
+  explicit Domain(const BType &, const BType &);
+  virtual ~Domain() = default;
+};
+
+class Range : public BinaryBType {
+ public:
+  explicit Range(const BType &, const BType &);
+  virtual ~Range() = default;
+};
+
+class Image : public BinaryBType {
+ public:
+  explicit Image(const BType &, const BType &);
+  virtual ~Image() = default;
 };
 
 };  // namespace Expression

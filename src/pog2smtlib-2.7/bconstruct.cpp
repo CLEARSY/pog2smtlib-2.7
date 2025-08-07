@@ -245,6 +245,19 @@ shared_ptr<Abstract> Factory::Set(const BType& t) {
   return get<BConstruct::Expression::Set>(m_Sets, t);
 }
 
+/* 5.13 Expressions of Relations */
+shared_ptr<Abstract> Factory::Domain(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Domain>(m_Domains, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Range(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Range>(m_Ranges, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Image(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Image>(m_Images, lhs, rhs);
+}
+
 size_t Factory::size() { return m_index.size(); }
 
 shared_ptr<Abstract> Factory::at(size_t index) { return m_index.at(index); }
