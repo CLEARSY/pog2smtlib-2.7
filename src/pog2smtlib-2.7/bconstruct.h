@@ -66,6 +66,8 @@ class PowerSet;
 class PowerSet1;
 class Interval;
 class CartesianProduct;
+class Set;
+
 };  // namespace Expression
 
 class Factory {
@@ -106,10 +108,10 @@ class Factory {
 
   /* 5.1 Primary Expressions */
   std::shared_ptr<Abstract> Data(const Data &);
-  
+
   /* 5.2 Boolean Expressions */
   std::shared_ptr<Abstract> BooleanExpression();
-  
+
   /* 5.3 Arithmetical Expressions */
   std::shared_ptr<Abstract> Maxint();
   std::shared_ptr<Abstract> Minint();
@@ -120,12 +122,12 @@ class Factory {
   std::shared_ptr<Abstract> Floor();
   std::shared_ptr<Abstract> Ceiling();
   std::shared_ptr<Abstract> ToReal();
-  
+
   /* 5.4 Arithmetical Expressions (continued) */
-  
+
   /* 5.5 Expression of Couples */
   std::shared_ptr<Abstract> Maplet();
-  
+
   /* 5.6 Building Sets */
   std::shared_ptr<Abstract> EmptySet(const BType &);
   std::shared_ptr<Abstract> Integer();
@@ -143,6 +145,7 @@ class Factory {
   std::shared_ptr<Abstract> Interval();
   std::shared_ptr<Abstract> ExpressionCartesianProduct(const BType &,
                                                        const BType &);
+  std::shared_ptr<Abstract> Set(const BType &);
 
   class Exception : public std::exception {
    public:
@@ -166,6 +169,7 @@ class Factory {
       return p.second->hash_combine(p.first->hash_combine(0));
     }
   };
+
   struct DataHash {
     size_t operator()(const std::shared_ptr<const struct Data> &dt) const {
       return dt->m_name->hash_combine(0);
@@ -209,7 +213,7 @@ class Factory {
   std::unordered_map<std::shared_ptr<const struct Data>,
                      std::shared_ptr<BConstruct::Expression::Data>, DataHash>
       m_data;
-  
+
   /* 5.2 Boolean Expressions */
   std::shared_ptr<BConstruct::Expression::BooleanExpression>
       m_BooleanExpression;
@@ -254,12 +258,16 @@ class Factory {
       m_PowerSet1s;
 
   std::shared_ptr<BConstruct::Expression::Interval> m_Interval;
-      
+
   std::unordered_map<
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
       std::shared_ptr<BConstruct::Expression::CartesianProduct>,
       BinaryBTypeHash>
       m_ExpressionCartesianProducts;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Set>, BTypeHash>
+      m_Sets;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -413,7 +421,6 @@ class CartesianProduct : public Uniform {
   explicit CartesianProduct();
   virtual ~CartesianProduct() = default;
 };
-
 };  // namespace Type
 
 /* Classes for predicate operators */
@@ -627,6 +634,12 @@ class CartesianProduct : public BinaryBType {
  public:
   explicit CartesianProduct(const BType &lhs, const BType &rhs);
   virtual ~CartesianProduct() = default;
+};
+
+class Set : public UnaryBType {
+ public:
+  explicit Set(const BType &);
+  virtual ~Set() = default;
 };
 
 };  // namespace Expression

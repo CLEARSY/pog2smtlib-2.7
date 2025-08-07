@@ -1,5 +1,5 @@
 (set-option :print-success false)
-(set-logic ALL)
+(set-logic HO_ALL)
 (define-sort |BOOL| () Bool)
 (define-sort |Z| () Int)
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))

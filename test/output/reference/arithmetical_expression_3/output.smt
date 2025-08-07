@@ -1,5 +1,5 @@
 (set-option :print-success false)
-(set-logic ALL)
+(set-logic HO_ALL)
 (define-sort |Z| () Int)
 (declare-const c4 |Z|)
 (declare-const c2 |Z|)
