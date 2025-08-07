@@ -52,7 +52,7 @@ add_cl_test("arithmetical_expression_12")
 
 # 5.4 Arithmetical Expressions (Continued)
 
-# 5.4 Expression of Couples
+# 5.5 Expression of Couples
 
 add_cl_test("expr_couple_1")
 add_cl_test("expr_couple_2")
@@ -84,3 +84,13 @@ add_cl_test("set_1")
 add_cl_test("set_2")
 add_cl_test("quantified_set_1")
 add_cl_test("quantified_set_2")
+
+# 5.13 Expressions of Relations
+
+add_cl_test("domain_1")
+add_cl_test("domain_2")
+add_cl_test("range_1")
+add_cl_test("range_2")
+add_cl_test("image_1")
+add_cl_test("image_2")
+

@@ -8,18 +8,18 @@
 (declare-const vconst |Z|)
 (declare-const vset |POW Z|)
 
-(declare-fun interval (|Z| |Z|) |POW Z|)
+(declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (interval l u))
+        (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
 (assert (!
-  (= vset (interval 1 4))
+  (= vset (|interval| 1 4))
   :named |Define:lprp:1|)
 )
 (assert (!
-  (|set.in Z| vconst (interval 5 6))
+  (|set.in Z| vconst (|interval| 5 6))
   :named |Define:lprp:2|)
 )
 (assert (!

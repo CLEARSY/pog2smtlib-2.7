@@ -35,5 +35,10 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/cartesianproduct.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/set.cpp
   
+  # 5.13 Expressions of Relations
+  ${CMAKE_CURRENT_SOURCE_DIR}/domain.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/range.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/image.cpp
+
   PARENT_SCOPE
 )

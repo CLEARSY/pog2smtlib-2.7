@@ -9,18 +9,18 @@
 (declare-const vset2 |POW Z|)
 (declare-const vset1 |POW Z|)
 
-(declare-fun interval (|Z| |Z|) |POW Z|)
+(declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (interval l u))
+        (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
 (assert (!
-  (= vset1 (interval 1 12))
+  (= vset1 (|interval| 1 12))
   :named |Define:lprp:1|)
 )
 (assert (!
-  (= vset2 (interval 4 9))
+  (= vset2 (|interval| 4 9))
   :named |Define:lprp:2|)
 )
 (assert (!
