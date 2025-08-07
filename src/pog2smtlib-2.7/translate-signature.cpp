@@ -313,6 +313,15 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                     *types.at(0), *types.at(1));
             break;
 
+          /* 5.8 Set List Expressions */
+
+          /* 5.10 Set of Relations */
+          case Expr::BinaryOp::Relations:
+            construct = BConstruct::Factory::factory().Relation(*types.at(0),
+                                                                *types.at(1));
+            break;
+
+
           /* 5.13 Expressions of Relations */
           case Expr::BinaryOp::Image:
             construct = BConstruct::Factory::factory().Image(*types.at(0),
