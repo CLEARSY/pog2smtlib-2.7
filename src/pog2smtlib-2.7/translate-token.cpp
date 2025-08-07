@@ -85,7 +85,11 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
 
     /* 5.7 Set List Expressions */
     {Expr::UnaryOp::Subsets, "sub-sets"},
-    {Expr::UnaryOp::Non_Empty_Subsets, "non empty sub-sets"}
+    {Expr::UnaryOp::Non_Empty_Subsets, "non empty sub-sets"},
+
+    /* 5.13 Expressions of Relations */
+    {Expr::UnaryOp::Domain, "rel.domain"},
+    {Expr::UnaryOp::Range, "rel.range"}
 };
 
 std::string smtSymbol(Expr::UnaryOp op) {
@@ -109,6 +113,18 @@ std::string smtSymbol(Expr::UnaryOp op, const BType& t) {
   return fmt::format("|{0} {1}|", str, symbolInner(t));
 }
 
+std::string smtSymbol(Expr::UnaryOp op, const BType& t1, const BType& t2) {
+  const auto itr = unOpExprToStringMap.find(op);
+  if (itr == unOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
+  }
+  string& str = itr->second;
+  return fmt::format("|{0} {1} {2}|", str, symbolInner(t1), symbolInner(t2));
+}
+
+
 static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     /* 5.3 Arithmetical Expressions I */
     {Expr::BinaryOp::IAddition, "+"},
@@ -125,7 +141,10 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     
     /* 5.7 Set List Expressions */
     {Expr::BinaryOp::Cartesian_Product, "set.product"},
-    {Expr::BinaryOp::Interval, "interval"}
+    {Expr::BinaryOp::Interval, "|interval|"},
+
+    /* 5.13 Expressions of Relations */
+    {Expr::BinaryOp::Image, "rel.image"}
 };
 
 std::string smtSymbol(Expr::BinaryOp op) {

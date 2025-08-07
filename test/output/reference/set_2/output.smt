@@ -8,32 +8,27 @@
 (declare-const vconst |Z|)
 (declare-const vset |POW Z|)
 
-(declare-fun interval (|Z| |Z|) |POW Z|)
+(declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (interval l u))
+        (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
 
- (define-sort |? Z| () (-> |Z| Bool))
- (declare-const |set.intent Z| (-> |? Z| |POW Z|))
- (assert
-    (! 
-        (forall ((p |? Z|))
-            (forall ((x |Z|))
-                (= (|set.in Z| x (|set.intent Z| p))
-                    (p x)
-                )
-            )
-        )
-    :named |set.in.intent Z|)
- )
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (assert (!
   (= vset (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)(= x 4)(= x 10)))))
   :named |Define:lprp:1|)
 )
 (assert (!
-  (|set.in Z| vconst (interval 1 4))
+  (|set.in Z| vconst (|interval| 1 4))
   :named |Define:lprp:2|)
 )
 (assert (!

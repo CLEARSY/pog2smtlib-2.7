@@ -239,6 +239,16 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::UnaryOp::Non_Empty_Subsets:
             construct = BConstruct::Factory::factory().PowerSet1(*types.at(0));
             break;
+
+          /* 5.13 Expressions of Relations */
+          case Expr::UnaryOp::Domain:
+            construct = BConstruct::Factory::factory().Domain(*types.at(0),
+                                                              *types.at(1));
+            break;
+          case Expr::UnaryOp::Range:
+            construct = BConstruct::Factory::factory().Range(*types.at(0),
+                                                             *types.at(1));
+            break;
           default:
             throw std::runtime_error(fmt::format(
                 "{}:{} Unknown unary operator {}", FILE_NAME, LINE_NUMBER, op));
@@ -291,6 +301,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct =
                 BConstruct::Factory::factory().ExpressionCartesianProduct(
                     *types.at(0), *types.at(1));
+            break;
+
+          /* 5.13 Expressions of Relations */
+          case Expr::BinaryOp::Image:
+            construct = BConstruct::Factory::factory().Image(*types.at(0),
+                                                             *types.at(1));
             break;
           default:
             throw std::runtime_error(
