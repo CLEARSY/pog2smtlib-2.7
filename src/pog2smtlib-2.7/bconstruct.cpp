@@ -231,6 +231,10 @@ shared_ptr<Abstract> Factory::PowerSet1(const BType& t) {
   return get<BConstruct::Expression::PowerSet1>(m_PowerSet1s, t);
 }
 
+shared_ptr<Abstract> Factory::Interval() {
+  return get<BConstruct::Expression::Interval>(m_Interval);
+}
+
 shared_ptr<Abstract> Factory::ExpressionCartesianProduct(const BType& t1,
                                                          const BType& t2) {
   return get<BConstruct::Expression::CartesianProduct>(

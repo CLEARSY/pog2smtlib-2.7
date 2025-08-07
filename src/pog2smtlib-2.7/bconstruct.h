@@ -64,6 +64,7 @@ class Int;
 /* 5.7 Set List Expressions */
 class PowerSet;
 class PowerSet1;
+class Interval;
 class CartesianProduct;
 };  // namespace Expression
 
@@ -139,6 +140,7 @@ class Factory {
   /* 5.7 Set List Expressions */
   std::shared_ptr<Abstract> PowerSet(const BType &);
   std::shared_ptr<Abstract> PowerSet1(const BType &);
+  std::shared_ptr<Abstract> Interval();
   std::shared_ptr<Abstract> ExpressionCartesianProduct(const BType &,
                                                        const BType &);
 
@@ -250,6 +252,8 @@ class Factory {
                      std::shared_ptr<BConstruct::Expression::PowerSet1>,
                      BTypeHash>
       m_PowerSet1s;
+
+  std::shared_ptr<BConstruct::Expression::Interval> m_Interval;
       
   std::unordered_map<
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
@@ -611,6 +615,12 @@ class PowerSet1 : public UnaryBType {
  public:
   explicit PowerSet1(const BType &);
   virtual ~PowerSet1() = default;
+};
+
+class Interval : public Uniform {
+ public:
+  explicit Interval();
+  virtual ~Interval() = default;
 };
 
 class CartesianProduct : public BinaryBType {
