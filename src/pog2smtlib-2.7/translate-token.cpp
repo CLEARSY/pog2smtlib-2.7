@@ -149,6 +149,33 @@ std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2) {
   return fmt::format("|{0} {1} {2}|", str, symbolInner(t1), symbolInner(t2));
 }
 
+std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2, const BType& t3) {
+  const auto itr = binOpExprToStringMap.find(op);
+  if (itr == binOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
+  }
+  string& str = itr->second;
+  return fmt::format("|{0} {1} {2} {3}|", str, symbolInner(t1), symbolInner(t2), symbolInner(t3));
+}
+
+static std::unordered_map<Expr::NaryOp, std::string> nOpExprToStringMap = {
+    /* 5.7 Set List Expressions */
+    {Expr::NaryOp::Set, "set.intent"}
+};
+
+string smtSymbol(Expr::NaryOp op, const BType& type) {
+  const auto itr = nOpExprToStringMap.find(op);
+  if (itr == nOpExprToStringMap.end()) {
+    throw std::runtime_error(fmt::format("{}:{} unexpected operator {}",
+                                         FILE_NAME, LINE_NUMBER,
+                                         Expr::to_string(op)));
+  }
+  string& str = itr->second;
+  return fmt::format("|{0} {1}|", str, symbolInner(type));
+}
+
 static std::unordered_map<Expr::Visitor::EConstant, std::string>
     constantToStringMap = {
         /* 5.2 Boolean Expressions */

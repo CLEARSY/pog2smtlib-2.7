@@ -23,6 +23,7 @@
 #include "cc-compatibility.h"
 #include "expr.h"
 #include "pred.h"
+#include "btype-symbols.h"
 #include "pure-typing.h"
 #include "symbols.h"
 #include "translate-token.h"
@@ -372,9 +373,9 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Head_Insertion:
     case Expr::BinaryOp::Intersection:
     case Expr::BinaryOp::Head_Restriction:
-    case Expr::BinaryOp::Composition:
     case Expr::BinaryOp::Surcharge:
     case Expr::BinaryOp::Relations:
+    case Expr::BinaryOp::Composition:
     case Expr::BinaryOp::Tail_Insertion:
     case Expr::BinaryOp::Domain_Subtraction:
     case Expr::BinaryOp::Domain_Restriction:
@@ -428,8 +429,37 @@ void SmtTranslatorVisitor::visitNaryExpression(
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] Expr::NaryOp op,
     [[maybe_unused]] const std::vector<Expr> &vec) {
-  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
-                                       FILE_NAME, LINE_NUMBER));
+  switch (op) {
+    /* 5.7 Set List Expressions */
+    case Expr::NaryOp::Set:
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, type.toPowerType().content));
+      m_translation.append(" (lambda (");
+
+      m_translation.push_back('(');
+      m_translation.push_back('x');
+      m_translation.push_back(' ');
+      m_translation.append(symbolInner(type.toPowerType().content));
+      m_translation.push_back(')');
+      m_translation.push_back(')'); 
+      m_translation.push_back(' ');
+
+      m_translation.append("(or ");
+      for (const Expr &v : vec) {
+        m_translation.append("(= x ");
+        v.accept(*this);
+        m_translation.push_back(')');
+      }
+      m_translation.push_back(')'); 
+
+      m_translation.push_back(')');
+      m_translation.push_back(')'); 
+    break;
+    default:
+      throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
+                                           FILE_NAME, LINE_NUMBER));
+      return;
+  }
 }
 void SmtTranslatorVisitor::visitBooleanExpression(
     [[maybe_unused]] const BType &type,
