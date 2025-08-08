@@ -9,14 +9,13 @@
 namespace BConstruct::Expression {
 
 static constexpr std::string_view SCRIPT = R"(
- (declare-fun |relations.total {0} {1}| ({2} {3}) {4})
- (assert
-    (!
-        (forall ((X {2}) (Y {3}))
-            (forall ((f {5}))
-                (= ({6} f (|relations.total {0} {1}| X Y))
-                    (= ({7} f) X))))
-        :named |ax:set.in.relations.total {8}|))
+(declare-fun |relations.total {0} {1}| ({2} {3}) {4})
+(assert (!
+  (forall ((X {2}) (Y {3}))
+    (forall ((f {5}))
+      (= ({6} f (|relations.total {0} {1}| X Y))
+         (= ({7} f) X))))
+ :named |ax:set.in.relations.total {8}|))
 )";
 
 Total_Relation::Total_Relation(const BType &U, const BType &V)
@@ -26,7 +25,7 @@ Total_Relation::Total_Relation(const BType &U, const BType &V)
   const auto UxV = BType::PROD(U, V);
   const auto PUxV = BType::POW(UxV);
   const auto PPUxV = BType::POW(PUxV);
-  m_script = fmt::format(SCRIPT, 
+  m_script = fmt::format(SCRIPT,
                          /*0*/ symbolInner(U),
                          /*1*/ symbolInner(V),
                          /*2*/ symbol(PU),

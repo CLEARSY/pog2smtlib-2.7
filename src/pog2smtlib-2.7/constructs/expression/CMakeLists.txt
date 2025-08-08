@@ -51,6 +51,7 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/image.cpp
 
   # 5.15 Sets of Functions
+  ${CMAKE_CURRENT_SOURCE_DIR}/total.cpp
 
   PARENT_SCOPE
 )

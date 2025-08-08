@@ -81,6 +81,7 @@ class Range;
 class Image;
 
 /* 5.15 Sets of Functions */
+class Total_Relation;
 
 };  // namespace Expression
 
@@ -174,6 +175,8 @@ class Factory {
   std::shared_ptr<Abstract> Image(const BType &, const BType &);
 
   /* 5.15 Sets of Functions */
+  std::shared_ptr<Abstract> Total_Relation(const BType &, const BType &);
+
   class Exception : public std::exception {
    public:
     Exception(const std::string &msg) : msg{msg} {}
@@ -320,6 +323,12 @@ class Factory {
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
       std::shared_ptr<BConstruct::Expression::Image>, BinaryBTypeHash>
       m_Images;
+
+  /* 5.15 Sets of Functions */
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Total_Relation>, BinaryBTypeHash>
+      m_Total_Relations;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -713,6 +722,14 @@ class Set : public UnaryBType {
 
 /* 5.8 Set List Expressions */
 
+/* 5.10 Set of Relations  */
+
+class Relation : public BinaryBType {
+ public:
+  explicit Relation(const BType &, const BType &);
+  virtual ~Relation() = default;
+};
+
 /* 5.13 Expressions of Relations */
 
 class Domain : public BinaryBType {
@@ -733,15 +750,13 @@ class Image : public BinaryBType {
   virtual ~Image() = default;
 };
 
-/* 5.10 Set of Relations  */
-
-class Relation : public BinaryBType {
- public:
-  explicit Relation(const BType &, const BType &);
-  virtual ~Relation() = default;
-};
-
 /* 5.15 Sets of Functions */
+
+class Total_Relation : public BinaryBType {
+ public:
+  explicit Total_Relation(const BType &, const BType &);
+  virtual ~Total_Relation() = default;
+};
 
 };  // namespace Expression
 
