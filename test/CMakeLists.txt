@@ -91,6 +91,17 @@ add_cl_test("quantified_set_2")
 
 # 5.8 Set List Expressions
 
+add_cl_test("set_diff_1")
+add_cl_test("set_diff_2")
+add_cl_test("union_1")
+add_cl_test("union_2")
+add_cl_test("inter_1")
+add_cl_test("inter_2")
+add_cl_test("set_union_1")
+add_cl_test("set_union_2")
+add_cl_test("set_inter_1")
+add_cl_test("set_inter_2")
+
 # 5.10 Set of Relations
 
 add_cl_test("relations_1")

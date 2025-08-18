@@ -263,6 +263,28 @@ shared_ptr<Abstract> Factory::Relation(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Relation>(m_Relations, lhs, rhs);
 }
 
+/* 5.8 Set List Expressions */
+
+shared_ptr<Abstract> Factory::Difference(const BType& t) {
+  return get<BConstruct::Expression::Difference>(m_Differences, t);
+}
+
+shared_ptr<Abstract> Factory::Union(const BType& t) {
+  return get<BConstruct::Expression::Union>(m_Unions, t);
+}
+
+shared_ptr<Abstract> Factory::Intersection(const BType& t) {
+  return get<BConstruct::Expression::Intersection>(m_Intersections, t);
+}
+
+shared_ptr<Abstract> Factory::GeneralizedIntersection(const BType& t) {
+  return get<BConstruct::Expression::GeneralizedIntersection>(m_GeneralizedIntersections, t);
+}
+
+shared_ptr<Abstract> Factory::GeneralizedUnion(const BType& t) {
+  return get<BConstruct::Expression::GeneralizedUnion>(m_GeneralizedUnions, t);
+}
+
 /* 5.13 Expressions of Relations */
 
 shared_ptr<Abstract> Factory::Domain(const BType& lhs, const BType& rhs) {
@@ -278,6 +300,7 @@ shared_ptr<Abstract> Factory::Image(const BType& lhs, const BType& rhs) {
 }
 
 /* 5.15 Sets of Functions */
+
 shared_ptr<Abstract> Factory::Injection(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Injection>(m_Injections, lhs, rhs);
 }
