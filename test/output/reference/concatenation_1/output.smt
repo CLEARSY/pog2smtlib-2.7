@@ -1,0 +1,109 @@
+(set-option :print-success false)
+(set-logic HO_ALL)
+(define-sort |Z| () Int)
+(declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
+(define-sort |(Z x Z)| () (C |Z| |Z|))
+(declare-sort P 1)
+(define-sort |((Z x Z) x Z)| () (C |(Z x Z)| |Z|))
+(define-sort |POW Z| () (P |Z|))
+(define-sort |POW ((Z x Z) x Z)| () (P |((Z x Z) x Z)|))
+(define-sort |POW (Z x Z)| () (P |(Z x Z)|))
+
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
+
+(declare-fun |set.in ((Z x Z) x Z)| (|((Z x Z) x Z)| |POW ((Z x Z) x Z)|) Bool)
+
+(declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
+(define-sort |POW POW ((Z x Z) x Z)| () (P |POW ((Z x Z) x Z)|))
+
+(declare-fun |rel.range (Z x Z) Z| (|POW ((Z x Z) x Z)|) |POW Z|)
+(assert (!
+  (forall ((r |POW ((Z x Z) x Z)|) (e |Z|))
+    (= (|set.in Z| e (|rel.range (Z x Z) Z| r))
+       (exists ((x |(Z x Z)|)) (|set.in ((Z x Z) x Z)| (maplet x e) r))))
+  :named |ax:set.in.range ((Z x Z) x Z)|))
+
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
+    )
+  )
+  :named |ax.set.eq (Z x Z)|))
+
+(declare-fun |set.in POW ((Z x Z) x Z)| (|POW ((Z x Z) x Z)| |POW POW ((Z x Z) x Z)|) Bool)
+
+(declare-fun |surjections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
+(assert (!
+  (forall ((X |POW (Z x Z)|) (Y |POW Z|))
+    (forall ((f |POW ((Z x Z) x Z)|))
+      (= (|set.in POW ((Z x Z) x Z)| f (|surjections (Z x Z) Z| X Y))
+         (= (|rel.range (Z x Z) Z| f) Y)
+      )))
+  :named |ax:set.in.surjections ((Z x Z) x Z)|))
+
+(declare-fun |injections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
+(assert (!
+  (forall ((X |POW (Z x Z)|) (Y |POW Z|) (f |POW ((Z x Z) x Z)|))
+     (= (|set.in POW ((Z x Z) x Z)| f (|injections (Z x Z) Z| X Y))
+        (forall ((p1 |((Z x Z) x Z)|) (p2 |((Z x Z) x Z)|))
+          (=> (and (|set.in ((Z x Z) x Z)| p1 f) (|set.in ((Z x Z) x Z)| p2 f) (= (snd p1) (snd p2)))
+              (= (fst p1) (fst p2))))))
+  :named |ax:set.in.injections ((Z x Z) x Z)|))
+
+(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
+
+(declare-fun |interval| (|Z| |Z|) |POW Z|)
+ (assert (!
+    (forall ((l |Z|) (u |Z|) (e |Z|))
+        (= (|set.in Z| e (|interval| l u))
+            (and (<= l e) (<= e u))))
+    :named |ax.set.in.interval|))
+
+(declare-fun |bijections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
+(assert (!
+  (forall ((X |POW (Z x Z)|) (Y |POW Z|))
+    (forall ((f |POW ((Z x Z) x Z)|))
+      (= (|set.in POW ((Z x Z) x Z)| f (|bijections (Z x Z) Z| X Y))
+         (and (|set.in POW ((Z x Z) x Z)| f (|injections (Z x Z) Z| X Y))
+              (|set.in POW ((Z x Z) x Z)| f (|surjections (Z x Z) Z| X Y))))))
+  :named |ax:set.in.bijections ((Z x Z) x Z)|))
+
+(declare-fun |card (Z x Z)| (|POW (Z x Z)|) Cardinals)
+(assert (!
+  (forall ((s |POW (Z x Z)|))
+    (or (= (|card (Z x Z)| s) Infinite)
+        (exists ((f |POW ((Z x Z) x Z)|))
+          (|set.in POW ((Z x Z) x Z)| f (|bijections (Z x Z) Z| s (|interval| 1 (Value (|card (Z x Z)| s))))))))
+  :named |ax.card.definition (Z x Z)|))
+
+(declare-fun |size Z| (|POW (Z x Z)|) |Z|)
+(assert (!
+  (forall ((s |POW (Z x Z)|))
+    (= (|size Z| s) (Value (|card (Z x Z)| s))))
+  :named |ax.size.definition Z|))
+
+(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
+(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
+(assert (!
+  (forall ((p |? (Z x Z)|))
+    (forall ((x |(Z x Z)|))
+      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
+         (p x))))
+  :named |ax:set.in.intent (Z x Z)|))
+
+(declare-fun |^ Z| (|POW (Z x Z)| |POW (Z x Z)|) |POW (Z x Z)|)
+(assert (!
+  (forall ((s1 |POW (Z x Z)|)(s2 |POW (Z x Z)|)(p |(Z x Z)|))
+    (= (|set.in (Z x Z)| p (|^ Z| s1 s2))
+       (or (|set.in (Z x Z)| p s1)
+           (|set.in (Z x Z)| (maplet (- (fst p) (|size Z| s1)) (snd p)) s2))))
+  :named |ax.conc.definition Z|
+))
+(assert (!
+  (not (= (|^ Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 3))(= x (maplet 1 1))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 2))(= x (maplet 2 4)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 3))(= x (maplet 1 1))(= x (maplet 2 0))(= x (maplet 3 4))(= x (maplet 4 2)))))))
+  :named |Goal|)
+)
+(check-sat)
+(exit)

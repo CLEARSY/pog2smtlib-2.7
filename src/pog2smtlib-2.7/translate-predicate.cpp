@@ -437,6 +437,26 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       break;
     }
 
+    /* 5.18 Expressions of Sequences */
+    case Expr::UnaryOp::Size: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, elementType(e.getType()).toProductType().rhs));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
+    /* 5.19 Expressions of Sequences */
+    case Expr::UnaryOp::Concatenation: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, (type.toPowerType().content).toProductType().rhs));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     default:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));
@@ -626,18 +646,29 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       m_translation.push_back(')');
       break;
     }
+    
+    /* 5.19 Expressions of Sequences */
+    case Expr::BinaryOp::Concatenation:
+    case Expr::BinaryOp::Head_Insertion:
+    case Expr::BinaryOp::Tail_Insertion:
+    case Expr::BinaryOp::Head_Restriction:
+    case Expr::BinaryOp::Tail_Restriction: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, (type.toPowerType().content).toProductType().rhs));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
 
     /* todo */
-    case Expr::BinaryOp::Head_Insertion:
-    case Expr::BinaryOp::Head_Restriction:
     case Expr::BinaryOp::Surcharge:
-    case Expr::BinaryOp::Tail_Insertion:
     case Expr::BinaryOp::Domain_Subtraction:
     case Expr::BinaryOp::Domain_Restriction:
     case Expr::BinaryOp::Partial_Bijections:
     case Expr::BinaryOp::Parallel_Product:
-    case Expr::BinaryOp::Tail_Restriction:
-    case Expr::BinaryOp::Concatenation:
     case Expr::BinaryOp::Modulo:
     case Expr::BinaryOp::Range_Restriction:
     case Expr::BinaryOp::Range_Subtraction:

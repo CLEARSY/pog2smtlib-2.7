@@ -119,7 +119,13 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     {Expr::UnaryOp::Non_Empty_Sequences, "seq1"},
     {Expr::UnaryOp::Injective_Sequences, "iseq"},
     {Expr::UnaryOp::Non_Empty_Injective_Sequences, "iseq1"},
-    {Expr::UnaryOp::Permutations, "perm"}
+    {Expr::UnaryOp::Permutations, "perm"},
+
+    /* 5.18 Expressions of Sequences */
+    {Expr::UnaryOp::Size, "size"},
+
+    /* 5.19 Expressions of Sequences */
+    {Expr::UnaryOp::Concatenation, "conc"}
   };
 
 std::string smtSymbol(Expr::UnaryOp op) {
@@ -202,7 +208,14 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::Total_Bijections, "bijections.total"},
 
     /* 5.15 Sets of Functions */
-    {Expr::BinaryOp::Application, "fun.eval"}
+    {Expr::BinaryOp::Application, "fun.eval"},
+
+    /* 5.19 Expressions of Sequences */
+    {Expr::BinaryOp::Concatenation, "^"},
+    {Expr::BinaryOp::Head_Insertion, "→"},
+    {Expr::BinaryOp::Tail_Insertion, "←"},
+    {Expr::BinaryOp::Head_Restriction, "/\\"},
+    {Expr::BinaryOp::Tail_Restriction, "\\/"}
 };
 
 std::string smtSymbol(Expr::BinaryOp op) {

@@ -488,6 +488,39 @@ shared_ptr<Abstract> Factory::EmptySeq(const BType& t) {
   return get<BConstruct::Expression::EmptySeq>(m_EmptySeqs, t);
 }
 
+
+/* 5.18 Expressions of Sequences */
+
+shared_ptr<Abstract> Factory::Size(const BType& t) {
+  return get<BConstruct::Expression::Size>(m_Sizes, t);
+}
+
+/* 5.19 Expressions of Sequences */
+
+shared_ptr<Abstract> Factory::Concatenation(const BType& t) {
+  return get<BConstruct::Expression::Concatenation>(m_Concatenations, t);
+}
+
+shared_ptr<Abstract> Factory::Insert_In_Front(const BType& t) {
+  return get<BConstruct::Expression::Insert_In_Front>(m_Insert_In_Fronts, t);
+}
+
+shared_ptr<Abstract> Factory::Insert_At_Tail(const BType& t) {
+  return get<BConstruct::Expression::Insert_At_Tail>(m_Insert_At_Tails, t);
+}
+
+shared_ptr<Abstract> Factory::Restrict_In_Front(const BType& t) {
+  return get<BConstruct::Expression::Restrict_In_Front>(m_Restrict_In_Fronts, t);
+}
+
+shared_ptr<Abstract> Factory::Restrict_At_Tail(const BType& t) {
+  return get<BConstruct::Expression::Restrict_At_Tail>(m_Restrict_At_Tails, t);
+}
+
+shared_ptr<Abstract> Factory::General_Concatenation(const BType& t) {
+  return get<BConstruct::Expression::General_Concatenation>(m_General_Concatenations, t);
+}
+
 size_t Factory::size() { return m_index.size(); }
 
 shared_ptr<Abstract> Factory::at(size_t index) { return m_index.at(index); }

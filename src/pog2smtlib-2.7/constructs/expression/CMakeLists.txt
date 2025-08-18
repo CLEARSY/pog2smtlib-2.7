@@ -98,5 +98,16 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/perm.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/emptyseq.cpp
 
+  # 5.18 Expressions of Sequences 
+  ${CMAKE_CURRENT_SOURCE_DIR}/size.cpp
+
+  # 5.19 Expressions of Sequences 
+  ${CMAKE_CURRENT_SOURCE_DIR}/concatenation.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/insert_in_front.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/insert_at_tail.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/restrict_in_front.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/restrict_at_tail.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/general_concatenation.cpp
+
   PARENT_SCOPE
 )
