@@ -85,6 +85,13 @@ class GeneralizedIntersection;
 class Relation;
 class Total_Relation;
 
+/* 5.11 Expressions of Relations */
+class Identity;
+class Reverse;
+class Prj1;
+class Prj2;
+class Composition;
+class Direct_Product;
 
 /* 5.13 Expressions of Relations */
 class Domain;
@@ -176,7 +183,7 @@ class Factory {
   std::shared_ptr<Abstract> Max();
   std::shared_ptr<Abstract> Min();
   std::shared_ptr<Abstract> Cardinals();
-  std::shared_ptr<Abstract> Card(const BType&);
+  std::shared_ptr<Abstract> Card(const BType &);
 
   /* 5.5 Expression of Couples */
   std::shared_ptr<Abstract> Maplet();
@@ -198,7 +205,7 @@ class Factory {
   std::shared_ptr<Abstract> Interval();
   std::shared_ptr<Abstract> ExpressionCartesianProduct(const BType &,
                                                        const BType &);
-  std::shared_ptr<Abstract> Set(const BType &);                                                    
+  std::shared_ptr<Abstract> Set(const BType &);
   std::shared_ptr<Abstract> Fin(const BType &);
   std::shared_ptr<Abstract> Fin1(const BType &);
 
@@ -213,6 +220,15 @@ class Factory {
   std::shared_ptr<Abstract> Relation(const BType &, const BType &);
   std::shared_ptr<Abstract> Total_Relation(const BType &, const BType &);
 
+  /* 5.11 Expressions of Relations */
+  std::shared_ptr<Abstract> Identity(const BType &);
+  std::shared_ptr<Abstract> Reverse(const BType &, const BType &);
+  std::shared_ptr<Abstract> Prj1(const BType &, const BType &);
+  std::shared_ptr<Abstract> Prj2(const BType &, const BType &);
+  std::shared_ptr<Abstract> Composition(const BType &, const BType &,
+                                        const BType &);
+  std::shared_ptr<Abstract> Direct_Product(const BType &, const BType &,
+                                           const BType &);
 
   /* 5.13 Expressions of Relations */
   std::shared_ptr<Abstract> Domain(const BType &, const BType &);
@@ -231,11 +247,13 @@ class Factory {
   std::shared_ptr<Abstract> Partial_Surjection(const BType &, const BType &);
   std::shared_ptr<Abstract> Total_Surjection(const BType &, const BType &);
   std::shared_ptr<Abstract> Total_Bijection(const BType &, const BType &);
-    
+
   /* 5.16 Expressions of Functions */
   std::shared_ptr<Abstract> Evaluation(const BType &, const BType &);
-  std::shared_ptr<Abstract> Transformed_Into_Function(const BType &, const BType &);
-  std::shared_ptr<Abstract> Transformed_Into_Relation(const BType &, const BType &);
+  std::shared_ptr<Abstract> Transformed_Into_Function(const BType &,
+                                                      const BType &);
+  std::shared_ptr<Abstract> Transformed_Into_Relation(const BType &,
+                                                      const BType &);
 
   /* 5.17 Set of Sequences */
   std::shared_ptr<Abstract> Seq(const BType &);
@@ -265,6 +283,14 @@ class Factory {
     size_t operator()(const std::pair<std::shared_ptr<const BType>,
                                       std::shared_ptr<const BType>> &p) const {
       return p.second->hash_combine(p.first->hash_combine(0));
+    }
+  };
+  struct TernaryBTypeHash {
+    size_t operator()(const std::pair<std::pair<std::shared_ptr<const BType>,
+                                                std::shared_ptr<const BType>>,
+                                      std::shared_ptr<const BType>> &p) const {
+      return p.second->hash_combine(
+          p.first.second->hash_combine(p.first.first->hash_combine(0)));
     }
   };
   struct DataHash {
@@ -331,8 +357,7 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Min> m_Min;
   std::shared_ptr<BConstruct::Expression::Cardinals> m_Cardinals;
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Card>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Card>, BTypeHash>
       m_Cards;
 
   /* 5.5 Expression of Couples */
@@ -376,13 +401,11 @@ class Factory {
       m_Sets;
 
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Fin>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Fin>, BTypeHash>
       m_Fins;
 
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Fin1>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Fin1>, BTypeHash>
       m_Fin1s;
 
   /* 5.8 Set List Expressions (continued) */
@@ -417,41 +440,76 @@ class Factory {
       std::shared_ptr<BConstruct::Expression::Relation>, BinaryBTypeHash>
       m_Relations;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Total_Relation>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Total_Relation>, BinaryBTypeHash>
       m_Total_Relations;
 
+  /* 5.11 Expressions of Relations */
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Identity>,
+                     BTypeHash>
+      m_Identitys;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Reverse>, BinaryBTypeHash>
+      m_Reverses;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Prj1>, BinaryBTypeHash>
+      m_Prj1s;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Prj2>, BinaryBTypeHash>
+      m_Prj2s;
+
+  std::unordered_map<
+      std::pair<
+          std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+          std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Composition>, TernaryBTypeHash>
+      m_Compositions;
+
+  std::unordered_map<
+      std::pair<
+          std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+          std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Direct_Product>, TernaryBTypeHash>
+      m_Direct_Products;
+
   /* 5.13 Expressions of Relations */
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Domain>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Domain>, BinaryBTypeHash>
       m_Domains;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Range>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Range>, BinaryBTypeHash>
       m_Ranges;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Image>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Image>, BinaryBTypeHash>
       m_Images;
 
   /* 5.15 Sets of Functions */
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Injection>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Injection>, BinaryBTypeHash>
       m_Injections;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Surjection>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Surjection>, BinaryBTypeHash>
       m_Surjections;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Bijection>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Bijection>, BinaryBTypeHash>
       m_Bijections;
 
   std::unordered_map<
@@ -470,56 +528,59 @@ class Factory {
       BinaryBTypeHash>
       m_Partial_Functions;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Partial_Injection>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Partial_Injection>,
+      BinaryBTypeHash>
       m_Partial_Injections;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Total_Injection>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Total_Injection>, BinaryBTypeHash>
       m_Total_Injections;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Partial_Surjection>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Partial_Surjection>,
+      BinaryBTypeHash>
       m_Partial_Surjections;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Total_Surjection>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Total_Surjection>,
+      BinaryBTypeHash>
       m_Total_Surjections;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Total_Bijection>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Total_Bijection>, BinaryBTypeHash>
       m_Total_Bijections;
 
   /* 5.16 Expressions of Functions */
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Evaluation>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Evaluation>, BinaryBTypeHash>
       m_Evaluations;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Transformed_Into_Function>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Transformed_Into_Function>,
+      BinaryBTypeHash>
       m_Transformed_Into_Functions;
 
-  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
-                     std::shared_ptr<BConstruct::Expression::Transformed_Into_Relation>,
-                     BinaryBTypeHash>
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Transformed_Into_Relation>,
+      BinaryBTypeHash>
       m_Transformed_Into_Relations;
 
   /* 5.17 Set of Sequences */
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Seq>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Seq>, BTypeHash>
       m_Seqs;
 
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Seq1>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Seq1>, BTypeHash>
       m_Seq1s;
 
   std::unordered_map<std::shared_ptr<const BType>,
@@ -533,8 +594,7 @@ class Factory {
       m_Injective_Seq1s;
 
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Perm>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Perm>, BTypeHash>
       m_Perms;
 
   std::unordered_map<std::shared_ptr<const BType>,
@@ -560,6 +620,14 @@ class Factory {
           std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
           std::shared_ptr<T>, BinaryBTypeHash> &m,
       const BType &tl, const BType &tr);
+
+  template <typename T>
+  std::shared_ptr<Abstract> get(
+      std::unordered_map<std::pair<std::pair<std::shared_ptr<const BType>,
+                                             std::shared_ptr<const BType>>,
+                                   std::shared_ptr<const BType>>,
+                         std::shared_ptr<T>, TernaryBTypeHash> &m,
+      const BType &fst, const BType &snd, const BType &thd);
 
   std::shared_ptr<Abstract> get(const struct Data &t);
 };
@@ -673,6 +741,24 @@ class BinaryBType : public Abstract {
   std::string_view m_label;
   std::shared_ptr<const BType> m_type1;
   std::shared_ptr<const BType> m_type2;
+};
+
+class TernaryBType : public Abstract {
+ public:
+  TernaryBType(const BType &t1, const BType &t2, const BType &t3)
+      : m_type1(std::make_shared<const BType>(t1)),
+        m_type2(std::make_shared<const BType>(t2)),
+        m_type3(std::make_shared<const BType>(t3)) {}
+  virtual ~TernaryBType() = default;
+
+  virtual std::string to_string() const override;
+
+ protected:
+  size_t hash_special() const override;
+  std::string_view m_label;
+  std::shared_ptr<const BType> m_type1;
+  std::shared_ptr<const BType> m_type2;
+  std::shared_ptr<const BType> m_type3;
 };
 
 /* Classes for the type system constructs */
@@ -1001,6 +1087,44 @@ class Total_Relation : public BinaryBType {
   virtual ~Total_Relation() = default;
 };
 
+/* 5.11 Expressions of Relations */
+
+class Identity : public UnaryBType {
+ public:
+  explicit Identity(const BType &);
+  virtual ~Identity() = default;
+};
+
+class Reverse : public BinaryBType {
+ public:
+  explicit Reverse(const BType &, const BType &);
+  virtual ~Reverse() = default;
+};
+
+class Prj1 : public BinaryBType {
+ public:
+  explicit Prj1(const BType &, const BType &);
+  virtual ~Prj1() = default;
+};
+
+class Prj2 : public BinaryBType {
+ public:
+  explicit Prj2(const BType &, const BType &);
+  virtual ~Prj2() = default;
+};
+
+class Composition : public TernaryBType {
+ public:
+  explicit Composition(const BType &, const BType &, const BType &);
+  virtual ~Composition() = default;
+};
+
+class Direct_Product : public TernaryBType {
+ public:
+  explicit Direct_Product(const BType &, const BType &, const BType &);
+  virtual ~Direct_Product() = default;
+};
+
 /* 5.13 Expressions of Relations */
 
 class Domain : public BinaryBType {
@@ -1020,7 +1144,6 @@ class Image : public BinaryBType {
   explicit Image(const BType &, const BType &);
   virtual ~Image() = default;
 };
-
 
 /* 5.15 Sets of Functions */
 

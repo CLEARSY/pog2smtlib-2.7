@@ -1,0 +1,114 @@
+/home/wflitti/pog2smtlib-2.7-integration/b2smtlib/src/pog2smtlib-2.7/pog-translation.cpp 0 0
+appel POGTranslations::groupPrelude(0)
+/home/wflitti/pog2smtlib-2.7-integration/b2smtlib/src/pog2smtlib-2.7/pog-signatures.cpp group = 0
+/home/wflitti/pog2smtlib-2.7-integration/b2smtlib/src/pog2smtlib-2.7/pog-signatures.cpp group = 0
+/home/wflitti/pog2smtlib-2.7-integration/b2smtlib/src/pog2smtlib-2.7/pog-translation.cpp signature = [{<Z>, :<Z>, .. | vset, vconst]
+prelude groupe 0:
+ (define-sort |Z| () Int)
+(declare-sort P 1)
+(define-sort |POW Z| () (P |Z|))
+
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
+(declare-const vconst |Z|)
+(declare-const vset |POW Z|)
+
+(declare-fun |interval| (|Z| |Z|) |POW Z|)
+ (assert (!
+    (forall ((l |Z|) (u |Z|) (e |Z|))
+        (= (|set.in Z| e (|interval| l u))
+            (and (<= l e) (<= e u))))
+    :named |ax.set.in.interval|))
+
+ (define-sort |? Z| () (-> |Z| Bool))
+ (declare-const |set.intent Z| (-> |? Z| |POW Z|))
+ (assert
+    (! 
+        (forall ((p |? Z|))
+            (forall ((x |Z|))
+                (= (|set.in Z| x (|set.intent Z| p))
+                    (p x)
+                )
+            )
+        )
+    :named |set.in.intent Z|)
+ )
+
+(fin prelude groupe 0)
+signature of local hypothesis :
+[ | ]
+fin signature of local hypothesis
+POGSignatures::ofGoal 0 0 - initial
+[ | ]
+/home/wflitti/pog2smtlib-2.7-integration/b2smtlib/src/pog2smtlib-2.7/pog-signatures.cpp group = 0
+POGSignatures::ofGoal 0 0 - group
+[.., :<Z>, {<Z> | vconst, vset]
+POGSignatures::ofGoal 0 0 - group+local hyps
+[.., :<Z>, {<Z> | vconst, vset]
+POGSignatures::ofGoal 0 0 - goal
+[:<Z> | vset, vconst]
+POGSignatures::ofGoal 0 0 - group+local hyps+goal
+[.., :<Z>, {<Z> | vconst, vset]
+signature of goal :
+[.., :<Z>, {<Z> | vconst, vset]
+fin signature of goal
+/home/wflitti/pog2smtlib-2.7-integration/b2smtlib/src/pog2smtlib-2.7/pog-signatures.cpp group = 0
+/home/wflitti/pog2smtlib-2.7-integration/b2smtlib/src/pog2smtlib-2.7/pog-signatures.cpp group = 0
+signature of group :
+[{<Z>, :<Z>, .. | vset, vconst]
+end signature of group
+script define B definitions:
+
+(fin script define B definitions)
+script define ctx:
+
+(fin script define ctx)
+script define cst:
+
+(fin script define cst)
+script define lprp:
+(assert (!
+  (= vset (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)(= x 4)(= x 10)))))
+  :named |Define:lprp:1|)
+)
+(assert (!
+  (|set.in Z| vconst (|interval| 1 4))
+  :named |Define:lprp:2|)
+)
+
+(fin script define lprp)
+script define inprp:
+
+(fin script define inprp)
+script define inext:
+
+(fin script define inext)
+script define seext:
+
+(fin script define seext)
+script define inv:
+
+(fin script define inv)
+script groupe 0:
+(assert (!
+  (= vset (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)(= x 4)(= x 10)))))
+  :named |Define:lprp:1|)
+)
+(assert (!
+  (|set.in Z| vconst (|interval| 1 4))
+  :named |Define:lprp:2|)
+)
+
+(fin script groupe 0)script but 0,0:
+(assert (!
+  (not (|set.in Z| vconst vset))
+  :named |Goal|)
+)
+
+(fin script but 0,0)
+script but :
+(assert (!
+  (not (|set.in Z| vconst vset))
+  :named |Goal|)
+)
+
+fin script but

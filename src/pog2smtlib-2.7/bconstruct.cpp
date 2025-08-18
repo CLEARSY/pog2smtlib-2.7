@@ -66,6 +66,26 @@ shared_ptr<Abstract> Factory::get(
   return construct;
 }
 
+template <typename T>
+shared_ptr<Abstract> Factory::get(
+    unordered_map<pair<pair<shared_ptr<const BType>, shared_ptr<const BType>>,
+                       shared_ptr<const BType>>,
+                  shared_ptr<T>, Factory::TernaryBTypeHash>& m,
+    const BType& fst, const BType& snd, const BType& thd) {
+  pair<pair<shared_ptr<const BType>, shared_ptr<const BType>>,
+       shared_ptr<const BType>>
+      pt = make_pair(make_pair(make_shared<const BType>(fst),
+                               make_shared<const BType>(snd)),
+                     make_shared<const BType>(thd));
+  auto it = m.find(pt);
+  if (it != m.end()) {
+    return it->second;
+  }
+  auto construct = make_shared<T>(fst, snd, thd);
+  m[pt] = construct;
+  return construct;
+}
+
 shared_ptr<Abstract> Factory::get(const struct Data& dt) {
   shared_ptr<const struct Data> pt = std::make_shared<const struct Data>(dt);
   auto it = m_data.find(pt);
@@ -191,7 +211,7 @@ shared_ptr<Abstract> Factory::Cardinals() {
   return get<BConstruct::Expression::Cardinals>(m_Cardinals);
 }
 
-shared_ptr<Abstract> Factory::Card(const BType &t) {
+shared_ptr<Abstract> Factory::Card(const BType& t) {
   return get<BConstruct::Expression::Card>(m_Cards, t);
 }
 
@@ -286,7 +306,8 @@ shared_ptr<Abstract> Factory::Intersection(const BType& t) {
 }
 
 shared_ptr<Abstract> Factory::GeneralizedIntersection(const BType& t) {
-  return get<BConstruct::Expression::GeneralizedIntersection>(m_GeneralizedIntersections, t);
+  return get<BConstruct::Expression::GeneralizedIntersection>(
+      m_GeneralizedIntersections, t);
 }
 
 shared_ptr<Abstract> Factory::GeneralizedUnion(const BType& t) {
@@ -299,7 +320,44 @@ shared_ptr<Abstract> Factory::Relation(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Relation>(m_Relations, lhs, rhs);
 }
 
+shared_ptr<Abstract> Factory::Total_Relation(const BType& lhs,
+                                             const BType& rhs) {
+  return get<BConstruct::Expression::Total_Relation>(m_Total_Relations, lhs,
+                                                     rhs);
+}
+
+/* 5.11 Expressions of Relations */
+
+shared_ptr<Abstract> Factory::Identity(const BType& t) {
+  return get<BConstruct::Expression::Identity>(m_Identitys, t);
+}
+
+shared_ptr<Abstract> Factory::Reverse(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Reverse>(m_Reverses, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Prj1(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Prj1>(m_Prj1s, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Prj2(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Prj2>(m_Prj2s, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Composition(const BType& fst, const BType& snd,
+                                          const BType& thd) {
+  return get<BConstruct::Expression::Composition>(m_Compositions, fst, snd,
+                                                  thd);
+}
+
+shared_ptr<Abstract> Factory::Direct_Product(const BType& fst, const BType& snd,
+                                             const BType& thd) {
+  return get<BConstruct::Expression::Direct_Product>(m_Direct_Products, fst,
+                                                     snd, thd);
+}
+
 /* 5.13 Expressions of Relations */
+
 shared_ptr<Abstract> Factory::Domain(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Domain>(m_Domains, lhs, rhs);
 }
@@ -330,32 +388,46 @@ shared_ptr<Abstract> Factory::Function(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Function>(m_Functions, lhs, rhs);
 }
 
-shared_ptr<Abstract> Factory::Partial_Function(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Partial_Function>(m_Partial_Functions, lhs, rhs);
+shared_ptr<Abstract> Factory::Partial_Function(const BType& lhs,
+                                               const BType& rhs) {
+  return get<BConstruct::Expression::Partial_Function>(m_Partial_Functions, lhs,
+                                                       rhs);
 }
 
-shared_ptr<Abstract> Factory::Total_Function(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Total_Function>(m_Total_Functions, lhs, rhs);
+shared_ptr<Abstract> Factory::Total_Function(const BType& lhs,
+                                             const BType& rhs) {
+  return get<BConstruct::Expression::Total_Function>(m_Total_Functions, lhs,
+                                                     rhs);
 }
 
-shared_ptr<Abstract> Factory::Partial_Injection(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Partial_Injection>(m_Partial_Injections, lhs, rhs);
+shared_ptr<Abstract> Factory::Partial_Injection(const BType& lhs,
+                                                const BType& rhs) {
+  return get<BConstruct::Expression::Partial_Injection>(m_Partial_Injections,
+                                                        lhs, rhs);
 }
 
-shared_ptr<Abstract> Factory::Total_Injection(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Total_Injection>(m_Total_Injections, lhs, rhs);
+shared_ptr<Abstract> Factory::Total_Injection(const BType& lhs,
+                                              const BType& rhs) {
+  return get<BConstruct::Expression::Total_Injection>(m_Total_Injections, lhs,
+                                                      rhs);
 }
 
-shared_ptr<Abstract> Factory::Partial_Surjection(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Partial_Surjection>(m_Partial_Surjections, lhs, rhs);
+shared_ptr<Abstract> Factory::Partial_Surjection(const BType& lhs,
+                                                 const BType& rhs) {
+  return get<BConstruct::Expression::Partial_Surjection>(m_Partial_Surjections,
+                                                         lhs, rhs);
 }
 
-shared_ptr<Abstract> Factory::Total_Surjection(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Total_Surjection>(m_Total_Surjections, lhs, rhs);
+shared_ptr<Abstract> Factory::Total_Surjection(const BType& lhs,
+                                               const BType& rhs) {
+  return get<BConstruct::Expression::Total_Surjection>(m_Total_Surjections, lhs,
+                                                       rhs);
 }
 
-shared_ptr<Abstract> Factory::Total_Bijection(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Total_Bijection>(m_Total_Bijections, lhs, rhs);
+shared_ptr<Abstract> Factory::Total_Bijection(const BType& lhs,
+                                              const BType& rhs) {
+  return get<BConstruct::Expression::Total_Bijection>(m_Total_Bijections, lhs,
+                                                      rhs);
 }
 
 /* 5.16 Expressions of Functions */
@@ -364,12 +436,16 @@ shared_ptr<Abstract> Factory::Evaluation(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Evaluation>(m_Evaluations, lhs, rhs);
 }
 
-shared_ptr<Abstract> Factory::Transformed_Into_Function(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Transformed_Into_Function>(m_Transformed_Into_Functions, lhs, rhs);
+shared_ptr<Abstract> Factory::Transformed_Into_Function(const BType& lhs,
+                                                        const BType& rhs) {
+  return get<BConstruct::Expression::Transformed_Into_Function>(
+      m_Transformed_Into_Functions, lhs, rhs);
 }
 
-shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType& lhs, const BType& rhs) {
-  return get<BConstruct::Expression::Transformed_Into_Relation>(m_Transformed_Into_Relations, lhs, rhs);
+shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType& lhs,
+                                                        const BType& rhs) {
+  return get<BConstruct::Expression::Transformed_Into_Relation>(
+      m_Transformed_Into_Relations, lhs, rhs);
 }
 
 /* 5.17 Set of Sequences */
@@ -435,6 +511,16 @@ size_t BinaryBType::hash_special() const {
 string BinaryBType::to_string() const {
   return fmt::format("{}_<{}, {}>", m_label, m_type1->to_string(),
                      m_type2->to_string());
+}
+
+size_t TernaryBType::hash_special() const {
+  return m_type3->hash_combine(m_type2->hash_combine(
+      m_type1->hash_combine(std::hash<std::string>{}(std::string(m_label)))));
+}
+
+string TernaryBType::to_string() const {
+  return fmt::format("{}_<{}, {}, {}>", m_label, m_type1->to_string(),
+                     m_type2->to_string(), m_type3->to_string());
 }
 
 }  // namespace BConstruct

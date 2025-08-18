@@ -267,6 +267,15 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                 *types.at(0));
             break;
 
+          /* 5.11 Expressions of Relations */
+          case Expr::UnaryOp::Identity:
+            construct = BConstruct::Factory::factory().Identity(*types.at(0));
+            break;
+          case Expr::UnaryOp::Inverse:
+            construct = BConstruct::Factory::factory().Reverse(*types.at(0),
+                                                             *types.at(1));
+            break;
+
           /* 5.13 Expressions of Relations */
           case Expr::UnaryOp::Domain:
             construct = BConstruct::Factory::factory().Domain(*types.at(0),
@@ -374,6 +383,26 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Relation(*types.at(0),
                                                                 *types.at(1));
             break;
+
+          /* 5.11 Expressions of Relations */
+          case Expr::BinaryOp::First_Projection:
+            construct = BConstruct::Factory::factory().Prj1(*types.at(0),
+                                                             *types.at(1));
+            break;
+          case Expr::BinaryOp::Second_Projection:
+            construct = BConstruct::Factory::factory().Prj2(*types.at(0),
+                                                             *types.at(1));
+            break;
+          case Expr::BinaryOp::Composition:
+            construct = BConstruct::Factory::factory().Composition(*types.at(0),
+                                                             *types.at(1),
+                                                             *types.at(2));
+            break;
+          case Expr::BinaryOp::Direct_Product:
+            construct = BConstruct::Factory::factory().Direct_Product(*types.at(0),
+                                                             *types.at(1),
+                                                             *types.at(2));
+            break;          
 
           /* 5.13 Expressions of Relations */
           case Expr::BinaryOp::Image:
