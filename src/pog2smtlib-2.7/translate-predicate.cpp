@@ -348,6 +348,29 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       break;
     }
 
+    /* 5.11 Expressions of Relations */
+    case Expr::UnaryOp::Identity: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op,
+                    elementType(e.getType())));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+    case Expr::UnaryOp::Inverse: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op,
+                    elementType(e.getType()).toProductType().lhs,
+                    elementType(e.getType()).toProductType().rhs));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     /* 5.13 Expressions of Relations */
     case Expr::UnaryOp::Domain:
     case Expr::UnaryOp::Range: {
@@ -493,6 +516,37 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       break;
     }
 
+    /* 5.11 Expressions of Relations */
+    case Expr::BinaryOp::First_Projection:
+    case Expr::BinaryOp::Second_Projection: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op,
+                    elementType(lhs.getType()),
+                    elementType(rhs.getType())));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+    case Expr::BinaryOp::Composition:
+    case Expr::BinaryOp::Direct_Product: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op,
+                    elementType(lhs.getType()).toProductType().lhs,
+                    elementType(lhs.getType()).toProductType().rhs,
+                    elementType(rhs.getType()).toProductType().rhs));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     /* 5.13 Expressions of Relations */
     case Expr::BinaryOp::Image: {
       m_translation.push_back('(');
@@ -550,12 +604,10 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Head_Insertion:
     case Expr::BinaryOp::Head_Restriction:
     case Expr::BinaryOp::Surcharge:
-    case Expr::BinaryOp::Composition:
     case Expr::BinaryOp::Tail_Insertion:
     case Expr::BinaryOp::Domain_Subtraction:
     case Expr::BinaryOp::Domain_Restriction:
     case Expr::BinaryOp::Partial_Bijections:
-    case Expr::BinaryOp::Direct_Product:
     case Expr::BinaryOp::Parallel_Product:
     case Expr::BinaryOp::Tail_Restriction:
     case Expr::BinaryOp::Concatenation:
@@ -569,8 +621,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::FMultiplication:
     case Expr::BinaryOp::FDivision:
     case Expr::BinaryOp::Iteration:
-    case Expr::BinaryOp::First_Projection:
-    case Expr::BinaryOp::Second_Projection:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));
       return;

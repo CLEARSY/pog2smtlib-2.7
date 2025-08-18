@@ -52,6 +52,15 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
 
   # 5.10 Set of Relations
   ${CMAKE_CURRENT_SOURCE_DIR}/relations.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/total.cpp
+
+  # 5.11 Expressions of Relations
+  ${CMAKE_CURRENT_SOURCE_DIR}/identity.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/reverse.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/prj1.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/prj2.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/composition.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/directproduct.cpp
 
   # 5.13 Expressions of Relations
   ${CMAKE_CURRENT_SOURCE_DIR}/domain.cpp
@@ -59,7 +68,6 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/image.cpp
 
   # 5.15 Sets of Functions
-  ${CMAKE_CURRENT_SOURCE_DIR}/total.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/injection.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/surjection.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/bijection.cpp

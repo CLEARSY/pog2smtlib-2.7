@@ -98,6 +98,10 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     {Expr::UnaryOp::Union, "union"},
     {Expr::UnaryOp::Intersection, "inter"},
 
+    /* 5.11 Expressions of Relations */
+    {Expr::UnaryOp::Identity, "id"},
+    {Expr::UnaryOp::Inverse, "~"},
+
     /* 5.13 Expressions of Relations */
     {Expr::UnaryOp::Domain, "rel.domain"},
     {Expr::UnaryOp::Range, "rel.range"},
@@ -160,7 +164,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
 
     /* 5.5 Expression of Couples */
     {Expr::BinaryOp::Mapplet, "maplet"},
-
+    
     /* 5.7 Set List Expressions */
     {Expr::BinaryOp::Cartesian_Product, "set.product"},
     {Expr::BinaryOp::Interval, "|interval|"},
@@ -171,6 +175,12 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
 
     /* 5.10 Set of Relations */
     {Expr::BinaryOp::Relations, "relations"},
+
+    /* 5.11 Expressions of Relations */
+    {Expr::BinaryOp::First_Projection, "prj1"},
+    {Expr::BinaryOp::Second_Projection, "prj1"},
+    {Expr::BinaryOp::Composition, "relcomp"},
+    {Expr::BinaryOp::Direct_Product, "directproduct"},
 
     /* 5.13 Expressions of Relations */
     {Expr::BinaryOp::Image, "rel.image"},
@@ -286,7 +296,7 @@ static std::unordered_map<Expr::Visitor::EConstant, std::string>
         {Expr::Visitor::EConstant::MinInt, "MININT"},
         {Expr::Visitor::EConstant::Successor, "succ"},
         {Expr::Visitor::EConstant::Predecessor, "pred"},
-
+        
         /* 5.6 Building Sets */
         {Expr::Visitor::EConstant::INTEGER, "INTEGER"},
         {Expr::Visitor::EConstant::NATURAL, "NATURAL"},
