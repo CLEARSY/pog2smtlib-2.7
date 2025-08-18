@@ -131,6 +131,11 @@ class EmptySeq;
 
 /* 5.18 Expressions of Sequences */
 class Size;
+class First;
+class Last;
+class Front;
+class Tail;
+class Rev;
 
 /* 5.19 Expressions of Sequences */
 class Concatenation;
@@ -286,6 +291,11 @@ class Factory {
 
   /* 5.18 Expressions of Sequences */
   std::shared_ptr<Abstract> Size(const BType &);
+  std::shared_ptr<Abstract> First(const BType &);
+  std::shared_ptr<Abstract> Last(const BType &);
+  std::shared_ptr<Abstract> Front(const BType &);
+  std::shared_ptr<Abstract> Tail(const BType &);
+  std::shared_ptr<Abstract> Rev(const BType &);
 
   /* 5.19 Expressions of Sequences */
   std::shared_ptr<Abstract> Concatenation(const BType &);
@@ -655,6 +665,31 @@ class Factory {
                      std::shared_ptr<BConstruct::Expression::Size>,
                      BTypeHash>
       m_Sizes;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::First>,
+                     BTypeHash>
+      m_Firsts;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Last>,
+                     BTypeHash>
+      m_Lasts;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Front>,
+                     BTypeHash>
+      m_Fronts;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Tail>,
+                     BTypeHash>
+      m_Tails;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Rev>,
+                     BTypeHash>
+      m_Revs;
 
   /* 5.19 Expressions of Sequences */
   std::unordered_map<std::shared_ptr<const BType>,
@@ -1382,6 +1417,36 @@ class Size : public UnaryBType {
  public:
   explicit Size(const BType &);
   virtual ~Size() = default;
+};
+
+class First : public UnaryBType {
+ public:
+  explicit First(const BType &);
+  virtual ~First() = default;
+};
+
+class Last : public UnaryBType {
+ public:
+  explicit Last(const BType &);
+  virtual ~Last() = default;
+};
+
+class Front : public UnaryBType {
+ public:
+  explicit Front(const BType &);
+  virtual ~Front() = default;
+};
+
+class Tail : public UnaryBType {
+ public:
+  explicit Tail(const BType &);
+  virtual ~Tail() = default;
+};
+
+class Rev : public UnaryBType {
+ public:
+  explicit Rev(const BType &);
+  virtual ~Rev() = default;
 };
 
 /* 5.19 Expressions of Sequences */

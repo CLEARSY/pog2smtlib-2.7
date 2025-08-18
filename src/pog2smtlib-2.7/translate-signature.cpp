@@ -325,7 +325,21 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::UnaryOp::Size:
             construct = BConstruct::Factory::factory().Size(*types.at(0));
             break;
-
+          case Expr::UnaryOp::First:
+            construct = BConstruct::Factory::factory().First(*types.at(0));
+            break;
+          case Expr::UnaryOp::Last:
+            construct = BConstruct::Factory::factory().Last(*types.at(0));
+            break;
+          case Expr::UnaryOp::Front:
+            construct = BConstruct::Factory::factory().Front(*types.at(0));
+            break;
+          case Expr::UnaryOp::Tail:
+            construct = BConstruct::Factory::factory().Tail(*types.at(0));
+            break;
+          case Expr::UnaryOp::Reverse:
+            construct = BConstruct::Factory::factory().Rev(*types.at(0));
+            break;
           /* 5.19 Expressions of Sequences */
           case Expr::UnaryOp::Concatenation:
             construct = BConstruct::Factory::factory().General_Concatenation(*types.at(0));
