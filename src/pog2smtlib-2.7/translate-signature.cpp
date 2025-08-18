@@ -248,7 +248,15 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().PowerSet1(*types.at(0));
             break;
 
-          /* 5.8 Set List Expressions */
+          /* 5.8 Set List Expressions (continued) */
+          case Expr::UnaryOp::Union:
+            construct =
+                BConstruct::Factory::factory().GeneralizedUnion(*types.at(0));
+            break;
+          case Expr::UnaryOp::Intersection:
+            construct = BConstruct::Factory::factory().GeneralizedIntersection(
+                *types.at(0));
+            break;
 
           /* 5.13 Expressions of Relations */
           case Expr::UnaryOp::Domain:
@@ -313,14 +321,23 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                     *types.at(0), *types.at(1));
             break;
 
-          /* 5.8 Set List Expressions */
+          /* 5.8 Set List Expressions (continued)*/
+          case Expr::BinaryOp::Set_Difference:
+            construct = BConstruct::Factory::factory().Difference(*types.at(0));
+            break;
+          case Expr::BinaryOp::Union:
+            construct = BConstruct::Factory::factory().Union(*types.at(0));
+            break;
+          case Expr::BinaryOp::Intersection:
+            construct =
+                BConstruct::Factory::factory().Intersection(*types.at(0));
+            break;
 
           /* 5.10 Set of Relations */
           case Expr::BinaryOp::Relations:
             construct = BConstruct::Factory::factory().Relation(*types.at(0),
                                                                 *types.at(1));
             break;
-
 
           /* 5.13 Expressions of Relations */
           case Expr::BinaryOp::Image:

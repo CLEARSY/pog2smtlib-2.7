@@ -38,6 +38,8 @@ Surjection::Surjection(const BType &U, const BType &V) : BinaryBType(U, V) {
   m_label = "surj";
   m_prerequisites.insert(
       {std::make_shared<BConstruct::Predicate::SetMembership>(PUxV),
+       std::make_shared<BConstruct::Predicate::Equality>(PU),
+       std::make_shared<BConstruct::Predicate::Equality>(PV),
        std::make_shared<BConstruct::Expression::Range>(U, V)});
   m_debug_string = fmt::format("surj_<{},{}>", U.to_string(), V.to_string());
 }

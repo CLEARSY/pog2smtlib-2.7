@@ -322,7 +322,16 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       break;
     }
 
-    /* 5.8 Set List Expressions */
+    /* 5.8 Set List Expressions (continued) */
+    case Expr::UnaryOp::Union:
+    case Expr::UnaryOp::Intersection: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, type.toPowerType().content));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
 
     /* 5.13 Expressions of Relations */
     case Expr::UnaryOp::Domain:
@@ -382,7 +391,20 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       break;
     }
 
-      /* 5.8 Set List Expressions */
+      /* 5.8 Set List Expressions (continued) */
+
+    case Expr::BinaryOp::Set_Difference:
+    case Expr::BinaryOp::Union:
+    case Expr::BinaryOp::Intersection: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, type.toPowerType().content));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
 
     case Expr::BinaryOp::Cartesian_Product: {
       m_translation.push_back('(');
@@ -465,9 +487,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Total_Bijections:
     case Expr::BinaryOp::Direct_Product:
     case Expr::BinaryOp::Parallel_Product:
-    case Expr::BinaryOp::Union:
-    case Expr::BinaryOp::Intersection:
-    case Expr::BinaryOp::Set_Difference:
     case Expr::BinaryOp::Tail_Restriction:
     case Expr::BinaryOp::Concatenation:
     case Expr::BinaryOp::Modulo:
