@@ -40,10 +40,10 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/cartesianproduct.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/set.cpp
 
+  # 5.8 Set List Expressions
+
   # 5.10 Set of Relations
   ${CMAKE_CURRENT_SOURCE_DIR}/relations.cpp
-
-  # 5.8 Set List Expressions
 
   # 5.13 Expressions of Relations
   ${CMAKE_CURRENT_SOURCE_DIR}/domain.cpp
@@ -52,6 +52,9 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
 
   # 5.15 Sets of Functions
   ${CMAKE_CURRENT_SOURCE_DIR}/total.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/injection.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/surjection.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/bijection.cpp
 
   PARENT_SCOPE
 )
