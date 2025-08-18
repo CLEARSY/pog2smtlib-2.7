@@ -75,6 +75,13 @@ class Set;
 /* 5.10 Set of Relations */
 class Relation;
 
+/* 5.8 Set List Expressions */
+class Difference;
+class Union;
+class Intersection;
+class GeneralizedUnion;
+class GeneralizedIntersection;
+
 /* 5.13 Expressions of Relations */
 class Domain;
 class Range;
@@ -173,6 +180,13 @@ class Factory {
 
   /* 5.10 Set of Relations */
   std::shared_ptr<Abstract> Relation(const BType &, const BType &);
+
+  /* 5.8 Set List Expressions */
+  std::shared_ptr<Abstract> Difference(const BType &);
+  std::shared_ptr<Abstract> Union(const BType &);
+  std::shared_ptr<Abstract> Intersection(const BType &);
+  std::shared_ptr<Abstract> GeneralizedUnion(const BType &);
+  std::shared_ptr<Abstract> GeneralizedIntersection(const BType &);
 
   /* 5.13 Expressions of Relations */
   std::shared_ptr<Abstract> Domain(const BType &, const BType &);
@@ -318,6 +332,32 @@ class Factory {
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
       std::shared_ptr<BConstruct::Expression::Relation>, BinaryBTypeHash>
       m_Relations;
+
+  /* 5.8 Set List Expressions */
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Difference>,
+                     BTypeHash>
+      m_Differences;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Union>, BTypeHash>
+      m_Unions;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Intersection>,
+                     BTypeHash>
+      m_Intersections;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::GeneralizedUnion>,
+                     BTypeHash>
+      m_GeneralizedUnions;
+
+  std::unordered_map<
+      std::shared_ptr<const BType>,
+      std::shared_ptr<BConstruct::Expression::GeneralizedIntersection>,
+      BTypeHash>
+      m_GeneralizedIntersections;
 
   /* 5.13 Expressions of Relations */
   std::unordered_map<
@@ -759,7 +799,37 @@ class Set : public UnaryBType {
   virtual ~Set() = default;
 };
 
-/* 5.8 Classes for Set List Expressions */
+/* 5.8 Classes for Set List Expressions (continued) */
+
+class Difference : public UnaryBType {
+ public:
+  explicit Difference(const BType &);
+  virtual ~Difference() = default;
+};
+
+class Union : public UnaryBType {
+ public:
+  explicit Union(const BType &);
+  virtual ~Union() = default;
+};
+
+class Intersection : public UnaryBType {
+ public:
+  explicit Intersection(const BType &);
+  virtual ~Intersection() = default;
+};
+
+class GeneralizedUnion : public UnaryBType {
+ public:
+  explicit GeneralizedUnion(const BType &);
+  virtual ~GeneralizedUnion() = default;
+};
+
+class GeneralizedIntersection : public UnaryBType {
+ public:
+  explicit GeneralizedIntersection(const BType &);
+  virtual ~GeneralizedIntersection() = default;
+};
 
 /* 5.10 Set of Relations  */
 
