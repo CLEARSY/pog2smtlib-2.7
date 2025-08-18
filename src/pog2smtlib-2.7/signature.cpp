@@ -465,8 +465,10 @@ void GetSignatureVisitor::visitUnaryExpression(
     case Expr::UnaryOp::Front:
     case Expr::UnaryOp::Reverse: {
       const auto &etype1 = e.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = rhsOfProductType(op, etype2);
       m_signature.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype1)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3)));
       break;
     }
     case Expr::UnaryOp::Closure:
@@ -481,10 +483,11 @@ void GetSignatureVisitor::visitUnaryExpression(
     case Expr::UnaryOp::Concatenation: {
       const auto &etype1 = e.getType();
       const auto &etype2 = elementOfPowerType(op, etype1);
-      const auto &etype3 = elementOfPowerType(op, etype2);
-      const auto &etype4 = rhsOfProductType(op, etype3);
+      const auto &etype3 = rhsOfProductType(op, etype2);
+      const auto &etype4 = elementOfPowerType(op, etype3);
+      const auto &etype5 = rhsOfProductType(op, etype4);
       m_signature.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype4)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype5)));
       break;
     }
     case Expr::UnaryOp::IMinimum:
@@ -671,9 +674,10 @@ void GetSignatureVisitor::visitBinaryExpression(
     /* Concatenation */
     case Expr::BinaryOp::Concatenation: {
       const auto &etype1 = lhs.getType();
-      const auto &etype2 = rhsOfProductType(op, etype1);
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = rhsOfProductType(op, etype2);
       sig.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3)));
       break;
     }
     /* Range_Restriction, Range_Subtraction, Image, Application */

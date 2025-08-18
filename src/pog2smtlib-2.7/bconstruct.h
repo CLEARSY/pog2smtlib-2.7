@@ -129,6 +129,17 @@ class Injective_Seq1;
 class Perm;
 class EmptySeq;
 
+/* 5.18 Expressions of Sequences */
+class Size;
+
+/* 5.19 Expressions of Sequences */
+class Concatenation;
+class Insert_In_Front;
+class Insert_At_Tail;
+class Restrict_In_Front;
+class Restrict_At_Tail;
+class General_Concatenation;
+
 };  // namespace Expression
 
 class Factory {
@@ -272,6 +283,17 @@ class Factory {
   std::shared_ptr<Abstract> Injective_Seq1(const BType &);
   std::shared_ptr<Abstract> Perm(const BType &);
   std::shared_ptr<Abstract> EmptySeq(const BType &);
+
+  /* 5.18 Expressions of Sequences */
+  std::shared_ptr<Abstract> Size(const BType &);
+
+  /* 5.19 Expressions of Sequences */
+  std::shared_ptr<Abstract> Concatenation(const BType &);
+  std::shared_ptr<Abstract> Insert_In_Front(const BType &);
+  std::shared_ptr<Abstract> Insert_At_Tail(const BType &);
+  std::shared_ptr<Abstract> Restrict_In_Front(const BType &);
+  std::shared_ptr<Abstract> Restrict_At_Tail(const BType &);
+  std::shared_ptr<Abstract> General_Concatenation(const BType &);
 
   class Exception : public std::exception {
    public:
@@ -627,6 +649,43 @@ class Factory {
                      std::shared_ptr<BConstruct::Expression::EmptySeq>,
                      BTypeHash>
       m_EmptySeqs;
+
+  /* 5.18 Expressions of Sequences */
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Size>,
+                     BTypeHash>
+      m_Sizes;
+
+  /* 5.19 Expressions of Sequences */
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Concatenation>,
+                     BTypeHash>
+      m_Concatenations;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Insert_In_Front>,
+                     BTypeHash>
+      m_Insert_In_Fronts;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Insert_At_Tail>,
+                     BTypeHash>
+      m_Insert_At_Tails;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Restrict_In_Front>,
+                     BTypeHash>
+      m_Restrict_In_Fronts;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Restrict_At_Tail>,
+                     BTypeHash>
+      m_Restrict_At_Tails;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::General_Concatenation>,
+                     BTypeHash>
+      m_General_Concatenations;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -1315,6 +1374,52 @@ class EmptySeq : public UnaryBType {
  public:
   explicit EmptySeq(const BType &);
   virtual ~EmptySeq() = default;
+};
+
+/* 5.18 Expressions of Sequences */
+
+class Size : public UnaryBType {
+ public:
+  explicit Size(const BType &);
+  virtual ~Size() = default;
+};
+
+/* 5.19 Expressions of Sequences */
+
+class Concatenation : public UnaryBType {
+ public:
+  explicit Concatenation(const BType &);
+  virtual ~Concatenation() = default;
+};
+
+class Insert_In_Front : public UnaryBType {
+ public:
+  explicit Insert_In_Front(const BType &);
+  virtual ~Insert_In_Front() = default;
+};
+
+class Insert_At_Tail : public UnaryBType {
+ public:
+  explicit Insert_At_Tail(const BType &);
+  virtual ~Insert_At_Tail() = default;
+};
+
+class Restrict_In_Front : public UnaryBType {
+ public:
+  explicit Restrict_In_Front(const BType &);
+  virtual ~Restrict_In_Front() = default;
+};
+
+class Restrict_At_Tail : public UnaryBType {
+ public:
+  explicit Restrict_At_Tail(const BType &);
+  virtual ~Restrict_At_Tail() = default;
+};
+
+class General_Concatenation : public UnaryBType {
+ public:
+  explicit General_Concatenation(const BType &);
+  virtual ~General_Concatenation() = default;
 };
 
 };  // namespace Expression
