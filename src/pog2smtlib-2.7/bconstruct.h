@@ -82,6 +82,9 @@ class Image;
 
 /* 5.15 Sets of Functions */
 class Total_Relation;
+class Injection;
+class Surjection;
+class Bijection;
 
 };  // namespace Expression
 
@@ -176,6 +179,9 @@ class Factory {
 
   /* 5.15 Sets of Functions */
   std::shared_ptr<Abstract> Total_Relation(const BType &, const BType &);
+  std::shared_ptr<Abstract> Injection(const BType &, const BType &);
+  std::shared_ptr<Abstract> Surjection(const BType &, const BType &);
+  std::shared_ptr<Abstract> Bijection(const BType &, const BType &);
 
   class Exception : public std::exception {
    public:
@@ -329,6 +335,21 @@ class Factory {
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
       std::shared_ptr<BConstruct::Expression::Total_Relation>, BinaryBTypeHash>
       m_Total_Relations;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Injection>, BinaryBTypeHash>
+      m_Injections;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Surjection>, BinaryBTypeHash>
+      m_Surjections;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Bijection>, BinaryBTypeHash>
+      m_Bijections;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -531,7 +552,6 @@ class NumberComparison : public Uniform {
 namespace Expression {
 
 /* 5.1 Classes for Primary expressions */
-
 class Data : public std::enable_shared_from_this<Data>, public Uniform {
  public:
   explicit Data(const struct ::Data &dt);
@@ -609,8 +629,7 @@ class ToReal : public Uniform {
   virtual ~ToReal() = default;
 };
 
-/* 5.4 Arithmetical Expressions (continued) */
-
+/* 5.3 Arithmetical Expressions */
 class Max : public Uniform {
  public:
   explicit Max();
@@ -631,8 +650,7 @@ class Maplet : public Uniform {
   virtual ~Maplet() = default;
 };
 
-/* 5.6 Building Sets */
-
+/* 5.6 Classes for Building Sets */
 class EmptySet : public UnaryBType {
  public:
   /** @param t type of the elements of the set (even empty set must be strictly
@@ -688,8 +706,7 @@ class Int : public Uniform {
   virtual ~Int() = default;
 };
 
-/* 5.7 Set List Expressions */
-
+/* 5.7 Classes for Set List Expressions */
 class PowerSet : public UnaryBType {
  public:
   explicit PowerSet(const BType &);
@@ -720,10 +737,7 @@ class Set : public UnaryBType {
   virtual ~Set() = default;
 };
 
-/* 5.8 Set List Expressions */
-
 /* 5.10 Set of Relations  */
-
 class Relation : public BinaryBType {
  public:
   explicit Relation(const BType &, const BType &);
@@ -731,7 +745,6 @@ class Relation : public BinaryBType {
 };
 
 /* 5.13 Expressions of Relations */
-
 class Domain : public BinaryBType {
  public:
   explicit Domain(const BType &, const BType &);
@@ -751,11 +764,28 @@ class Image : public BinaryBType {
 };
 
 /* 5.15 Sets of Functions */
-
 class Total_Relation : public BinaryBType {
  public:
   explicit Total_Relation(const BType &, const BType &);
   virtual ~Total_Relation() = default;
+};
+
+class Injection : public BinaryBType {
+ public:
+  explicit Injection(const BType &, const BType &);
+  virtual ~Injection() = default;
+};
+
+class Surjection : public BinaryBType {
+ public:
+  explicit Surjection(const BType &, const BType &);
+  virtual ~Surjection() = default;
+};
+
+class Bijection : public BinaryBType {
+ public:
+  explicit Bijection(const BType &, const BType &);
+  virtual ~Bijection() = default;
 };
 
 };  // namespace Expression
