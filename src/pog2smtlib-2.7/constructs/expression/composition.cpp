@@ -14,9 +14,9 @@ static constexpr std::string_view SCRIPT = R"(
   (forall ((r {1}) (s {2}) (p {4}))
     (= ({5} p ({0} r s))
        (exists ((y {6}))
-			   (and
-  			   ({7} (maplet (fst p) y) r)
-	  			 ({8} (maplet y (snd p)) s)))))
+         (and
+           ({7} (maplet (fst p) y) r)
+           ({8} (maplet y (snd p)) s)))))
   :named |ax.set.in.relcomp {9}|))
 )";
 

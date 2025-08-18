@@ -356,6 +356,20 @@ shared_ptr<Abstract> Factory::Direct_Product(const BType& fst, const BType& snd,
                                                      snd, thd);
 }
 
+/* 5.12 Expressions of Relations */
+
+shared_ptr<Abstract> Factory::Iteration(const BType& t) {
+  return get<BConstruct::Expression::Iteration>(m_Iterations, t);
+}
+
+shared_ptr<Abstract> Factory::Closure(const BType& t) {
+  return get<BConstruct::Expression::Closure>(m_Closures, t);
+}
+
+shared_ptr<Abstract> Factory::Closure1(const BType& t) {
+  return get<BConstruct::Expression::Closure1>(m_Closure1s, t);
+}
+
 /* 5.13 Expressions of Relations */
 
 shared_ptr<Abstract> Factory::Domain(const BType& lhs, const BType& rhs) {
