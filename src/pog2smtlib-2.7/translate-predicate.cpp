@@ -309,7 +309,7 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       m_translation.push_back(')');
       break;
     }
-    
+
     /* 5.7 Set List Expressions */
     case Expr::UnaryOp::Subsets:
     case Expr::UnaryOp::Non_Empty_Subsets: {
@@ -382,7 +382,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       break;
     }
 
-    /* 5.8 Set List Expressions */
+      /* 5.8 Set List Expressions */
 
     case Expr::BinaryOp::Cartesian_Product: {
       m_translation.push_back('(');
@@ -428,14 +428,31 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       m_translation.push_back(')');
       break;
     }
-    /* todo */
-    case Expr::BinaryOp::Partial_Functions:
-    case Expr::BinaryOp::Partial_Surjections:
-    case Expr::BinaryOp::Set_Difference:
+
+    /* 5.15 Sets of Functions */
     case Expr::BinaryOp::Total_Functions:
+    case Expr::BinaryOp::Partial_Functions: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op,
+                    ((type.toPowerType().content).toPowerType().content)
+                        .toProductType()
+                        .lhs,
+                    ((type.toPowerType().content).toPowerType().content)
+                        .toProductType()
+                        .rhs));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
+    /* todo */
+    case Expr::BinaryOp::Partial_Surjections:
     case Expr::BinaryOp::Total_Surjections:
     case Expr::BinaryOp::Head_Insertion:
-    case Expr::BinaryOp::Intersection:
     case Expr::BinaryOp::Head_Restriction:
     case Expr::BinaryOp::Surcharge:
     case Expr::BinaryOp::Composition:
@@ -449,6 +466,8 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Direct_Product:
     case Expr::BinaryOp::Parallel_Product:
     case Expr::BinaryOp::Union:
+    case Expr::BinaryOp::Intersection:
+    case Expr::BinaryOp::Set_Difference:
     case Expr::BinaryOp::Tail_Restriction:
     case Expr::BinaryOp::Concatenation:
     case Expr::BinaryOp::Modulo:
@@ -582,7 +601,7 @@ void SmtTranslatorVisitor::visitQuantifiedSet(
       types.push_back(current.toProductType().rhs);
       current = current.toProductType().lhs;
     } else {
-      types.push_back(current); // le dernier (tout à gauche)
+      types.push_back(current);  // le dernier (tout à gauche)
     }
   }
 
@@ -595,7 +614,7 @@ void SmtTranslatorVisitor::visitQuantifiedSet(
     m_translation.push_back(')');
   }
 
-  m_translation.push_back(')'); 
+  m_translation.push_back(')');
   m_translation.push_back(' ');
 
   cond.accept(*this);

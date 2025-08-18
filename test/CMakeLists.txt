@@ -50,7 +50,7 @@ add_cl_test("arithmetical_expression_10")
 add_cl_test("arithmetical_expression_11")
 add_cl_test("arithmetical_expression_12")
 
-# 5.4 Arithmetical Expressions (Continued)
+# 5.4 Arithmetical Expressions (continued)
 add_cl_test("max_1")
 add_cl_test("max_2")
 add_cl_test("min_1")
@@ -105,3 +105,9 @@ add_cl_test("range_2")
 add_cl_test("image_1")
 add_cl_test("image_2")
 
+# 5.15 Sets of Functions
+
+add_cl_test("functions_partial_1")
+add_cl_test("functions_partial_2")
+add_cl_test("functions_total_1")
+add_cl_test("functions_total_2")
