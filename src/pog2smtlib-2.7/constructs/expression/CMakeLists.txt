@@ -100,6 +100,11 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
 
   # 5.18 Expressions of Sequences 
   ${CMAKE_CURRENT_SOURCE_DIR}/size.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/first.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/last.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/front.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/tail.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/rev.cpp
 
   # 5.19 Expressions of Sequences 
   ${CMAKE_CURRENT_SOURCE_DIR}/concatenation.cpp

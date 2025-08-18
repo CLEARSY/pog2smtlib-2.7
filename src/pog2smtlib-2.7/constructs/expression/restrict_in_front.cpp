@@ -24,7 +24,7 @@ Restrict_In_Front::Restrict_In_Front(const BType &T) : UnaryBType(T) {
   m_script =
       fmt::format(SCRIPT,
                   /*0*/ smtSymbol(Expr::BinaryOp::Head_Restriction, T),
-                  /*1*/ symbol(T),
+                  /*1*/ symbol(BType::INT),
                   /*2*/ symbol(PZxT),
                   /*3*/ symbol(ZxT),
                   /*4*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),

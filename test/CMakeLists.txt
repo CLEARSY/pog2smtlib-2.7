@@ -190,6 +190,16 @@ add_cl_test("iseq1_2")
 
 add_cl_test("size_1")
 add_cl_test("size_2")
+add_cl_test("first_1")
+add_cl_test("first_2")
+add_cl_test("last_1")
+add_cl_test("last_2")
+add_cl_test("front_1")
+add_cl_test("front_2")
+add_cl_test("tail_1")
+add_cl_test("tail_2")
+add_cl_test("rev_1")
+add_cl_test("rev_2")
 
 # 5.19 Expressions of Sequences 
 
