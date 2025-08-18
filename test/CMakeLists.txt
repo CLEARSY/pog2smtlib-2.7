@@ -115,6 +115,21 @@ add_cl_test("set_inter_2")
 add_cl_test("relations_1")
 add_cl_test("relations_2")
 
+# 5.11 Expressions of Relations
+
+add_cl_test("identity_1")
+add_cl_test("identity_2")
+add_cl_test("reverse_1")
+add_cl_test("reverse_2")
+add_cl_test("prj1_1")
+add_cl_test("prj1_2")
+add_cl_test("prj2_1")
+add_cl_test("prj2_2")
+add_cl_test("composition_1")
+add_cl_test("composition_2")
+add_cl_test("direct_product_1")
+add_cl_test("direct_product_2")
+
 # 5.13 Expressions of Relations
 
 add_cl_test("domain_1")

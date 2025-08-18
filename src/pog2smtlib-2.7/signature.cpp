@@ -421,7 +421,6 @@ void GetSignatureVisitor::visitUnaryExpression(
     case Expr::UnaryOp::Domain:
     case Expr::UnaryOp::Range:
     case Expr::UnaryOp::Inverse:
-    case Expr::UnaryOp::Identity:
     case Expr::UnaryOp::Fnc: {
       const auto &etype1 = e.getType();
       const auto &etype2 = elementOfPowerType(op, etype1);
@@ -430,6 +429,13 @@ void GetSignatureVisitor::visitUnaryExpression(
       m_signature.m_operators.emplace(
           MonomorphizedOperator(op, std::make_shared<BType>(etype3),
                                 std::make_shared<BType>(etype4)));
+      break;
+    }
+    case Expr::UnaryOp::Identity: {
+      const auto &etype1 = e.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      m_signature.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
       break;
     }
     case Expr::UnaryOp::Rel: {
@@ -461,10 +467,8 @@ void GetSignatureVisitor::visitUnaryExpression(
     case Expr::UnaryOp::Closure:
     case Expr::UnaryOp::Transitive_Closure: {
       const auto &etype1 = e.getType();
-      const auto &etype2 = elementOfPowerType(op, etype1);
-      const auto &etype3 = rhsOfProductType(op, etype2);
       m_signature.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype3)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype1)));
       break;
     }
     case Expr::UnaryOp::Concatenation: {
@@ -610,16 +614,19 @@ void GetSignatureVisitor::visitBinaryExpression(
     }
     /*
     Composition,
-              */
-    case Expr::BinaryOp::Composition: {
+    Direct_Product */
+    case Expr::BinaryOp::Composition:
+    case Expr::BinaryOp::Direct_Product: {
       const auto &etype1 = lhs.getType();
-      const auto &etype2 = lhsOfProductType(op, etype1);
-      const auto &etype3 = rhsOfProductType(op, etype1);
-      const auto &etype4 = rhs.getType();
-      const auto &etype5 = rhsOfProductType(op, etype4);
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = lhsOfProductType(op, etype2);
+      const auto &etype4 = rhsOfProductType(op, etype2);
+      const auto &etype5 = rhs.getType();
+      const auto &etype6 = elementOfPowerType(op, etype5);
+      const auto &etype7 = rhsOfProductType(op, etype6);      
       sig.m_operators.emplace(MonomorphizedOperator(
-          op, std::make_shared<BType>(etype2), std::make_shared<BType>(etype3),
-          std::make_shared<BType>(etype5)));
+          op, std::make_shared<BType>(etype3), std::make_shared<BType>(etype4),
+          std::make_shared<BType>(etype7)));
       break;
     }
     /*     Surcharge, ,
@@ -641,17 +648,6 @@ void GetSignatureVisitor::visitBinaryExpression(
       sig.m_operators.emplace(
           MonomorphizedOperator(op, std::make_shared<BType>(etype2),
                                 std::make_shared<BType>(etype3)));
-      break;
-    }
-    /* Direct_Product */
-    case Expr::BinaryOp::Direct_Product: {
-      const auto &etype1 = lhs.getType();
-      const auto &etype2 = rhs.getType();
-      const auto &[etype3, etype4] = argsOfProductType(op, etype1);
-      const auto &etype5 = rhsOfProductType(op, etype2);
-      sig.m_operators.emplace(MonomorphizedOperator(
-          op, std::make_shared<BType>(etype3), std::make_shared<BType>(etype4),
-          std::make_shared<BType>(etype5)));
       break;
     }
     /* Parallel_Product */
@@ -700,9 +696,11 @@ void GetSignatureVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Second_Projection: {
       const auto &etype1 = lhs.getType();
       const auto &etype2 = rhs.getType();
+      const auto &etype3 = elementOfPowerType(op, etype1);
+      const auto &etype4 = elementOfPowerType(op, etype2);
       sig.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype1),
-                                std::make_shared<BType>(etype2)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3),
+                                std::make_shared<BType>(etype4)));
       break;
     }
     /* Const, Rank, Father, Subtree, Arity */
