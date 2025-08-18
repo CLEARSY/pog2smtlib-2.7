@@ -1,0 +1,9 @@
+MACHINE
+    surjection_1
+CONSTANTS
+    r1
+PROPERTIES
+    r1 <: BOOL * BOOL
+ASSERTIONS
+    r1 : BOOL +->> BOOL
+END

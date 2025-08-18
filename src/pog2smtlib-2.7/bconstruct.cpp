@@ -278,6 +278,17 @@ shared_ptr<Abstract> Factory::Image(const BType& lhs, const BType& rhs) {
 }
 
 /* 5.15 Sets of Functions */
+shared_ptr<Abstract> Factory::Injection(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Injection>(m_Injections, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Surjection(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Surjection>(m_Surjections, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Bijection(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Bijection>(m_Bijections, lhs, rhs);
+}
 
 size_t Factory::size() { return m_index.size(); }
 
