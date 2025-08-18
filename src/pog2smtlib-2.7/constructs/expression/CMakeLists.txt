@@ -66,6 +66,11 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/functions.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/functionspartial.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/functionstotal.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/partialinjections.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/partialsurjections.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/totalbijections.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/totalinjections.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/totalsurjections.cpp
   
   PARENT_SCOPE
 )

@@ -83,6 +83,8 @@ class GeneralizedIntersection;
 
 /* 5.10 Set of Relations */
 class Relation;
+class Total_Relation;
+
 
 /* 5.13 Expressions of Relations */
 class Domain;
@@ -90,13 +92,17 @@ class Range;
 class Image;
 
 /* 5.15 Sets of Functions */
-class Total_Relation;
 class Injection;
 class Surjection;
 class Bijection;
 class Function;
 class Partial_Function;
 class Total_Function;
+class Partial_Injection;
+class Total_Injection;
+class Partial_Surjection;
+class Total_Surjection;
+class Total_Bijection;
 
 };  // namespace Expression
 
@@ -179,8 +185,7 @@ class Factory {
   std::shared_ptr<Abstract> Interval();
   std::shared_ptr<Abstract> ExpressionCartesianProduct(const BType &,
                                                        const BType &);
-  std::shared_ptr<Abstract> Set(const BType &);
-
+  std::shared_ptr<Abstract> Set(const BType &);                                                    
   std::shared_ptr<Abstract> Fin(const BType &);
   std::shared_ptr<Abstract> Fin1(const BType &);
 
@@ -193,6 +198,8 @@ class Factory {
 
   /* 5.10 Set of Relations */
   std::shared_ptr<Abstract> Relation(const BType &, const BType &);
+  std::shared_ptr<Abstract> Total_Relation(const BType &, const BType &);
+
 
   /* 5.13 Expressions of Relations */
   std::shared_ptr<Abstract> Domain(const BType &, const BType &);
@@ -200,14 +207,18 @@ class Factory {
   std::shared_ptr<Abstract> Image(const BType &, const BType &);
 
   /* 5.15 Sets of Functions */
-  std::shared_ptr<Abstract> Total_Relation(const BType &, const BType &);
   std::shared_ptr<Abstract> Injection(const BType &, const BType &);
   std::shared_ptr<Abstract> Surjection(const BType &, const BType &);
   std::shared_ptr<Abstract> Bijection(const BType &, const BType &);
   std::shared_ptr<Abstract> Function(const BType &, const BType &);
   std::shared_ptr<Abstract> Total_Function(const BType &, const BType &);
   std::shared_ptr<Abstract> Partial_Function(const BType &, const BType &);
-
+  std::shared_ptr<Abstract> Partial_Injection(const BType &, const BType &);
+  std::shared_ptr<Abstract> Total_Injection(const BType &, const BType &);
+  std::shared_ptr<Abstract> Partial_Surjection(const BType &, const BType &);
+  std::shared_ptr<Abstract> Total_Surjection(const BType &, const BType &);
+  std::shared_ptr<Abstract> Total_Bijection(const BType &, const BType &);
+    
   class Exception : public std::exception {
    public:
     Exception(const std::string &msg) : msg{msg} {}
@@ -380,6 +391,11 @@ class Factory {
       std::shared_ptr<BConstruct::Expression::Relation>, BinaryBTypeHash>
       m_Relations;
 
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Total_Relation>,
+                     BinaryBTypeHash>
+      m_Total_Relations;
+
   /* 5.13 Expressions of Relations */
   std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
                      std::shared_ptr<BConstruct::Expression::Domain>,
@@ -427,6 +443,31 @@ class Factory {
       std::shared_ptr<BConstruct::Expression::Partial_Function>,
       BinaryBTypeHash>
       m_Partial_Functions;
+
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Partial_Injection>,
+                     BinaryBTypeHash>
+      m_Partial_Injections;
+
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Total_Injection>,
+                     BinaryBTypeHash>
+      m_Total_Injections;
+
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Partial_Surjection>,
+                     BinaryBTypeHash>
+      m_Partial_Surjections;
+
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Total_Surjection>,
+                     BinaryBTypeHash>
+      m_Total_Surjections;
+
+  std::unordered_map<std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+                     std::shared_ptr<BConstruct::Expression::Total_Bijection>,
+                     BinaryBTypeHash>
+      m_Total_Bijections;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -629,6 +670,7 @@ class NumberComparison : public Uniform {
 namespace Expression {
 
 /* 5.1 Classes for Primary expressions */
+
 class Data : public std::enable_shared_from_this<Data>, public Uniform {
  public:
   explicit Data(const struct ::Data &dt);
@@ -740,6 +782,7 @@ class Maplet : public Uniform {
 };
 
 /* 5.6 Classes for Building Sets */
+
 class EmptySet : public UnaryBType {
  public:
   /** @param t type of the elements of the set (even empty set must be strictly
@@ -796,6 +839,7 @@ class Int : public Uniform {
 };
 
 /* 5.7 Classes for Set List Expressions */
+
 class PowerSet : public UnaryBType {
  public:
   explicit PowerSet(const BType &);
@@ -878,7 +922,14 @@ class Relation : public BinaryBType {
   virtual ~Relation() = default;
 };
 
+class Total_Relation : public BinaryBType {
+ public:
+  explicit Total_Relation(const BType &, const BType &);
+  virtual ~Total_Relation() = default;
+};
+
 /* 5.13 Expressions of Relations */
+
 class Domain : public BinaryBType {
  public:
   explicit Domain(const BType &, const BType &);
@@ -897,13 +948,8 @@ class Image : public BinaryBType {
   virtual ~Image() = default;
 };
 
-/* 5.15 Sets of Functions */
 
-class Total_Relation : public BinaryBType {
- public:
-  explicit Total_Relation(const BType &, const BType &);
-  virtual ~Total_Relation() = default;
-};
+/* 5.15 Sets of Functions */
 
 class Injection : public BinaryBType {
  public:
@@ -939,6 +985,36 @@ class Total_Function : public BinaryBType {
  public:
   explicit Total_Function(const BType &, const BType &);
   virtual ~Total_Function() = default;
+};
+
+class Partial_Injection : public BinaryBType {
+ public:
+  explicit Partial_Injection(const BType &, const BType &);
+  virtual ~Partial_Injection() = default;
+};
+
+class Total_Injection : public BinaryBType {
+ public:
+  explicit Total_Injection(const BType &, const BType &);
+  virtual ~Total_Injection() = default;
+};
+
+class Partial_Surjection : public BinaryBType {
+ public:
+  explicit Partial_Surjection(const BType &, const BType &);
+  virtual ~Partial_Surjection() = default;
+};
+
+class Total_Surjection : public BinaryBType {
+ public:
+  explicit Total_Surjection(const BType &, const BType &);
+  virtual ~Total_Surjection() = default;
+};
+
+class Total_Bijection : public BinaryBType {
+ public:
+  explicit Total_Bijection(const BType &, const BType &);
+  virtual ~Total_Bijection() = default;
 };
 
 };  // namespace Expression

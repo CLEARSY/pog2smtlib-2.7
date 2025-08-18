@@ -363,6 +363,26 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Total_Function(
                 *types.at(0), *types.at(1));
             break;
+          case Expr::BinaryOp::Partial_Injections:
+            construct = BConstruct::Factory::factory().Partial_Injection(
+                *types.at(0), *types.at(1));
+            break;
+          case Expr::BinaryOp::Total_Injections:
+            construct = BConstruct::Factory::factory().Total_Injection(
+                *types.at(0), *types.at(1));
+            break;
+          case Expr::BinaryOp::Partial_Surjections:
+            construct = BConstruct::Factory::factory().Partial_Surjection(
+                *types.at(0), *types.at(1));
+            break;
+          case Expr::BinaryOp::Total_Surjections:
+            construct = BConstruct::Factory::factory().Total_Surjection(
+                *types.at(0), *types.at(1));
+            break;
+          case Expr::BinaryOp::Total_Bijections:
+            construct = BConstruct::Factory::factory().Total_Bijection(
+                *types.at(0), *types.at(1));
+            break;
           default:
             throw std::runtime_error(
                 fmt::format("{}:{} Unknown binary operator {}", FILE_NAME,

@@ -165,6 +165,11 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     /* 5.15 Sets of Functions */
     {Expr::BinaryOp::Partial_Functions, "functions.partial"},
     {Expr::BinaryOp::Total_Functions, "functions.total"},
+    {Expr::BinaryOp::Partial_Injections, "injections.partial"},
+    {Expr::BinaryOp::Total_Injections, "injections.total"},
+    {Expr::BinaryOp::Partial_Surjections, "surjections.partial"},
+    {Expr::BinaryOp::Total_Surjections, "surjections.total"},
+    {Expr::BinaryOp::Total_Bijections, "bijections.total"}
 };
 
 std::string smtSymbol(Expr::BinaryOp op) {
