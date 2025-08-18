@@ -33,9 +33,9 @@
   (forall ((r |POW (Z x POW Z)|) (s |POW (POW Z x Z)|) (p |(Z x Z)|))
     (= (|set.in (Z x Z)| p (|relcomp Z POW Z Z| r s))
        (exists ((y |POW Z|))
-			   (and
-  			   (|set.in (Z x POW Z)| (maplet (fst p) y) r)
-	  			 (|set.in (POW Z x Z)| (maplet y (snd p)) s)))))
+         (and
+           (|set.in (Z x POW Z)| (maplet (fst p) y) r)
+           (|set.in (POW Z x Z)| (maplet y (snd p)) s)))))
   :named |ax.set.in.relcomp ((Z x POW Z) x Z)|))
 
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))

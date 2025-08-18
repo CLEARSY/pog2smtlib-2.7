@@ -8,15 +8,13 @@
 
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 
-(declare-fun |relcomp Z Z Z| (|POW (Z x Z)| |POW (Z x Z)|) |POW (Z x Z)|)
+(declare-fun |closure Z| (|POW (Z x Z)|) |POW (Z x Z)|)
 (assert (!
-  (forall ((r |POW (Z x Z)|) (s |POW (Z x Z)|) (p |(Z x Z)|))
-    (= (|set.in (Z x Z)| p (|relcomp Z Z Z| r s))
-       (exists ((y |Z|))
-         (and
-           (|set.in (Z x Z)| (maplet (fst p) y) r)
-           (|set.in (Z x Z)| (maplet y (snd p)) s)))))
-  :named |ax.set.in.relcomp ((Z x Z) x Z)|))
+  (forall ((R |POW (Z x Z)|)(p |(Z x Z)|))
+    (= (|set.in (Z x Z)| p (|closure Z| R))
+       (or (= (fst p) (snd p))
+           (|set.in (Z x Z)| p (|closure Z| R)))))
+  :named |ax.closure Z|))
 
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
@@ -27,7 +25,7 @@
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
-  (not (|set.in (Z x Z)| (maplet 1 10) (|relcomp Z Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 5 4))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 3 10))))))))
+  (not (= (|closure Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 2 1))(= x (maplet 2 2))(= x (maplet 3 3)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 2 1))(= x (maplet 2 2))(= x (maplet 2 3))(= x (maplet 3 3)))))))
   :named |Goal|)
 )
 (check-sat)

@@ -463,12 +463,19 @@ void GetSignatureVisitor::visitUnaryExpression(
     case Expr::UnaryOp::Last:
     case Expr::UnaryOp::Tail:
     case Expr::UnaryOp::Front:
-    case Expr::UnaryOp::Reverse:
-    case Expr::UnaryOp::Closure:
-    case Expr::UnaryOp::Transitive_Closure: {
+    case Expr::UnaryOp::Reverse: {
       const auto &etype1 = e.getType();
       m_signature.m_operators.emplace(
           MonomorphizedOperator(op, std::make_shared<BType>(etype1)));
+      break;
+    }
+    case Expr::UnaryOp::Closure:
+    case Expr::UnaryOp::Transitive_Closure: {
+      const auto &etype1 = e.getType();
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = lhsOfProductType(op, etype2);
+      m_signature.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3)));
       break;
     }
     case Expr::UnaryOp::Concatenation: {
@@ -686,9 +693,10 @@ void GetSignatureVisitor::visitBinaryExpression(
     /* Iteration */
     case Expr::BinaryOp::Iteration: {
       const auto &etype1 = lhs.getType();
-      const auto &etype2 = lhsOfProductType(op, etype1);
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = lhsOfProductType(op, etype2);
       sig.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3)));
       break;
     }
     /* First_Projection, Second_Projection */
