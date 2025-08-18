@@ -185,3 +185,23 @@ add_cl_test("iseq_1")
 add_cl_test("iseq_2")
 add_cl_test("iseq1_1")
 add_cl_test("iseq1_2")
+
+# 5.18 Expressions of Sequences 
+
+add_cl_test("size_1")
+add_cl_test("size_2")
+
+# 5.19 Expressions of Sequences 
+
+add_cl_test("concatenation_1")
+add_cl_test("concatenation_2")
+add_cl_test("insert_in_front_1")
+add_cl_test("insert_in_front_2")
+add_cl_test("insert_at_tail_1")
+add_cl_test("insert_at_tail_2")
+add_cl_test("restrict_in_front_1")
+add_cl_test("restrict_in_front_2")
+add_cl_test("restrict_at_tail_1")
+add_cl_test("restrict_at_tail_2")
+add_cl_test("general_concatenation_1")
+add_cl_test("general_concatenation_2")

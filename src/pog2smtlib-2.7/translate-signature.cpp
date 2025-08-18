@@ -320,6 +320,16 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::UnaryOp::Permutations:
             construct = BConstruct::Factory::factory().Perm(*types.at(0));
             break;
+
+          /* 5.18 Expressions of Sequences */
+          case Expr::UnaryOp::Size:
+            construct = BConstruct::Factory::factory().Size(*types.at(0));
+            break;
+
+          /* 5.19 Expressions of Sequences */
+          case Expr::UnaryOp::Concatenation:
+            construct = BConstruct::Factory::factory().General_Concatenation(*types.at(0));
+            break;
           default:
             throw std::runtime_error(fmt::format(
                 "{}:{} Unknown unary operator {}", FILE_NAME, LINE_NUMBER, op));
@@ -457,6 +467,24 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::BinaryOp::Application:
             construct = BConstruct::Factory::factory().Evaluation(
                 *types.at(0), *types.at(1));
+            break;
+
+          /* 5.19 Expressions of Sequences */
+          case Expr::BinaryOp::Concatenation:
+            construct = BConstruct::Factory::factory().Concatenation(*types.at(0));
+            break;
+          case Expr::BinaryOp::Head_Insertion:
+            construct = BConstruct::Factory::factory().Insert_In_Front(*types.at(0));
+            break;
+          case Expr::BinaryOp::Tail_Insertion:
+            construct =
+                BConstruct::Factory::factory().Insert_At_Tail(*types.at(0));
+            break;
+          case Expr::BinaryOp::Head_Restriction:
+            construct = BConstruct::Factory::factory().Restrict_In_Front(*types.at(0));
+            break;
+          case Expr::BinaryOp::Tail_Restriction:
+            construct = BConstruct::Factory::factory().Restrict_At_Tail(*types.at(0));
             break;
           default:
             throw std::runtime_error(
