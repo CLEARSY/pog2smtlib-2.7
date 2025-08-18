@@ -290,6 +290,18 @@ shared_ptr<Abstract> Factory::Bijection(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Bijection>(m_Bijections, lhs, rhs);
 }
 
+shared_ptr<Abstract> Factory::Function(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Function>(m_Functions, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Partial_Function(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Partial_Function>(m_Partial_Functions, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Total_Function(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Total_Function>(m_Total_Functions, lhs, rhs);
+}
+
 size_t Factory::size() { return m_index.size(); }
 
 shared_ptr<Abstract> Factory::at(size_t index) { return m_index.at(index); }

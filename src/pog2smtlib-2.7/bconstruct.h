@@ -85,6 +85,9 @@ class Total_Relation;
 class Injection;
 class Surjection;
 class Bijection;
+class Function;
+class Partial_Function;
+class Total_Function;
 
 };  // namespace Expression
 
@@ -144,7 +147,6 @@ class Factory {
   /* 5.4 Arithmetical Expressions (continued) */
   std::shared_ptr<Abstract> Max();
   std::shared_ptr<Abstract> Min();
-
   /* 5.5 Expression of Couples */
   std::shared_ptr<Abstract> Maplet();
 
@@ -182,6 +184,9 @@ class Factory {
   std::shared_ptr<Abstract> Injection(const BType &, const BType &);
   std::shared_ptr<Abstract> Surjection(const BType &, const BType &);
   std::shared_ptr<Abstract> Bijection(const BType &, const BType &);
+  std::shared_ptr<Abstract> Function(const BType &, const BType &);
+  std::shared_ptr<Abstract> Total_Function(const BType &, const BType &);
+  std::shared_ptr<Abstract> Partial_Function(const BType &, const BType &);
 
   class Exception : public std::exception {
    public:
@@ -350,6 +355,22 @@ class Factory {
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
       std::shared_ptr<BConstruct::Expression::Bijection>, BinaryBTypeHash>
       m_Bijections;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Function>, BinaryBTypeHash>
+      m_Functions;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Total_Function>, BinaryBTypeHash>
+      m_Total_Functions;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Partial_Function>,
+      BinaryBTypeHash>
+      m_Partial_Functions;
 
   void index(std::shared_ptr<Abstract>);
 
@@ -552,6 +573,7 @@ class NumberComparison : public Uniform {
 namespace Expression {
 
 /* 5.1 Classes for Primary expressions */
+
 class Data : public std::enable_shared_from_this<Data>, public Uniform {
  public:
   explicit Data(const struct ::Data &dt);
@@ -642,8 +664,6 @@ class Min : public Uniform {
   virtual ~Min() = default;
 };
 
-/* 5.5 Expression of Couples */
-
 class Maplet : public Uniform {
  public:
   explicit Maplet();
@@ -651,6 +671,7 @@ class Maplet : public Uniform {
 };
 
 /* 5.6 Classes for Building Sets */
+
 class EmptySet : public UnaryBType {
  public:
   /** @param t type of the elements of the set (even empty set must be strictly
@@ -707,6 +728,7 @@ class Int : public Uniform {
 };
 
 /* 5.7 Classes for Set List Expressions */
+
 class PowerSet : public UnaryBType {
  public:
   explicit PowerSet(const BType &);
@@ -737,7 +759,10 @@ class Set : public UnaryBType {
   virtual ~Set() = default;
 };
 
+/* 5.8 Classes for Set List Expressions */
+
 /* 5.10 Set of Relations  */
+
 class Relation : public BinaryBType {
  public:
   explicit Relation(const BType &, const BType &);
@@ -745,6 +770,7 @@ class Relation : public BinaryBType {
 };
 
 /* 5.13 Expressions of Relations */
+
 class Domain : public BinaryBType {
  public:
   explicit Domain(const BType &, const BType &);
@@ -764,6 +790,7 @@ class Image : public BinaryBType {
 };
 
 /* 5.15 Sets of Functions */
+
 class Total_Relation : public BinaryBType {
  public:
   explicit Total_Relation(const BType &, const BType &);
@@ -786,6 +813,24 @@ class Bijection : public BinaryBType {
  public:
   explicit Bijection(const BType &, const BType &);
   virtual ~Bijection() = default;
+};
+
+class Function : public BinaryBType {
+ public:
+  explicit Function(const BType &, const BType &);
+  virtual ~Function() = default;
+};
+
+class Partial_Function : public BinaryBType {
+ public:
+  explicit Partial_Function(const BType &, const BType &);
+  virtual ~Partial_Function() = default;
+};
+
+class Total_Function : public BinaryBType {
+ public:
+  explicit Total_Function(const BType &, const BType &);
+  virtual ~Total_Function() = default;
 };
 
 };  // namespace Expression
