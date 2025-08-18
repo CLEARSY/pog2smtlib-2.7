@@ -495,6 +495,26 @@ shared_ptr<Abstract> Factory::Size(const BType& t) {
   return get<BConstruct::Expression::Size>(m_Sizes, t);
 }
 
+shared_ptr<Abstract> Factory::First(const BType& t) {
+  return get<BConstruct::Expression::First>(m_Firsts, t);
+}
+
+shared_ptr<Abstract> Factory::Last(const BType& t) {
+  return get<BConstruct::Expression::Last>(m_Lasts, t);
+}
+
+shared_ptr<Abstract> Factory::Front(const BType& t) {
+  return get<BConstruct::Expression::Front>(m_Fronts, t);
+}
+
+shared_ptr<Abstract> Factory::Tail(const BType& t) {
+  return get<BConstruct::Expression::Tail>(m_Tails, t);
+}
+
+shared_ptr<Abstract> Factory::Rev(const BType& t) {
+  return get<BConstruct::Expression::Rev>(m_Revs, t);
+}
+
 /* 5.19 Expressions of Sequences */
 
 shared_ptr<Abstract> Factory::Concatenation(const BType& t) {

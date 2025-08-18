@@ -123,7 +123,12 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
 
     /* 5.18 Expressions of Sequences */
     {Expr::UnaryOp::Size, "size"},
-
+    {Expr::UnaryOp::First, "first"},
+    {Expr::UnaryOp::Last, "last"},
+    {Expr::UnaryOp::Front, "front"},
+    {Expr::UnaryOp::Tail, "tail"},
+    {Expr::UnaryOp::Reverse, "rev"},
+    
     /* 5.19 Expressions of Sequences */
     {Expr::UnaryOp::Concatenation, "conc"}
   };

@@ -438,7 +438,12 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     }
 
     /* 5.18 Expressions of Sequences */
-    case Expr::UnaryOp::Size: {
+    case Expr::UnaryOp::Size:
+    case Expr::UnaryOp::First:
+    case Expr::UnaryOp::Last:
+    case Expr::UnaryOp::Front:
+    case Expr::UnaryOp::Tail:
+    case Expr::UnaryOp::Reverse: {
       m_translation.push_back('(');
       m_translation.append(smtSymbol(op, elementType(e.getType()).toProductType().rhs));
       m_translation.push_back(' ');
