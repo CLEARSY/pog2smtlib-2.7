@@ -14,7 +14,7 @@ static constexpr std::string_view SCRIPT = R"(
   (forall ((e1 {1}) (e2 {2}))
     (forall ((f {4}))
       (= ({5} f ({0} e1 e2))
-         (and ({5} f (|functions.partial {6} {7}| e1 e2))
+         (and ({5} f ({9} e1 e2))
               ({5} f (|relations.total {6} {7}| e1 e2))))))
   :named |ax:def.tfun {8}|))
 )";
@@ -35,7 +35,8 @@ Total_Function::Total_Function(const BType &U, const BType &V)
                          /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
                          /*6*/ symbolInner(U),
                          /*7*/ symbolInner(V),
-                         /*8*/ symbolInner(UxV));
+                         /*8*/ symbolInner(UxV),
+                         /*9*/ smtSymbol(Expr::BinaryOp::Partial_Functions, U, V));
   m_label = "-->";
   m_prerequisites.insert(
       {std::make_shared<BConstruct::Expression::Total_Relation>(U, V),

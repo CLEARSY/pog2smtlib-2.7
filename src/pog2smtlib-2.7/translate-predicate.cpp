@@ -463,7 +463,12 @@ void SmtTranslatorVisitor::visitBinaryExpression(
 
     /* 5.15 Sets of Functions */
     case Expr::BinaryOp::Total_Functions:
-    case Expr::BinaryOp::Partial_Functions: {
+    case Expr::BinaryOp::Partial_Functions:
+    case Expr::BinaryOp::Partial_Injections:
+    case Expr::BinaryOp::Total_Injections:
+    case Expr::BinaryOp::Partial_Surjections:
+    case Expr::BinaryOp::Total_Surjections:
+    case Expr::BinaryOp::Total_Bijections: {
       m_translation.push_back('(');
       m_translation.append(
           smtSymbol(op,
@@ -482,8 +487,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     }
 
     /* todo */
-    case Expr::BinaryOp::Partial_Surjections:
-    case Expr::BinaryOp::Total_Surjections:
     case Expr::BinaryOp::Head_Insertion:
     case Expr::BinaryOp::Head_Restriction:
     case Expr::BinaryOp::Surcharge:
@@ -491,10 +494,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Tail_Insertion:
     case Expr::BinaryOp::Domain_Subtraction:
     case Expr::BinaryOp::Domain_Restriction:
-    case Expr::BinaryOp::Partial_Injections:
-    case Expr::BinaryOp::Total_Injections:
     case Expr::BinaryOp::Partial_Bijections:
-    case Expr::BinaryOp::Total_Bijections:
     case Expr::BinaryOp::Direct_Product:
     case Expr::BinaryOp::Parallel_Product:
     case Expr::BinaryOp::Tail_Restriction:

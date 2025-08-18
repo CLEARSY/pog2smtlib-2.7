@@ -338,6 +338,26 @@ shared_ptr<Abstract> Factory::Total_Function(const BType& lhs, const BType& rhs)
   return get<BConstruct::Expression::Total_Function>(m_Total_Functions, lhs, rhs);
 }
 
+shared_ptr<Abstract> Factory::Partial_Injection(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Partial_Injection>(m_Partial_Injections, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Total_Injection(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Total_Injection>(m_Total_Injections, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Partial_Surjection(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Partial_Surjection>(m_Partial_Surjections, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Total_Surjection(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Total_Surjection>(m_Total_Surjections, lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Total_Bijection(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Total_Bijection>(m_Total_Bijections, lhs, rhs);
+}
+
 size_t Factory::size() { return m_index.size(); }
 
 shared_ptr<Abstract> Factory::at(size_t index) { return m_index.at(index); }
