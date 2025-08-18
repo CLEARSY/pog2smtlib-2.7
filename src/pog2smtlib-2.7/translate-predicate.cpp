@@ -371,6 +371,19 @@ void SmtTranslatorVisitor::visitUnaryExpression(
       break;
     }
 
+    /* 5.12 Expressions of Relations */
+    case Expr::UnaryOp::Closure:
+    case Expr::UnaryOp::Transitive_Closure: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op,
+                    elementType(e.getType()).toProductType().lhs));
+      m_translation.push_back(' ');
+      e.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     /* 5.13 Expressions of Relations */
     case Expr::UnaryOp::Domain:
     case Expr::UnaryOp::Range: {
@@ -547,6 +560,20 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       break;
     }
 
+    /* 5.12 Expressions of Relations */
+    case Expr::BinaryOp::Iteration: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op,
+                    (type.toPowerType().content).toProductType().lhs));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     /* 5.13 Expressions of Relations */
     case Expr::BinaryOp::Image: {
       m_translation.push_back('(');
@@ -620,7 +647,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::FSubtraction:
     case Expr::BinaryOp::FMultiplication:
     case Expr::BinaryOp::FDivision:
-    case Expr::BinaryOp::Iteration:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));
       return;

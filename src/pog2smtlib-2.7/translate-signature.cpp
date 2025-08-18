@@ -276,6 +276,14 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                                                              *types.at(1));
             break;
 
+          /* 5.12 Expressions of Relations */
+          case Expr::UnaryOp::Closure:
+            construct = BConstruct::Factory::factory().Closure(*types.at(0));
+            break;
+          case Expr::UnaryOp::Transitive_Closure:
+            construct = BConstruct::Factory::factory().Closure1(*types.at(0));
+            break;
+
           /* 5.13 Expressions of Relations */
           case Expr::UnaryOp::Domain:
             construct = BConstruct::Factory::factory().Domain(*types.at(0),
@@ -402,7 +410,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Direct_Product(*types.at(0),
                                                              *types.at(1),
                                                              *types.at(2));
-            break;          
+            break;      
+            
+          /* 5.12 Expressions of Relations */
+          case Expr::BinaryOp::Iteration:
+            construct = BConstruct::Factory::factory().Iteration(*types.at(0));
+            break;
 
           /* 5.13 Expressions of Relations */
           case Expr::BinaryOp::Image:

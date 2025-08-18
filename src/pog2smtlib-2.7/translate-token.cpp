@@ -102,6 +102,10 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     {Expr::UnaryOp::Identity, "id"},
     {Expr::UnaryOp::Inverse, "~"},
 
+    /* 5.12 Expressions of Relations */
+    {Expr::UnaryOp::Closure, "closure"},    
+    {Expr::UnaryOp::Transitive_Closure, "closure1"},    
+
     /* 5.13 Expressions of Relations */
     {Expr::UnaryOp::Domain, "rel.domain"},
     {Expr::UnaryOp::Range, "rel.range"},
@@ -181,6 +185,9 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::Second_Projection, "prj1"},
     {Expr::BinaryOp::Composition, "relcomp"},
     {Expr::BinaryOp::Direct_Product, "directproduct"},
+
+    /* 5.12 Expressions of Relations */
+    {Expr::BinaryOp::Iteration, "iterate"},
 
     /* 5.13 Expressions of Relations */
     {Expr::BinaryOp::Image, "rel.image"},

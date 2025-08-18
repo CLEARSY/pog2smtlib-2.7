@@ -93,6 +93,11 @@ class Prj2;
 class Composition;
 class Direct_Product;
 
+/* 5.12 Expressions of Relations */
+class Iteration;
+class Closure;
+class Closure1;
+
 /* 5.13 Expressions of Relations */
 class Domain;
 class Range;
@@ -229,6 +234,11 @@ class Factory {
                                         const BType &);
   std::shared_ptr<Abstract> Direct_Product(const BType &, const BType &,
                                            const BType &);
+
+  /* 5.12 Expressions of Relations */
+  std::shared_ptr<Abstract> Iteration(const BType &);
+  std::shared_ptr<Abstract> Closure(const BType &);
+  std::shared_ptr<Abstract> Closure1(const BType &);
 
   /* 5.13 Expressions of Relations */
   std::shared_ptr<Abstract> Domain(const BType &, const BType &);
@@ -479,6 +489,22 @@ class Factory {
           std::shared_ptr<const BType>>,
       std::shared_ptr<BConstruct::Expression::Direct_Product>, TernaryBTypeHash>
       m_Direct_Products;
+
+  /* 5.12 Expressions of Relations */
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Iteration>,
+                     BTypeHash>
+      m_Iterations;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Closure>,
+                     BTypeHash>
+      m_Closures;
+
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Closure1>,
+                     BTypeHash>
+      m_Closure1s;
 
   /* 5.13 Expressions of Relations */
   std::unordered_map<
@@ -1123,6 +1149,26 @@ class Direct_Product : public TernaryBType {
  public:
   explicit Direct_Product(const BType &, const BType &, const BType &);
   virtual ~Direct_Product() = default;
+};
+
+/* 5.12 Expressions of Relations */
+
+class Iteration : public UnaryBType {
+ public:
+  explicit Iteration(const BType &);
+  virtual ~Iteration() = default;
+};
+
+class Closure : public UnaryBType {
+ public:
+  explicit Closure(const BType &);
+  virtual ~Closure() = default;
+};
+
+class Closure1 : public UnaryBType {
+ public:
+  explicit Closure1(const BType &);
+  virtual ~Closure1() = default;
 };
 
 /* 5.13 Expressions of Relations */

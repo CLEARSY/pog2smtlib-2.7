@@ -130,6 +130,15 @@ add_cl_test("composition_2")
 add_cl_test("direct_product_1")
 add_cl_test("direct_product_2")
 
+# 5.12 Expressions of Relations
+
+add_cl_test("iteration_1")
+add_cl_test("iteration_2")
+add_cl_test("closure_1")
+add_cl_test("closure_2")
+add_cl_test("closure1_1")
+add_cl_test("closure1_2")
+
 # 5.13 Expressions of Relations
 
 add_cl_test("domain_1")
@@ -165,7 +174,7 @@ add_cl_test("fnc_2")
 add_cl_test("rel_1")
 add_cl_test("rel_2")
 
-# 5.17 Set of Sequences 
+# 5.17 Set of Sequences
 add_cl_test("set_sequences_1")
 add_cl_test("set_sequences_2")
 add_cl_test("seq_1")
