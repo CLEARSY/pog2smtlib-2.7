@@ -327,6 +327,16 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Image(*types.at(0),
                                                              *types.at(1));
             break;
+
+          /* 5.15 Sets of Functions */
+          case Expr::BinaryOp::Partial_Functions:
+            construct = BConstruct::Factory::factory().Partial_Function(
+                *types.at(0), *types.at(1));
+            break;
+          case Expr::BinaryOp::Total_Functions:
+            construct = BConstruct::Factory::factory().Total_Function(
+                *types.at(0), *types.at(1));
+            break;
           default:
             throw std::runtime_error(
                 fmt::format("{}:{} Unknown binary operator {}", FILE_NAME,

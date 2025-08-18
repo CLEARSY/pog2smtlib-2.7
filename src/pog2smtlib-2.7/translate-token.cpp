@@ -155,7 +155,11 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::Relations, "relations"},
 
     /* 5.13 Expressions of Relations */
-    {Expr::BinaryOp::Image, "rel.image"}
+    {Expr::BinaryOp::Image, "rel.image"},
+
+    /* 5.15 Sets of Functions */
+    {Expr::BinaryOp::Partial_Functions, "functions.partial"},
+    {Expr::BinaryOp::Total_Functions, "functions.total"},
 };
 
 std::string smtSymbol(Expr::BinaryOp op) {
