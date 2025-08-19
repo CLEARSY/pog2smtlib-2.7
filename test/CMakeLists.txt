@@ -148,6 +148,22 @@ add_cl_test("range_2")
 add_cl_test("image_1")
 add_cl_test("image_2")
 
+# 5.13 Expressions of Relations
+
+add_cl_test("restriction_domain_1")
+add_cl_test("restriction_domain_2")
+add_cl_test("subtraction_domain_1")
+add_cl_test("subtraction_domain_2")
+add_cl_test("restriction_range_1")
+add_cl_test("restriction_range_2")
+add_cl_test("subtraction_range_1")
+add_cl_test("subtraction_range_2")
+add_cl_test("overwrite_1")
+add_cl_test("overwrite_2")
+add_cl_test("overwrite_3")
+add_cl_test("overwrite_4")
+add_cl_test("overwrite_5")
+
 # 5.15 Sets of Functions
 
 add_cl_test("functions_partial_1")
@@ -174,7 +190,8 @@ add_cl_test("fnc_2")
 add_cl_test("rel_1")
 add_cl_test("rel_2")
 
-# 5.17 Set of Sequences
+# 5.17 Sets of Sequences
+
 add_cl_test("set_sequences_1")
 add_cl_test("set_sequences_2")
 add_cl_test("seq_1")
@@ -186,7 +203,7 @@ add_cl_test("iseq_2")
 add_cl_test("iseq1_1")
 add_cl_test("iseq1_2")
 
-# 5.18 Expressions of Sequences 
+# 5.18 Expressions of Sequences
 
 add_cl_test("size_1")
 add_cl_test("size_2")
@@ -201,7 +218,7 @@ add_cl_test("tail_2")
 add_cl_test("rev_1")
 add_cl_test("rev_2")
 
-# 5.19 Expressions of Sequences 
+# 5.19 Expressions of Sequences
 
 add_cl_test("concatenation_1")
 add_cl_test("concatenation_2")
