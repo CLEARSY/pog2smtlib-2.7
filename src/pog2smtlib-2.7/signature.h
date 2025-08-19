@@ -88,8 +88,7 @@ class MonomorphizedOperator {
 };
 
 namespace std {
-template <>
-struct hash<MonomorphizedOperator> {
+template <> struct hash<MonomorphizedOperator> {
   // Add required constructors
   hash() = default;
   hash(const hash &) = default;
@@ -105,8 +104,7 @@ struct hash<MonomorphizedOperator> {
 }  // namespace std
 
 namespace std {
-template <>
-struct hash<VarName> {
+template <> struct hash<VarName> {
   // Add required constructors
   hash() = default;
   hash(const hash &) = default;
@@ -134,8 +132,7 @@ typedef struct Data {
 } Data;
 
 namespace std {
-template <>
-struct hash<Data> {
+template <> struct hash<Data> {
   // Add required constructors
   hash() = default;
   hash(const hash &) = default;
