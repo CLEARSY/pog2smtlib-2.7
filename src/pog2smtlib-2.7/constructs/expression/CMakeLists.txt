@@ -72,6 +72,13 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/range.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/image.cpp
 
+  # 5.14 Expressions of Relations
+  ${CMAKE_CURRENT_SOURCE_DIR}/restriction_domain.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/subtraction_domain.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/restriction_range.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/subtraction_range.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/overwrite.cpp
+
   # 5.15 Sets of Functions
   ${CMAKE_CURRENT_SOURCE_DIR}/injection.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/surjection.cpp

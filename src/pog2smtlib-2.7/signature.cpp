@@ -643,10 +643,12 @@ void GetSignatureVisitor::visitBinaryExpression(
      */
     case Expr::BinaryOp::Surcharge: {
       const auto &etype1 = lhs.getType();
-      const auto &[etype2, etype3] = argsOfProductType(op, etype1);
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = lhsOfProductType(op, etype2);
+      const auto &etype4 = rhsOfProductType(op, etype2);
       sig.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype2),
-                                std::make_shared<BType>(etype3)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3),
+                                std::make_shared<BType>(etype4)));
       break;
     }
     /*     Domain_Subtraction, Domain_Restriction,
@@ -654,10 +656,12 @@ void GetSignatureVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Domain_Subtraction:
     case Expr::BinaryOp::Domain_Restriction: {
       const auto &etype1 = rhs.getType();
-      const auto &[etype2, etype3] = argsOfProductType(op, etype1);
+      const auto &etype2 = elementOfPowerType(op, etype1);
+      const auto &etype3 = lhsOfProductType(op, etype2);
+      const auto &etype4 = rhsOfProductType(op, etype2);
       sig.m_operators.emplace(
-          MonomorphizedOperator(op, std::make_shared<BType>(etype2),
-                                std::make_shared<BType>(etype3)));
+          MonomorphizedOperator(op, std::make_shared<BType>(etype3),
+                                std::make_shared<BType>(etype4)));
       break;
     }
     /* Parallel_Product */

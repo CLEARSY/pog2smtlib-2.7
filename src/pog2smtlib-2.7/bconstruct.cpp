@@ -384,6 +384,36 @@ shared_ptr<Abstract> Factory::Image(const BType& lhs, const BType& rhs) {
   return get<BConstruct::Expression::Image>(m_Images, lhs, rhs);
 }
 
+/* 5.14 Expressions of Relations */
+
+shared_ptr<Abstract> Factory::Restriction_Domain(const BType& lhs,
+                                                 const BType& rhs) {
+  return get<BConstruct::Expression::Restriction_Domain>(m_Restriction_Domains,
+                                                         lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Subtraction_Domain(const BType& lhs,
+                                                 const BType& rhs) {
+  return get<BConstruct::Expression::Subtraction_Domain>(m_Subtraction_Domains,
+                                                         lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Restriction_Range(const BType& lhs,
+                                                const BType& rhs) {
+  return get<BConstruct::Expression::Restriction_Range>(m_Restriction_Ranges,
+                                                        lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Subtraction_Range(const BType& lhs,
+                                                const BType& rhs) {
+  return get<BConstruct::Expression::Subtraction_Range>(m_Subtraction_Ranges,
+                                                        lhs, rhs);
+}
+
+shared_ptr<Abstract> Factory::Overwrite(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Overwrite>(m_Overwrites, lhs, rhs);
+}
+
 /* 5.15 Sets of Functions */
 
 shared_ptr<Abstract> Factory::Injection(const BType& lhs, const BType& rhs) {
@@ -488,7 +518,6 @@ shared_ptr<Abstract> Factory::EmptySeq(const BType& t) {
   return get<BConstruct::Expression::EmptySeq>(m_EmptySeqs, t);
 }
 
-
 /* 5.18 Expressions of Sequences */
 
 shared_ptr<Abstract> Factory::Size(const BType& t) {
@@ -530,7 +559,8 @@ shared_ptr<Abstract> Factory::Insert_At_Tail(const BType& t) {
 }
 
 shared_ptr<Abstract> Factory::Restrict_In_Front(const BType& t) {
-  return get<BConstruct::Expression::Restrict_In_Front>(m_Restrict_In_Fronts, t);
+  return get<BConstruct::Expression::Restrict_In_Front>(m_Restrict_In_Fronts,
+                                                        t);
 }
 
 shared_ptr<Abstract> Factory::Restrict_At_Tail(const BType& t) {
@@ -538,7 +568,8 @@ shared_ptr<Abstract> Factory::Restrict_At_Tail(const BType& t) {
 }
 
 shared_ptr<Abstract> Factory::General_Concatenation(const BType& t) {
-  return get<BConstruct::Expression::General_Concatenation>(m_General_Concatenations, t);
+  return get<BConstruct::Expression::General_Concatenation>(
+      m_General_Concatenations, t);
 }
 
 size_t Factory::size() { return m_index.size(); }

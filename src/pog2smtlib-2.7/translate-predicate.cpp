@@ -613,6 +613,25 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       break;
     }
 
+    /* 5.14 Expressions of Relations */
+    case Expr::BinaryOp::Domain_Restriction:
+    case Expr::BinaryOp::Domain_Subtraction:
+    case Expr::BinaryOp::Range_Restriction:
+    case Expr::BinaryOp::Range_Subtraction:
+    case Expr::BinaryOp::Surcharge: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op,
+                    (type.toPowerType().content).toProductType().lhs,
+                    (type.toPowerType().content).toProductType().rhs));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
+
     /* 5.15 Sets of Functions */
     case Expr::BinaryOp::Total_Functions:
     case Expr::BinaryOp::Partial_Functions:
@@ -669,14 +688,9 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     }
 
     /* todo */
-    case Expr::BinaryOp::Surcharge:
-    case Expr::BinaryOp::Domain_Subtraction:
-    case Expr::BinaryOp::Domain_Restriction:
     case Expr::BinaryOp::Partial_Bijections:
     case Expr::BinaryOp::Parallel_Product:
     case Expr::BinaryOp::Modulo:
-    case Expr::BinaryOp::Range_Restriction:
-    case Expr::BinaryOp::Range_Subtraction:
     case Expr::BinaryOp::IExponentiation:
     case Expr::BinaryOp::RExponentiation:
     case Expr::BinaryOp::FAddition:
