@@ -26,17 +26,18 @@ Total_Function::Total_Function(const BType &U, const BType &V)
   const auto UxV = BType::PROD(U, V);
   const auto PUxV = BType::POW(UxV);
   const auto PPUxV = BType::POW(PUxV);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::BinaryOp::Total_Functions, U, V),
-                         /*1*/ symbol(PU),
-                         /*2*/ symbol(PV),
-                         /*3*/ symbol(PPUxV),
-                         /*4*/ symbol(PUxV),
-                         /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
-                         /*6*/ symbolInner(U),
-                         /*7*/ symbolInner(V),
-                         /*8*/ symbolInner(UxV),
-                         /*9*/ smtSymbol(Expr::BinaryOp::Partial_Functions, U, V));
+  m_script =
+      fmt::format(SCRIPT,
+                  /*0*/ smtSymbol(Expr::BinaryOp::Total_Functions, U, V),
+                  /*1*/ symbol(PU),
+                  /*2*/ symbol(PV),
+                  /*3*/ symbol(PPUxV),
+                  /*4*/ symbol(PUxV),
+                  /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
+                  /*6*/ symbolInner(U),
+                  /*7*/ symbolInner(V),
+                  /*8*/ symbolInner(UxV),
+                  /*9*/ smtSymbol(Expr::BinaryOp::Partial_Functions, U, V));
   m_label = "-->";
   m_prerequisites.insert(
       {std::make_shared<BConstruct::Expression::Total_Relation>(U, V),

@@ -17,19 +17,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 #include "utils.h"
 
+#include <filesystem>  // C++17 and later
 #include <string>
-#include <filesystem> // C++17 and later
 namespace utils {
 
 using std::string;
 
 std::string absoluteBasename(const std::string &filename) {
   std::filesystem::path p(filename);
-  std::string base = p.stem().string(); // Get filename without extension
+  std::string base = p.stem().string();  // Get filename without extension
   if (base.empty()) {
     base = "out";
   }
-  std::filesystem::path prefix_path = std::filesystem::absolute(p).parent_path() / base;
+  std::filesystem::path prefix_path =
+      std::filesystem::absolute(p).parent_path() / base;
   return prefix_path.string();
 }
 

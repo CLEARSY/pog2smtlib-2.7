@@ -763,8 +763,7 @@ class Factory {
   void index(std::shared_ptr<Abstract>);
 
  private:
-  template <typename T>
-  std::shared_ptr<Abstract> get(std::shared_ptr<T> &m);
+  template <typename T> std::shared_ptr<Abstract> get(std::shared_ptr<T> &m);
 
   template <typename T>
   std::shared_ptr<Abstract> get(

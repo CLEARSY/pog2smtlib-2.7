@@ -22,6 +22,22 @@ trailing-whitespace-check:
         exit 1
       fi
 
+clang-format-check:
+  image: xianpengshen/clang-tools:19
+  stage: lint
+  tags:
+    - docker
+    - linux
+  script:
+    - FILES=$(find src/pog2smtlib-2.7 -type f \( -name '*.cpp' -o -name '*.h'
+      \))
+    - |
+      if [ -n "$FILES" ]; then
+        clang-format --version
+        # Check formatting (non-zero exit if diff exists)
+        clang-format -style=file -n --Werror $FILES
+      fi
+
 build:
   image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/ubuntu-24.04
   stage: build
