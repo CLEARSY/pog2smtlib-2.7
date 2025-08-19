@@ -1,6 +1,6 @@
-# Contributing to b2smtlib
+# Contributing to pog2smtlib-2.7
 
-First off, thank you for considering contributing to b2smtlib! 
+First off, thank you for considering contributing to pog2smtlib-2.7!
 We welcome contributions from everyone, whether you're submitting a bug report, fixing a bug, requesting a new feature, or improving documentation.
 
 This document will guide you through the process of contributing to this project. Please take a moment to review it before submitting your contribution.
@@ -55,19 +55,21 @@ To contribute code, follow these steps:
 4. **Create a new branch**: Create a branch associated to this issue, giving the name `issue/#number`.
 
 5. **Make your changes**: Implement your fix or feature. We kindly ask you to:
-  - Follow coding conventions (as defined in the `.clang-format` file).
-  - In code comments, use Doxygen markup whenever applicable.
+
+- Follow coding conventions (as defined in the `src/.clang-format` file).
+- In code comments, use Doxygen markup whenever applicable.
 
 6. **Commit your changes**: Commit your changes with a clear, concise message.
 
-7. **Open a pull request**: Once you consider your work is ready, and verified it has not introduced a regression, open a pull request. 
+7. **Open a pull request**: Once you consider your work is ready, and verified it has not introduced a regression, open a pull request.
 
 8. **Pull request check-list**:
-  - If this is your first contribution, attach a copy of the [Contributor License Agreement](#contributor-license-agreement-cla) with your signature to the pull request.
-  - Make sure your branch is up-to-date with the main branch.
-  - Make sure your branch did not introduce any regression.
-  - In your PR description, explain what changes you've made and why. Link to any related issues.
-  - Review process: Your PR will be reviewed by one of the project maintainers. Be prepared for feedback and changes.
+
+- If this is your first contribution, attach a copy of the [Contributor License Agreement](#contributor-license-agreement-cla) with your signature to the pull request.
+- Make sure your branch is up-to-date with the main branch.
+- Make sure your branch did not introduce any regression.
+- In your PR description, explain what changes you've made and why. Link to any related issues.
+- Review process: Your PR will be reviewed by one of the project maintainers. Be prepared for feedback and changes.
 
 ### Contributor License Agreement (CLA)
 
