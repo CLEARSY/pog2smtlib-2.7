@@ -203,6 +203,13 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     /* 5.13 Expressions of Relations */
     {Expr::BinaryOp::Image, "rel.image"},
 
+    /* 5.14 Expressions of Relations */
+    {Expr::BinaryOp::Domain_Restriction, "rel.restrict.dom"},
+    {Expr::BinaryOp::Domain_Subtraction, "rel.subtract.dom"},
+    {Expr::BinaryOp::Range_Restriction, "rel.restrict.ran"},
+    {Expr::BinaryOp::Range_Subtraction, "rel.subtract.ran"},
+    {Expr::BinaryOp::Surcharge, "rel.overwrite"},
+  
     /* 5.15 Sets of Functions */
     {Expr::BinaryOp::Partial_Functions, "functions.partial"},
     {Expr::BinaryOp::Total_Functions, "functions.total"},

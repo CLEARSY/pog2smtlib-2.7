@@ -447,6 +447,28 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                                                              *types.at(1));
             break;
 
+          /* 5.14 Expressions of Relations */
+          case Expr::BinaryOp::Domain_Restriction:
+            construct = BConstruct::Factory::factory().Restriction_Domain(*types.at(0),
+                                                             *types.at(1));
+            break;
+          case Expr::BinaryOp::Domain_Subtraction:
+            construct = BConstruct::Factory::factory().Subtraction_Domain(*types.at(0),
+                                                             *types.at(1));
+            break;
+          case Expr::BinaryOp::Range_Restriction:
+            construct = BConstruct::Factory::factory().Restriction_Range(*types.at(0),
+                                                             *types.at(1));
+            break;
+          case Expr::BinaryOp::Range_Subtraction:
+            construct = BConstruct::Factory::factory().Subtraction_Range(*types.at(0),
+                                                             *types.at(1));
+            break;
+          case Expr::BinaryOp::Surcharge:
+            construct = BConstruct::Factory::factory().Overwrite(*types.at(0),
+                                                             *types.at(1));
+            break;
+
           /* 5.15 Sets of Functions */
           case Expr::BinaryOp::Partial_Functions:
             construct = BConstruct::Factory::factory().Partial_Function(

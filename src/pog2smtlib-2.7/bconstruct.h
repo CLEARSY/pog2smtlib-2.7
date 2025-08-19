@@ -103,6 +103,13 @@ class Domain;
 class Range;
 class Image;
 
+/* 5.14 Expressions of Relations */
+class Restriction_Domain;
+class Subtraction_Domain;
+class Restriction_Range;
+class Subtraction_Range;
+class Overwrite;
+
 /* 5.15 Sets of Functions */
 class Injection;
 class Surjection;
@@ -260,6 +267,13 @@ class Factory {
   std::shared_ptr<Abstract> Domain(const BType &, const BType &);
   std::shared_ptr<Abstract> Range(const BType &, const BType &);
   std::shared_ptr<Abstract> Image(const BType &, const BType &);
+
+  /* 5.14 Expressions of Relations */
+  std::shared_ptr<Abstract> Restriction_Domain(const BType &, const BType &);
+  std::shared_ptr<Abstract> Subtraction_Domain(const BType &, const BType &);
+  std::shared_ptr<Abstract> Restriction_Range(const BType &, const BType &);
+  std::shared_ptr<Abstract> Subtraction_Range(const BType &, const BType &);
+  std::shared_ptr<Abstract> Overwrite(const BType &, const BType &);
 
   /* 5.15 Sets of Functions */
   std::shared_ptr<Abstract> Injection(const BType &, const BType &);
@@ -554,6 +568,36 @@ class Factory {
       std::shared_ptr<BConstruct::Expression::Image>, BinaryBTypeHash>
       m_Images;
 
+  /* 5.14 Expressions of Relations */
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Restriction_Domain>,
+      BinaryBTypeHash>
+      m_Restriction_Domains;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Subtraction_Domain>,
+      BinaryBTypeHash>
+      m_Subtraction_Domains;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Restriction_Range>,
+      BinaryBTypeHash>
+      m_Restriction_Ranges;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Subtraction_Range>,
+      BinaryBTypeHash>
+      m_Subtraction_Ranges;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Overwrite>, BinaryBTypeHash>
+      m_Overwrites;
+
   /* 5.15 Sets of Functions */
   std::unordered_map<
       std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
@@ -662,33 +706,27 @@ class Factory {
 
   /* 5.18 Expressions of Sequences */
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Size>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Size>, BTypeHash>
       m_Sizes;
 
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::First>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::First>, BTypeHash>
       m_Firsts;
 
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Last>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Last>, BTypeHash>
       m_Lasts;
 
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Front>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Front>, BTypeHash>
       m_Fronts;
 
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Tail>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Tail>, BTypeHash>
       m_Tails;
 
   std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::Rev>,
-                     BTypeHash>
+                     std::shared_ptr<BConstruct::Expression::Rev>, BTypeHash>
       m_Revs;
 
   /* 5.19 Expressions of Sequences */
@@ -717,9 +755,9 @@ class Factory {
                      BTypeHash>
       m_Restrict_At_Tails;
 
-  std::unordered_map<std::shared_ptr<const BType>,
-                     std::shared_ptr<BConstruct::Expression::General_Concatenation>,
-                     BTypeHash>
+  std::unordered_map<
+      std::shared_ptr<const BType>,
+      std::shared_ptr<BConstruct::Expression::General_Concatenation>, BTypeHash>
       m_General_Concatenations;
 
   void index(std::shared_ptr<Abstract>);
@@ -1283,6 +1321,38 @@ class Image : public BinaryBType {
  public:
   explicit Image(const BType &, const BType &);
   virtual ~Image() = default;
+};
+
+/* 5.14 Expressions of Relations */
+
+class Restriction_Domain : public BinaryBType {
+ public:
+  explicit Restriction_Domain(const BType &, const BType &);
+  virtual ~Restriction_Domain() = default;
+};
+
+class Subtraction_Domain : public BinaryBType {
+ public:
+  explicit Subtraction_Domain(const BType &, const BType &);
+  virtual ~Subtraction_Domain() = default;
+};
+
+class Restriction_Range : public BinaryBType {
+ public:
+  explicit Restriction_Range(const BType &, const BType &);
+  virtual ~Restriction_Range() = default;
+};
+
+class Subtraction_Range : public BinaryBType {
+ public:
+  explicit Subtraction_Range(const BType &, const BType &);
+  virtual ~Subtraction_Range() = default;
+};
+
+class Overwrite : public BinaryBType {
+ public:
+  explicit Overwrite(const BType &, const BType &);
+  virtual ~Overwrite() = default;
 };
 
 /* 5.15 Sets of Functions */

@@ -9,7 +9,7 @@
 namespace BConstruct::Expression {
 
 static constexpr std::string_view SCRIPT = R"(
-(define-fun {0} ((s {1})) {1} ({2} s 1)
+(define-fun {0} ((s {1})) {1} ({2} s 1))
 )";
 
 Tail::Tail(const BType &T) : UnaryBType(T) {
