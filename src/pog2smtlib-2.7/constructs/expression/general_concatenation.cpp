@@ -22,13 +22,12 @@ static constexpr std::string_view SCRIPT = R"(
 ))
 )";
 
-General_Concatenation::General_Concatenation(const BType &T)
-    : UnaryBType(T) {
+General_Concatenation::General_Concatenation(const BType &T) : UnaryBType(T) {
   const auto ZxT = BType::PROD(BType::INT, T);
   const auto PZxT = BType::POW(ZxT);
   const auto ZxPZxT = BType::PROD(BType::INT, PZxT);
   const auto PZxPZxT = BType::POW(ZxPZxT);
-  m_script = fmt::format(SCRIPT, 
+  m_script = fmt::format(SCRIPT,
                          /*0*/ smtSymbol(Expr::UnaryOp::Concatenation, T),
                          /*1*/ symbol(PZxPZxT),
                          /*2*/ symbol(PZxT),
@@ -38,11 +37,11 @@ General_Concatenation::General_Concatenation(const BType &T)
                          /*6*/ symbolInner(T));
   m_label = "conc";
   m_prerequisites.insert({
-       std::make_shared<BConstruct::Expression::Insert_In_Front>(PZxT),
-       std::make_shared<BConstruct::Expression::Concatenation>(T),
-       std::make_shared<BConstruct::Expression::EmptySeq>(PZxT),
-       std::make_shared<BConstruct::Expression::EmptySeq>(T),
-    });
+      std::make_shared<BConstruct::Expression::Insert_In_Front>(PZxT),
+      std::make_shared<BConstruct::Expression::Concatenation>(T),
+      std::make_shared<BConstruct::Expression::EmptySeq>(PZxT),
+      std::make_shared<BConstruct::Expression::EmptySeq>(T),
+  });
   m_debug_string = fmt::format("conc_{}", T.to_string());
 }
 

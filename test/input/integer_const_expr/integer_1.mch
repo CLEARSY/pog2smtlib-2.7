@@ -1,5 +1,5 @@
 /* integer_1
- * Author: 
+ * Author:
  * Creation date: 24/11/2024
  */
 MACHINE

@@ -42,13 +42,13 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/set.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/fin.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/fin1.cpp
-  
+
   # 5.8 Set List Expressions (continued)
   ${CMAKE_CURRENT_SOURCE_DIR}/diff.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/union.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/intersection.cpp 
+  ${CMAKE_CURRENT_SOURCE_DIR}/intersection.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/generalizedunion.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/generalizedintersection.cpp 
+  ${CMAKE_CURRENT_SOURCE_DIR}/generalizedintersection.cpp
 
   # 5.10 Set of Relations
   ${CMAKE_CURRENT_SOURCE_DIR}/relations.cpp
@@ -97,7 +97,7 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/intofunction.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/intorelation.cpp
 
-  # 5.17 Set of Sequences 
+  # 5.17 Set of Sequences
   ${CMAKE_CURRENT_SOURCE_DIR}/seq.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/seq1.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/iseq.cpp
@@ -105,7 +105,7 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/perm.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/emptyseq.cpp
 
-  # 5.18 Expressions of Sequences 
+  # 5.18 Expressions of Sequences
   ${CMAKE_CURRENT_SOURCE_DIR}/size.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/first.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/last.cpp
@@ -113,7 +113,7 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/tail.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/rev.cpp
 
-  # 5.19 Expressions of Sequences 
+  # 5.19 Expressions of Sequences
   ${CMAKE_CURRENT_SOURCE_DIR}/concatenation.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/insert_in_front.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/insert_at_tail.cpp

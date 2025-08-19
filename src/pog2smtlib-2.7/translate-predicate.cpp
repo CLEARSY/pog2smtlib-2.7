@@ -351,9 +351,7 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     /* 5.11 Expressions of Relations */
     case Expr::UnaryOp::Identity: {
       m_translation.push_back('(');
-      m_translation.append(
-          smtSymbol(op,
-                    elementType(e.getType())));
+      m_translation.append(smtSymbol(op, elementType(e.getType())));
       m_translation.push_back(' ');
       e.accept(*this);
       m_translation.push_back(')');
@@ -362,8 +360,7 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     case Expr::UnaryOp::Inverse: {
       m_translation.push_back('(');
       m_translation.append(
-          smtSymbol(op,
-                    elementType(e.getType()).toProductType().lhs,
+          smtSymbol(op, elementType(e.getType()).toProductType().lhs,
                     elementType(e.getType()).toProductType().rhs));
       m_translation.push_back(' ');
       e.accept(*this);
@@ -376,8 +373,7 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     case Expr::UnaryOp::Transitive_Closure: {
       m_translation.push_back('(');
       m_translation.append(
-          smtSymbol(op,
-                    elementType(e.getType()).toProductType().lhs));
+          smtSymbol(op, elementType(e.getType()).toProductType().lhs));
       m_translation.push_back(' ');
       e.accept(*this);
       m_translation.push_back(')');
@@ -445,7 +441,8 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     case Expr::UnaryOp::Tail:
     case Expr::UnaryOp::Reverse: {
       m_translation.push_back('(');
-      m_translation.append(smtSymbol(op, elementType(e.getType()).toProductType().rhs));
+      m_translation.append(
+          smtSymbol(op, elementType(e.getType()).toProductType().rhs));
       m_translation.push_back(' ');
       e.accept(*this);
       m_translation.push_back(')');
@@ -455,7 +452,8 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     /* 5.19 Expressions of Sequences */
     case Expr::UnaryOp::Concatenation: {
       m_translation.push_back('(');
-      m_translation.append(smtSymbol(op, (type.toPowerType().content).toProductType().rhs));
+      m_translation.append(
+          smtSymbol(op, (type.toPowerType().content).toProductType().rhs));
       m_translation.push_back(' ');
       e.accept(*this);
       m_translation.push_back(')');
@@ -558,10 +556,8 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::First_Projection:
     case Expr::BinaryOp::Second_Projection: {
       m_translation.push_back('(');
-      m_translation.append(
-          smtSymbol(op,
-                    elementType(lhs.getType()),
-                    elementType(rhs.getType())));
+      m_translation.append(smtSymbol(op, elementType(lhs.getType()),
+                                     elementType(rhs.getType())));
       m_translation.push_back(' ');
       lhs.accept(*this);
       m_translation.push_back(' ');
@@ -573,8 +569,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Direct_Product: {
       m_translation.push_back('(');
       m_translation.append(
-          smtSymbol(op,
-                    elementType(lhs.getType()).toProductType().lhs,
+          smtSymbol(op, elementType(lhs.getType()).toProductType().lhs,
                     elementType(lhs.getType()).toProductType().rhs,
                     elementType(rhs.getType()).toProductType().rhs));
       m_translation.push_back(' ');
@@ -589,8 +584,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Iteration: {
       m_translation.push_back('(');
       m_translation.append(
-          smtSymbol(op,
-                    (type.toPowerType().content).toProductType().lhs));
+          smtSymbol(op, (type.toPowerType().content).toProductType().lhs));
       m_translation.push_back(' ');
       lhs.accept(*this);
       m_translation.push_back(' ');
@@ -621,8 +615,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Surcharge: {
       m_translation.push_back('(');
       m_translation.append(
-          smtSymbol(op,
-                    (type.toPowerType().content).toProductType().lhs,
+          smtSymbol(op, (type.toPowerType().content).toProductType().lhs,
                     (type.toPowerType().content).toProductType().rhs));
       m_translation.push_back(' ');
       lhs.accept(*this);
@@ -670,7 +663,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       m_translation.push_back(')');
       break;
     }
-    
+
     /* 5.19 Expressions of Sequences */
     case Expr::BinaryOp::Concatenation:
     case Expr::BinaryOp::Head_Insertion:
@@ -678,7 +671,8 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::Head_Restriction:
     case Expr::BinaryOp::Tail_Restriction: {
       m_translation.push_back('(');
-      m_translation.append(smtSymbol(op, (type.toPowerType().content).toProductType().rhs));
+      m_translation.append(
+          smtSymbol(op, (type.toPowerType().content).toProductType().rhs));
       m_translation.push_back(' ');
       lhs.accept(*this);
       m_translation.push_back(' ');

@@ -16,11 +16,10 @@ static constexpr std::string_view SCRIPT = R"(
     :named |ax.fun.eval {5}|))
 )";
 
-Evaluation::Evaluation(const BType &U, const BType &V)
-    : BinaryBType(U, V) {
+Evaluation::Evaluation(const BType &U, const BType &V) : BinaryBType(U, V) {
   const auto UxV = BType::PROD(U, V);
   const auto PUxV = BType::POW(UxV);
-  m_script = fmt::format(SCRIPT, 
+  m_script = fmt::format(SCRIPT,
                          /*0*/ smtSymbol(Expr::BinaryOp::Application, U, V),
                          /*1*/ symbol(PUxV),
                          /*2*/ symbol(U),
