@@ -349,12 +349,12 @@ void GetSignatureVisitor::visitConstant(
       if (type.getKind() != BType::Kind::PowerType) {
         throw Exception("Empty set constant must have a powerset type");
       }
-    /*  
-    case Expr::Visitor::EConstant::EmptySeq:
-      if (type.getKind() != BType::Kind::PowerType) {
-        throw Exception("Empty set constant must have a powerset type");
-      }
-    */
+      /*
+      case Expr::Visitor::EConstant::EmptySeq:
+        if (type.getKind() != BType::Kind::PowerType) {
+          throw Exception("Empty set constant must have a powerset type");
+        }
+      */
       m_signature.m_operators.emplace(MonomorphizedOperator{
           c, std::make_shared<BType>(type.toPowerType().content)});
     case Expr::Visitor::EConstant::Successor:
@@ -633,7 +633,7 @@ void GetSignatureVisitor::visitBinaryExpression(
       const auto &etype4 = rhsOfProductType(op, etype2);
       const auto &etype5 = rhs.getType();
       const auto &etype6 = elementOfPowerType(op, etype5);
-      const auto &etype7 = rhsOfProductType(op, etype6);      
+      const auto &etype7 = rhsOfProductType(op, etype6);
       sig.m_operators.emplace(MonomorphizedOperator(
           op, std::make_shared<BType>(etype3), std::make_shared<BType>(etype4),
           std::make_shared<BType>(etype7)));

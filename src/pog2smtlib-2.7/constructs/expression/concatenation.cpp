@@ -19,11 +19,10 @@ static constexpr std::string_view SCRIPT = R"(
 ))
 )";
 
-Concatenation::Concatenation(const BType &T)
-    : UnaryBType(T) {
+Concatenation::Concatenation(const BType &T) : UnaryBType(T) {
   const auto ZxT = BType::PROD(BType::INT, T);
   const auto PZxT = BType::POW(ZxT);
-  m_script = fmt::format(SCRIPT, 
+  m_script = fmt::format(SCRIPT,
                          /*0*/ smtSymbol(Expr::BinaryOp::Concatenation, T),
                          /*1*/ symbol(PZxT),
                          /*2*/ symbol(ZxT),
@@ -32,9 +31,9 @@ Concatenation::Concatenation(const BType &T)
                          /*5*/ symbolInner(T));
   m_label = "^";
   m_prerequisites.insert({
-       std::make_shared<BConstruct::Predicate::SetMembership>(T),
-       std::make_shared<BConstruct::Expression::Size>(T),
-    });
+      std::make_shared<BConstruct::Predicate::SetMembership>(T),
+      std::make_shared<BConstruct::Expression::Size>(T),
+  });
   m_debug_string = fmt::format("^_{}", T.to_string());
 }
 

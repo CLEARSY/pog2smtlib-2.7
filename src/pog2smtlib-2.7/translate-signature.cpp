@@ -273,7 +273,7 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           case Expr::UnaryOp::Inverse:
             construct = BConstruct::Factory::factory().Reverse(*types.at(0),
-                                                             *types.at(1));
+                                                               *types.at(1));
             break;
 
           /* 5.12 Expressions of Relations */
@@ -296,12 +296,14 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
 
           /* 5.16 Expressions of Functions */
           case Expr::UnaryOp::Fnc:
-            construct = BConstruct::Factory::factory().Transformed_Into_Function(*types.at(0),
-                                                              *types.at(1));
+            construct =
+                BConstruct::Factory::factory().Transformed_Into_Function(
+                    *types.at(0), *types.at(1));
             break;
           case Expr::UnaryOp::Rel:
-            construct = BConstruct::Factory::factory().Transformed_Into_Relation(*types.at(0),
-                                                             *types.at(1));
+            construct =
+                BConstruct::Factory::factory().Transformed_Into_Relation(
+                    *types.at(0), *types.at(1));
             break;
 
           /* 5.17 Set of Sequences */
@@ -312,10 +314,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Seq1(*types.at(0));
             break;
           case Expr::UnaryOp::Injective_Sequences:
-            construct = BConstruct::Factory::factory().Injective_Seq(*types.at(0));
+            construct =
+                BConstruct::Factory::factory().Injective_Seq(*types.at(0));
             break;
           case Expr::UnaryOp::Non_Empty_Injective_Sequences:
-            construct = BConstruct::Factory::factory().Injective_Seq1(*types.at(0));
+            construct =
+                BConstruct::Factory::factory().Injective_Seq1(*types.at(0));
             break;
           case Expr::UnaryOp::Permutations:
             construct = BConstruct::Factory::factory().Perm(*types.at(0));
@@ -342,7 +346,8 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           /* 5.19 Expressions of Sequences */
           case Expr::UnaryOp::Concatenation:
-            construct = BConstruct::Factory::factory().General_Concatenation(*types.at(0));
+            construct = BConstruct::Factory::factory().General_Concatenation(
+                *types.at(0));
             break;
           default:
             throw std::runtime_error(fmt::format(
@@ -418,24 +423,22 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
 
           /* 5.11 Expressions of Relations */
           case Expr::BinaryOp::First_Projection:
-            construct = BConstruct::Factory::factory().Prj1(*types.at(0),
-                                                             *types.at(1));
+            construct =
+                BConstruct::Factory::factory().Prj1(*types.at(0), *types.at(1));
             break;
           case Expr::BinaryOp::Second_Projection:
-            construct = BConstruct::Factory::factory().Prj2(*types.at(0),
-                                                             *types.at(1));
+            construct =
+                BConstruct::Factory::factory().Prj2(*types.at(0), *types.at(1));
             break;
           case Expr::BinaryOp::Composition:
-            construct = BConstruct::Factory::factory().Composition(*types.at(0),
-                                                             *types.at(1),
-                                                             *types.at(2));
+            construct = BConstruct::Factory::factory().Composition(
+                *types.at(0), *types.at(1), *types.at(2));
             break;
           case Expr::BinaryOp::Direct_Product:
-            construct = BConstruct::Factory::factory().Direct_Product(*types.at(0),
-                                                             *types.at(1),
-                                                             *types.at(2));
-            break;      
-            
+            construct = BConstruct::Factory::factory().Direct_Product(
+                *types.at(0), *types.at(1), *types.at(2));
+            break;
+
           /* 5.12 Expressions of Relations */
           case Expr::BinaryOp::Iteration:
             construct = BConstruct::Factory::factory().Iteration(*types.at(0));
@@ -449,24 +452,24 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
 
           /* 5.14 Expressions of Relations */
           case Expr::BinaryOp::Domain_Restriction:
-            construct = BConstruct::Factory::factory().Restriction_Domain(*types.at(0),
-                                                             *types.at(1));
+            construct = BConstruct::Factory::factory().Restriction_Domain(
+                *types.at(0), *types.at(1));
             break;
           case Expr::BinaryOp::Domain_Subtraction:
-            construct = BConstruct::Factory::factory().Subtraction_Domain(*types.at(0),
-                                                             *types.at(1));
+            construct = BConstruct::Factory::factory().Subtraction_Domain(
+                *types.at(0), *types.at(1));
             break;
           case Expr::BinaryOp::Range_Restriction:
-            construct = BConstruct::Factory::factory().Restriction_Range(*types.at(0),
-                                                             *types.at(1));
+            construct = BConstruct::Factory::factory().Restriction_Range(
+                *types.at(0), *types.at(1));
             break;
           case Expr::BinaryOp::Range_Subtraction:
-            construct = BConstruct::Factory::factory().Subtraction_Range(*types.at(0),
-                                                             *types.at(1));
+            construct = BConstruct::Factory::factory().Subtraction_Range(
+                *types.at(0), *types.at(1));
             break;
           case Expr::BinaryOp::Surcharge:
             construct = BConstruct::Factory::factory().Overwrite(*types.at(0),
-                                                             *types.at(1));
+                                                                 *types.at(1));
             break;
 
           /* 5.15 Sets of Functions */
@@ -501,26 +504,30 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
 
           /* 5.16 Expressions of Functions */
           case Expr::BinaryOp::Application:
-            construct = BConstruct::Factory::factory().Evaluation(
-                *types.at(0), *types.at(1));
+            construct = BConstruct::Factory::factory().Evaluation(*types.at(0),
+                                                                  *types.at(1));
             break;
 
           /* 5.19 Expressions of Sequences */
           case Expr::BinaryOp::Concatenation:
-            construct = BConstruct::Factory::factory().Concatenation(*types.at(0));
+            construct =
+                BConstruct::Factory::factory().Concatenation(*types.at(0));
             break;
           case Expr::BinaryOp::Head_Insertion:
-            construct = BConstruct::Factory::factory().Insert_In_Front(*types.at(0));
+            construct =
+                BConstruct::Factory::factory().Insert_In_Front(*types.at(0));
             break;
           case Expr::BinaryOp::Tail_Insertion:
             construct =
                 BConstruct::Factory::factory().Insert_At_Tail(*types.at(0));
             break;
           case Expr::BinaryOp::Head_Restriction:
-            construct = BConstruct::Factory::factory().Restrict_In_Front(*types.at(0));
+            construct =
+                BConstruct::Factory::factory().Restrict_In_Front(*types.at(0));
             break;
           case Expr::BinaryOp::Tail_Restriction:
-            construct = BConstruct::Factory::factory().Restrict_At_Tail(*types.at(0));
+            construct =
+                BConstruct::Factory::factory().Restrict_At_Tail(*types.at(0));
             break;
           default:
             throw std::runtime_error(
@@ -543,7 +550,8 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Set(*types.at(0));
             break;
           case Expr::NaryOp::Sequence:
-            construct = BConstruct::Factory::factory().Set(BType::PROD(BType::INT, *types.at(0)));
+            construct = BConstruct::Factory::factory().Set(
+                BType::PROD(BType::INT, *types.at(0)));
             break;
           default:
             throw std::runtime_error(

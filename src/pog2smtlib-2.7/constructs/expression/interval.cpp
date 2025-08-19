@@ -1,4 +1,4 @@
- #include <fmt/core.h>
+#include <fmt/core.h>
 
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
@@ -19,16 +19,16 @@ static constexpr std::string_view SCRIPT = R"(
 
 Interval::Interval() {
   const auto PZ = BType::POW(BType::INT);
-  m_script = fmt::format(SCRIPT, 
-                         /*0*/ smtSymbol(Expr::BinaryOp::Interval),
-                         /*1*/ symbol(BType::INT),
-                         /*2*/ symbol(PZ),
-                         /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
+  m_script =
+      fmt::format(SCRIPT,
+                  /*0*/ smtSymbol(Expr::BinaryOp::Interval),
+                  /*1*/ symbol(BType::INT),
+                  /*2*/ symbol(PZ),
+                  /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
   m_label = "..";
   m_prerequisites.insert(
-        std::make_shared<BConstruct::Predicate::SetMembership>(BType::INT)
-    );
+      std::make_shared<BConstruct::Predicate::SetMembership>(BType::INT));
   m_debug_string = fmt::format("..");
 }
 
-};  // namespace BConstruct::Expression                                     
+};  // namespace BConstruct::Expression
