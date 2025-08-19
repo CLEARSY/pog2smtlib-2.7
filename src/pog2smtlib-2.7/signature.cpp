@@ -134,8 +134,7 @@ struct fmt::formatter<std::shared_ptr<T>> : formatter<string_view> {
 };
 
 namespace std {
-template <>
-struct hash<BType> {
+template <> struct hash<BType> {
   std::size_t operator()(const BType &b) const noexcept {
     return b.hash_combine(0);
   }

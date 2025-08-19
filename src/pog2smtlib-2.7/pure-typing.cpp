@@ -140,7 +140,7 @@ class PureTypingVisitor : public Pred::Visitor {
   PureTypeExpression m_exprVisitor;
 
  public:
-  PureTypingVisitor() : m_result(false), m_exprVisitor() {};
+  PureTypingVisitor() : m_result(false), m_exprVisitor() {}
   bool get() const { return m_result; }
 
   void visitImplication([[maybe_unused]] const Pred &, const Pred &) {

@@ -34,8 +34,7 @@ using BOperator =
                  Expr::Visitor::EConstant, Expr::EKind>;
 
 namespace std {
-template <>
-struct hash<BOperator> {
+template <> struct hash<BOperator> {
   size_t operator()(const BOperator& op) const {
     switch (op.index()) {
       case 0:
@@ -63,15 +62,13 @@ struct hash<BOperator> {
 }  // namespace std
 
 /** @brief Overloads formatter to use the fmt library for BOperator values */
-template <>
-struct fmt::formatter<BOperator> : formatter<string_view> {
+template <> struct fmt::formatter<BOperator> : formatter<string_view> {
   auto format(BOperator op, format_context& ctx) const
       -> format_context::iterator;
 };
 
 /** @brief Overloads formatter to use the fmt library for BType values */
-template <>
-struct fmt::formatter<BType> : formatter<string_view> {
+template <> struct fmt::formatter<BType> : formatter<string_view> {
   auto format(BType type, format_context& ctx) const
       -> format_context::iterator;
 };

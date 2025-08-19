@@ -25,8 +25,7 @@ void Factory::index(shared_ptr<Abstract> construct) {
   m_index.push_back(construct);
 }
 
-template <typename T>
-shared_ptr<Abstract> Factory::get(shared_ptr<T>& m) {
+template <typename T> shared_ptr<Abstract> Factory::get(shared_ptr<T>& m) {
   if (m != nullptr) {
     return m;
   }
