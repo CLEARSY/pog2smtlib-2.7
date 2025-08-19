@@ -1,7 +1,7 @@
 /*
-  This file is part of pog2smtlib27.
+  This file is part of pog2smtlib-2.7.
   Copyright © CLEARSY 2025
-  pog2smtlib27 is free software: you can redistribute it and/or modify
+  pog2smtlib-2.7 is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.

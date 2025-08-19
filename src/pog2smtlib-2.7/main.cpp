@@ -1,21 +1,17 @@
-/******************************* CLEARSY **************************************
-This file is part of b2smtlib
-
-Copyright (C) 2024 CLEARSY (contact@clearsy.com)
-
-b2smtlib is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License version 3 as published by
-the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-******************************************************************************/
-
+/*
+  This file is part of pog2smtlib-2.7
+  Copyright © CLEARSY 2024-2025
+  pog2smtlib-2.7 is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 #include <algorithm>
 #include <cstdlib>  // For EXIT_FAILURE
 #include <cstring>
@@ -33,8 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 static void display_help() {
   std::cout << "Translates Atelier B proof obligation file to SMT-LIB format."
             << std::endl
-            << "\tpog2smtlib27 -i file.pog -o file.smt2" << std::endl
-            << "\tpog2smtlib27 -n [-a N1 M1 -a N2 M2 ... -a Nk Mk] [-m] -i "
+            << "\tpog2smtlib-2.7 -i file.pog -o file.smt2" << std::endl
+            << "\tpog2smtlib-2.7 -n [-a N1 M1 -a N2 M2 ... -a Nk Mk] [-m] -i "
                "file.pog -o file.smt2"
             << std::endl
             << "\t\t-n" << std::endl
