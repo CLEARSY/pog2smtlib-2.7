@@ -19,17 +19,16 @@ static constexpr std::string_view SCRIPT = R"(
   :named |def.reverse {6}|))
 )";
 
-Reverse::Reverse(const BType &U, const BType &V)
-    : BinaryBType(U, V) {
+Reverse::Reverse(const BType &U, const BType &V) : BinaryBType(U, V) {
   const auto VxU = BType::PROD(V, U);
   const auto PVxU = BType::POW(VxU);
   const auto UxV = BType::PROD(U, V);
   const auto PUxV = BType::POW(UxV);
-  m_script = fmt::format(SCRIPT, 
-                         /*0*/ smtSymbol(Expr::UnaryOp::Inverse, U, V), 
+  m_script = fmt::format(SCRIPT,
+                         /*0*/ smtSymbol(Expr::UnaryOp::Inverse, U, V),
                          /*1*/ symbol(PUxV),
-                         /*2*/ symbol(PVxU), 
-                         /*3*/ smtSymbol(Expr::NaryOp::Set, VxU), 
+                         /*2*/ symbol(PVxU),
+                         /*3*/ smtSymbol(Expr::NaryOp::Set, VxU),
                          /*4*/ symbolInner(VxU),
                          /*5*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
                          /*6*/ symbolInner(UxV));

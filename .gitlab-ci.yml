@@ -4,7 +4,23 @@ variables:
   GIT_SUBMODULE_FORCE_HTTPS: "true"
 
 stages:
+  - lint
   - build
+
+trailing-whitespace-check:
+  image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/ubuntu-24.04
+  stage: lint
+  tags:
+    - docker
+    - linux
+  script:
+    - git fetch --no-tags origin "$CI_DEFAULT_BRANCH"
+    - |
+      if git grep -I -n '[[:blank:]]$' HEAD -- '*.cpp' '*.h' '*.mch' '*.txt'; then
+        echo "❌ Trailing whitespace found in (*.cpp|*.h|*.mch|*.txt)."
+        echo "Fix the lines above and amend your commit."
+        exit 1
+      fi
 
 build:
   image: ${CI_REGISTRY}/clearsy-public/bbatch-linux-docker/ubuntu-24.04

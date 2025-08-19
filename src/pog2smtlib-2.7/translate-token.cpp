@@ -103,8 +103,8 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     {Expr::UnaryOp::Inverse, "~"},
 
     /* 5.12 Expressions of Relations */
-    {Expr::UnaryOp::Closure, "closure"},    
-    {Expr::UnaryOp::Transitive_Closure, "closure1"},    
+    {Expr::UnaryOp::Closure, "closure"},
+    {Expr::UnaryOp::Transitive_Closure, "closure1"},
 
     /* 5.13 Expressions of Relations */
     {Expr::UnaryOp::Domain, "rel.domain"},
@@ -128,10 +128,9 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     {Expr::UnaryOp::Front, "front"},
     {Expr::UnaryOp::Tail, "tail"},
     {Expr::UnaryOp::Reverse, "rev"},
-    
+
     /* 5.19 Expressions of Sequences */
-    {Expr::UnaryOp::Concatenation, "conc"}
-  };
+    {Expr::UnaryOp::Concatenation, "conc"}};
 
 std::string smtSymbol(Expr::UnaryOp op) {
   const auto itr = unOpExprToStringMap.find(op);
@@ -165,7 +164,6 @@ std::string smtSymbol(Expr::UnaryOp op, const BType& t1, const BType& t2) {
   return fmt::format("|{0} {1} {2}|", str, symbolInner(t1), symbolInner(t2));
 }
 
-
 static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     /* 5.3 Arithmetical Expressions I */
     {Expr::BinaryOp::IAddition, "+"},
@@ -179,7 +177,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
 
     /* 5.5 Expression of Couples */
     {Expr::BinaryOp::Mapplet, "maplet"},
-    
+
     /* 5.7 Set List Expressions */
     {Expr::BinaryOp::Cartesian_Product, "set.product"},
     {Expr::BinaryOp::Interval, "|interval|"},
@@ -209,7 +207,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::Range_Restriction, "rel.restrict.ran"},
     {Expr::BinaryOp::Range_Subtraction, "rel.subtract.ran"},
     {Expr::BinaryOp::Surcharge, "rel.overwrite"},
-  
+
     /* 5.15 Sets of Functions */
     {Expr::BinaryOp::Partial_Functions, "functions.partial"},
     {Expr::BinaryOp::Total_Functions, "functions.total"},
@@ -227,8 +225,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::Head_Insertion, "→"},
     {Expr::BinaryOp::Tail_Insertion, "←"},
     {Expr::BinaryOp::Head_Restriction, "/\\"},
-    {Expr::BinaryOp::Tail_Restriction, "\\/"}
-};
+    {Expr::BinaryOp::Tail_Restriction, "\\/"}};
 
 std::string smtSymbol(Expr::BinaryOp op) {
   const auto itr = binOpExprToStringMap.find(op);
@@ -250,7 +247,6 @@ std::string smtSymbol(Expr::BinaryOp op, const BType& t) {
   string& str = itr->second;
   return fmt::format("|{0} {1}|", str, symbolInner(t));
 }
-
 
 std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2) {
   const auto itr = binOpExprToStringMap.find(op);
@@ -279,8 +275,7 @@ std::string smtSymbol(Expr::BinaryOp op, const BType& t1, const BType& t2,
 static std::unordered_map<Expr::NaryOp, std::string> nOpExprToStringMap = {
     /* 5.7 Set List Expressions */
     {Expr::NaryOp::Set, "set.intent"},
-    {Expr::NaryOp::Sequence, "set.intent"}
-};
+    {Expr::NaryOp::Sequence, "set.intent"}};
 
 string smtSymbol(Expr::NaryOp op, const BType& type) {
   const auto itr = nOpExprToStringMap.find(op);
@@ -293,8 +288,8 @@ string smtSymbol(Expr::NaryOp op, const BType& type) {
   return fmt::format("|{0} {1}|", str, symbolInner(type));
 }
 
-static std::unordered_map<Expr::QuantifiedOp, std::string> qOpExprToStringMap = {
-};
+static std::unordered_map<Expr::QuantifiedOp, std::string> qOpExprToStringMap =
+    {};
 
 std::string smtSymbol(Expr::QuantifiedOp op) {
   const auto itr = qOpExprToStringMap.find(op);
@@ -328,7 +323,7 @@ static std::unordered_map<Expr::Visitor::EConstant, std::string>
         {Expr::Visitor::EConstant::MinInt, "MININT"},
         {Expr::Visitor::EConstant::Successor, "succ"},
         {Expr::Visitor::EConstant::Predecessor, "pred"},
-        
+
         /* 5.6 Building Sets */
         {Expr::Visitor::EConstant::INTEGER, "INTEGER"},
         {Expr::Visitor::EConstant::NATURAL, "NATURAL"},
@@ -360,7 +355,8 @@ std::string smtSymbol(Expr::Visitor::EConstant c, const BType& type) {
     return fmt::format("|set.empty {0}|", symbolInner(type));
   } /* else if (c == Expr::Visitor::EConstant::EmptySeq) {
     return fmt::format("|seq.empty {0}|", symbolInner(type));
-  } */ else {
+  } */
+  else {
     return smtSymbol(c);
   }
 }
