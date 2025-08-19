@@ -1,3 +1,17 @@
+/*
+  This file is part of pog2smtlib-2.7
+  Copyright © CLEARSY 2025
+  pog2smtlib-2.7 is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 #include "signature.h"
 
 #include <fmt/format.h>
@@ -11,7 +25,7 @@ using std::unordered_set;
 #include "pure-typing.h"
 #include "type-utils.h"
 
-static constexpr bool debug_me = false;
+static constexpr bool debug_me = true;
 
 class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
  public:
@@ -796,13 +810,28 @@ void GetSignatureVisitor::visitQuantifiedExpr(
     [[maybe_unused]] const Pred &cond, [[maybe_unused]] const Expr &body) {
   SignatureReset(m_signature);
   Signature sig;
+  if (true) {
+    std::cerr << "visitQuantifiedExpr" << std::endl
+              << "initial" << std::endl
+              << toString(sig) << std::endl;
+  }
   for (auto v : vars) {
     m_bindings.insert(v.name);
   }
   cond.accept(*this);
   SignatureMoveInto(sig, m_signature);
+  if (true) {
+    std::cerr << "visitQuantifiedExpr" << std::endl
+              << "cond" << std::endl
+              << toString(sig) << std::endl;
+  }
   body.accept(*this);
   SignatureMoveInto(m_signature, sig);
+  if (true) {
+    std::cerr << "visitQuantifiedExpr" << std::endl
+              << "final" << std::endl
+              << toString(m_signature) << std::endl;
+  }
   for (auto v : vars) {
     m_bindings.erase(v.name);
   }

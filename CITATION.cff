@@ -1,16 +1,14 @@
 cff-version: 1.2.0
-title: b2smtlib
+title: pog2smtlib-2.7
 message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
+  If you use this software, please cite it using the metadata from this file.
 type: software
 authors:
   - name: CLEARSY
-repository-code: 'https://github.com/CLEARSY/b2smtlib'
+repository-code: "https://github.com/CLEARSY/b2smtlib"
 abstract: >
-  Tool translating proof obligations from the POG format to
-  SMT-LIB 2.6. The generated SMT-LIB problem includes the
-  axiomatization of the B operators used in the proof obligation.
-  The produced SMT-LIB problem is multi-sorted and monomorphization
-  is applied to handle polymorphic operators such as ∈.
+  Tool translating proof obligations from the POG format to SMT-LIB 2.7. The
+  generated SMT-LIB problem includes the axiomatization of the B operators used
+  in the proof obligation. The produced SMT-LIB problem is multi-sorted and
+  monomorphization is applied to handle polymorphic operators such as ∈.
 license: GPL-3.0

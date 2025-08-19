@@ -1,6 +1,6 @@
 message(STATUS "Processing ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt")
 
-include_directories(${pog2smtlib27_program_SOURCE_DIR})
+include_directories(${pog2smtlib-2.7_program_SOURCE_DIR})
 set(POG2SMTLIB27_EXPRESSION_SOURCES
   # 5.1 Primary Expressions
   ${CMAKE_CURRENT_SOURCE_DIR}/data.cpp
