@@ -172,7 +172,7 @@
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
 (assert (!
-  (not (= (|conc POW Z| (|set.intent (Z x POW (Z x POW Z))| (lambda ((x |(Z x POW (Z x POW Z))|)) (or (= x (maplet 0 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 |set.empty Z|)))))))(= x (maplet 1 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)))))))))))(= x (maplet 2 |set.empty (Z x POW Z)|))(= x (maplet 3 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 5))))))))))))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 |set.empty Z|))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)))))))))))
+  (not (= (|conc POW Z| (|set.intent (Z x POW (Z x POW Z))| (lambda ((x |(Z x POW (Z x POW Z))|)) (or (= x (maplet 1 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 1 |set.empty Z|))))))(= x (maplet 2 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3))))))))))(= x (maplet 3 |set.empty (Z x POW Z)|))(= x (maplet 4 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 5))))))))))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 |set.empty Z|))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)))))))))))
   :named |Goal|)
 )
 (check-sat)

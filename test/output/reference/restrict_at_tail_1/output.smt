@@ -101,7 +101,7 @@
             (|set.in (Z x Z)| (maplet (+ x (fst p)) (snd p)) s))))
   :named |ax.restrict.tail.def Z|))
 (assert (!
-  (not (= (|\/ Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 5))(= x (maplet 2 4))))) 3) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 4)))))))
+  (not (= (|\/ Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))(= x (maplet 2 5))(= x (maplet 3 4))))) 3) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 1 4))))))
   :named |Goal|)
 )
 (check-sat)

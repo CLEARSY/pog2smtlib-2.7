@@ -107,7 +107,7 @@
   :named |Define:lprp:1|)
 )
 (assert (!
-  (= vset (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)))))))))
+  (= vset (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (|set.intent Z| (lambda ((x |Z|)) (= x 0))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)))))))))
   :named |Define:lprp:2|)
 )
 (assert (!

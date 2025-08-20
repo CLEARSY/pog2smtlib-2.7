@@ -58,7 +58,7 @@
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
-  (not (|set.in (Z x (Z x POW Z))| (maplet 1 (maplet 3 (|set.intent Z| (lambda ((x |Z|)) (or (= x 9)))))) (|directproduct Z Z POW Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 5 4))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 10))))))(= x (maplet 4 (|set.intent Z| (lambda ((x |Z|)) (or (= x 9))))))))))))
+  (not (|set.in (Z x (Z x POW Z))| (maplet 1 (maplet 3 (|set.intent Z| (lambda ((x |Z|)) (= x 9))))) (|directproduct Z Z POW Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 5 4))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 10)))))(= x (maplet 4 (|set.intent Z| (lambda ((x |Z|)) (= x 9)))))))))))
   :named |Goal|)
 )
 (check-sat)

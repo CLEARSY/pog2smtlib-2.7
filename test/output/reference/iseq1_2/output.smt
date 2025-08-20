@@ -281,7 +281,7 @@
        (and (|set.in POW (Z x Z)| s (|iseq Z| E)) (not (= s |seq.empty Z|)))))
   :named |ax.iseq1 Z|))
 (assert (!
-  (not (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 1))(= x (maplet 2 0))))) (|iseq1 Z| INTEGER)))
+  (not (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))(= x (maplet 2 1))(= x (maplet 3 0))))) (|iseq1 Z| INTEGER)))
   :named |Goal|)
 )
 (check-sat)

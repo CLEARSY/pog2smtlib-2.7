@@ -166,7 +166,7 @@
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
-  (not (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 1))))) (|bijections.total Z Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)))))))
+  (not (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 0 1)))) (|bijections.total Z Z| (|set.intent Z| (lambda ((x |Z|)) (= x 0))) (|set.intent Z| (lambda ((x |Z|)) (= x 1))))))
   :named |Goal|)
 )
 (check-sat)
