@@ -28,7 +28,7 @@ static constexpr std::string_view SCRIPT = R"(
   (forall ((R {1})(p {2}))
     (= ({3} p ({0} R))
        (or (= (fst p) (snd p))
-           ({3} p ({0} R)))))
+           ({3} p ({5} R)))))
   :named |ax.closure {4}|))
 )";
 
@@ -40,10 +40,12 @@ Closure::Closure(const BType &T) : UnaryBType(T) {
                          /*1*/ symbol(PTxT),
                          /*2*/ symbol(TxT),
                          /*3*/ smtSymbol(Pred::ComparisonOp::Membership, TxT),
-                         /*4*/ symbolInner(T));
+                         /*4*/ symbolInner(T),
+                         /*5*/ smtSymbol(Expr::UnaryOp::Transitive_Closure, T));
   m_label = "closure";
   m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(TxT)});
+      {std::make_shared<BConstruct::Predicate::SetMembership>(TxT),
+       std::make_shared<BConstruct::Expression::Closure1>(T)});
   m_debug_string = fmt::format("closure_{}", T.to_string());
 }
 
