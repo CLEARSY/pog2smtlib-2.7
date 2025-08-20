@@ -27,9 +27,8 @@ static constexpr std::string_view SCRIPT = R"(
 (assert (!
   (forall ((s {1}) (t {1}))
     (= ({3} s ({0} t))
-        (and
-          ({3} s ({0} t))
-          (not  (= s {4})))))
+       (and ({3} s ({6} t))
+            (not  (= s {4})))))
   :named |ax.non empty finite sub-sets {5}|))
 )";
 
@@ -43,7 +42,8 @@ Fin1::Fin1(const BType &T) : UnaryBType(T) {
                   /*2*/ symbol(PPT),
                   /*3*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
                   /*4*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, T),
-                  /*5*/ symbolInner(T));
+                  /*5*/ symbolInner(T),
+                  /*6*/ smtSymbol(Expr::UnaryOp::Finite_Subsets, T));
   m_label = "FIN1";
   m_prerequisites.insert(
       {std::make_shared<BConstruct::Expression::EmptySet>(T),

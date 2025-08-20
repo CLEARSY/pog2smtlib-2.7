@@ -8,12 +8,40 @@
 
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 
+(declare-fun |relcomp Z Z Z| (|POW (Z x Z)| |POW (Z x Z)|) |POW (Z x Z)|)
+(assert (!
+  (forall ((r |POW (Z x Z)|) (s |POW (Z x Z)|) (p |(Z x Z)|))
+    (= (|set.in (Z x Z)| p (|relcomp Z Z Z| r s))
+       (exists ((y |Z|))
+         (and
+           (|set.in (Z x Z)| (maplet (fst p) y) r)
+           (|set.in (Z x Z)| (maplet y (snd p)) s)))))
+  :named |ax.set.in.relcomp ((Z x Z) x Z)|))
+
+(declare-fun |iterate Z| (|POW (Z x Z)| |Z|) |POW (Z x Z)|)
+(assert (!
+  (forall ((R |POW (Z x Z)|)) (= (|iterate Z| R 1) R))
+  :named |ax.set.iterate.1 Z|))
+(assert (!
+  (forall ((R |POW (Z x Z)|)(n |Z|))
+    (= (|iterate Z| R (+ n 1)) (|relcomp Z Z Z| R (|iterate Z| R n))))
+  :named |ax.set.iterate.n+1 Z|))
+
+(declare-fun |closure1 Z| (|POW (Z x Z)|) |POW (Z x Z)|)
+(assert (!
+  (forall ((R |POW (Z x Z)|)(p |(Z x Z)|))
+    (= (|set.in (Z x Z)| p (|closure1 Z| R))
+       (exists ((n |Z|))
+         (and (<= 1 n)
+              (|set.in (Z x Z)| p (|iterate Z| R n))))))
+  :named |ax.closure1 Z|))
+
 (declare-fun |closure Z| (|POW (Z x Z)|) |POW (Z x Z)|)
 (assert (!
   (forall ((R |POW (Z x Z)|)(p |(Z x Z)|))
     (= (|set.in (Z x Z)| p (|closure Z| R))
        (or (= (fst p) (snd p))
-           (|set.in (Z x Z)| p (|closure Z| R)))))
+           (|set.in (Z x Z)| p (|closure1 Z| R)))))
   :named |ax.closure Z|))
 
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
