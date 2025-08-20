@@ -107,7 +107,7 @@
          (p x))))
   :named |ax:set.in.intent Z|))
 (assert (!
-  (not (= (|size POW Z| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 3))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 6)(= x 7)(= x 8))))))(= x (maplet 2 |set.empty Z|))(= x (maplet 3 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)))))))))) 4))
+  (not (= (|size POW Z| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 3))))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 6)(= x 7)(= x 8))))))(= x (maplet 3 |set.empty Z|))(= x (maplet 4 (|set.intent Z| (lambda ((x |Z|)) (= x 1))))))))) 4))
   :named |Goal|)
 )
 (check-sat)

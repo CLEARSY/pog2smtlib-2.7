@@ -102,7 +102,7 @@
   :named |ax.conc.definition Z|
 ))
 (assert (!
-  (not (= (|^ Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 3))(= x (maplet 1 1))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 2))(= x (maplet 2 4)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 3))(= x (maplet 1 1))(= x (maplet 2 0))(= x (maplet 3 4))(= x (maplet 4 2)))))))
+  (not (= (|^ Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 2 1))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))(= x (maplet 2 2))(= x (maplet 3 4)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 2 1))(= x (maplet 3 0))(= x (maplet 4 4))(= x (maplet 5 2)))))))
   :named |Goal|)
 )
 (check-sat)

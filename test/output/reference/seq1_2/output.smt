@@ -268,7 +268,7 @@
   (forall ((e |Z|)) (|set.in Z| e INTEGER))
   :named |ax.set.in.INTEGER|))
 (assert (!
-  (not (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 1))(= x (maplet 1 2))(= x (maplet 2 4))(= x (maplet 3 0))))) (|seq1 Z| INTEGER)))
+  (not (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 1))(= x (maplet 2 2))(= x (maplet 3 4))(= x (maplet 4 0))))) (|seq1 Z| INTEGER)))
   :named |Goal|)
 )
 (check-sat)

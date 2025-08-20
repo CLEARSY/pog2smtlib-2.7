@@ -37,7 +37,7 @@
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
-  (not (= (|rel.overwrite Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 1)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 1)))))))
+  (not (= (|rel.overwrite Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 0 0)))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 1 1))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 1)))))))
   :named |Goal|)
 )
 (check-sat)

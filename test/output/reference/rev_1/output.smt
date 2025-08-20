@@ -100,7 +100,7 @@
        (|set.in (Z x Z)| (maplet (- (+ 1 (|size Z| s)) (fst p)) (snd p)) s)))
   :named |ax.set.in.rev Z|))
 (assert (!
-  (not (= (|rev Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 1))(= x (maplet 1 5))(= x (maplet 2 2))(= x (maplet 3 9)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 1))(= x (maplet 1 5))(= x (maplet 2 2))(= x (maplet 3 9)))))))
+  (not (= (|rev Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 1))(= x (maplet 2 5))(= x (maplet 3 2))(= x (maplet 4 9)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 1))(= x (maplet 2 5))(= x (maplet 3 2))(= x (maplet 4 9)))))))
   :named |Goal|)
 )
 (check-sat)

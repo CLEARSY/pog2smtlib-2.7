@@ -733,13 +733,17 @@ void SmtTranslatorVisitor::visitNaryExpression(
       m_translation.push_back(')');
       m_translation.push_back(' ');
 
-      m_translation.append("(or ");
+      if (vec.size() > 1) {
+        m_translation.append("(or ");
+      }
       for (const Expr &v : vec) {
         m_translation.append("(= x ");
         v.accept(*this);
         m_translation.push_back(')');
       }
-      m_translation.push_back(')');
+      if (vec.size() > 1) {
+        m_translation.push_back(')');
+      }
 
       m_translation.push_back(')');
       m_translation.push_back(')');
@@ -758,9 +762,11 @@ void SmtTranslatorVisitor::visitNaryExpression(
       m_translation.push_back(')');
       m_translation.push_back(' ');
 
-      int i = 0;
+      int i = 1;
 
-      m_translation.append("(or ");
+      if (vec.size() > 1) {
+        m_translation.append("(or ");
+      }
       for (const Expr &v : vec) {
         m_translation.append("(= x (maplet ");
         m_translation.append(std::to_string(i));
@@ -770,8 +776,9 @@ void SmtTranslatorVisitor::visitNaryExpression(
         m_translation.push_back(')');
         i++;
       }
-      m_translation.push_back(')');
-
+      if (vec.size() > 1) {
+        m_translation.push_back(')');
+      }
       m_translation.push_back(')');
       m_translation.push_back(')');
       break;

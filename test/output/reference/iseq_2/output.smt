@@ -318,7 +318,7 @@
       (|set.subseteq Z| s t)))
   :named |ax.sub-sets Z|))
 (assert (!
-  (not (|set.in POW (Z x POW Z)| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 0))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 0))))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1))))))))) (|iseq POW Z| (|sub-sets Z| INTEGER))))
+  (not (|set.in POW (Z x POW Z)| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 0))))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (= x 0)))))(= x (maplet 3 (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1))))))))) (|iseq POW Z| (|sub-sets Z| INTEGER))))
   :named |Goal|)
 )
 (check-sat)

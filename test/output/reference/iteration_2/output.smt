@@ -41,7 +41,7 @@
   (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
   :named |ax.set.in.empty (Z x Z)|))
 (assert (!
-  (not (= (|iterate Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))))) 2) |set.empty (Z x Z)|))
+  (not (= (|iterate Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 1 0)))) 2) |set.empty (Z x Z)|))
   :named |Goal|)
 )
 (check-sat)

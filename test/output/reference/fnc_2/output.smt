@@ -56,7 +56,7 @@
                (|set.in (Z x POW Z)| (maplet (fst p) y) r))))))
   :named |ax.set.in.fnc (Z x POW Z)|))
 (assert (!
-  (= func (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4))))))(= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4)(= x 6)(= x 7))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 5)(= x 4))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1))))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 6)(= x 8)(= x 5))))))))))
+  (= func (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4))))))(= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4)(= x 6)(= x 7))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 5)(= x 4))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 1)))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 6)(= x 8)(= x 5))))))))))
   :named |Define:lprp:1|)
 )
 (assert (!
