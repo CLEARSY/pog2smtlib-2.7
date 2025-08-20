@@ -103,7 +103,7 @@
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
-  (not (= (|front Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 5))(= x (maplet 1 4))(= x (maplet 2 7))(= x (maplet 3 8)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 5))(= x (maplet 1 4))(= x (maplet 2 7)))))))
+  (not (= (|front Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 5))(= x (maplet 2 4))(= x (maplet 3 7))(= x (maplet 4 8)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 5))(= x (maplet 2 4))(= x (maplet 3 7)))))))
   :named |Goal|)
 )
 (check-sat)

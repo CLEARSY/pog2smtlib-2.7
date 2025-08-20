@@ -109,7 +109,7 @@
          (p x))))
   :named |ax:set.in.intent Z|))
 (assert (!
-  (not (= (Value (|card POW Z| (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x |set.empty Z|)(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4)(= x 5)(= x 6)))))))))) 4))
+  (not (= (Value (|card POW Z| (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x |set.empty Z|)(= x (|set.intent Z| (lambda ((x |Z|)) (= x 1))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4)(= x 5)(= x 6)))))))))) 4))
   :named |Goal|)
 )
 (check-sat)

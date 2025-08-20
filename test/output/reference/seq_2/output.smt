@@ -17,7 +17,7 @@
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
-  (not (|set.in (Z x Z)| (maplet 1 1) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 1))(= x (maplet 1 2))(= x (maplet 2 3)))))))
+  (not (|set.in (Z x Z)| (maplet 1 1) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 1))(= x (maplet 2 2))(= x (maplet 3 3)))))))
   :named |Goal|)
 )
 (check-sat)

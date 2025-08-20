@@ -39,7 +39,7 @@
   :named |Define:lprp:1|)
 )
 (assert (!
-  (not (= (|inter Z| vset) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0))))))
+  (not (= (|inter Z| vset) (|set.intent Z| (lambda ((x |Z|)) (= x 0)))))
   :named |Goal|)
 )
 (check-sat)

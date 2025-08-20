@@ -99,7 +99,7 @@
     (|set.in (Z x Z)| (maplet (|size Z| s) (|last Z| s)) s))
   :named |ax.last.definition Z|))
 (assert (!
-  (not (= (|last Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 5))(= x (maplet 1 5))(= x (maplet 2 7)))))) 7))
+  (not (= (|last Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 5))(= x (maplet 2 5))(= x (maplet 3 7)))))) 7))
   :named |Goal|)
 )
 (check-sat)

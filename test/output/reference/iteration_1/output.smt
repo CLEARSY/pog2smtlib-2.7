@@ -85,7 +85,7 @@
   (forall ((e |Z|)) (|set.in Z| e INTEGER))
   :named |ax.set.in.INTEGER|))
 (assert (!
-  (not (|set.in POW (Z x Z)| (|iterate Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))))) 1) (|sub-sets (Z x Z)| (|set.product Z Z| INTEGER NAT1))))
+  (not (|set.in POW (Z x Z)| (|iterate Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 1 0)))) 1) (|sub-sets (Z x Z)| (|set.product Z Z| INTEGER NAT1))))
   :named |Goal|)
 )
 (check-sat)
