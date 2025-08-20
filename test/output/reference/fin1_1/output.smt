@@ -126,9 +126,8 @@
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))
     (= (|set.in POW Z| s (|non empty finite sub-sets Z| t))
-        (and
-          (|set.in POW Z| s (|non empty finite sub-sets Z| t))
-          (not  (= s |set.empty Z|)))))
+       (and (|set.in POW Z| s (|finite sub-sets Z| t))
+            (not  (= s |set.empty Z|)))))
   :named |ax.non empty finite sub-sets Z|))
 (declare-const p1 |POW POW Z|)
 (declare-const p2 |POW POW Z|)
@@ -229,9 +228,8 @@
 (assert (!
   (forall ((s |POW POW Z|) (t |POW POW Z|))
     (= (|set.in POW POW Z| s (|non empty finite sub-sets POW Z| t))
-        (and
-          (|set.in POW POW Z| s (|non empty finite sub-sets POW Z| t))
-          (not  (= s |set.empty POW Z|)))))
+       (and (|set.in POW POW Z| s (|finite sub-sets POW Z| t))
+            (not  (= s |set.empty POW Z|)))))
   :named |ax.non empty finite sub-sets POW Z|))
 (assert (!
   (|set.subseteq POW Z| p1 (|non empty finite sub-sets Z| INTEGER))
