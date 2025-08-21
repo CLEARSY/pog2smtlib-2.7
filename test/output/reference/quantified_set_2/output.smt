@@ -20,9 +20,9 @@
   (forall ((e |Z|)) (|set.in Z| e INTEGER))
   :named |ax.set.in.INTEGER|))
 (assert (!
-  (not (|set.in Z| 3 (|set.intent Z| (lambda ((xx |Z|)) (and
-(|set.in Z| xx INTEGER)
-(< (* xx xx) 10)
+  (not (|set.in Z| 3 (|set.intent Z| (lambda ((x |Z|)) (and
+(|set.in Z| x INTEGER)
+(< (* x x) 10)
 )))))
   :named |Goal|)
 )

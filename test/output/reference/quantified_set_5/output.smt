@@ -14,16 +14,8 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-
-(declare-const INTEGER |POW Z|)
 (assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
-(assert (!
-  (not (|set.in Z| 3 (|set.intent Z| (lambda ((x |Z|)) (and
-(|set.in Z| x INTEGER)
-(= x 2)
-)))))
+  (not (|set.in Z| 1 (|set.intent Z| (lambda ((x |Z|)) (= x 1)))))
   :named |Goal|)
 )
 (check-sat)

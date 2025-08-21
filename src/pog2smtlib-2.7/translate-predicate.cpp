@@ -147,6 +147,7 @@ class SmtTranslatorVisitor : public Pred::Visitor, public Expr::Visitor {
       else
         m_translation.append(")");
     }
+    if (child < vec.size()) m_translation.append(")");
     m_indent -= 1;
   }
 };
@@ -817,7 +818,43 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
     [[maybe_unused]] const std::vector<TypedVar> vars,
     [[maybe_unused]] const Pred &cond, [[maybe_unused]] const Expr &body) {
   switch (op) {
-    case Expr::QuantifiedOp::Lambda:
+    case Expr::QuantifiedOp::Lambda: {
+      m_translation.push_back('(');
+      m_translation.append(
+          smtSymbol(op, (type.toPowerType().content).toProductType().lhs,
+                    (type.toPowerType().content).toProductType().rhs));
+
+      m_translation.append(" (lambda ((c ");
+      m_translation.append(
+          symbol((type.toPowerType().content).toProductType().lhs));
+      m_translation.append(")) ");
+      Pred condCopy = cond.copy();
+      std::map<VarName, VarName> map;
+      for (size_t i = 0; i < vars.size(); ++i) {
+        std::string access = "c";
+        for (size_t j = 0; j < vars.size() - i - 1; ++j) {
+          access = "(fst " + access + ")";
+        }
+        access = (i == 0) ? access : "(snd " + access + ")";
+        map.insert({vars[i].name, VarName::makeVarWithoutSuffix(access)});
+      }
+      condCopy.alpha(map);
+      condCopy.accept(*this);
+      m_translation.push_back(')');
+      m_translation.push_back(' ');
+
+      m_translation.append(" (lambda ((c ");
+      m_translation.append(
+          symbol((type.toPowerType().content).toProductType().lhs));
+      m_translation.append(")) ");
+      Expr bodyCopy = body.copy();
+      bodyCopy.alpha(map);
+      bodyCopy.accept(*this);
+      m_translation.push_back(')');
+
+      m_translation.push_back(')');
+      break;
+    }
     case Expr::QuantifiedOp::ISum:
     case Expr::QuantifiedOp::IProduct:
     case Expr::QuantifiedOp::Union:
@@ -837,36 +874,21 @@ void SmtTranslatorVisitor::visitQuantifiedSet(
   m_translation.push_back('(');
   m_translation.append(
       smtSymbol(Expr::NaryOp::Set, type.toPowerType().content));
-  m_translation.append(" (lambda (");
-
-  // Étape 1 : Récupérer les différentes types produits
-  std::vector<BType> types;
-  BType current = type.toPowerType().content;
-
+  m_translation.append(" (lambda ((x ");
+  m_translation.append(symbol(type.toPowerType().content));
+  m_translation.append(")) ");
+  Pred condCopy = cond.copy();
+  std::map<VarName, VarName> map;
   for (size_t i = 0; i < vars.size(); ++i) {
-    if (i < vars.size() - 1) {
-      types.push_back(current.toProductType().rhs);
-      current = current.toProductType().lhs;
-    } else {
-      types.push_back(current);  // le dernier (tout à gauche)
+    std::string access = "x";
+    for (size_t j = 0; j < vars.size() - i - 1; ++j) {
+      access = "(fst " + access + ")";
     }
+    access = (i == 0) ? access : "(snd " + access + ")";
+    map.insert({vars[i].name, VarName::makeVarWithoutSuffix(access)});
   }
-
-  // Étape 2 : Générer les variables avec leur type, dans le bon ordre
-  for (size_t i = 0; i < vars.size(); ++i) {
-    m_translation.push_back('(');
-    m_translation.append(vars[i].name.show());
-    m_translation.push_back(' ');
-    m_translation.append(symbol(types[vars.size() - 1 - i]));
-    m_translation.push_back(')');
-  }
-
-  m_translation.push_back(')');
-  m_translation.push_back(' ');
-
-  cond.accept(*this);
-
-  m_translation.push_back(')');
+  condCopy.alpha(map);
+  condCopy.accept(*this);
   m_translation.push_back(')');
   m_translation.push_back(')');
 }

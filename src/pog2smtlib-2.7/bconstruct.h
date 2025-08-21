@@ -141,6 +141,7 @@ class Total_Bijection;
 class Evaluation;
 class Transformed_Into_Function;
 class Transformed_Into_Relation;
+class Lambda;
 
 /* 5.17 Set of Sequences */
 class Seq;
@@ -308,6 +309,7 @@ class Factory {
                                                       const BType &);
   std::shared_ptr<Abstract> Transformed_Into_Relation(const BType &,
                                                       const BType &);
+  std::shared_ptr<Abstract> Lambda(const BType &, const BType &);
 
   /* 5.17 Set of Sequences */
   std::shared_ptr<Abstract> Seq(const BType &);
@@ -689,6 +691,11 @@ class Factory {
       std::shared_ptr<BConstruct::Expression::Transformed_Into_Relation>,
       BinaryBTypeHash>
       m_Transformed_Into_Relations;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Lambda>, BinaryBTypeHash>
+      m_Lambdas;
 
   /* 5.17 Set of Sequences */
   std::unordered_map<std::shared_ptr<const BType>,
@@ -1454,6 +1461,12 @@ class Transformed_Into_Relation : public BinaryBType {
  public:
   explicit Transformed_Into_Relation(const BType &, const BType &);
   virtual ~Transformed_Into_Relation() = default;
+};
+
+class Lambda : public BinaryBType {
+ public:
+  explicit Lambda(const BType &, const BType &);
+  virtual ~Lambda() = default;
 };
 
 /* 5.17 Set of Sequences */

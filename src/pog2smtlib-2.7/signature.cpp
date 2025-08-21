@@ -810,31 +810,30 @@ void GetSignatureVisitor::visitQuantifiedExpr(
     [[maybe_unused]] const Pred &cond, [[maybe_unused]] const Expr &body) {
   SignatureReset(m_signature);
   Signature sig;
-  if (true) {
-    std::cerr << "visitQuantifiedExpr" << std::endl
-              << "initial" << std::endl
-              << toString(sig) << std::endl;
-  }
   for (auto v : vars) {
     m_bindings.insert(v.name);
   }
   cond.accept(*this);
   SignatureMoveInto(sig, m_signature);
-  if (true) {
-    std::cerr << "visitQuantifiedExpr" << std::endl
-              << "cond" << std::endl
-              << toString(sig) << std::endl;
-  }
   body.accept(*this);
-  SignatureMoveInto(m_signature, sig);
-  if (true) {
-    std::cerr << "visitQuantifiedExpr" << std::endl
-              << "final" << std::endl
-              << toString(m_signature) << std::endl;
-  }
+  SignatureMoveInto(sig, m_signature);
   for (auto v : vars) {
     m_bindings.erase(v.name);
   }
+  switch (op) {
+    case Expr::QuantifiedOp::Lambda: {
+      const auto &etype1 = elementOfPowerType(op, type);
+      const auto &etype2 = lhsOfProductType(op, etype1);
+      const auto &etype3 = rhsOfProductType(op, etype1);
+      sig.m_operators.emplace(
+          MonomorphizedOperator(op, std::make_shared<BType>(etype2),
+                                std::make_shared<BType>(etype3)));
+      break;
+    }
+    default:
+      break;
+  }
+  m_signature = std::move(sig);
 }
 
 void GetSignatureVisitor::visitQuantifiedSet(
