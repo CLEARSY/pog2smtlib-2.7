@@ -41,3 +41,9 @@ Please carefully read the CONTRIBUTING.md file in this repository in case you co
 
 This code is distributed under the license: "GNU GENERAL PUBLIC LICENSE, Version 3".
 See the LICENSE file in this repository.
+
+## Acknowledgments
+
+This project is developed and maintained by [CLEARSY](https://www.clearsy.com/). It has been partly financed by the [Agence Nationale de la Recherche](https://anr.fr) grant ANR-21-CE25-0010 for the
+[BLaSST](https://anr.fr/Project-ANR-21-CE25-0010) project (Enhancing B Language Reasoners with SAT and SMT Techniques).
+
