@@ -830,6 +830,17 @@ void GetSignatureVisitor::visitQuantifiedExpr(
                                 std::make_shared<BType>(etype3)));
       break;
     }
+    case Expr::QuantifiedOp::Union:
+    case Expr::QuantifiedOp::Intersection: {
+      BType tp = vars[0].type;
+      for (size_t i = 1; i < vars.size(); ++i) {
+        tp = BType::PROD(tp, vars[i].type);
+      }
+      const auto &etype1 = elementOfPowerType(op, type);
+      sig.m_operators.emplace(MonomorphizedOperator(
+          op, std::make_shared<BType>(tp), std::make_shared<BType>(etype1)));
+      break;
+    }
     default:
       break;
   }
