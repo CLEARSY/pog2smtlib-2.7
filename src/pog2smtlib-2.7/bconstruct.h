@@ -58,6 +58,8 @@ class IntegerDivision;
 class Floor;
 class Ceiling;
 class ToReal;
+class Succ;
+class Predecessor;
 
 /* 5.4 Arithmetical Expressions (continued) */
 class Max;
@@ -225,6 +227,8 @@ class Factory {
   std::shared_ptr<Abstract> Floor();
   std::shared_ptr<Abstract> Ceiling();
   std::shared_ptr<Abstract> ToReal();
+  std::shared_ptr<Abstract> Succ();
+  std::shared_ptr<Abstract> Predecessor();
 
   /* 5.4 Arithmetical Expressions (continued) */
   std::shared_ptr<Abstract> Max();
@@ -432,6 +436,8 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Floor> m_Floor;
   std::shared_ptr<BConstruct::Expression::Ceiling> m_Ceiling;
   std::shared_ptr<BConstruct::Expression::ToReal> m_ToReal;
+  std::shared_ptr<BConstruct::Expression::Succ> m_Succ;
+  std::shared_ptr<BConstruct::Expression::Predecessor> m_Predecessor;
 
   /* 5.4 Arithmetical Expressions (continued) */
   std::shared_ptr<BConstruct::Expression::Max> m_Max;
@@ -1107,6 +1113,18 @@ class ToReal : public Uniform {
  public:
   explicit ToReal();
   virtual ~ToReal() = default;
+};
+
+class Succ : public Uniform {
+ public:
+  explicit Succ();
+  virtual ~Succ() = default;
+};
+
+class Predecessor : public Uniform {
+ public:
+  explicit Predecessor();
+  virtual ~Predecessor() = default;
 };
 
 /* 5.3 Arithmetical Expressions */

@@ -18,32 +18,17 @@
     </Define>
     <Define name="ctx" hash="0"/>
     <Define name="seext" hash="0"/>
-    <Define name="lprp" hash="7437355169344929984">
-        <Exp_Comparison op=":">
-            <Id value="c1" typref="1" tag="arithmetical_expression_8.bxml:1:2:1:1:1"/>
-            <Id value="INTEGER" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:1:2"/>
-        </Exp_Comparison>
-        <Exp_Comparison op=":">
-            <Id value="c2" typref="1" tag="arithmetical_expression_8.bxml:1:2:1:2:1"/>
-            <Id value="INTEGER" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:2:2"/>
-        </Exp_Comparison>
-    </Define>
+    <Define name="lprp" hash="0"/>
     <Define name="inprp" hash="0"/>
     <Define name="inext" hash="0"/>
     <Define name="inv" hash="0"/>
     <Define name="ass" hash="11641000841652449644">
         <Exp_Comparison op="=">
-            <Id value="c1" typref="1" tag="arithmetical_expression_8.bxml:1:4:1:1"/>
-            <Unary_Exp op="floor" typref="1">
-                <Real_Literal value="3.13" typref="2" tag="arithmetical_expression_8.bxml:1:4:1:2:1"/>
-            </Unary_Exp>
-        </Exp_Comparison>
-        <Exp_Comparison op="=">
-            <Binary_Exp op="(" typref="1">
-                <Id value="succ" typref="3"/>
-                <Id value="c1" typref="1" tag="arithmetical_expression_8.bxml:1:4:2:1:1"/>
+            <Binary_Exp op="(" typref="0">
+                <Id value="succ" typref="1"/>
+                <Integer_Literal value="2" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:1:1:1"/>
             </Binary_Exp>
-            <Id value="c2" typref="1" tag="arithmetical_expression_8.bxml:1:4:2:2"/>
+            <Integer_Literal value="3" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:1:1:1"/>
         </Exp_Comparison>
     </Define>
     <Define name="cst" hash="0"/>
@@ -62,58 +47,20 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op="=">
-                    <Id value="c1" typref="1" tag="arithmetical_expression_8.bxml:1:4:1:1"/>
-                    <Unary_Exp op="floor" typref="1">
-                        <Real_Literal value="3.13" typref="2" tag="arithmetical_expression_8.bxml:1:4:1:2:1"/>
-                    </Unary_Exp>
-                </Exp_Comparison>
-            </Goal>
-        </Simple_Goal>
-    </Proof_Obligation>
-    <Proof_Obligation goalHash="7151297201782450186">
-        <Tag>AssertionLemmas</Tag>
-        <Definition name="B definitions"/>
-        <Definition name="ctx"/>
-        <Definition name="cst"/>
-        <Definition name="lprp"/>
-        <Definition name="inprp"/>
-        <Definition name="inext"/>
-        <Definition name="seext"/>
-        <Definition name="inv"/>
-        <Hypothesis>
-            <Exp_Comparison op="=">
-                <Id value="c1" typref="1" tag="arithmetical_expression_8.bxml:1:4:1:1"/>
-                <Unary_Exp op="floor" typref="1">
-                    <Real_Literal value="3.13" typref="2" tag="arithmetical_expression_8.bxml:1:4:1:2:1"/>
-                </Unary_Exp>
-            </Exp_Comparison>
-        </Hypothesis>
-        <Simple_Goal>
-            <Tag>Assertion is verified</Tag>
-            <Goal>
-                <Exp_Comparison op="=">
-                    <Binary_Exp op="(" typref="1">
-                        <Id value="succ" typref="3"/>
-                        <Id value="c1" typref="1" tag="arithmetical_expression_8.bxml:1:4:2:1:1"/>
+                    <Binary_Exp op="(" typref="0">
+                        <Id value="succ" typref="1"/>
+                        <Integer_Literal value="2" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:1:1:1"/>
                     </Binary_Exp>
-                    <Id value="c2" typref="1" tag="arithmetical_expression_8.bxml:1:4:2:2"/>
+                    <Integer_Literal value="3" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:1:1:1"/>
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
     </Proof_Obligation>
     <TypeInfos>
         <Type id="0">
-            <Unary_Exp op="POW">
-                <Id value="INTEGER"/>
-            </Unary_Exp>
-        </Type>
-        <Type id="1">
             <Id value="INTEGER"/>
         </Type>
-        <Type id="2">
-            <Id value="REAL"/>
-        </Type>
-        <Type id="3">
+        <Type id="1">
             <Unary_Exp op="POW">
                 <Binary_Exp op="*">
                     <Id value="INTEGER"/>

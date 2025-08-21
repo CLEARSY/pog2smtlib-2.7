@@ -1,10 +1,5 @@
 MACHINE
     arithmetical_expression_9
-CONSTANTS
-    c1, c2
-PROPERTIES
-    c1 : INTEGER &
-    c2 : INTEGER
 ASSERTIONS
-    pred(c1) = c2
+    pred(3) = 2
 END
