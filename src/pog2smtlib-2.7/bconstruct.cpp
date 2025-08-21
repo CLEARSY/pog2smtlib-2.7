@@ -505,6 +505,10 @@ shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType& lhs,
       m_Transformed_Into_Relations, lhs, rhs);
 }
 
+shared_ptr<Abstract> Factory::Lambda(const BType& lhs, const BType& rhs) {
+  return get<BConstruct::Expression::Lambda>(m_Lambdas, lhs, rhs);
+}
+
 /* 5.17 Set of Sequences */
 
 shared_ptr<Abstract> Factory::Seq(const BType& t) {

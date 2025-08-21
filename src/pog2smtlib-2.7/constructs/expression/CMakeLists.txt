@@ -96,6 +96,7 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/eval.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/intofunction.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/intorelation.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/lambda.cpp
 
   # 5.17 Set of Sequences
   ${CMAKE_CURRENT_SOURCE_DIR}/seq.cpp

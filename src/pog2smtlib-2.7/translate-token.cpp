@@ -289,7 +289,9 @@ string smtSymbol(Expr::NaryOp op, const BType& type) {
 }
 
 static std::unordered_map<Expr::QuantifiedOp, std::string> qOpExprToStringMap =
-    {};
+    {
+        /* 5.16 Expressions of Functions */
+        {Expr::QuantifiedOp::Lambda, "set.lambda"}};
 
 std::string smtSymbol(Expr::QuantifiedOp op) {
   const auto itr = qOpExprToStringMap.find(op);
