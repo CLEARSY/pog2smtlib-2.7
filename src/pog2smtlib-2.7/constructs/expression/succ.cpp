@@ -23,32 +23,30 @@
 namespace BConstruct::Expression {
 
 static constexpr std::string_view SCRIPT = R"(
-(declare-fun {0} (|? {1}| (-> {2} {3})) {3})
+(declare-const {0} {1})
 (assert (!
-  (forall ((P |? {1}|)(E (-> {2} {3}))(x {5}))
-    (= ({4} x ({0} P E))
-       (forall ((e {2})) (=> (P e) ({4} x (E e))))))
-  :named |ax.set.in.quantified.inter {6}|))
+  (forall ((x {3}))
+      (=
+        ({2} x {0})
+        (= (snd x) (+ (fst x) 1))
+      )
+  )
+  :named |ax:int.succ|))
 )";
 
-Quantified_Intersection::Quantified_Intersection(const BType &U, const BType &V)
-    : BinaryBType(U, V) {
-  const auto PV = BType::POW(V);
-  const auto UxV = BType::PROD(U, V);
+Succ::Succ() {
   m_script =
       fmt::format(SCRIPT,
-                  /*0*/ smtSymbol(Expr::QuantifiedOp::Intersection, U, V),
-                  /*1*/ symbolInner(U),
-                  /*2*/ symbol(U),
-                  /*3*/ symbol(PV),
-                  /*4*/ smtSymbol(Pred::ComparisonOp::Membership, V),
-                  /*5*/ symbol(V),
-                  /*6*/ symbolInner(UxV));
-  m_label = "INTER";
+                  /*0*/ smtSymbol(Expr::Visitor::EConstant::Successor),
+                  /*1*/ symbol(BType::POW(BType::PROD(BType::INT, BType::INT))),
+                  /*2*/
+                  smtSymbol(Pred::ComparisonOp::Membership,
+                            BType::PROD(BType::INT, BType::INT)),
+                  /*3*/ symbol(BType::PROD(BType::INT, BType::INT)));
   m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(V),
-       std::make_shared<BConstruct::Expression::Set>(U)});
-  m_debug_string = fmt::format("INTER_<{},{}>", U.to_string(), V.to_string());
+      {std::make_shared<BConstruct::Predicate::SetMembership>(
+          BType::PROD(BType::INT, BType::INT))});
+  m_label = "succ";
+  m_debug_string = "succ";
 }
-
 };  // namespace BConstruct::Expression

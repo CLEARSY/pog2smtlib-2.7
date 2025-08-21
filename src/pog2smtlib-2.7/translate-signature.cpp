@@ -382,6 +382,7 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::BinaryOp::RSubtraction:
           case Expr::BinaryOp::RMultiplication:
           case Expr::BinaryOp::RDivision:
+          case Expr::BinaryOp::Modulo:
             construct = nullptr;
             break;
           case Expr::BinaryOp::IDivision:
@@ -610,6 +611,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           case Expr::Visitor::EConstant::MinInt:
             construct = BConstruct::Factory::factory().Minint();
+            break;
+          case Expr::Visitor::EConstant::Successor:
+            construct = BConstruct::Factory::factory().Succ();
+            break;
+          case Expr::Visitor::EConstant::Predecessor:
+            construct = BConstruct::Factory::factory().Predecessor();
             break;
 
           /* 5.6 Building Sets */
