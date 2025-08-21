@@ -841,6 +841,17 @@ void GetSignatureVisitor::visitQuantifiedExpr(
           op, std::make_shared<BType>(tp), std::make_shared<BType>(etype1)));
       break;
     }
+    case Expr::QuantifiedOp::ISum:
+    case Expr::QuantifiedOp::IProduct: {
+      BType tp = BType::INT;
+      for (size_t i = 1; i < vars.size(); ++i) {
+        tp = BType::PROD(tp, BType::INT);
+      }
+      sig.m_operators.emplace(MonomorphizedOperator{
+          Pred::ComparisonOp::Membership, std::make_shared<BType>(tp)});
+      sig.m_operators.emplace(MonomorphizedOperator(op));
+      break;
+    }
     default:
       break;
   }

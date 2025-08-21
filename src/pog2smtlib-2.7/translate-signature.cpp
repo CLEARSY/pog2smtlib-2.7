@@ -577,6 +577,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Quantified_Intersection(
                 *types.at(0), *types.at(1));
             break;
+          case Expr::QuantifiedOp::ISum:
+            construct = BConstruct::Factory::factory().GeneralizedSum();
+            break;
+          case Expr::QuantifiedOp::IProduct:
+            construct = BConstruct::Factory::factory().GeneralizedProduct();
+            break;
           default:
             throw std::runtime_error(
                 fmt::format("{}:{} Unknown Quantified operator {}", FILE_NAME,

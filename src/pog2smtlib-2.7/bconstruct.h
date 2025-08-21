@@ -64,6 +64,8 @@ class Max;
 class Min;
 class Cardinals;
 class Card;
+class GeneralizedSum;
+class GeneralizedProduct;
 
 /* 5.5 Expression of Couples */
 class Maplet;
@@ -229,6 +231,8 @@ class Factory {
   std::shared_ptr<Abstract> Min();
   std::shared_ptr<Abstract> Cardinals();
   std::shared_ptr<Abstract> Card(const BType &);
+  std::shared_ptr<Abstract> GeneralizedSum();
+  std::shared_ptr<Abstract> GeneralizedProduct();
 
   /* 5.5 Expression of Couples */
   std::shared_ptr<Abstract> Maplet();
@@ -436,6 +440,9 @@ class Factory {
   std::unordered_map<std::shared_ptr<const BType>,
                      std::shared_ptr<BConstruct::Expression::Card>, BTypeHash>
       m_Cards;
+  std::shared_ptr<BConstruct::Expression::GeneralizedSum> m_GeneralizedSum;
+  std::shared_ptr<BConstruct::Expression::GeneralizedProduct>
+      m_GeneralizedProduct;
 
   /* 5.5 Expression of Couples */
   std::shared_ptr<BConstruct::Expression::Maplet> m_Maplet;
@@ -1125,6 +1132,18 @@ class Card : public UnaryBType {
  public:
   explicit Card(const BType &t);
   virtual ~Card() = default;
+};
+
+class GeneralizedSum : public Uniform {
+ public:
+  explicit GeneralizedSum();
+  virtual ~GeneralizedSum() = default;
+};
+
+class GeneralizedProduct : public Uniform {
+ public:
+  explicit GeneralizedProduct();
+  virtual ~GeneralizedProduct() = default;
 };
 
 /* 5.5 Expression of Couples */
