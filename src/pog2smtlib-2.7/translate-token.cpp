@@ -291,6 +291,10 @@ string smtSymbol(Expr::NaryOp op, const BType& type) {
 
 static std::unordered_map<Expr::QuantifiedOp, std::string> qOpExprToStringMap =
     {
+        /* 5.4 Arithmetical Expressions (continued) */
+        {Expr::QuantifiedOp::ISum, "|SIGMA|"},
+        {Expr::QuantifiedOp::IProduct, "|PI|"},
+
         /* 5.8 Set List Expressions */
         {Expr::QuantifiedOp::Union, "UNION"},
         {Expr::QuantifiedOp::Intersection, "INTER"},

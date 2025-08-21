@@ -228,6 +228,14 @@ shared_ptr<Abstract> Factory::Card(const BType& t) {
   return get<BConstruct::Expression::Card>(m_Cards, t);
 }
 
+shared_ptr<Abstract> Factory::GeneralizedSum() {
+  return get<BConstruct::Expression::GeneralizedSum>(m_GeneralizedSum);
+}
+
+shared_ptr<Abstract> Factory::GeneralizedProduct() {
+  return get<BConstruct::Expression::GeneralizedProduct>(m_GeneralizedProduct);
+}
+
 /* 5.5 Expression of Couples */
 
 shared_ptr<Abstract> Factory::Maplet() {
