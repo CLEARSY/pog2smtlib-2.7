@@ -49,6 +49,8 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/intersection.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/generalizedunion.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/generalizedintersection.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/quantified_union.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/quantified_inter.cpp
 
   # 5.10 Set of Relations
   ${CMAKE_CURRENT_SOURCE_DIR}/relations.cpp

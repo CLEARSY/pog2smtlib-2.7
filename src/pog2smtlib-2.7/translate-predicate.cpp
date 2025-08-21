@@ -855,10 +855,46 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
       m_translation.push_back(')');
       break;
     }
+    case Expr::QuantifiedOp::Union:
+    case Expr::QuantifiedOp::Intersection: {
+      BType tp = vars[0].type;
+      for (size_t i = 1; i < vars.size(); ++i) {
+        tp = BType::PROD(tp, vars[i].type);
+      }
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op, tp, type.toPowerType().content));
+
+      m_translation.append(" (lambda ((c ");
+      m_translation.append(symbol(tp));
+      m_translation.append(")) ");
+      Pred condCopy = cond.copy();
+      std::map<VarName, VarName> map;
+      for (size_t i = 0; i < vars.size(); ++i) {
+        std::string access = "c";
+        for (size_t j = 0; j < vars.size() - i - 1; ++j) {
+          access = "(fst " + access + ")";
+        }
+        access = (i == 0) ? access : "(snd " + access + ")";
+        map.insert({vars[i].name, VarName::makeVarWithoutSuffix(access)});
+      }
+      condCopy.alpha(map);
+      condCopy.accept(*this);
+      m_translation.push_back(')');
+      m_translation.push_back(' ');
+
+      m_translation.append(" (lambda ((c ");
+      m_translation.append(symbol(tp));
+      m_translation.append(")) ");
+      Expr bodyCopy = body.copy();
+      bodyCopy.alpha(map);
+      bodyCopy.accept(*this);
+      m_translation.push_back(')');
+
+      m_translation.push_back(')');
+      break;
+    }
     case Expr::QuantifiedOp::ISum:
     case Expr::QuantifiedOp::IProduct:
-    case Expr::QuantifiedOp::Union:
-    case Expr::QuantifiedOp::Intersection:
     case Expr::QuantifiedOp::RSum:
     case Expr::QuantifiedOp::RProduct:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",

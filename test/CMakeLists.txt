@@ -112,6 +112,14 @@ add_cl_test("set_union_1")
 add_cl_test("set_union_2")
 add_cl_test("set_inter_1")
 add_cl_test("set_inter_2")
+add_cl_test("quantified_union_1")
+add_cl_test("quantified_union_2")
+add_cl_test("quantified_union_3")
+add_cl_test("quantified_union_4")
+add_cl_test("quantified_union_5")
+add_cl_test("quantified_union_6")
+add_cl_test("quantified_inter_1")
+add_cl_test("quantified_inter_2")
 
 # 5.10 Set of Relations
 
