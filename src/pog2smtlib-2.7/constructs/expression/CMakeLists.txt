@@ -12,6 +12,8 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/floor.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/ceiling.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/toreal.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/predecessor.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/succ.cpp
 
   # 5.4 Arithmetical Expressions (continued)
   ${CMAKE_CURRENT_SOURCE_DIR}/max.cpp

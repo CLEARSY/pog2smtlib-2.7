@@ -370,8 +370,10 @@ void GetSignatureVisitor::visitConstant(
       */
       m_signature.m_operators.emplace(MonomorphizedOperator{
           c, std::make_shared<BType>(type.toPowerType().content)});
+      break;
     case Expr::Visitor::EConstant::Successor:
     case Expr::Visitor::EConstant::Predecessor:
+      m_signature.m_operators.emplace(MonomorphizedOperator{c});
       break;
   }
 }

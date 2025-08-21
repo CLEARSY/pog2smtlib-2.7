@@ -482,6 +482,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::RMultiplication:
     case Expr::BinaryOp::IDivision:
     case Expr::BinaryOp::RDivision:
+    case Expr::BinaryOp::Modulo:
 
     /* 5.5 Expression of Couples */
     case Expr::BinaryOp::Mapplet: {
@@ -685,7 +686,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     /* todo */
     case Expr::BinaryOp::Partial_Bijections:
     case Expr::BinaryOp::Parallel_Product:
-    case Expr::BinaryOp::Modulo:
     case Expr::BinaryOp::IExponentiation:
     case Expr::BinaryOp::RExponentiation:
     case Expr::BinaryOp::FAddition:

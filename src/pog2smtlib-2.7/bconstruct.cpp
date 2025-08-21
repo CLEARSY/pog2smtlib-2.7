@@ -210,6 +210,14 @@ shared_ptr<Abstract> Factory::ToReal() {
   return get<BConstruct::Expression::ToReal>(m_ToReal);
 }
 
+shared_ptr<Abstract> Factory::Succ() {
+  return get<BConstruct::Expression::Succ>(m_Succ);
+}
+
+shared_ptr<Abstract> Factory::Predecessor() {
+  return get<BConstruct::Expression::Predecessor>(m_Predecessor);
+}
+
 /* 5.4 Arithmetical Expressions (continued) */
 
 shared_ptr<Abstract> Factory::Max() {
