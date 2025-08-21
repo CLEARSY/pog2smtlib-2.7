@@ -61,7 +61,7 @@ message("POG2SMTLIB27_SOURCES: ${POG2SMTLIB27_SOURCES}")
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${POGLIB_SOURCE_DIR}
-  ${LIBBAST_SOURCE_DIR}
+  ${BASTLIB_SOURCE_DIR}
   ${FMT_CXX_SOURCE_DIR}/include/
   )
 
@@ -70,5 +70,5 @@ add_executable(pog2smtlib27
     ${POG2SMTLIB27_HEADERS}
     )
 
-target_link_libraries(pog2smtlib27 PRIVATE fmt::fmt-header-only -Bstatic POGLIB BAST tinyxml2::tinyxml2)
+target_link_libraries(pog2smtlib27 PRIVATE fmt::fmt-header-only -Bstatic POGLIB BAST_LIB tinyxml2::tinyxml2)
 set(pog2smtlib27_EXE ${CMAKE_CURRENT_BINARY_DIR}/pog2smtlib27 CACHE PATH "pog2smtlib27 executable")
