@@ -59,6 +59,10 @@ add_cl_test("card_1")
 add_cl_test("card_2")
 add_cl_test("card_3")
 add_cl_test("card_4")
+add_cl_test("quantified_sum_1")
+add_cl_test("quantified_sum_2")
+add_cl_test("quantified_prod_1")
+add_cl_test("quantified_prod_2")
 
 # 5.5 Expression of Couples
 
