@@ -562,8 +562,20 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
       }
     case 5:  // Expr::QuantifiedOp
       /* Lambda, Intersection, Union, ISum, IProduct, RSum, RProduct */
-      throw std::runtime_error(fmt::format("{}:{} operator {} is not supported",
-                                           FILE_NAME, LINE_NUMBER, op));
+      {
+        const Expr::QuantifiedOp qop = std::get<Expr::QuantifiedOp>(op);
+        switch (qop) {
+          case Expr::QuantifiedOp::Lambda:
+            construct = BConstruct::Factory::factory().Lambda(*types.at(0),
+                                                              *types.at(1));
+            break;
+          default:
+            throw std::runtime_error(
+                fmt::format("{}:{} Unknown Quantified operator {}", FILE_NAME,
+                            LINE_NUMBER, Expr::to_string(qop)));
+        }
+        break;
+      }
     case 6:  // Expr::Visitor::EConstant => duplicate with Expr::EKind !!
              /* MaxInt, MinInt, INTEGER, NATURAL, NATURAL1, INT, NAT, NAT1,
                 STRING, BOOL, REAL, FLOAT, TRUE, FALSE, EmptySet, Successor,

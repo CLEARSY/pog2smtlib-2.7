@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
+    <Define name="B definitions" hash="7128875304803749033">
+        <Exp_Comparison op="=">
+            <Id value="NAT" typref="0"/>
+            <Binary_Exp op=".." typref="0">
+                <Integer_Literal value="0" typref="1"/>
+                <Id value="MAXINT" typref="1"/>
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="INT" typref="0"/>
+            <Binary_Exp op=".." typref="0">
+                <Id value="MININT" typref="1"/>
+                <Id value="MAXINT" typref="1"/>
+            </Binary_Exp>
+        </Exp_Comparison>
+    </Define>
+    <Define name="ctx" hash="0"/>
+    <Define name="seext" hash="0"/>
+    <Define name="lprp" hash="0"/>
+    <Define name="inprp" hash="0"/>
+    <Define name="inext" hash="0"/>
+    <Define name="inv" hash="0"/>
+    <Define name="ass" hash="11697126398671780372">
+        <Exp_Comparison op=":">
+            <Integer_Literal value="1" typref="1" tag="quantified_set_5.bxml:1:2:1:1"/>
+            <Quantified_Set typref="0">
+                <Variables>
+                    <Id value="xx" typref="1"/>
+                </Variables>
+                <Body>
+                    <Exp_Comparison op="=">
+                        <Id value="xx" typref="1" tag="quantified_set_5.bxml:1:2:1:2:2:1:1"/>
+                        <Integer_Literal value="1" typref="1" tag="quantified_set_5.bxml:1:2:1:2:2:1:2"/>
+                    </Exp_Comparison>
+                </Body>
+            </Quantified_Set>
+        </Exp_Comparison>
+    </Define>
+    <Define name="cst" hash="0"/>
+    <Define name="sets" hash="0"/>
+    <Proof_Obligation goalHash="9084017364965107748">
+        <Tag>AssertionLemmas</Tag>
+        <Definition name="B definitions"/>
+        <Definition name="ctx"/>
+        <Definition name="cst"/>
+        <Definition name="lprp"/>
+        <Definition name="inprp"/>
+        <Definition name="inext"/>
+        <Definition name="seext"/>
+        <Definition name="inv"/>
+        <Simple_Goal>
+            <Tag>Assertion is verified</Tag>
+            <Goal>
+                <Exp_Comparison op=":">
+                    <Integer_Literal value="1" typref="1" tag="quantified_set_5.bxml:1:2:1:1"/>
+                    <Quantified_Set typref="0">
+                        <Variables>
+                            <Id value="xx" typref="1"/>
+                        </Variables>
+                        <Body>
+                            <Exp_Comparison op="=">
+                                <Id value="xx" typref="1" tag="quantified_set_5.bxml:1:2:1:2:2:1:1"/>
+                                <Integer_Literal value="1" typref="1" tag="quantified_set_5.bxml:1:2:1:2:2:1:2"/>
+                            </Exp_Comparison>
+                        </Body>
+                    </Quantified_Set>
+                </Exp_Comparison>
+            </Goal>
+        </Simple_Goal>
+    </Proof_Obligation>
+    <TypeInfos>
+        <Type id="0">
+            <Unary_Exp op="POW">
+                <Id value="INTEGER"/>
+            </Unary_Exp>
+        </Type>
+        <Type id="1">
+            <Id value="INTEGER"/>
+        </Type>
+    </TypeInfos>
+</Proof_Obligations>

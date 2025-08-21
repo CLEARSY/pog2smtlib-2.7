@@ -96,6 +96,9 @@ add_cl_test("fin1_1")
 add_cl_test("fin1_2")
 add_cl_test("quantified_set_1")
 add_cl_test("quantified_set_2")
+add_cl_test("quantified_set_3")
+add_cl_test("quantified_set_4")
+add_cl_test("quantified_set_5")
 
 # 5.8 Set List Expressions (continued)
 
@@ -183,6 +186,10 @@ add_cl_test("bijections_total_2")
 
 # 5.16 Expressions of Functions
 
+add_cl_test("lambda_1")
+add_cl_test("lambda_2")
+add_cl_test("lambda_3")
+add_cl_test("lambda_4")
 add_cl_test("application_1")
 add_cl_test("application_2")
 add_cl_test("fnc_1")
