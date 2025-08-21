@@ -94,6 +94,8 @@ class Union;
 class Intersection;
 class GeneralizedUnion;
 class GeneralizedIntersection;
+class Quantified_Union;
+class Quantified_Intersection;
 
 /* 5.10 Set of Relations */
 class Relation;
@@ -258,6 +260,9 @@ class Factory {
   std::shared_ptr<Abstract> Intersection(const BType &);
   std::shared_ptr<Abstract> GeneralizedUnion(const BType &);
   std::shared_ptr<Abstract> GeneralizedIntersection(const BType &);
+  std::shared_ptr<Abstract> Quantified_Union(const BType &, const BType &);
+  std::shared_ptr<Abstract> Quantified_Intersection(const BType &,
+                                                    const BType &);
 
   /* 5.10 Set of Relations */
   std::shared_ptr<Abstract> Relation(const BType &, const BType &);
@@ -505,6 +510,18 @@ class Factory {
       std::shared_ptr<BConstruct::Expression::GeneralizedIntersection>,
       BTypeHash>
       m_GeneralizedIntersections;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Quantified_Union>,
+      BinaryBTypeHash>
+      m_Quantified_Unions;
+
+  std::unordered_map<
+      std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Quantified_Intersection>,
+      BinaryBTypeHash>
+      m_Quantified_Intersections;
 
   /* 5.10 Set of Relations */
   std::unordered_map<
@@ -1249,6 +1266,18 @@ class GeneralizedIntersection : public UnaryBType {
  public:
   explicit GeneralizedIntersection(const BType &);
   virtual ~GeneralizedIntersection() = default;
+};
+
+class Quantified_Union : public BinaryBType {
+ public:
+  explicit Quantified_Union(const BType &, const BType &);
+  virtual ~Quantified_Union() = default;
+};
+
+class Quantified_Intersection : public BinaryBType {
+ public:
+  explicit Quantified_Intersection(const BType &, const BType &);
+  virtual ~Quantified_Intersection() = default;
 };
 
 /* 5.10 Set of Relations  */

@@ -327,6 +327,18 @@ shared_ptr<Abstract> Factory::GeneralizedUnion(const BType& t) {
   return get<BConstruct::Expression::GeneralizedUnion>(m_GeneralizedUnions, t);
 }
 
+shared_ptr<Abstract> Factory::Quantified_Union(const BType& lhs,
+                                               const BType& rhs) {
+  return get<BConstruct::Expression::Quantified_Union>(m_Quantified_Unions, lhs,
+                                                       rhs);
+}
+
+shared_ptr<Abstract> Factory::Quantified_Intersection(const BType& lhs,
+                                                      const BType& rhs) {
+  return get<BConstruct::Expression::Quantified_Intersection>(
+      m_Quantified_Intersections, lhs, rhs);
+}
+
 /* 5.10 Set of Relations */
 
 shared_ptr<Abstract> Factory::Relation(const BType& lhs, const BType& rhs) {

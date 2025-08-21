@@ -182,6 +182,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::Cartesian_Product, "set.product"},
     {Expr::BinaryOp::Interval, "|interval|"},
 
+    /* 5.8 Set List Expressions */
     {Expr::BinaryOp::Set_Difference, "set.diff"},
     {Expr::BinaryOp::Union, "set.union"},
     {Expr::BinaryOp::Intersection, "set.inter"},
@@ -290,6 +291,10 @@ string smtSymbol(Expr::NaryOp op, const BType& type) {
 
 static std::unordered_map<Expr::QuantifiedOp, std::string> qOpExprToStringMap =
     {
+        /* 5.8 Set List Expressions */
+        {Expr::QuantifiedOp::Union, "UNION"},
+        {Expr::QuantifiedOp::Intersection, "INTER"},
+
         /* 5.16 Expressions of Functions */
         {Expr::QuantifiedOp::Lambda, "set.lambda"}};
 

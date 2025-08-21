@@ -569,6 +569,14 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Lambda(*types.at(0),
                                                               *types.at(1));
             break;
+          case Expr::QuantifiedOp::Union:
+            construct = BConstruct::Factory::factory().Quantified_Union(
+                *types.at(0), *types.at(1));
+            break;
+          case Expr::QuantifiedOp::Intersection:
+            construct = BConstruct::Factory::factory().Quantified_Intersection(
+                *types.at(0), *types.at(1));
+            break;
           default:
             throw std::runtime_error(
                 fmt::format("{}:{} Unknown Quantified operator {}", FILE_NAME,
