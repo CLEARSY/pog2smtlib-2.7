@@ -22,7 +22,7 @@
 
 #include "bconstruct.h"
 
-class Signature;  // forward declaration
+struct Signature;  // forward declaration
 
 /** @brief the text script containing SMT commands to declare and define
  * translations of operators

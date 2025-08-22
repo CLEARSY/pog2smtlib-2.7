@@ -88,7 +88,7 @@ std::string to_string(BOperator op) {
 class TypeSymbolVisitor : public BType::Visitor {
  public:
   TypeSymbolVisitor() : m_result() {}
-  std::string getResult() const { return m_result; }
+  const std::string &getResult() const { return m_result; }
 
   virtual void visitINTEGER() override;
   virtual void visitBOOLEAN() override;
@@ -169,6 +169,6 @@ auto fmt::formatter<BType>::format(BType type, format_context &ctx) const
     -> format_context::iterator {
   TypeSymbolVisitor visitor;
   type.accept(visitor);
-  std::string_view name = visitor.getResult();
+  const std::string &name = visitor.getResult();
   return formatter<string_view>::format(name, ctx);
 }
