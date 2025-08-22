@@ -377,12 +377,12 @@ void GetSignatureVisitor::visitConstant(
 }
 
 void GetSignatureVisitor::visitIdent(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const VarName &b) {
+    const BType &type, [[maybe_unused]] const std::vector<std::string> &bxmlTag,
+    const VarName &b) {
   SignatureReset(m_signature);
   if (m_bindings.find(b) == m_bindings.end()) {
-    struct Data data{std::make_shared<VarName>(b), type};
+    struct Data data{std::make_shared<VarName>(b),
+                     std::make_shared<const BType>(type)};
     m_signature.m_data.emplace(data);
   }
 }
