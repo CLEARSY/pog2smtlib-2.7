@@ -75,7 +75,7 @@ class MonomorphizedOperator {
     }
     return *this;
   }
-  inline bool operator<(const MonomorphizedOperator &other) const {
+  inline int operator<(const MonomorphizedOperator &other) const {
     if (this->m_hash < other.m_hash) {
       return -1;
     } else if (other.m_hash < this->m_hash) {
@@ -143,6 +143,7 @@ typedef struct Data {
     return (*m_name == *(other.m_name) ||
             m_name->show() == other.m_name->show());
   }
+  Data &operator=(const Data &) = delete;
 } Data;
 
 namespace std {
