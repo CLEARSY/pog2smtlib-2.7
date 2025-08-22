@@ -631,8 +631,8 @@ void GetSignatureVisitor::visitBinaryExpression(
     }
     case Expr::BinaryOp::Head_Restriction:
     case Expr::BinaryOp::Tail_Restriction: {
-      const auto &etype1 = lhs.getType();  // sequence type
-      const auto &etype2 = elementOfSequenceType(op, etype1);
+      const auto &etype1 = elementOfPowerType(op, type);
+      const auto &etype2 = rhsOfProductType(op, etype1);
       sig.m_operators.emplace(
           MonomorphizedOperator(op, std::make_shared<BType>(etype2)));
       break;
