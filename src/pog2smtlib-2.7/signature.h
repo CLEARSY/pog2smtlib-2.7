@@ -75,7 +75,7 @@ class MonomorphizedOperator {
     }
     return *this;
   }
-  inline bool operator<(const MonomorphizedOperator &other) const {
+  inline int operator<(const MonomorphizedOperator &other) const {
     if (this->m_hash < other.m_hash) {
       return -1;
     } else if (other.m_hash < this->m_hash) {
@@ -136,7 +136,7 @@ template <> struct hash<VarName> {
  */
 typedef struct Data {
   std::shared_ptr<VarName> m_name;
-  const BType &m_type;
+  std::shared_ptr<const BType> m_type;
 
   std::string to_string() const;
   inline bool operator==(const Data &other) const {

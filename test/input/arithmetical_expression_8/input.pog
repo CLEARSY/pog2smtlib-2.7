@@ -22,18 +22,18 @@
     <Define name="inprp" hash="0"/>
     <Define name="inext" hash="0"/>
     <Define name="inv" hash="0"/>
-    <Define name="ass" hash="11641000841652449644">
+    <Define name="ass" hash="5054692310900142660">
         <Exp_Comparison op="=">
-            <Binary_Exp op="(" typref="0">
-                <Id value="succ" typref="1"/>
-                <Integer_Literal value="2" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:1:1:1"/>
+            <Binary_Exp op="(" typref="1">
+                <Id value="succ" typref="2"/>
+                <Integer_Literal value="2" typref="1" tag="arithmetical_expression_8.bxml:1:2:1:1:1"/>
             </Binary_Exp>
-            <Integer_Literal value="3" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:1:1:1"/>
+            <Integer_Literal value="3" typref="1" tag="arithmetical_expression_8.bxml:1:2:1:2"/>
         </Exp_Comparison>
     </Define>
     <Define name="cst" hash="0"/>
     <Define name="sets" hash="0"/>
-    <Proof_Obligation goalHash="17672018188607156258">
+    <Proof_Obligation goalHash="2639812552407910009">
         <Tag>AssertionLemmas</Tag>
         <Definition name="B definitions"/>
         <Definition name="ctx"/>
@@ -47,20 +47,25 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op="=">
-                    <Binary_Exp op="(" typref="0">
-                        <Id value="succ" typref="1"/>
-                        <Integer_Literal value="2" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:1:1:1"/>
+                    <Binary_Exp op="(" typref="1">
+                        <Id value="succ" typref="2"/>
+                        <Integer_Literal value="2" typref="1" tag="arithmetical_expression_8.bxml:1:2:1:1:1"/>
                     </Binary_Exp>
-                    <Integer_Literal value="3" typref="0" tag="arithmetical_expression_8.bxml:1:2:1:1:1:1"/>
+                    <Integer_Literal value="3" typref="1" tag="arithmetical_expression_8.bxml:1:2:1:2"/>
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
     </Proof_Obligation>
     <TypeInfos>
         <Type id="0">
-            <Id value="INTEGER"/>
+            <Unary_Exp op="POW">
+                <Id value="INTEGER"/>
+            </Unary_Exp>
         </Type>
         <Type id="1">
+            <Id value="INTEGER"/>
+        </Type>
+        <Type id="2">
             <Unary_Exp op="POW">
                 <Binary_Exp op="*">
                     <Id value="INTEGER"/>
