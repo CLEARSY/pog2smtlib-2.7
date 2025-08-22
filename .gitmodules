@@ -1,3 +1,4 @@
 [submodule "POGLIB"]
 	path = extern/POGLIB
 	url = https://github.com/CLEARSY/POGLIB
+	branch = main
