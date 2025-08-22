@@ -25,8 +25,6 @@ using std::unordered_set;
 #include "pure-typing.h"
 #include "type-utils.h"
 
-static constexpr bool debug_me = true;
-
 class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
  public:
   GetSignatureVisitor() {}
@@ -282,8 +280,8 @@ void GetSignatureVisitor::visitForall(const std::vector<TypedVar> &vars,
   }
 }
 
-void GetSignatureVisitor::visitExists(
-    [[maybe_unused]] const std::vector<TypedVar> &vars, const Pred &p) {
+void GetSignatureVisitor::visitExists(const std::vector<TypedVar> &vars,
+                                      const Pred &p) {
   for (auto v : vars) {
     m_bindings.insert(v.name);
   }
@@ -757,9 +755,8 @@ void GetSignatureVisitor::visitTernaryExpression(
 
 void GetSignatureVisitor::visitNaryExpression(
     [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] Expr::NaryOp op,
-    [[maybe_unused]] const std::vector<Expr> &vec) {
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag, Expr::NaryOp op,
+    const std::vector<Expr> &vec) {
   SignatureReset(m_signature);
   Signature sig;
   for (const Expr &e : vec) {
@@ -788,8 +785,7 @@ void GetSignatureVisitor::visitNaryExpression(
 
 void GetSignatureVisitor::visitBooleanExpression(
     [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const Pred &p) {
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag, const Pred &p) {
   SignatureReset(m_signature);
   p.accept(*this);
 }
@@ -807,9 +803,8 @@ void GetSignatureVisitor::visitStruct(
 void GetSignatureVisitor::visitQuantifiedExpr(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] Expr::QuantifiedOp op,
-    [[maybe_unused]] const std::vector<TypedVar> vars,
-    [[maybe_unused]] const Pred &cond, [[maybe_unused]] const Expr &body) {
+    Expr::QuantifiedOp op, const std::vector<TypedVar> vars, const Pred &cond,
+    const Expr &body) {
   SignatureReset(m_signature);
   Signature sig;
   for (auto v : vars) {
@@ -863,8 +858,7 @@ void GetSignatureVisitor::visitQuantifiedExpr(
 void GetSignatureVisitor::visitQuantifiedSet(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::vector<TypedVar> vars,
-    [[maybe_unused]] const Pred &cond) {
+    const std::vector<TypedVar> vars, const Pred &cond) {
   SignatureReset(m_signature);
   for (auto v : vars) {
     m_bindings.insert(v.name);
