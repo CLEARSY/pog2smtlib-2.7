@@ -27,7 +27,7 @@ namespace BConstruct::Expression {
 Data::Data(const struct ::Data &data)
     : enable_shared_from_this<BConstruct::Expression::Data>(),
       BConstruct::Uniform(),
-      m_type(data.m_type),
+      m_type(*data.m_type),
       m_name(data.to_string()) {
   m_prerequisites.insert(std::make_shared<BConstruct::Type::Type>(m_type));
   m_debug_string = fmt::format("Data<{}>", data.to_string());
