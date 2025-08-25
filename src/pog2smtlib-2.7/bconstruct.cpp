@@ -242,6 +242,10 @@ shared_ptr<Abstract> Factory::Predecessor() {
   return get<BConstruct::Expression::Predecessor>(m_Predecessor);
 }
 
+shared_ptr<Abstract> Factory::Exponentiation() {
+  return get<BConstruct::Expression::Exponentiation>(m_Exponentiation);
+}
+
 /* 5.4 Arithmetical Expressions (continued) */
 
 shared_ptr<Abstract> Factory::Max() {

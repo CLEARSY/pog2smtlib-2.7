@@ -51,6 +51,8 @@ add_cl_test("arithmetical_expression_9")
 add_cl_test("arithmetical_expression_10")
 add_cl_test("arithmetical_expression_11")
 add_cl_test("arithmetical_expression_12")
+add_cl_test("arithmetical_expression_13")
+add_cl_test("arithmetical_expression_14")
 
 # 5.4 Arithmetical Expressions (continued)
 add_cl_test("max_1")

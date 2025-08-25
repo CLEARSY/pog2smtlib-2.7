@@ -388,6 +388,9 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::BinaryOp::IDivision:
             construct = BConstruct::Factory::factory().IntegerDivision();
             break;
+          case Expr::BinaryOp::IExponentiation:
+            construct = BConstruct::Factory::factory().Exponentiation();
+            break;
 
           /* 5.5 Expression of Couples */
           case Expr::BinaryOp::Mapplet:

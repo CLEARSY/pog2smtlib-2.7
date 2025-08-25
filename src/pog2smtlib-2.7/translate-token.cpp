@@ -175,6 +175,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::IDivision, "|int.div|"},
     {Expr::BinaryOp::RDivision, "/"},
     {Expr::BinaryOp::Modulo, "mod"},
+    {Expr::BinaryOp::IExponentiation, "|int.exp|"},
 
     /* 5.5 Expression of Couples */
     {Expr::BinaryOp::Mapplet, "maplet"},

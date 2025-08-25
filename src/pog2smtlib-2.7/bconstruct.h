@@ -60,6 +60,7 @@ class Ceiling;
 class ToReal;
 class Succ;
 class Predecessor;
+class Exponentiation;
 
 /* 5.4 Arithmetical Expressions (continued) */
 class Max;
@@ -230,6 +231,7 @@ class Factory {
   std::shared_ptr<Abstract> ToReal();
   std::shared_ptr<Abstract> Succ();
   std::shared_ptr<Abstract> Predecessor();
+  std::shared_ptr<Abstract> Exponentiation();
 
   /* 5.4 Arithmetical Expressions (continued) */
   std::shared_ptr<Abstract> Max();
@@ -453,6 +455,7 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::ToReal> m_ToReal;
   std::shared_ptr<BConstruct::Expression::Succ> m_Succ;
   std::shared_ptr<BConstruct::Expression::Predecessor> m_Predecessor;
+  std::shared_ptr<BConstruct::Expression::Exponentiation> m_Exponentiation;
 
   /* 5.4 Arithmetical Expressions (continued) */
   std::shared_ptr<BConstruct::Expression::Max> m_Max;
@@ -1178,6 +1181,12 @@ class Predecessor : public Uniform {
  public:
   explicit Predecessor();
   virtual ~Predecessor() = default;
+};
+
+class Exponentiation : public Uniform {
+ public:
+  explicit Exponentiation();
+  virtual ~Exponentiation() = default;
 };
 
 /* 5.3 Arithmetical Expressions */
