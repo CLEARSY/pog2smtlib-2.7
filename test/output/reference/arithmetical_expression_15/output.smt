@@ -1,17 +1,22 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(define-sort |Z| () Int)
+(define-sort |REAL| () Real)
 
-(define-fun-rec |int.exp| ((n |Z|) (p |Z|)) |Z|
- (ite (= p 0)
-    1
-    (ite (> p 0)
-        (* n (|int.exp| n (- p 1)))
-        0))
- )
-
+(declare-fun |real.div| (|REAL| |REAL|) |REAL|)
 (assert (!
-  (not (= (|int.exp| 2 3) 8))
+  (forall ((a |REAL|) (b |REAL|))
+    (and
+      (=> (and (<= 0 a) (< 0 b))
+        (= (|real.div| a b) (/ a b)))
+      (=> (and (<= 0 a) (< b 0))
+        (= (|real.div| a b) (- (/ a (- b)))))
+      (=> (and (< a 0) (< 0 b))
+        (= (|real.div| a b) (- (/ (- a) b))))
+      (=> (and (<= a 0) (< b 0))
+        (= (|real.div| a b) (/ a b)))))
+  :named |ax.real.div :1|))
+(assert (!
+  (not (= (|real.div| 5.0 2.0) 2.5))
   :named |Goal|)
 )
 (check-sat)

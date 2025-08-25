@@ -246,6 +246,14 @@ shared_ptr<Abstract> Factory::Exponentiation() {
   return get<BConstruct::Expression::Exponentiation>(m_Exponentiation);
 }
 
+shared_ptr<Abstract> Factory::RealDivision() {
+  return get<BConstruct::Expression::RealDivision>(m_RealDivision);
+}
+
+shared_ptr<Abstract> Factory::RExponentiation() {
+  return get<BConstruct::Expression::RExponentiation>(m_RExponentiation);
+}
+
 /* 5.4 Arithmetical Expressions (continued) */
 
 shared_ptr<Abstract> Factory::Max() {
@@ -254,6 +262,14 @@ shared_ptr<Abstract> Factory::Max() {
 
 shared_ptr<Abstract> Factory::Min() {
   return get<BConstruct::Expression::Min>(m_Min);
+}
+
+shared_ptr<Abstract> Factory::RMax() {
+  return get<BConstruct::Expression::RMax>(m_RMax);
+}
+
+shared_ptr<Abstract> Factory::RMin() {
+  return get<BConstruct::Expression::RMin>(m_RMin);
 }
 
 shared_ptr<Abstract> Factory::Cardinals() {
@@ -270,6 +286,15 @@ shared_ptr<Abstract> Factory::GeneralizedSum() {
 
 shared_ptr<Abstract> Factory::GeneralizedProduct() {
   return get<BConstruct::Expression::GeneralizedProduct>(m_GeneralizedProduct);
+}
+
+shared_ptr<Abstract> Factory::RGeneralizedSum() {
+  return get<BConstruct::Expression::RGeneralizedSum>(m_RGeneralizedSum);
+}
+
+shared_ptr<Abstract> Factory::RGeneralizedProduct() {
+  return get<BConstruct::Expression::RGeneralizedProduct>(
+      m_RGeneralizedProduct);
 }
 
 /* 5.5 Expression of Couples */

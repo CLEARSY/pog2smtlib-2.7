@@ -55,20 +55,26 @@ class Addition;
 class Subtraction;
 class Multiplication;
 class IntegerDivision;
+class RealDivision;
 class Floor;
 class Ceiling;
 class ToReal;
 class Succ;
 class Predecessor;
 class Exponentiation;
+class RExponentiation;
 
 /* 5.4 Arithmetical Expressions (continued) */
 class Max;
 class Min;
+class RMax;
+class RMin;
 class Cardinals;
 class Card;
 class GeneralizedSum;
 class GeneralizedProduct;
+class RGeneralizedSum;
+class RGeneralizedProduct;
 
 /* 5.5 Expression of Couples */
 class Maplet;
@@ -232,14 +238,20 @@ class Factory {
   std::shared_ptr<Abstract> Succ();
   std::shared_ptr<Abstract> Predecessor();
   std::shared_ptr<Abstract> Exponentiation();
+  std::shared_ptr<Abstract> RealDivision();
+  std::shared_ptr<Abstract> RExponentiation();
 
   /* 5.4 Arithmetical Expressions (continued) */
   std::shared_ptr<Abstract> Max();
   std::shared_ptr<Abstract> Min();
+  std::shared_ptr<Abstract> RMax();
+  std::shared_ptr<Abstract> RMin();
   std::shared_ptr<Abstract> Cardinals();
   std::shared_ptr<Abstract> Card(const BType &);
   std::shared_ptr<Abstract> GeneralizedSum();
   std::shared_ptr<Abstract> GeneralizedProduct();
+  std::shared_ptr<Abstract> RGeneralizedSum();
+  std::shared_ptr<Abstract> RGeneralizedProduct();
 
   /* 5.5 Expression of Couples */
   std::shared_ptr<Abstract> Maplet();
@@ -456,10 +468,14 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Succ> m_Succ;
   std::shared_ptr<BConstruct::Expression::Predecessor> m_Predecessor;
   std::shared_ptr<BConstruct::Expression::Exponentiation> m_Exponentiation;
+  std::shared_ptr<BConstruct::Expression::RealDivision> m_RealDivision;
+  std::shared_ptr<BConstruct::Expression::RExponentiation> m_RExponentiation;
 
   /* 5.4 Arithmetical Expressions (continued) */
   std::shared_ptr<BConstruct::Expression::Max> m_Max;
   std::shared_ptr<BConstruct::Expression::Min> m_Min;
+  std::shared_ptr<BConstruct::Expression::RMax> m_RMax;
+  std::shared_ptr<BConstruct::Expression::RMin> m_RMin;
   std::shared_ptr<BConstruct::Expression::Cardinals> m_Cardinals;
   std::unordered_map<std::shared_ptr<const BType>,
                      std::shared_ptr<BConstruct::Expression::Card>, BTypeHash>
@@ -467,6 +483,9 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::GeneralizedSum> m_GeneralizedSum;
   std::shared_ptr<BConstruct::Expression::GeneralizedProduct>
       m_GeneralizedProduct;
+  std::shared_ptr<BConstruct::Expression::RGeneralizedSum> m_RGeneralizedSum;
+  std::shared_ptr<BConstruct::Expression::RGeneralizedProduct>
+      m_RGeneralizedProduct;
 
   /* 5.5 Expression of Couples */
   std::shared_ptr<BConstruct::Expression::Maplet> m_Maplet;
@@ -1189,6 +1208,18 @@ class Exponentiation : public Uniform {
   virtual ~Exponentiation() = default;
 };
 
+class RealDivision : public Uniform {
+ public:
+  explicit RealDivision();
+  virtual ~RealDivision() = default;
+};
+
+class RExponentiation : public Uniform {
+ public:
+  explicit RExponentiation();
+  virtual ~RExponentiation() = default;
+};
+
 /* 5.3 Arithmetical Expressions */
 class Max : public Uniform {
  public:
@@ -1200,6 +1231,18 @@ class Min : public Uniform {
  public:
   explicit Min();
   virtual ~Min() = default;
+};
+
+class RMax : public Uniform {
+ public:
+  explicit RMax();
+  virtual ~RMax() = default;
+};
+
+class RMin : public Uniform {
+ public:
+  explicit RMin();
+  virtual ~RMin() = default;
 };
 
 class Cardinals : public Uniform {
@@ -1224,6 +1267,18 @@ class GeneralizedProduct : public Uniform {
  public:
   explicit GeneralizedProduct();
   virtual ~GeneralizedProduct() = default;
+};
+
+class RGeneralizedSum : public Uniform {
+ public:
+  explicit RGeneralizedSum();
+  virtual ~RGeneralizedSum() = default;
+};
+
+class RGeneralizedProduct : public Uniform {
+ public:
+  explicit RGeneralizedProduct();
+  virtual ~RGeneralizedProduct() = default;
 };
 
 /* 5.5 Expression of Couples */

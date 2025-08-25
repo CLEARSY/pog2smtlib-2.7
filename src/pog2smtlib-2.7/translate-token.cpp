@@ -86,6 +86,8 @@ static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     /* 5.4 Arithmetical Expressions (continued) */
     {Expr::UnaryOp::IMaximum, "|max|"},
     {Expr::UnaryOp::IMinimum, "|min|"},
+    {Expr::UnaryOp::RMaximum, "|rmax|"},
+    {Expr::UnaryOp::RMinimum, "|rmin|"},
     {Expr::UnaryOp::Cardinality, "card"},
 
     /* 5.7 Set List Expressions */
@@ -173,9 +175,10 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::IMultiplication, "*"},
     {Expr::BinaryOp::RMultiplication, "*"},
     {Expr::BinaryOp::IDivision, "|int.div|"},
-    {Expr::BinaryOp::RDivision, "/"},
     {Expr::BinaryOp::Modulo, "mod"},
+    {Expr::BinaryOp::RDivision, "|real.div|"},
     {Expr::BinaryOp::IExponentiation, "|int.exp|"},
+    {Expr::BinaryOp::RExponentiation, "|real.exp|"},
 
     /* 5.5 Expression of Couples */
     {Expr::BinaryOp::Mapplet, "maplet"},
@@ -310,6 +313,8 @@ static std::unordered_map<Expr::QuantifiedOp, std::string> qOpExprToStringMap =
         /* 5.4 Arithmetical Expressions (continued) */
         {Expr::QuantifiedOp::ISum, "|SIGMA|"},
         {Expr::QuantifiedOp::IProduct, "|PI|"},
+        {Expr::QuantifiedOp::RSum, "|rSIGMA|"},
+        {Expr::QuantifiedOp::RProduct, "|rPI|"},
 
         /* 5.8 Set List Expressions */
         {Expr::QuantifiedOp::Union, "UNION"},

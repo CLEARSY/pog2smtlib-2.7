@@ -239,6 +239,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::UnaryOp::IMinimum:
             construct = BConstruct::Factory::factory().Min();
             break;
+          case Expr::UnaryOp::RMaximum:
+            construct = BConstruct::Factory::factory().RMax();
+            break;
+          case Expr::UnaryOp::RMinimum:
+            construct = BConstruct::Factory::factory().RMin();
+            break;
           case Expr::UnaryOp::Cardinality:
             construct = BConstruct::Factory::factory().Card(*types.at(0));
             break;
@@ -381,7 +387,6 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::BinaryOp::RAddition:
           case Expr::BinaryOp::RSubtraction:
           case Expr::BinaryOp::RMultiplication:
-          case Expr::BinaryOp::RDivision:
           case Expr::BinaryOp::Modulo:
             construct = nullptr;
             break;
@@ -390,6 +395,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           case Expr::BinaryOp::IExponentiation:
             construct = BConstruct::Factory::factory().Exponentiation();
+            break;
+          case Expr::BinaryOp::RDivision:
+            construct = BConstruct::Factory::factory().RealDivision();
+            break;
+          case Expr::BinaryOp::RExponentiation:
+            construct = BConstruct::Factory::factory().RExponentiation();
             break;
 
           /* 5.5 Expression of Couples */
@@ -590,6 +601,12 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             break;
           case Expr::QuantifiedOp::IProduct:
             construct = BConstruct::Factory::factory().GeneralizedProduct();
+            break;
+          case Expr::QuantifiedOp::RSum:
+            construct = BConstruct::Factory::factory().RGeneralizedSum();
+            break;
+          case Expr::QuantifiedOp::RProduct:
+            construct = BConstruct::Factory::factory().RGeneralizedProduct();
             break;
           default:
             throw std::runtime_error(

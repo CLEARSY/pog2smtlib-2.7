@@ -15,14 +15,20 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/predecessor.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/succ.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/exp.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/realdivision.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/rexp.cpp
 
   # 5.4 Arithmetical Expressions (continued)
   ${CMAKE_CURRENT_SOURCE_DIR}/max.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/min.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/rmax.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/rmin.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/card.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/cardinals.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/generalized_sum.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/generalized_product.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/rgeneralized_sum.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/rgeneralized_product.cpp
 
   # 5.5 Expression of Couples
   ${CMAKE_CURRENT_SOURCE_DIR}/maplet.cpp

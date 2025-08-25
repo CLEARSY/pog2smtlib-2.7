@@ -1,5 +1,6 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
+(define-sort |Z| () Int)
 
 (define-fun-rec |int.exp| ((n |Z|) (p |Z|)) |Z|
  (ite (= p 0)

@@ -41,6 +41,8 @@ static constexpr std::string_view SCRIPT = R"(
 IntegerDivision::IntegerDivision() {
   m_script = fmt::format(SCRIPT, smtSymbol(Expr::BinaryOp::IDivision),
                          symbol(BType::INT));
+  m_prerequisites.insert(
+      {std::make_shared<BConstruct::Type::Type>(BType::INT)});
   m_label = "/i";
   m_debug_string = "/i";
 }

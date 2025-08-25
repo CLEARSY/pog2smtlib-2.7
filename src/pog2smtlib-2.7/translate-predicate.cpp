@@ -280,8 +280,7 @@ void SmtTranslatorVisitor::visitRealLiteral(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Expr::Decimal &d) {
-  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
-                                       FILE_NAME, LINE_NUMBER));
+  m_translation.append(d.integerPart + "." + d.fractionalPart);
 }
 void SmtTranslatorVisitor::visitUnaryExpression(
     [[maybe_unused]] const BType &type,
@@ -302,7 +301,9 @@ void SmtTranslatorVisitor::visitUnaryExpression(
 
     /* 5.4 Arithmetical Expressions (continued) */
     case Expr::UnaryOp::IMaximum:
-    case Expr::UnaryOp::IMinimum: {
+    case Expr::UnaryOp::IMinimum:
+    case Expr::UnaryOp::RMaximum:
+    case Expr::UnaryOp::RMinimum: {
       m_translation.push_back('(');
       m_translation.append(smtSymbol(op));
       m_translation.push_back(' ');
@@ -484,6 +485,7 @@ void SmtTranslatorVisitor::visitBinaryExpression(
     case Expr::BinaryOp::RDivision:
     case Expr::BinaryOp::Modulo:
     case Expr::BinaryOp::IExponentiation:
+    case Expr::BinaryOp::RExponentiation:
 
     /* 5.5 Expression of Couples */
     case Expr::BinaryOp::Mapplet: {
@@ -703,7 +705,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
 
     /* todo */
     case Expr::BinaryOp::Partial_Bijections:
-    case Expr::BinaryOp::RExponentiation:
     case Expr::BinaryOp::FAddition:
     case Expr::BinaryOp::FSubtraction:
     case Expr::BinaryOp::FMultiplication:
@@ -958,7 +959,54 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
       break;
     }
     case Expr::QuantifiedOp::RSum:
-    case Expr::QuantifiedOp::RProduct:
+    case Expr::QuantifiedOp::RProduct: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(op));
+      m_translation.push_back(' ');
+
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(Expr::NaryOp::Set, BType::REAL));
+      m_translation.append(" (lambda ((c ");
+      m_translation.append(symbol(BType::REAL));
+      m_translation.append(")) ");
+
+      BType tp = BType::REAL;
+      for (size_t i = 1; i < vars.size(); ++i) {
+        tp = BType::PROD(tp, BType::REAL);
+      }
+
+      Pred condCopy = cond.copy();
+      Expr bodyCopy = body.copy();
+      std::map<VarName, VarName> map;
+      for (size_t i = 0; i < vars.size(); ++i) {
+        std::string access = "y";
+        for (size_t j = 0; j < vars.size() - i - 1; ++j) {
+          access = "(fst " + access + ")";
+        }
+        if (i != 0) {
+          access = "(snd " + access + ")";
+        }
+        map.insert({vars[i].name, VarName::makeVarWithoutSuffix(access)});
+      }
+      condCopy.alpha(map);
+      bodyCopy.alpha(map);
+
+      m_translation.append("(exists ((y ");
+      m_translation.append(symbol(tp));
+      m_translation.append(")) ");
+
+      m_translation.append("(and ");
+      condCopy.accept(*this);
+      m_translation.append(" (= c ");
+      bodyCopy.accept(*this);
+      m_translation.append(")))");
+
+      m_translation.append(")");
+      m_translation.append(")");
+      m_translation.append(")");
+      break;
+    }
+    default:
       throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                            FILE_NAME, LINE_NUMBER));
       return;

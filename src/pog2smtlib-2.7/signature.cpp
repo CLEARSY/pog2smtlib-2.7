@@ -592,16 +592,16 @@ void GetSignatureVisitor::visitBinaryExpression(
     case Expr::BinaryOp::IMultiplication:
     case Expr::BinaryOp::IDivision:
     case Expr::BinaryOp::IExponentiation:
-    case Expr::BinaryOp::RAddition:
-    case Expr::BinaryOp::RSubtraction:
-    case Expr::BinaryOp::RMultiplication:
-    case Expr::BinaryOp::RDivision:
-    case Expr::BinaryOp::RExponentiation:
     case Expr::BinaryOp::FAddition:
     case Expr::BinaryOp::FSubtraction:
     case Expr::BinaryOp::FMultiplication:
     case Expr::BinaryOp::FDivision:
-    case Expr::BinaryOp::Modulo: {
+    case Expr::BinaryOp::Modulo:
+    case Expr::BinaryOp::RAddition:
+    case Expr::BinaryOp::RSubtraction:
+    case Expr::BinaryOp::RMultiplication:
+    case Expr::BinaryOp::RDivision:
+    case Expr::BinaryOp::RExponentiation: {
       sig.m_operators.emplace(MonomorphizedOperator(op));
       break;
     }
@@ -842,6 +842,17 @@ void GetSignatureVisitor::visitQuantifiedExpr(
       BType tp = BType::INT;
       for (size_t i = 1; i < vars.size(); ++i) {
         tp = BType::PROD(tp, BType::INT);
+      }
+      sig.m_operators.emplace(MonomorphizedOperator{
+          Pred::ComparisonOp::Membership, std::make_shared<BType>(tp)});
+      sig.m_operators.emplace(MonomorphizedOperator(op));
+      break;
+    }
+    case Expr::QuantifiedOp::RSum:
+    case Expr::QuantifiedOp::RProduct: {
+      BType tp = BType::REAL;
+      for (size_t i = 1; i < vars.size(); ++i) {
+        tp = BType::PROD(tp, BType::REAL);
       }
       sig.m_operators.emplace(MonomorphizedOperator{
           Pred::ComparisonOp::Membership, std::make_shared<BType>(tp)});
