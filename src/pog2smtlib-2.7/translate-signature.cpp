@@ -439,6 +439,10 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
             construct = BConstruct::Factory::factory().Direct_Product(
                 *types.at(0), *types.at(1), *types.at(2));
             break;
+          case Expr::BinaryOp::Parallel_Product:
+            construct = BConstruct::Factory::factory().Parallel_Product(
+                *types.at(0), *types.at(1), *types.at(2), *types.at(3));
+            break;
 
           /* 5.12 Expressions of Relations */
           case Expr::BinaryOp::Iteration:

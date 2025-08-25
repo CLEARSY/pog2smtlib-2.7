@@ -146,6 +146,8 @@ add_cl_test("composition_1")
 add_cl_test("composition_2")
 add_cl_test("direct_product_1")
 add_cl_test("direct_product_2")
+add_cl_test("parallel_product_1")
+add_cl_test("parallel_product_2")
 
 # 5.12 Expressions of Relations
 

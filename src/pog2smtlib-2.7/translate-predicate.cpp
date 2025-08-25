@@ -581,7 +581,24 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       m_translation.push_back(')');
       break;
     }
-
+    case Expr::BinaryOp::Parallel_Product: {
+      m_translation.push_back('(');
+      m_translation.append(smtSymbol(
+          op,
+          (type.toPowerType().content).toProductType().lhs.toProductType().lhs,
+          (type.toPowerType().content).toProductType().lhs.toProductType().rhs,
+          (type.toPowerType().content).toProductType().rhs.toProductType().lhs,
+          (type.toPowerType().content)
+              .toProductType()
+              .rhs.toProductType()
+              .rhs));
+      m_translation.push_back(' ');
+      lhs.accept(*this);
+      m_translation.push_back(' ');
+      rhs.accept(*this);
+      m_translation.push_back(')');
+      break;
+    }
     /* 5.12 Expressions of Relations */
     case Expr::BinaryOp::Iteration: {
       m_translation.push_back('(');
@@ -685,7 +702,6 @@ void SmtTranslatorVisitor::visitBinaryExpression(
 
     /* todo */
     case Expr::BinaryOp::Partial_Bijections:
-    case Expr::BinaryOp::Parallel_Product:
     case Expr::BinaryOp::IExponentiation:
     case Expr::BinaryOp::RExponentiation:
     case Expr::BinaryOp::FAddition:

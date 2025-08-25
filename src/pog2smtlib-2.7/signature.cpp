@@ -128,12 +128,8 @@ class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
       "Signature computation: application of {} operator is not supported";
 
   const BType &elementOfPowerType(const BOperator &op, const BType &power);
-  const BType &elementOfSequenceType(const BOperator &op,
-                                     const BType &sequence);
   const BType &lhsOfProductType(const BOperator &op, const BType &product);
   const BType &rhsOfProductType(const BOperator &op, const BType &product);
-  std::tuple<const BType &, const BType &> argsOfProductType(
-      const BOperator &op, const BType &product);
 };
 
 /** @brief Overloads formatter to use the fmt library for BType values */
@@ -679,13 +675,16 @@ void GetSignatureVisitor::visitBinaryExpression(
     }
     /* Parallel_Product */
     case Expr::BinaryOp::Parallel_Product: {
-      const auto &etype1 = lhs.getType();
-      const auto &etype2 = rhs.getType();
-      const auto &[etype3, etype4] = argsOfProductType(op, etype1);
-      const auto &[etype5, etype6] = argsOfProductType(op, etype2);
+      const auto &etype2 = elementOfPowerType(op, type);
+      const auto &etype3 = lhsOfProductType(op, etype2);
+      const auto &etype4 = rhsOfProductType(op, etype2);
+      const auto &etype5 = lhsOfProductType(op, etype3);
+      const auto &etype6 = rhsOfProductType(op, etype3);
+      const auto &etype7 = lhsOfProductType(op, etype4);
+      const auto &etype8 = rhsOfProductType(op, etype4);
       sig.m_operators.emplace(MonomorphizedOperator(
-          op, std::make_shared<BType>(etype3), std::make_shared<BType>(etype4),
-          std::make_shared<BType>(etype5), std::make_shared<BType>(etype6)));
+          op, std::make_shared<BType>(etype5), std::make_shared<BType>(etype6),
+          std::make_shared<BType>(etype7), std::make_shared<BType>(etype8)));
       break;
     }
     /* Concatenation */
@@ -916,31 +915,6 @@ const BType &GetSignatureVisitor::rhsOfProductType(const BOperator &op,
     throw Exception(fmt::format(MSG_BAD_TYPE, op));
   }
   return product.toProductType().rhs;
-};
-
-std::tuple<const BType &, const BType &> GetSignatureVisitor::argsOfProductType(
-    const BOperator &op, const BType &product) {
-  if (product.getKind() != BType::Kind::ProductType) {
-    throw Exception(fmt::format(MSG_BAD_TYPE, op));
-  }
-  return std::make_tuple(product.toProductType().lhs,
-                         product.toProductType().rhs);
-};
-
-const BType &GetSignatureVisitor::elementOfSequenceType(const BOperator &op,
-                                                        const BType &sequence) {
-  if (sequence.getKind() != BType::Kind::PowerType) {
-    throw Exception(fmt::format(MSG_BAD_TYPE, op));
-  }
-  const auto &etype1 = elementOfPowerType(op, sequence);
-  if (etype1.getKind() != BType::Kind::ProductType) {
-    throw Exception(fmt::format(MSG_BAD_TYPE, op));
-  }
-  const auto &[etype2, etype3] = argsOfProductType(op, etype1);
-  if (etype2.getKind() != BType::Kind::INTEGER) {
-    throw Exception(fmt::format(MSG_BAD_TYPE, op));
-  }
-  return etype3;
 };
 
 std::string toString(const Signature &sig) {

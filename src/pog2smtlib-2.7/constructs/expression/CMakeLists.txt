@@ -67,6 +67,7 @@ set(POG2SMTLIB27_EXPRESSION_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/prj2.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/composition.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/directproduct.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/parallelproduct.cpp
 
   # 5.12 Expressions of Relations
   ${CMAKE_CURRENT_SOURCE_DIR}/iteration.cpp

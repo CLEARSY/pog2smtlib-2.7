@@ -112,6 +112,7 @@ class Prj1;
 class Prj2;
 class Composition;
 class Direct_Product;
+class Parallel_Product;
 
 /* 5.12 Expressions of Relations */
 class Iteration;
@@ -286,6 +287,9 @@ class Factory {
   std::shared_ptr<Abstract> Direct_Product(const BType &, const BType &,
                                            const BType &);
 
+  std::shared_ptr<Abstract> Parallel_Product(const BType &, const BType &,
+                                             const BType &, const BType &);
+
   /* 5.12 Expressions of Relations */
   std::shared_ptr<Abstract> Iteration(const BType &);
   std::shared_ptr<Abstract> Closure(const BType &);
@@ -376,6 +380,17 @@ class Factory {
                                       std::shared_ptr<const BType>> &p) const {
       return p.second->hash_combine(
           p.first.second->hash_combine(p.first.first->hash_combine(0)));
+    }
+  };
+  struct NaryBTypeHash {
+    size_t operator()(
+        const std::pair<std::pair<std::pair<std::shared_ptr<const BType>,
+                                            std::shared_ptr<const BType>>,
+                                  std::shared_ptr<const BType>>,
+                        std::shared_ptr<const BType>> &p) const {
+      return p.second->hash_combine(
+          p.first.second->hash_combine(p.first.first.second->hash_combine(
+              p.first.first.first->hash_combine(0))));
     }
   };
   struct DataHash {
@@ -581,6 +596,14 @@ class Factory {
           std::shared_ptr<const BType>>,
       std::shared_ptr<BConstruct::Expression::Direct_Product>, TernaryBTypeHash>
       m_Direct_Products;
+
+  std::unordered_map<
+      std::pair<std::pair<std::pair<std::shared_ptr<const BType>,
+                                    std::shared_ptr<const BType>>,
+                          std::shared_ptr<const BType>>,
+                std::shared_ptr<const BType>>,
+      std::shared_ptr<BConstruct::Expression::Parallel_Product>, NaryBTypeHash>
+      m_Parallel_Products;
 
   /* 5.12 Expressions of Relations */
   std::unordered_map<std::shared_ptr<const BType>,
@@ -837,6 +860,16 @@ class Factory {
                          std::shared_ptr<T>, TernaryBTypeHash> &m,
       const BType &fst, const BType &snd, const BType &thd);
 
+  template <typename T>
+  std::shared_ptr<Abstract> get(
+      std::unordered_map<
+          std::pair<std::pair<std::pair<std::shared_ptr<const BType>,
+                                        std::shared_ptr<const BType>>,
+                              std::shared_ptr<const BType>>,
+                    std::shared_ptr<const BType>>,
+          std::shared_ptr<T>, NaryBTypeHash> &m,
+      const BType &fst, const BType &snd, const BType &thd, const BType &fth);
+
   std::shared_ptr<Abstract> get(const struct Data &t);
 };
 
@@ -967,6 +1000,26 @@ class TernaryBType : public Abstract {
   std::shared_ptr<const BType> m_type1;
   std::shared_ptr<const BType> m_type2;
   std::shared_ptr<const BType> m_type3;
+};
+
+class NaryBType : public Abstract {
+ public:
+  NaryBType(const BType &t1, const BType &t2, const BType &t3, const BType &t4)
+      : m_type1(std::make_shared<const BType>(t1)),
+        m_type2(std::make_shared<const BType>(t2)),
+        m_type3(std::make_shared<const BType>(t3)),
+        m_type4(std::make_shared<const BType>(t4)) {}
+  virtual ~NaryBType() = default;
+
+  virtual std::string to_string() const override;
+
+ protected:
+  size_t hash_special() const override;
+  std::string_view m_label;
+  std::shared_ptr<const BType> m_type1;
+  std::shared_ptr<const BType> m_type2;
+  std::shared_ptr<const BType> m_type3;
+  std::shared_ptr<const BType> m_type4;
 };
 
 /* Classes for the type system constructs */
@@ -1367,6 +1420,13 @@ class Direct_Product : public TernaryBType {
  public:
   explicit Direct_Product(const BType &, const BType &, const BType &);
   virtual ~Direct_Product() = default;
+};
+
+class Parallel_Product : public NaryBType {
+ public:
+  explicit Parallel_Product(const BType &, const BType &, const BType &,
+                            const BType &);
+  virtual ~Parallel_Product() = default;
 };
 
 /* 5.12 Expressions of Relations */

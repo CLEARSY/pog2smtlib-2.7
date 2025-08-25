@@ -99,6 +99,30 @@ shared_ptr<Abstract> Factory::get(
   return construct;
 }
 
+template <typename T>
+shared_ptr<Abstract> Factory::get(
+    unordered_map<
+        pair<pair<pair<shared_ptr<const BType>, shared_ptr<const BType>>,
+                  shared_ptr<const BType>>,
+             shared_ptr<const BType>>,
+        shared_ptr<T>, Factory::NaryBTypeHash>& m,
+    const BType& fst, const BType& snd, const BType& thd, const BType& fth) {
+  pair<pair<pair<shared_ptr<const BType>, shared_ptr<const BType>>,
+            shared_ptr<const BType>>,
+       shared_ptr<const BType>>
+      pt = make_pair(make_pair(make_pair(make_shared<const BType>(fst),
+                                         make_shared<const BType>(snd)),
+                               make_shared<const BType>(thd)),
+                     make_shared<const BType>(fth));
+  auto it = m.find(pt);
+  if (it != m.end()) {
+    return it->second;
+  }
+  auto construct = make_shared<T>(fst, snd, thd, fth);
+  m[pt] = construct;
+  return construct;
+}
+
 shared_ptr<Abstract> Factory::get(const struct Data& dt) {
   shared_ptr<const struct Data> pt = std::make_shared<const struct Data>(dt);
   auto it = m_data.find(pt);
@@ -397,6 +421,14 @@ shared_ptr<Abstract> Factory::Direct_Product(const BType& fst, const BType& snd,
                                                      snd, thd);
 }
 
+shared_ptr<Abstract> Factory::Parallel_Product(const BType& fst,
+                                               const BType& snd,
+                                               const BType& thd,
+                                               const BType& fth) {
+  return get<BConstruct::Expression::Parallel_Product>(m_Parallel_Products, fst,
+                                                       snd, thd, fth);
+}
+
 /* 5.12 Expressions of Relations */
 
 shared_ptr<Abstract> Factory::Iteration(const BType& t) {
@@ -664,6 +696,17 @@ size_t TernaryBType::hash_special() const {
 string TernaryBType::to_string() const {
   return fmt::format("{}_<{}, {}, {}>", m_label, m_type1->to_string(),
                      m_type2->to_string(), m_type3->to_string());
+}
+
+size_t NaryBType::hash_special() const {
+  return m_type4->hash_combine(m_type3->hash_combine(m_type2->hash_combine(
+      m_type1->hash_combine(std::hash<std::string>{}(std::string(m_label))))));
+}
+
+string NaryBType::to_string() const {
+  return fmt::format("{}_<{}, {}, {}, {}>", m_label, m_type1->to_string(),
+                     m_type2->to_string(), m_type3->to_string(),
+                     m_type4->to_string());
 }
 
 }  // namespace BConstruct
