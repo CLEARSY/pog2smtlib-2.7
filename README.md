@@ -5,7 +5,7 @@
 ![Build & Test](https://github.com/CLEARSY/b2smtlib/actions/workflows/cmake-multi-platform.yml/badge.svg)
 ![Code format](https://github.com/CLEARSY/b2smtlib/actions/workflows/clang-format-check.yml/badge.svg)
 
-`pog2smtlib-2.7` is a translator from pog to SMT-LIB 2.6.
+`pog2smtlib-2.7` is a translator from pog to SMT-LIB 2.7. It targets the HO-ALL logic and aims at supporting the full language of Atelier B proof obligations. 
 
 ## Usage
 
@@ -16,7 +16,7 @@ pog2smtlib27 -i <input.pog> -o <output>
 ## Compilation
 
 To compile the project with CMake:
-
+Oui, c'est l'outil pog2smtlib-2.7
 ```sh
 cmake -B build
 cmake --build build
