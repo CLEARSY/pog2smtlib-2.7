@@ -29,6 +29,11 @@ add_cl_test("expr_comparison_9")
 add_cl_test("expr_comparison_10")
 add_cl_test("expr_comparison_11")
 
+add_cl_test("forall_1")
+add_cl_test("forall_2")
+add_cl_test("exists_1")
+add_cl_test("exists_2")
+
 # 5.1 Primary Expressions
 
 # 5.1 Boolean Expressions

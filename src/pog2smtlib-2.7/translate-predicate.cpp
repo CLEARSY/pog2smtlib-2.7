@@ -192,12 +192,34 @@ void SmtTranslatorVisitor::visitDisjunction(const vector<Pred> &vec) {
 void SmtTranslatorVisitor::visitForall(
     [[maybe_unused]] const std::vector<TypedVar> &vars,
     [[maybe_unused]] const Pred &p) {
-  // TODO
+  m_translation.append("(forall (");
+  for (auto &v : vars) {
+    m_translation.append("(");
+    m_translation.append(v.name.show());
+    m_translation.append(" ");
+    m_translation.append(symbol(v.type));
+    m_translation.append(")");
+  }
+  m_translation.push_back(')');
+  m_translation.append(" ");
+  p.accept(*this);
+  m_translation.push_back(')');
 }
 void SmtTranslatorVisitor::visitExists(
     [[maybe_unused]] const std::vector<TypedVar> &vars,
     [[maybe_unused]] const Pred &p) {
-  // TODO
+  m_translation.append("(exists (");
+  for (auto &v : vars) {
+    m_translation.append("(");
+    m_translation.append(v.name.show());
+    m_translation.append(" ");
+    m_translation.append(symbol(v.type));
+    m_translation.append(")");
+  }
+  m_translation.push_back(')');
+  m_translation.append(" ");
+  p.accept(*this);
+  m_translation.push_back(')');
 }
 
 void SmtTranslatorVisitor::visitTrue() {
