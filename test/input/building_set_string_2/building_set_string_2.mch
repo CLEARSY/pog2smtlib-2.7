@@ -1,0 +1,5 @@
+MACHINE
+    string_2
+ASSERTIONS
+    "E" : STRING
+END

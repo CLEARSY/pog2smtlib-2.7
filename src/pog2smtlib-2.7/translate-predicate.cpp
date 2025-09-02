@@ -273,8 +273,7 @@ void SmtTranslatorVisitor::visitStringLiteral(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::string &b) {
-  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
-                                       FILE_NAME, LINE_NUMBER));
+  m_translation.append("\"" + b + "\"");
 }
 void SmtTranslatorVisitor::visitRealLiteral(
     [[maybe_unused]] const BType &type,

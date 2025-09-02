@@ -89,6 +89,7 @@ class Nat1;
 class Real;
 class Bool;
 class Int;
+class String;
 
 /* 5.7 Set List Expressions */
 class PowerSet;
@@ -266,6 +267,7 @@ class Factory {
   std::shared_ptr<Abstract> Real();
   std::shared_ptr<Abstract> Bool();
   std::shared_ptr<Abstract> Int();
+  std::shared_ptr<Abstract> String();
 
   /* 5.7 Set List Expressions */
   std::shared_ptr<Abstract> PowerSet(const BType &);
@@ -503,6 +505,7 @@ class Factory {
   std::shared_ptr<BConstruct::Expression::Real> m_Real;
   std::shared_ptr<BConstruct::Expression::Bool> m_Bool;
   std::shared_ptr<BConstruct::Expression::Int> m_Int;
+  std::shared_ptr<BConstruct::Expression::String> m_String;
 
   /* 5.7 Set List Expressions */
   std::unordered_map<std::shared_ptr<const BType>,
@@ -1298,6 +1301,7 @@ class EmptySet : public UnaryBType {
   explicit EmptySet(const BType &t);
   virtual ~EmptySet() = default;
 };
+
 class Integer : public Uniform {
  public:
   explicit Integer();
@@ -1344,6 +1348,12 @@ class Int : public Uniform {
  public:
   explicit Int();
   virtual ~Int() = default;
+};
+
+class String : public Uniform {
+ public:
+  explicit String();
+  virtual ~String() = default;
 };
 
 /* 5.7 Classes for Set List Expressions */

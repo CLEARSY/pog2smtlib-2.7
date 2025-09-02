@@ -341,6 +341,10 @@ shared_ptr<Abstract> Factory::Int() {
   return get<BConstruct::Expression::Int>(m_Int);
 }
 
+shared_ptr<Abstract> Factory::String() {
+  return get<BConstruct::Expression::String>(m_String);
+}
+
 /* 5.7 Set List Expressions */
 
 shared_ptr<Abstract> Factory::PowerSet(const BType& t) {

@@ -95,6 +95,8 @@ add_cl_test("building_set_nat1_1")
 add_cl_test("building_set_nat1_2")
 add_cl_test("building_set_int_1")
 add_cl_test("building_set_int_2")
+add_cl_test("building_set_string_1")
+add_cl_test("building_set_string_2")
 
 # 5.7 Set List Expressions
 

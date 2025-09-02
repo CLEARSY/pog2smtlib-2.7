@@ -69,7 +69,7 @@ string POGTranslations::ofGoal(int group, int goal) {
   Signature localHypSignature;
   const pog::PO &PO = POGroup.simpleGoals.at(goal);
   for (const auto localHypRef : PO.localHypsRef) {
-    localHypSignature += m_pogSignatures.ofLocalHyp(group, localHypRef);
+    localHypSignature += m_pogSignatures.ofLocalHyp(group, localHypRef - 1);
   }
   if (debug_me) {
     std::cerr << fmt::format(

@@ -668,6 +668,9 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::Visitor::EConstant::INT:
             construct = BConstruct::Factory::factory().Int();
             break;
+          case Expr::Visitor::EConstant::STRING:
+            construct = BConstruct::Factory::factory().String();
+            break;
 
           case Expr::Visitor::EConstant::EmptySet:
             if (types.size() != 1) {
