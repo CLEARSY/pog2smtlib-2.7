@@ -20,7 +20,7 @@ outdir="$testdir/output/result/$id"
 rm -rf "$outdir"
 mkdir -p "$outdir"
 
-$program -i "$inpdir/input.pog" -o "$outdir/output.pog" > "$outdir/stdout" 2> "$outdir/stderr"
+$program -i "$inpdir/input.pog" -o "$outdir/output" > "$outdir/stdout" 2> "$outdir/stderr"
 echo $? > "$outdir/exitcode"
 
 diff "$outdir/stdout" "$refdir/stdout"

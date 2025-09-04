@@ -146,6 +146,17 @@ add_cl_test("quantified_union_6")
 add_cl_test("quantified_inter_1")
 add_cl_test("quantified_inter_2")
 
+# 5.9 Record expressions
+
+add_cl_test("record_1")
+add_cl_test("record_2")
+add_cl_test("record_access_1")
+add_cl_test("record_access_2")
+add_cl_test("struct_1")
+add_cl_test("struct_2")
+add_cl_test("struct_3")
+add_cl_test("struct_4")
+
 # 5.10 Set of Relations
 
 add_cl_test("relations_1")

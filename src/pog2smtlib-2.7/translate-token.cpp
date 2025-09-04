@@ -77,6 +77,22 @@ string smtSymbol(Pred::ComparisonOp op, const BType& type) {
   }
 }
 
+static std::unordered_map<Expr::EKind, std::string>
+    expressionOperatorToStringMap = {
+        /* 5.9 Expressions of Records */
+        {Expr::EKind::Struct, "struct"}};
+
+std::string smtSymbol(Expr::EKind op) {
+  const auto itr = expressionOperatorToStringMap.find(op);
+  return itr->second;
+}
+
+std::string smtSymbol(Expr::EKind op, const BType& t) {
+  const auto itr = expressionOperatorToStringMap.find(op);
+  string& str = itr->second;
+  return fmt::format("|{0} {1}|", str, symbolInner(t));
+}
+
 static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     /* 5.3 Arithmetical Expressions */
     {Expr::UnaryOp::Real, "|int.real|"},

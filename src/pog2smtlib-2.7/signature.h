@@ -162,8 +162,9 @@ template <> struct hash<Data> {
 struct Signature {
   std::unordered_set<MonomorphizedOperator> m_operators;
   std::unordered_set<Data> m_data;
+  std::unordered_set<std::shared_ptr<BType>> m_types;
 
-  Signature() : m_operators{}, m_data{} {}
+  Signature() : m_operators{}, m_data{}, m_types{} {}
 };
 
 /**

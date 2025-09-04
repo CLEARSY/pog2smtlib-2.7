@@ -75,8 +75,20 @@ void BTypeSymbolVisitor::visitPowerType(const BType &ty) {
   ty.accept(*this);
 }
 void BTypeSymbolVisitor::visitRecordType(
-    const std::vector<std::pair<std::string, BType>> &) {
-  throw "not implemented";
+    const std::vector<std::pair<std::string, BType>> &fds) {
+  m_symbol += STRUCT + "(";
+  bool first = true;
+  for (auto &fd : fds) {
+    if (!first) {
+      m_symbol.append(", ");
+    } else {
+      first = false;
+    }
+    m_symbol.append(fd.first);
+    m_symbol.append(" : ");
+    fd.second.accept(*this);
+  }
+  m_symbol.append(")");
 }
 void BTypeSymbolVisitor::visitAbstractSet(const BType::AbstractSet &) {
   throw "not implemented";

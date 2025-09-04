@@ -839,15 +839,58 @@ void SmtTranslatorVisitor::visitRecord(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
-  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
-                                       FILE_NAME, LINE_NUMBER));
+  m_translation.push_back('(');
+  m_translation.append("|record ");
+  m_translation.append(symbolInner(type));
+  m_translation.append("| ");
+  bool first = true;
+  for (const auto &fd : fds) {
+    if (first) {
+      first = false;
+    } else {
+      m_translation.append(" ");
+    }
+    fd.second.accept(*this);
+  }
+  m_translation.push_back(')');
 }
 void SmtTranslatorVisitor::visitStruct(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
-  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
-                                       FILE_NAME, LINE_NUMBER));
+  m_translation.push_back('(');
+  m_translation.append(
+      smtSymbol(Expr::EKind::Struct, type.toPowerType().content));
+  m_translation.append(" (lambda (");
+
+  m_translation.push_back('(');
+  m_translation.push_back('x');
+  m_translation.push_back(' ');
+  m_translation.append(symbol(type.toPowerType().content));
+  m_translation.push_back(')');
+  m_translation.push_back(')');
+  m_translation.push_back(' ');
+
+  if (fds.size() > 1) {
+    m_translation.append("(and ");
+  }
+  for (const auto &fd : fds) {
+    m_translation.append("(");
+    m_translation.append(
+        smtSymbol(Pred::ComparisonOp::Membership,
+                  (fd.second.getType()).toPowerType().content));
+    m_translation.append(" (");
+    m_translation.append(fd.first);
+    m_translation.append(" x) ");
+    fd.second.accept(*this);
+    m_translation.push_back(')');
+  }
+  if (fds.size() > 1) {
+    m_translation.push_back(')');
+  }
+
+  m_translation.push_back(')');
+  m_translation.push_back(')');
 }
 void SmtTranslatorVisitor::visitQuantifiedExpr(
     [[maybe_unused]] const BType &type,
@@ -1072,6 +1115,9 @@ void SmtTranslatorVisitor::visitRecordAccess(
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
     [[maybe_unused]] const Expr &rec,
     [[maybe_unused]] const std::string &label) {
-  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
-                                       FILE_NAME, LINE_NUMBER));
+  m_translation.push_back('(');
+  m_translation.append(label);
+  m_translation.append(" ");
+  rec.accept(*this);
+  m_translation.push_back(')');
 }

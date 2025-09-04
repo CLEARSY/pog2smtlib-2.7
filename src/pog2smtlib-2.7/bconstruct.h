@@ -109,6 +109,9 @@ class GeneralizedIntersection;
 class Quantified_Union;
 class Quantified_Intersection;
 
+/* 5.9 Expressions of Records */
+class Struct;
+
 /* 5.10 Set of Relations */
 class Relation;
 class Total_Relation;
@@ -288,6 +291,9 @@ class Factory {
   std::shared_ptr<Abstract> Quantified_Union(const BType &, const BType &);
   std::shared_ptr<Abstract> Quantified_Intersection(const BType &,
                                                     const BType &);
+
+  /* 5.9 Expressions of Records */
+  std::shared_ptr<Abstract> Struct(const BType &);
 
   /* 5.10 Set of Relations */
   std::shared_ptr<Abstract> Relation(const BType &, const BType &);
@@ -575,6 +581,11 @@ class Factory {
       std::shared_ptr<BConstruct::Expression::Quantified_Intersection>,
       BinaryBTypeHash>
       m_Quantified_Intersections;
+
+  /* 5.9 Expressions of Records */
+  std::unordered_map<std::shared_ptr<const BType>,
+                     std::shared_ptr<BConstruct::Expression::Struct>, BTypeHash>
+      m_Structs;
 
   /* 5.10 Set of Relations */
   std::unordered_map<
@@ -1442,6 +1453,14 @@ class Quantified_Intersection : public BinaryBType {
  public:
   explicit Quantified_Intersection(const BType &, const BType &);
   virtual ~Quantified_Intersection() = default;
+};
+
+/* 5.9 Expressions of Records */
+
+class Struct : public UnaryBType {
+ public:
+  explicit Struct(const BType &);
+  virtual ~Struct() = default;
 };
 
 /* 5.10 Set of Relations  */

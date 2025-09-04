@@ -42,6 +42,15 @@ static stack<BConstructPtr> sortConstructsAndPrerequisites(
     stack<BConstructPtr> &todo, const BConstruct::Context &context);
 
 /** @brief creates a BConstruct instance if not already created
+ * @param t a B type
+ * @param queue the queue of B constructs that will be processed
+ * @param context the constructs that have already been translated
+ * */
+static void buildAndQueueConstruct(const std::shared_ptr<BType> &t,
+                                   stack<BConstructPtr> &queue,
+                                   const BConstruct::Context &);
+
+/** @brief creates a BConstruct instance if not already created
  * @param o a monomorphized operator
  * @param queue the queue of B constructs that will be processed
  * @param context the constructs that have already been translated
@@ -67,6 +76,9 @@ std::string translate(const Signature &signature,
                       BConstruct::Context &context) {
   stack<BConstructPtr> todo;
   stack<BConstructPtr> sequence;
+  for (auto &t : signature.m_types) {
+    buildAndQueueConstruct(t, todo, context);
+  }
   for (auto &o : signature.m_operators) {
     buildAndQueueConstruct(o, todo, context);
   }
@@ -152,6 +164,16 @@ static stack<BConstructPtr> sortConstructsAndPrerequisites(
   }
 
   return sorted;
+}
+
+static void buildAndQueueConstruct(const std::shared_ptr<BType> &t,
+                                   stack<BConstructPtr> &queue,
+                                   const BConstruct::Context &context) {
+  BConstructPtr construct;
+  construct = BConstruct::Factory::factory().Type(*t);
+  if (construct != nullptr && context.find(construct) == context.end()) {
+    queue.push(construct);
+  }
 }
 
 static void buildAndQueueConstruct(const struct Data &dt,
@@ -701,6 +723,11 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           /* 5.7 Set List Expressions */
           case Expr::EKind::QuantifiedSet:
             construct = BConstruct::Factory::factory().Set(*types.at(0));
+            break;
+
+          /* 5.9 Expressions of Records */
+          case Expr::EKind::Struct:
+            construct = BConstruct::Factory::factory().Struct(*types.at(0));
             break;
           default:
             throw std::runtime_error(

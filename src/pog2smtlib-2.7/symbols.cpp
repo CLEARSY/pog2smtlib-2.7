@@ -57,6 +57,12 @@ auto fmt::formatter<BOperator>::format(BOperator op, format_context &ctx) const
     if (std::get<Expr::EKind>(op) == Expr::EKind::QuantifiedSet) {
       name = "?";
     }
+    if (std::get<Expr::EKind>(op) == Expr::EKind::Struct) {
+      name = "struct";
+    }
+    if (std::get<Expr::EKind>(op) == Expr::EKind::Record) {
+      name = "rec";
+    }
   }
   return formatter<string_view>::format(name, ctx);
 }
@@ -77,6 +83,10 @@ std::string to_string(BOperator op) {
   } else if (std::holds_alternative<Expr::EKind>(op)) {
     if (std::get<Expr::EKind>(op) == Expr::EKind::QuantifiedSet) {
       return "?";
+    } else if (std::get<Expr::EKind>(op) == Expr::EKind::Struct) {
+      return "struct";
+    } else if (std::get<Expr::EKind>(op) == Expr::EKind::Record) {
+      return "rec";
     } else {
       return std::string("unknown operator");
     }

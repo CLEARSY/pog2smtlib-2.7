@@ -22,7 +22,7 @@ function prepare_pog() {
 
 export -f prepare_pog
 
-TRANSLATOR_EXE=../build/src/pog2smtlib-2.7/pog2smtlib27
+TRANSLATOR_EXE=../build-17/src/pog2smtlib-2.7/pog2smtlib27
 SMT_EXE="/usr/bin/cvc5 --tlimit=10000" # timeout in ms
 
 #
@@ -74,3 +74,13 @@ function install_test_output() {
 }
 
 export -f install_test_output
+
+echo "# usage:"
+echo "export test=..."
+echo "cd input/\$test"
+echo "prepare_pog \$test"
+echo "cd -"
+echo "prepare_test_output \$test"
+echo "# <manually inspect produced artifacts>"
+echo "install_test_output \$test"
+

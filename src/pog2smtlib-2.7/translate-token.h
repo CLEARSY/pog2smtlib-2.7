@@ -29,6 +29,7 @@ extern std::string_view smtSymbol(Pred::PKind);
 extern std::string smtSymbol(Pred::ComparisonOp);
 extern std::string smtSymbol(Pred::ComparisonOp, const BType&);
 extern std::string smtSymbol(Expr::EKind);
+extern std::string smtSymbol(Expr::EKind, const BType&);
 extern std::string smtSymbol(Expr::UnaryOp);
 extern std::string smtSymbol(Expr::UnaryOp, const BType&);
 extern std::string smtSymbol(Expr::UnaryOp, const BType&, const BType&);

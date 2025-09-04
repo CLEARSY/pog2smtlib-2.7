@@ -25,6 +25,8 @@ using std::unordered_set;
 #include "pure-typing.h"
 #include "type-utils.h"
 
+static constexpr bool debug_me = false;
+
 class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
  public:
   GetSignatureVisitor() {}
@@ -181,6 +183,7 @@ std::string Data::to_string() const { return m_name->show(); }
 Signature &operator+=(Signature &lhs, const Signature &rhs) {
   lhs.m_operators.insert(rhs.m_operators.begin(), rhs.m_operators.end());
   lhs.m_data.insert(rhs.m_data.begin(), rhs.m_data.end());
+  lhs.m_types.insert(rhs.m_types.begin(), rhs.m_types.end());
   return lhs;
 }
 
@@ -191,12 +194,16 @@ Signature &operator-=(Signature &lhs, const Signature &rhs) {
   for (const auto &elem : rhs.m_data) {
     lhs.m_data.erase(elem);
   }
+  for (const auto &elem : rhs.m_types) {
+    lhs.m_types.erase(elem);
+  }
   return lhs;
 }
 
 static void SignatureReset(Signature &target) {
   target.m_operators.clear();
   target.m_data.clear();
+  target.m_types.clear();
 }
 
 /**
@@ -217,6 +224,8 @@ static void SignatureMoveInto(Signature &target, Signature &source) {
                             std::make_move_iterator(source.m_operators.end()));
   target.m_data.insert(std::make_move_iterator(source.m_data.begin()),
                        std::make_move_iterator(source.m_data.end()));
+  target.m_types.insert(std::make_move_iterator(source.m_types.begin()),
+                        std::make_move_iterator(source.m_types.end()));
   SignatureReset(source);
 }
 
@@ -792,12 +801,32 @@ void GetSignatureVisitor::visitBooleanExpression(
 void GetSignatureVisitor::visitRecord(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {}
+    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
+  SignatureReset(m_signature);
+  Signature sig;
+  for (const auto &fd : fds) {
+    fd.second.accept(*this);
+    SignatureMoveInto(sig, m_signature);
+  }
+  sig.m_types.insert(std::make_shared<BType>(type));
+  m_signature = std::move(sig);
+}
 
 void GetSignatureVisitor::visitStruct(
     [[maybe_unused]] const BType &type,
     [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {}
+    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
+  SignatureReset(m_signature);
+  Signature sig;
+  for (const auto &fd : fds) {
+    fd.second.accept(*this);
+    SignatureMoveInto(sig, m_signature);
+  }
+  const auto &etype1 = elementOfPowerType(Expr::EKind::Struct, type);
+  sig.m_operators.emplace(MonomorphizedOperator(
+      Expr::EKind::Struct, std::make_shared<BType>(etype1)));
+  m_signature = std::move(sig);
+}
 
 void GetSignatureVisitor::visitQuantifiedExpr(
     [[maybe_unused]] const BType &type,
@@ -890,9 +919,15 @@ void GetSignatureVisitor::visitRecordUpdate(
 
 void GetSignatureVisitor::visitRecordAccess(
     [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const Expr &rec,
-    [[maybe_unused]] const std::string &label) {}
+    [[maybe_unused]] const std::vector<std::string> &bxmlTag, const Expr &rec,
+    [[maybe_unused]] const std::string &label) {
+  SignatureReset(m_signature);
+  Signature sig;
+  rec.accept(*this);
+  SignatureMoveInto(sig, m_signature);
+  sig.m_types.insert(std::make_shared<BType>(rec.getType()));
+  m_signature = std::move(sig);
+}
 
 Signature predicateSignature(const Pred &pred) {
   GetSignatureVisitor visitor;

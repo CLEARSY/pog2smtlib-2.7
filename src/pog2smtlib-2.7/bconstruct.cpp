@@ -153,7 +153,7 @@ shared_ptr<Abstract> Factory::Type(const BType& t) {
 /* Type */
 
 shared_ptr<Abstract> Factory::Type(const BType& t) {
-  return get<BConstruct::Predicate::SetMembership>(m_SetMemberships, t);
+  return get<BConstruct::Type::Type>(m_Types, t);
 }
 
 shared_ptr<Abstract> Factory::PowerSet() {
@@ -410,6 +410,12 @@ shared_ptr<Abstract> Factory::Quantified_Intersection(const BType& lhs,
                                                       const BType& rhs) {
   return get<BConstruct::Expression::Quantified_Intersection>(
       m_Quantified_Intersections, lhs, rhs);
+}
+
+/* 5.9 Expressions of Records */
+
+shared_ptr<Abstract> Factory::Struct(const BType& t) {
+  return get<BConstruct::Expression::Struct>(m_Structs, t);
 }
 
 /* 5.10 Set of Relations */

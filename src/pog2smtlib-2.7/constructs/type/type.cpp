@@ -37,6 +37,27 @@ Type::Type(const BType &type) : UnaryBType(type) {
     return result;
   };
 
+  auto structValues =
+      [](const std::vector<std::pair<std::string, BType>> &fds) {
+        std::string result;
+        for (size_t i = 0; i < fds.size(); ++i) {
+          if (i == fds.size() - 1) {
+            result += "(";
+            result += fds[i].first;
+            result += " ";
+            result += fds[i].second.to_string();
+            result += ")";
+          } else {
+            result += "(";
+            result += fds[i].first;
+            result += " ";
+            result += symbolInner(fds[i].second);
+            result += ") ";
+          }
+        }
+        return result;
+      };
+
   switch (type.getKind()) {
     case BType::Kind::INTEGER:
       m_script = fmt::format("(define-sort {0} () Int)\n", symbol(type));
@@ -80,7 +101,12 @@ Type::Type(const BType &type) : UnaryBType(type) {
           enumeratedValues(type.toEnumeratedSetType().getContent()));
       break;
     case BType::Kind::Struct:
-      throw std::runtime_error("Struct type not supported");
+      m_script = fmt::format("(declare-datatype {0} ((|record {1}| {2})))\n",
+                             symbol(type), symbolInner(type),
+                             structValues(type.toRecordType().m_fields));
+      for (const auto &fd : type.toRecordType().m_fields) {
+        m_prerequisites.insert(std::make_shared<Type>(fd.second));
+      }
       break;
   }
 }
