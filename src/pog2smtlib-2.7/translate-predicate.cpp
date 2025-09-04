@@ -189,9 +189,8 @@ void SmtTranslatorVisitor::visitDisjunction(const vector<Pred> &vec) {
   visitNaryPred(smtSymbol(Pred::PKind::Disjunction), vec);
 }
 
-void SmtTranslatorVisitor::visitForall(
-    [[maybe_unused]] const std::vector<TypedVar> &vars,
-    [[maybe_unused]] const Pred &p) {
+void SmtTranslatorVisitor::visitForall(const std::vector<TypedVar> &vars,
+                                       const Pred &p) {
   m_translation.append("(forall (");
   for (auto &v : vars) {
     m_translation.append("(");
@@ -205,9 +204,8 @@ void SmtTranslatorVisitor::visitForall(
   p.accept(*this);
   m_translation.push_back(')');
 }
-void SmtTranslatorVisitor::visitExists(
-    [[maybe_unused]] const std::vector<TypedVar> &vars,
-    [[maybe_unused]] const Pred &p) {
+void SmtTranslatorVisitor::visitExists(const std::vector<TypedVar> &vars,
+                                       const Pred &p) {
   m_translation.append("(exists (");
   for (auto &v : vars) {
     m_translation.append("(");
@@ -254,9 +252,9 @@ void SmtTranslatorVisitor::visitExprComparison(Pred::ComparisonOp op,
   m_translation.push_back(')');
 }
 
-void SmtTranslatorVisitor::visitConstant(
-    const BType &type, [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    EConstant c) {
+void SmtTranslatorVisitor::visitConstant(const BType &type,
+                                         const std::vector<std::string> &,
+                                         EConstant c) {
   switch (c) {
     case EConstant::EmptySet:
       m_translation.append(smtSymbol(c, type.toPowerType().content));
@@ -267,10 +265,9 @@ void SmtTranslatorVisitor::visitConstant(
   }
 }
 
-void SmtTranslatorVisitor::visitIdent(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    const VarName &b) {
+void SmtTranslatorVisitor::visitIdent(const BType &,
+                                      const std::vector<std::string> &,
+                                      const VarName &b) {
   m_translation.append(b.prefix());
   switch (b.kind()) {
     case VarName::Kind::NoSuffix:
@@ -284,29 +281,25 @@ void SmtTranslatorVisitor::visitIdent(
   }
 }
 
-void SmtTranslatorVisitor::visitIntegerLiteral(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    const std::string &i) {
+void SmtTranslatorVisitor::visitIntegerLiteral(const BType &,
+                                               const std::vector<std::string> &,
+                                               const std::string &i) {
   m_translation.append(i);
 }
 
-void SmtTranslatorVisitor::visitStringLiteral(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::string &b) {
+void SmtTranslatorVisitor::visitStringLiteral(const BType &,
+                                              const std::vector<std::string> &,
+                                              const std::string &b) {
   m_translation.append("\"" + b + "\"");
 }
-void SmtTranslatorVisitor::visitRealLiteral(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const Expr::Decimal &d) {
+void SmtTranslatorVisitor::visitRealLiteral(const BType &,
+                                            const std::vector<std::string> &,
+                                            const Expr::Decimal &d) {
   m_translation.append(d.integerPart + "." + d.fractionalPart);
 }
 void SmtTranslatorVisitor::visitUnaryExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] Expr::UnaryOp op, [[maybe_unused]] const Expr &e) {
+    const BType &type, const std::vector<std::string> &, Expr::UnaryOp op,
+    const Expr &e) {
   switch (op) {
     /* 5.3 Arithmetical Expressions */
     case Expr::UnaryOp::Real:
@@ -490,10 +483,8 @@ void SmtTranslatorVisitor::visitUnaryExpression(
 }
 
 void SmtTranslatorVisitor::visitBinaryExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] Expr::BinaryOp op, [[maybe_unused]] const Expr &lhs,
-    [[maybe_unused]] const Expr &rhs) {
+    const BType &type, const std::vector<std::string> &, Expr::BinaryOp op,
+    const Expr &lhs, const Expr &rhs) {
   switch (op) {
     /* 5.3 Arithmetical Expressions I */
     case Expr::BinaryOp::IAddition:
@@ -745,17 +736,13 @@ void SmtTranslatorVisitor::visitBinaryExpression(
   }
 }
 void SmtTranslatorVisitor::visitTernaryExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] Expr::TernaryOp op, [[maybe_unused]] const Expr &fst,
-    [[maybe_unused]] const Expr &snd, [[maybe_unused]] const Expr &thd) {
+    const BType &, const std::vector<std::string> &, Expr::TernaryOp,
+    const Expr &, const Expr &, const Expr &) {
   throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                        FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitNaryExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] Expr::NaryOp op,
+    const BType &type, const std::vector<std::string> &, Expr::NaryOp op,
     [[maybe_unused]] const std::vector<Expr> &vec) {
   switch (op) {
     /* 5.7 Set List Expressions */
@@ -829,16 +816,13 @@ void SmtTranslatorVisitor::visitNaryExpression(
   }
 }
 void SmtTranslatorVisitor::visitBooleanExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const Pred &p) {
+    const BType &, const std::vector<std::string> &, const Pred &) {
   throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                        FILE_NAME, LINE_NUMBER));
 }
 void SmtTranslatorVisitor::visitRecord(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
+    const BType &type, const std::vector<std::string> &,
+    const std::vector<std::pair<std::string, Expr>> &fds) {
   m_translation.push_back('(');
   m_translation.append("|record ");
   m_translation.append(symbolInner(type));
@@ -855,9 +839,8 @@ void SmtTranslatorVisitor::visitRecord(
   m_translation.push_back(')');
 }
 void SmtTranslatorVisitor::visitStruct(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
+    const BType &type, const std::vector<std::string> &,
+    const std::vector<std::pair<std::string, Expr>> &fds) {
   m_translation.push_back('(');
   m_translation.append(
       smtSymbol(Expr::EKind::Struct, type.toPowerType().content));
@@ -893,11 +876,8 @@ void SmtTranslatorVisitor::visitStruct(
   m_translation.push_back(')');
 }
 void SmtTranslatorVisitor::visitQuantifiedExpr(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] Expr::QuantifiedOp op,
-    [[maybe_unused]] const std::vector<TypedVar> vars,
-    [[maybe_unused]] const Pred &cond, [[maybe_unused]] const Expr &body) {
+    const BType &type, const std::vector<std::string> &, Expr::QuantifiedOp op,
+    const std::vector<TypedVar> vars, const Pred &cond, const Expr &body) {
   switch (op) {
     case Expr::QuantifiedOp::Lambda: {
       m_translation.push_back('(');
@@ -1076,11 +1056,10 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
       return;
   }
 }
-void SmtTranslatorVisitor::visitQuantifiedSet(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::vector<TypedVar> vars,
-    [[maybe_unused]] const Pred &cond) {
+void SmtTranslatorVisitor::visitQuantifiedSet(const BType &type,
+                                              const std::vector<std::string> &,
+                                              const std::vector<TypedVar> vars,
+                                              const Pred &cond) {
   m_translation.push_back('(');
   m_translation.append(
       smtSymbol(Expr::NaryOp::Set, type.toPowerType().content));
@@ -1102,19 +1081,17 @@ void SmtTranslatorVisitor::visitQuantifiedSet(
   m_translation.push_back(')');
   m_translation.push_back(')');
 }
-void SmtTranslatorVisitor::visitRecordUpdate(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const Expr &rec, [[maybe_unused]] const std::string &label,
-    [[maybe_unused]] const Expr &value) {
+void SmtTranslatorVisitor::visitRecordUpdate(const BType &,
+                                             const std::vector<std::string> &,
+                                             const Expr &, const std::string &,
+                                             const Expr &) {
   throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
                                        FILE_NAME, LINE_NUMBER));
 }
-void SmtTranslatorVisitor::visitRecordAccess(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const Expr &rec,
-    [[maybe_unused]] const std::string &label) {
+void SmtTranslatorVisitor::visitRecordAccess(const BType &,
+                                             const std::vector<std::string> &,
+                                             const Expr &rec,
+                                             const std::string &label) {
   m_translation.push_back('(');
   m_translation.append(label);
   m_translation.append(" ");

@@ -6,11 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 # configure compilers
 if(CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID MATCHES Clang$)
-  add_compile_options(-Wall)
-  add_compile_options(-Wextra)
-  add_compile_options(-pedantic)
-  add_compile_options(-Werror)
-  add_compile_options(-fno-threadsafe-statics)
+  add_compile_options(-Wall -Wextra -Wunused -Wpedantic -Werror)
 endif()
 
 add_subdirectory(constructs/type)

@@ -27,19 +27,16 @@ class PureTypeExpression : public Expr::Visitor {
   void reset() { m_result = false; }
   bool get() const { return m_result; }
 
-  virtual void visitConstant(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag, EConstant c) {
+  virtual void visitConstant(const BType &, const std::vector<std::string> &,
+                             EConstant c) {
     m_result = (c == Expr::Visitor::EConstant::INTEGER ||
                 c == Expr::Visitor::EConstant::BOOL ||
                 c == Expr::Visitor::EConstant::STRING ||
                 c == Expr::Visitor::EConstant::REAL ||
                 c == Expr::Visitor::EConstant::FLOAT);
   }
-  virtual void visitIdent(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      const VarName &b) {
+  virtual void visitIdent(const BType &type, const std::vector<std::string> &,
+                          const VarName &b) {
     if (type.getKind() == BType::Kind::PowerType) {
       const auto &etype = type.toPowerType().content;
       if (etype.getKind() == BType::Kind::AbstractSet) {
@@ -51,38 +48,33 @@ class PureTypeExpression : public Expr::Visitor {
       }
     }
   }
-  virtual void visitIntegerLiteral(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      const std::string &) {
+  virtual void visitIntegerLiteral(const BType &,
+                                   const std::vector<std::string> &,
+                                   const std::string &) {
     m_result = false;
   }
-  virtual void visitStringLiteral(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      const std::string &) {
+  virtual void visitStringLiteral(const BType &,
+                                  const std::vector<std::string> &,
+                                  const std::string &) {
     m_result = false;
   }
-  virtual void visitRealLiteral(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      const Expr::Decimal &) {
+  virtual void visitRealLiteral(const BType &, const std::vector<std::string> &,
+                                const Expr::Decimal &) {
     m_result = false;
   }
-  virtual void visitUnaryExpression(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      Expr::UnaryOp op, const Expr &e) {
+  virtual void visitUnaryExpression(const BType &,
+                                    const std::vector<std::string> &,
+                                    Expr::UnaryOp op, const Expr &e) {
     if (op == Expr::UnaryOp::Subsets) {
       e.accept(*this);
     } else {
       m_result = false;
     }
   }
-  virtual void visitBinaryExpression(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      Expr::BinaryOp op, const Expr &lhs, const Expr &rhs) {
+  virtual void visitBinaryExpression(const BType &,
+                                     const std::vector<std::string> &,
+                                     Expr::BinaryOp op, const Expr &lhs,
+                                     const Expr &rhs) {
     if (op == Expr::BinaryOp::Cartesian_Product) {
       lhs.accept(*this);
       if (m_result) {
@@ -92,58 +84,50 @@ class PureTypeExpression : public Expr::Visitor {
       m_result = false;
     }
   }
-  virtual void visitTernaryExpression(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag, Expr::TernaryOp,
-      const Expr &, const Expr &, const Expr &) {
+  virtual void visitTernaryExpression(const BType &,
+                                      const std::vector<std::string> &,
+                                      Expr::TernaryOp, const Expr &,
+                                      const Expr &, const Expr &) {
     m_result = false;
   }
-  virtual void visitNaryExpression(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag, Expr::NaryOp,
-      const std::vector<Expr> &) {
+  virtual void visitNaryExpression(const BType &,
+                                   const std::vector<std::string> &,
+                                   Expr::NaryOp, const std::vector<Expr> &) {
     m_result = false;
   }
-  virtual void visitBooleanExpression(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag, const Pred &) {
+  virtual void visitBooleanExpression(const BType &,
+                                      const std::vector<std::string> &,
+                                      const Pred &) {
     m_result = false;
   }
-  virtual void visitRecord(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      const std::vector<std::pair<std::string, Expr>> &) {
+  virtual void visitRecord(const BType &, const std::vector<std::string> &,
+                           const std::vector<std::pair<std::string, Expr>> &) {
     m_result = false;
   }
-  virtual void visitStruct(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      const std::vector<std::pair<std::string, Expr>> &) {
+  virtual void visitStruct(const BType &, const std::vector<std::string> &,
+                           const std::vector<std::pair<std::string, Expr>> &) {
     m_result = false;
   }
-  virtual void visitQuantifiedExpr(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      Expr::QuantifiedOp, const std::vector<TypedVar>, const Pred &,
-      const Expr &) {
+  virtual void visitQuantifiedExpr(const BType &,
+                                   const std::vector<std::string> &,
+                                   Expr::QuantifiedOp,
+                                   const std::vector<TypedVar>, const Pred &,
+                                   const Expr &) {
     m_result = false;
   }
-  virtual void visitQuantifiedSet(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-      const std::vector<TypedVar>, const Pred &) {
+  virtual void visitQuantifiedSet(const BType &,
+                                  const std::vector<std::string> &,
+                                  const std::vector<TypedVar>, const Pred &) {
     m_result = false;
   }
-  virtual void visitRecordUpdate(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag, const Expr &,
-      const std::string &, const Expr &) {
+  virtual void visitRecordUpdate(const BType &,
+                                 const std::vector<std::string> &, const Expr &,
+                                 const std::string &, const Expr &) {
     m_result = false;
   }
-  virtual void visitRecordAccess(
-      [[maybe_unused]] const BType &type,
-      [[maybe_unused]] const std::vector<std::string> &bxmlTag, const Expr &,
-      const std::string &) {
+  virtual void visitRecordAccess(const BType &,
+                                 const std::vector<std::string> &, const Expr &,
+                                 const std::string &) {
     m_result = false;
   }
 };
