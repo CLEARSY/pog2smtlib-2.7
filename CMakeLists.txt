@@ -3,6 +3,7 @@ project(pog2smtlib-2.7)
 
 # compile command database
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # set build type if not set
 if(NOT CMAKE_BUILD_TYPE)

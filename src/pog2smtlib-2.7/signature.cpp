@@ -25,7 +25,7 @@ using std::unordered_set;
 #include "pure-typing.h"
 #include "type-utils.h"
 
-static constexpr bool debug_me = false;
+[[maybe_unused]] static constexpr bool debug_me = false;
 
 class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
  public:
@@ -239,7 +239,7 @@ void GetSignatureVisitor::visitBinaryPred(const Pred &lhs, const Pred &rhs) {
   m_signature = std::move(sig);
 }
 
-void GetSignatureVisitor::visitUnaryPred([[maybe_unused]] const Pred &p) {
+void GetSignatureVisitor::visitUnaryPred(const Pred &p) {
   SignatureReset(m_signature);
   p.accept(*this);
 }
@@ -340,9 +340,9 @@ void GetSignatureVisitor::visitExprComparison(Pred::ComparisonOp op,
   m_signature = std::move(sig);
 }
 
-void GetSignatureVisitor::visitConstant(
-    const BType &type, [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    Expr::Visitor::EConstant c) {
+void GetSignatureVisitor::visitConstant(const BType &type,
+                                        const std::vector<std::string> &,
+                                        Expr::Visitor::EConstant c) {
   SignatureReset(m_signature);
   switch (c) {
     case Expr::Visitor::EConstant::MaxInt:
@@ -381,9 +381,9 @@ void GetSignatureVisitor::visitConstant(
   }
 }
 
-void GetSignatureVisitor::visitIdent(
-    const BType &type, [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    const VarName &b) {
+void GetSignatureVisitor::visitIdent(const BType &type,
+                                     const std::vector<std::string> &,
+                                     const VarName &b) {
   SignatureReset(m_signature);
   if (m_bindings.find(b) == m_bindings.end()) {
     struct Data data{std::make_shared<VarName>(b),
@@ -392,31 +392,28 @@ void GetSignatureVisitor::visitIdent(
   }
 }
 
-void GetSignatureVisitor::visitIntegerLiteral(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::string &i) {
+void GetSignatureVisitor::visitIntegerLiteral(const BType &,
+                                              const std::vector<std::string> &,
+                                              const std::string &) {
   SignatureReset(m_signature);
 }
 
-void GetSignatureVisitor::visitStringLiteral(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::string &b) {
+void GetSignatureVisitor::visitStringLiteral(const BType &,
+                                             const std::vector<std::string> &,
+                                             const std::string &) {
   SignatureReset(m_signature);
 }
 
-void GetSignatureVisitor::visitRealLiteral(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const Expr::Decimal &d) {
+void GetSignatureVisitor::visitRealLiteral(const BType &,
+                                           const std::vector<std::string> &,
+                                           const Expr::Decimal &) {
   SignatureReset(m_signature);
 }
 
-void GetSignatureVisitor::visitUnaryExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag, Expr::UnaryOp op,
-    const Expr &e) {
+void GetSignatureVisitor::visitUnaryExpression(const BType &,
+                                               const std::vector<std::string> &,
+                                               Expr::UnaryOp op,
+                                               const Expr &e) {
   SignatureReset(m_signature);
   e.accept(*this);
   switch (op) {
@@ -539,8 +536,7 @@ void GetSignatureVisitor::visitUnaryExpression(
 }
 
 void GetSignatureVisitor::visitBinaryExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag, Expr::BinaryOp op,
+    const BType &type, const std::vector<std::string> &, Expr::BinaryOp op,
     const Expr &lhs, const Expr &rhs) {
   SignatureReset(m_signature);
   Signature sig;
@@ -754,17 +750,15 @@ void GetSignatureVisitor::visitBinaryExpression(
 }
 
 void GetSignatureVisitor::visitTernaryExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    Expr::TernaryOp op, [[maybe_unused]] const Expr &fst,
-    [[maybe_unused]] const Expr &snd, [[maybe_unused]] const Expr &thd) {
+    const BType &, const std::vector<std::string> &, Expr::TernaryOp op,
+    const Expr &, const Expr &, const Expr &) {
   throw Exception(fmt::format(MSG_NOT_SUPPORTED, Expr::to_string(op)));
 }
 
-void GetSignatureVisitor::visitNaryExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag, Expr::NaryOp op,
-    const std::vector<Expr> &vec) {
+void GetSignatureVisitor::visitNaryExpression(const BType &type,
+                                              const std::vector<std::string> &,
+                                              Expr::NaryOp op,
+                                              const std::vector<Expr> &vec) {
   SignatureReset(m_signature);
   Signature sig;
   for (const Expr &e : vec) {
@@ -792,16 +786,14 @@ void GetSignatureVisitor::visitNaryExpression(
 }
 
 void GetSignatureVisitor::visitBooleanExpression(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag, const Pred &p) {
+    const BType &, const std::vector<std::string> &, const Pred &p) {
   SignatureReset(m_signature);
   p.accept(*this);
 }
 
 void GetSignatureVisitor::visitRecord(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
+    const BType &type, const std::vector<std::string> &,
+    const std::vector<std::pair<std::string, Expr>> &fds) {
   SignatureReset(m_signature);
   Signature sig;
   for (const auto &fd : fds) {
@@ -813,9 +805,8 @@ void GetSignatureVisitor::visitRecord(
 }
 
 void GetSignatureVisitor::visitStruct(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const std::vector<std::pair<std::string, Expr>> &fds) {
+    const BType &type, const std::vector<std::string> &,
+    const std::vector<std::pair<std::string, Expr>> &fds) {
   SignatureReset(m_signature);
   Signature sig;
   for (const auto &fd : fds) {
@@ -829,10 +820,8 @@ void GetSignatureVisitor::visitStruct(
 }
 
 void GetSignatureVisitor::visitQuantifiedExpr(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    Expr::QuantifiedOp op, const std::vector<TypedVar> vars, const Pred &cond,
-    const Expr &body) {
+    const BType &type, const std::vector<std::string> &, Expr::QuantifiedOp op,
+    const std::vector<TypedVar> vars, const Pred &cond, const Expr &body) {
   SignatureReset(m_signature);
   Signature sig;
   for (auto v : vars) {
@@ -894,10 +883,10 @@ void GetSignatureVisitor::visitQuantifiedExpr(
   m_signature = std::move(sig);
 }
 
-void GetSignatureVisitor::visitQuantifiedSet(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    const std::vector<TypedVar> vars, const Pred &cond) {
+void GetSignatureVisitor::visitQuantifiedSet(const BType &type,
+                                             const std::vector<std::string> &,
+                                             const std::vector<TypedVar> vars,
+                                             const Pred &cond) {
   SignatureReset(m_signature);
   for (auto v : vars) {
     m_bindings.insert(v.name);
@@ -911,16 +900,15 @@ void GetSignatureVisitor::visitQuantifiedSet(
   }
 }
 
-void GetSignatureVisitor::visitRecordUpdate(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag,
-    [[maybe_unused]] const Expr &rec, [[maybe_unused]] const std::string &label,
-    [[maybe_unused]] const Expr &value) {}
+void GetSignatureVisitor::visitRecordUpdate(const BType &,
+                                            const std::vector<std::string> &,
+                                            const Expr &, const std::string &,
+                                            const Expr &) {}
 
-void GetSignatureVisitor::visitRecordAccess(
-    [[maybe_unused]] const BType &type,
-    [[maybe_unused]] const std::vector<std::string> &bxmlTag, const Expr &rec,
-    [[maybe_unused]] const std::string &label) {
+void GetSignatureVisitor::visitRecordAccess(const BType &,
+                                            const std::vector<std::string> &,
+                                            const Expr &rec,
+                                            const std::string &) {
   SignatureReset(m_signature);
   Signature sig;
   rec.accept(*this);
