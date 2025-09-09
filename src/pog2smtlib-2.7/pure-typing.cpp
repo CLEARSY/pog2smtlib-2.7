@@ -104,10 +104,16 @@ class PureTypeExpression : public Expr::Visitor {
                            const std::vector<std::pair<std::string, Expr>> &) {
     m_result = false;
   }
-  virtual void visitStruct(const BType &, const std::vector<std::string> &,
-                           const std::vector<std::pair<std::string, Expr>> &) {
-    m_result = false;
+  virtual void visitStruct(
+      const BType &, const std::vector<std::string> &,
+      const std::vector<std::pair<std::string, Expr>> &fields) {
+    m_result = true;
+    for (const auto &field : fields) {
+      field.second.accept(*this);
+      if (!m_result) break;
+    }
   }
+
   virtual void visitQuantifiedExpr(const BType &,
                                    const std::vector<std::string> &,
                                    Expr::QuantifiedOp,
