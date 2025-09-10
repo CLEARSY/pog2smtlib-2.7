@@ -18,21 +18,26 @@
     </Define>
     <Define name="ctx" hash="0"/>
     <Define name="seext" hash="0"/>
-    <Define name="lprp" hash="0"/>
+    <Define name="lprp" hash="862487301452871135">
+        <Exp_Comparison op=":">
+            <Id value="co" typref="2" tag="building_set_bool.bxml:1:2:1:1"/>
+            <Id value="BOOL" typref="3" tag="building_set_bool.bxml:1:2:1:2"/>
+        </Exp_Comparison>
+    </Define>
     <Define name="inprp" hash="0"/>
     <Define name="inext" hash="0"/>
     <Define name="inv" hash="0"/>
-    <Define name="ass" hash="11831275560261738306">
+    <Define name="ass" hash="788368434646698796">
         <Unary_Pred op="not">
             <Exp_Comparison op=":">
-                <STRING_Literal value="E" typref="2" tag="string_1.bxml:1:2:1:1"/>
-                <Id value="STRING" typref="3" tag="string_1.bxml:1:2:1:2"/>
+                <Id value="co" typref="2" tag="building_set_bool.bxml:1:4:1:1"/>
+                <Id value="BOOL" typref="3" tag="building_set_bool.bxml:1:4:1:2"/>
             </Exp_Comparison>
         </Unary_Pred>
     </Define>
     <Define name="cst" hash="0"/>
     <Define name="sets" hash="0"/>
-    <Proof_Obligation goalHash="11831275631657688333">
+    <Proof_Obligation goalHash="788366873985711887">
         <Tag>AssertionLemmas</Tag>
         <Definition name="B definitions"/>
         <Definition name="ctx"/>
@@ -45,10 +50,12 @@
         <Simple_Goal>
             <Tag>Assertion is verified</Tag>
             <Goal>
-                <Exp_Comparison op=":">
-                    <STRING_Literal value="E" typref="2" tag="string_1.bxml:1:2:1:1"/>
-                    <Id value="STRING" typref="3" tag="string_1.bxml:1:2:1:2"/>
-                </Exp_Comparison>
+                <Unary_Pred op="not">
+                    <Exp_Comparison op=":">
+                        <Id value="co" typref="2" tag="building_set_bool.bxml:1:4:1:1"/>
+                        <Id value="BOOL" typref="3" tag="building_set_bool.bxml:1:4:1:2"/>
+                    </Exp_Comparison>
+                </Unary_Pred>
             </Goal>
         </Simple_Goal>
     </Proof_Obligation>
@@ -62,11 +69,11 @@
             <Id value="INTEGER"/>
         </Type>
         <Type id="2">
-            <Id value="STRING"/>
+            <Id value="BOOL"/>
         </Type>
         <Type id="3">
             <Unary_Exp op="POW">
-                <Id value="STRING"/>
+                <Id value="BOOL"/>
             </Unary_Exp>
         </Type>
     </TypeInfos>

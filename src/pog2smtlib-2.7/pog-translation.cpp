@@ -18,7 +18,6 @@
 #include <variant>
 
 #include "cc-compatibility.h"
-#include "pure-typing.h"
 #include "translate-predicate.h"
 #include "translate-signature.h"
 
@@ -169,7 +168,7 @@ string_view POGTranslations::groupScript(int group) {
   }
   int i = 1;
   for (const auto &pred : pogroup.hyps) {
-    if (!pureTypingPredicate(pred)) {
+    if (!pred.isPureTypingPredicate()) {
       const string translation = translate(pred);
       const string other = assertHypothesisCommand(translation, i);
       script.append(other);
@@ -216,7 +215,7 @@ string_view POGTranslations::localHypScript(int group, int localHyp) {
 string POGTranslations::goalScript(int group, int goal) {
   string result;
   const Pred &pred = m_pog.pos.at(group).simpleGoals.at(goal).goal;
-  if (!pureTypingPredicate(pred)) {
+  if (!pred.isPureTypingPredicate()) {
     const string translation = translate(pred);
     const string command = assertGoalCommand(translation);
     result.append(command);
@@ -249,7 +248,7 @@ string_view POGTranslations::defineScript(const std::string &name) {
         for (const auto &elem : define.contents) {
           if (std::holds_alternative<Pred>(elem)) {
             const Pred &pred = std::get<Pred>(elem);
-            if (!pureTypingPredicate(pred)) {
+            if (!pred.isPureTypingPredicate()) {
               const string &translation = translate(pred);
               const string &command =
                   assertDefineHypothesisCommand(translation, name, index);

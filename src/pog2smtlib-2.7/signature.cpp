@@ -22,7 +22,6 @@
 #include <unordered_set>
 using std::unordered_set;
 
-#include "pure-typing.h"
 #include "type-utils.h"
 
 [[maybe_unused]] static constexpr bool debug_me = false;
@@ -114,6 +113,7 @@ class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
   };  // end class Exception
 
  private:
+  void visitPredicatePureTypingGuard(const Pred &pred);
   void visitBinaryPred(const Pred &lhs, const Pred &rhs);
   void visitUnaryPred(const Pred &p);
   void visitNaryPred(const std::vector<Pred> &vec);
@@ -229,26 +229,33 @@ static void SignatureMoveInto(Signature &target, Signature &source) {
   SignatureReset(source);
 }
 
+void GetSignatureVisitor::visitPredicatePureTypingGuard(const Pred &pred) {
+  pred.accept(*this);
+  if (pred.isPureTypingPredicate()) {
+    m_signature.m_operators.clear();
+  }
+}
+
 void GetSignatureVisitor::visitBinaryPred(const Pred &lhs, const Pred &rhs) {
   SignatureReset(m_signature);
   Signature sig;
-  lhs.accept(*this);
+  visitPredicatePureTypingGuard(lhs);
   sig = std::move(m_signature);
   rhs.accept(*this);
-  SignatureMoveInto(sig, m_signature);
+  visitPredicatePureTypingGuard(rhs);
   m_signature = std::move(sig);
 }
 
 void GetSignatureVisitor::visitUnaryPred(const Pred &p) {
   SignatureReset(m_signature);
-  p.accept(*this);
+  visitPredicatePureTypingGuard(p);
 }
 
 void GetSignatureVisitor::visitNaryPred(const std::vector<Pred> &vec) {
   SignatureReset(m_signature);
   Signature sig;
   for (const Pred &p : vec) {
-    p.accept(*this);
+    visitPredicatePureTypingGuard(p);
     SignatureMoveInto(sig, m_signature);
   }
   m_signature = std::move(sig);
@@ -921,7 +928,7 @@ Signature predicateSignature(const Pred &pred) {
   GetSignatureVisitor visitor;
   pred.accept(visitor);
   Signature result = visitor.getSignature();
-  if (pureTypingPredicate(pred)) {
+  if (pred.isPureTypingPredicate()) {
     result.m_operators.clear();
   }
   return result;

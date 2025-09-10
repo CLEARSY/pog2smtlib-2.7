@@ -21,14 +21,9 @@
     (= (|set.in Z| x (|UNION Z Z| P E))
        (exists ((e |Z|)) (and (P e) (|set.in Z| x (E e))))))
   :named |ax.set.in.quantified.union (Z x Z)|))
-
-(declare-const INTEGER |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
 (assert (!
   (not (= (|UNION Z Z| (lambda ((c |Z|)) (|set.in Z| c (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4))))))  (lambda ((c |Z|)) (|set.intent Z| (lambda ((x |Z|)) (and
-(|set.in Z| x INTEGER)
+true
 (<= x c)
 ))))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 2)(= x 3))))))
   :named |Goal|)

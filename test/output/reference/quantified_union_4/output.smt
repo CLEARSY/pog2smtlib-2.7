@@ -32,11 +32,6 @@
          (p x))))
   :named |ax:set.in.intent Z|))
 
-(declare-const INTEGER |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
-
 (declare-fun |UNION (Z x POW Z) Z| (|? (Z x POW Z)| (-> |(Z x POW Z)| |POW Z|)) |POW Z|)
 (assert (!
   (forall ((P |? (Z x POW Z)|)(E (-> |(Z x POW Z)| |POW Z|))(x |Z|))
@@ -57,7 +52,7 @@
 (|set.in Z| (fst c) (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4)))))
 (|set.in POW Z| (snd c) (|set.intent POW Z| (lambda ((x |POW Z|)) (= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 10))))))))
 ))  (lambda ((c |(Z x POW Z)|)) (|set.intent Z| (lambda ((x |Z|)) (and
-(|set.in Z| x INTEGER)
+true
 (<= x (fst c))
 (|set.in Z| x (snd c))
 ))))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1))))))

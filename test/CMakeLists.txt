@@ -18,6 +18,10 @@ macro(add_cl_test id)
     set_tests_properties(${id} PROPERTIES LABELS "command line")
 endmacro(add_cl_test)
 
+# 3 Types
+
+add_cl_test("type_struct")
+
 add_cl_test("expr_comparison_1")
 add_cl_test("expr_comparison_2")
 add_cl_test("expr_comparison_3")
@@ -100,8 +104,10 @@ add_cl_test("building_set_nat1_1")
 add_cl_test("building_set_nat1_2")
 add_cl_test("building_set_int_1")
 add_cl_test("building_set_int_2")
-add_cl_test("building_set_string_1")
-add_cl_test("building_set_string_2")
+add_cl_test("building_set_bool")
+add_cl_test("building_set_integer")
+add_cl_test("building_set_string")
+add_cl_test("building_set_real")
 
 # 5.7 Set List Expressions
 

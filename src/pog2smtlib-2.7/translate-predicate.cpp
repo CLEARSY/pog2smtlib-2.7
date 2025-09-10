@@ -24,7 +24,6 @@
 #include "cc-compatibility.h"
 #include "expr.h"
 #include "pred.h"
-#include "pure-typing.h"
 #include "symbols.h"
 #include "translate-token.h"
 #include "type-utils.h"
@@ -126,13 +125,21 @@ class SmtTranslatorVisitor : public Pred::Visitor, public Expr::Visitor {
       "POG to SMT syntax transformation: application of {} operator is not "
       "supported";
 
+  inline void visitPredicateGuard(const Pred &pred) {
+    if (pred.isPureTypingPredicate()) {
+      m_translation.append(smtSymbol(Expr::Visitor::EConstant::TRUE));
+    } else {
+      pred.accept(*this);
+    }
+  }
+
   inline void visitBinaryPred(const string_view op, const Pred &lhs,
                               const Pred &rhs) {
     m_translation.append(fmt::format("{:{}}({}\n", "", m_indent * 2, op));
     m_indent += 1;
-    lhs.accept(*this);
+    visitPredicateGuard(lhs);
     m_translation.append("\n");
-    rhs.accept(*this);
+    visitPredicateGuard(rhs);
     m_translation.append(")");
     m_indent -= 1;
   }
@@ -141,7 +148,7 @@ class SmtTranslatorVisitor : public Pred::Visitor, public Expr::Visitor {
     m_indent += 1;
     std::size_t child = 1;
     for (const auto &pred : vec) {
-      pred.accept(*this);
+      visitPredicateGuard(pred);
       if (child < vec.size())
         m_translation.append("\n");
       else
@@ -178,7 +185,7 @@ void SmtTranslatorVisitor::visitEquivalence(const Pred &lhs, const Pred &rhs) {
 void SmtTranslatorVisitor::visitNegation(const Pred &p) {
   m_translation.append(fmt::format("{:{}}({} ", "", m_indent * 2,
                                    smtSymbol(Pred::PKind::Negation)));
-  p.accept(*this);
+  visitPredicateGuard(p);
   m_translation.append(")");
 }
 

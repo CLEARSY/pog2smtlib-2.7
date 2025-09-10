@@ -1,5 +1,5 @@
 MACHINE
-    string_1
+    building_set_string
 ASSERTIONS
     "E" /: STRING
 END

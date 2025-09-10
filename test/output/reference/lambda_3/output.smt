@@ -14,8 +14,6 @@
 (declare-fun |set.in (POW Z x Z)| (|(POW Z x Z)| |POW (POW Z x Z)|) Bool)
 (define-sort |POW ((POW Z x Z) x POW POW Z)| () (P |((POW Z x Z) x POW POW Z)|))
 
-(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-
 (assert (!
   (forall ((s |POW POW Z|) (t |POW POW Z|))
     (=
@@ -35,15 +33,8 @@
   :named |ax:set.in.intent (POW Z x Z)|))
 
 (declare-fun |set.in ((POW Z x Z) x POW POW Z)| (|((POW Z x Z) x POW POW Z)| |POW ((POW Z x Z) x POW POW Z)|) Bool)
-(declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
-(assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-      (=
-        (|set.subseteq Z| s t)
-        (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq Z|))
+
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 
 (declare-fun |set.lambda (POW Z x Z) POW POW Z| (|? (POW Z x Z)| (-> |(POW Z x Z)| |POW POW Z|)) |POW ((POW Z x Z) x POW POW Z)|)
 (assert (!
@@ -71,23 +62,10 @@
       (= (|set.in POW Z| x (|set.intent POW Z| p))
          (p x))))
   :named |ax:set.in.intent POW Z|))
-
-(declare-fun |sub-sets Z| (|POW Z|) |POW POW Z|)
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (=
-      (|set.in POW Z| s (|sub-sets Z| t))
-      (|set.subseteq Z| s t)))
-  :named |ax.sub-sets Z|))
-
-(declare-const INTEGER |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
 (assert (!
   (not (|set.in ((POW Z x Z) x POW POW Z)| (maplet (maplet (|set.intent Z| (lambda ((x |Z|)) (= x 1))) 2) (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (|set.intent Z| (lambda ((x |Z|)) (= x 1))))(= x (|set.intent Z| (lambda ((x |Z|)) (= x 3)))))))) (|set.lambda (POW Z x Z) POW POW Z| (lambda ((c |(POW Z x Z)|)) (and
-(|set.in POW Z| (fst c) (|sub-sets Z| INTEGER))
-(|set.in Z| (snd c) INTEGER)
+true
+true
 ))  (lambda ((c |(POW Z x Z)|)) (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (fst c))(= x (|set.intent Z| (lambda ((x |Z|)) (= x (snd c))))))))))))
   :named |Goal|)
 )

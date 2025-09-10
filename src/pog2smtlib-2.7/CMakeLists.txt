@@ -22,7 +22,6 @@ set(POG2SMTLIB27_HEADERS
     parameters.h
     pog-signatures.h
     pog-translation.h
-    pure-typing.h
     signature.h
     smtlib.h
     symbols.h
@@ -43,7 +42,6 @@ set(POG2SMTLIB27_SOURCES
     parameters.cpp
     pog-signatures.cpp
     pog-translation.cpp
-    pure-typing.cpp
     signature.cpp
     smtlib.cpp
     symbols.cpp
