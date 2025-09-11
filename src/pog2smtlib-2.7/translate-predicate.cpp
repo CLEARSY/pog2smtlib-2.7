@@ -190,10 +190,18 @@ void SmtTranslatorVisitor::visitNegation(const Pred &p) {
 }
 
 void SmtTranslatorVisitor::visitConjunction(const vector<Pred> &vec) {
-  visitNaryPred(smtSymbol(Pred::PKind::Conjunction), vec);
+  if (vec.size() == 0) {
+    m_translation.append(smtSymbol(Pred::PKind::True));
+  } else {
+    visitNaryPred(smtSymbol(Pred::PKind::Conjunction), vec);
+  }
 }
 void SmtTranslatorVisitor::visitDisjunction(const vector<Pred> &vec) {
-  visitNaryPred(smtSymbol(Pred::PKind::Disjunction), vec);
+  if (vec.size() == 0) {
+    m_translation.append(smtSymbol(Pred::PKind::False));
+  } else {
+    visitNaryPred(smtSymbol(Pred::PKind::Disjunction), vec);
+  }
 }
 
 void SmtTranslatorVisitor::visitForall(const std::vector<TypedVar> &vars,

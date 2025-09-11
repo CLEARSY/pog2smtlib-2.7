@@ -22,6 +22,12 @@ endmacro(add_cl_test)
 
 add_cl_test("type_struct")
 
+# 4 Predicates
+
+# 4.1 Propositions
+
+add_cl_test("issue_clearsy_11")
+
 add_cl_test("expr_comparison_1")
 add_cl_test("expr_comparison_2")
 add_cl_test("expr_comparison_3")
