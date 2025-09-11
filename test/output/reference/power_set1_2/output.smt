@@ -11,6 +11,15 @@
 (assert (!
   (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
   :named |ax.set.in.empty Z|))
+
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))
+    )
+  )
+  :named |ax.set.eq Z|))
 (define-sort |POW POW Z| () (P |POW Z|))
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!

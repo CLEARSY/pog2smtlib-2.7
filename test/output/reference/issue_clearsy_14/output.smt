@@ -3,6 +3,7 @@
 (define-sort |Z| () Int)
 (declare-sort P 1)
 (define-sort |POW Z| () (P |Z|))
+(declare-const co |POW Z|)
 
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 
@@ -15,13 +16,6 @@
          (p x))))
   :named |ax:set.in.intent Z|))
 
-(declare-fun |INTER Z Z| (|? Z| (-> |Z| |POW Z|)) |POW Z|)
-(assert (!
-  (forall ((P |? Z|)(E (-> |Z| |POW Z|))(x |Z|))
-    (= (|set.in Z| x (|INTER Z Z| P E))
-       (forall ((e |Z|)) (=> (P e) (|set.in Z| x (E e))))))
-  :named |ax.set.in.quantified.inter (Z x Z)|))
-
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))
     (=
@@ -31,10 +25,7 @@
   )
   :named |ax.set.eq Z|))
 (assert (!
-  (not (= (|INTER Z Z| (lambda ((c |Z|)) (|set.in Z| c (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4))))))  (lambda ((c |Z|)) (|set.intent Z| (lambda ((x |Z|)) (and
-true
-(<= x c)
-))))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 2))))))
+  (not (= co (|set.intent Z| (lambda ((x |Z|)) (= x 0)))))
   :named |Goal|)
 )
 (check-sat)

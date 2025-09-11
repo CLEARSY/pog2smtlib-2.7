@@ -29,6 +29,15 @@
            (and (|set.in Z| (fst x) X) (= (fst x) (snd x)))))))
   :named |def.id Z|))
 
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
+    )
+  )
+  :named |ax.set.eq (Z x Z)|))
+
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!

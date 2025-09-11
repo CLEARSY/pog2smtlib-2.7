@@ -28,6 +28,15 @@
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
+
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))
+    )
+  )
+  :named |ax.set.eq Z|))
 (assert (!
   (not (|set.in (Z x POW Z)| (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (and
 true

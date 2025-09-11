@@ -21,6 +21,15 @@
     (= (|set.in Z| x (|INTER Z Z| P E))
        (forall ((e |Z|)) (=> (P e) (|set.in Z| x (E e))))))
   :named |ax.set.in.quantified.inter (Z x Z)|))
+
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))
+    )
+  )
+  :named |ax.set.eq Z|))
 (assert (!
   (not (= (|INTER Z Z| (lambda ((c |Z|)) (|set.in Z| c (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4))))))  (lambda ((c |Z|)) (|set.intent Z| (lambda ((x |Z|)) (and
 true

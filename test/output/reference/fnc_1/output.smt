@@ -29,6 +29,15 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
+
+(assert (!
+  (forall ((s |POW (Z x POW Z)|) (t |POW (Z x POW Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x POW Z)|)) (= (|set.in (Z x POW Z)| e s) (|set.in (Z x POW Z)| e t)))
+    )
+  )
+  :named |ax.set.eq (Z x POW Z)|))
 (define-sort |POW POW Z| () (P |POW Z|))
 (define-sort |(Z x POW POW Z)| () (C |Z| |POW POW Z|))
 (define-sort |POW (Z x POW POW Z)| () (P |(Z x POW POW Z)|))

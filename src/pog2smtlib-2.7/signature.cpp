@@ -333,14 +333,19 @@ void GetSignatureVisitor::visitExprComparison(Pred::ComparisonOp op,
       sig.m_operators.emplace(MonomorphizedOperator{
           op, std::make_shared<BType>(elementType(lhs.getType()))});
       break;
-    /*
-      enum class ComparisonOp {
-        Equality,
-        Ige, Igt, Ilt, Ile,
-        Fge, Fgt, Flt, Fle,
-        Rle, Rlt, Rge, Rgt
-      };
-    */
+    case Pred::ComparisonOp::Equality:
+      if (lhs.getType().getKind() == BType::Kind::PowerType) {
+        sig.m_operators.emplace(
+            MonomorphizedOperator{op, std::make_shared<BType>(lhs.getType())});
+      }
+      break;
+      /*
+        enum class ComparisonOp {
+          Ige, Igt, Ilt, Ile,
+          Fge, Fgt, Flt, Fle,
+          Rle, Rlt, Rge, Rgt
+        };
+      */
     default:
       break;
   }

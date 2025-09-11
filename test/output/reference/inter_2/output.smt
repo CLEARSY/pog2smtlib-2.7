@@ -19,6 +19,15 @@
          (p x))))
   :named |ax:set.in.intent POW Z|))
 
+(assert (!
+  (forall ((s |POW POW Z|) (t |POW POW Z|))
+    (=
+      (= s t)
+      (forall ((e |POW Z|)) (= (|set.in POW Z| e s) (|set.in POW Z| e t)))
+    )
+  )
+  :named |ax.set.eq POW Z|))
+
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -34,6 +43,15 @@
     (= (|set.in Z| x (|inter Z| E))
        (forall ((e |POW Z|)) (=> (|set.in Z| x e) (|set.in POW Z| e E)))))
   :named |ax.set.in.generalized.intersection Z|))
+
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))
+    )
+  )
+  :named |ax.set.eq Z|))
 (assert (!
   (= vset (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 2)))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 2)))))))))
   :named |Define:lprp:1|)

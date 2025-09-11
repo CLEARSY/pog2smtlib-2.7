@@ -36,6 +36,15 @@
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
 
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
+    )
+  )
+  :named |ax.set.eq (Z x Z)|))
+
 (declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
 (assert (!
   (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))

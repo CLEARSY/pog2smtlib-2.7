@@ -15,6 +15,15 @@
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
+
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))
+    )
+  )
+  :named |ax.set.eq Z|))
 (assert (!
   (= vset1 (|interval| 1 12))
   :named |Define:lprp:1|)

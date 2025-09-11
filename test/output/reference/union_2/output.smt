@@ -73,6 +73,15 @@
          (p x))))
   :named |ax:set.in.intent Z|))
 
+(assert (!
+  (forall ((s |POW POW Z|) (t |POW POW Z|))
+    (=
+      (= s t)
+      (forall ((e |POW Z|)) (= (|set.in POW Z| e s) (|set.in POW Z| e t)))
+    )
+  )
+  :named |ax.set.eq POW Z|))
+
 (define-sort |? POW Z| () (-> |POW Z| Bool))
 (declare-const |set.intent POW Z| (-> |? POW Z| |POW POW Z|))
 (assert (!
@@ -102,6 +111,15 @@
     (= (|set.in Z| x (|union Z| E))
        (exists ((e |POW Z|)) (and (|set.in Z| x e) (|set.in POW Z| e E)))))
   :named |ax.set.in.generalized.union Z|))
+
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))
+    )
+  )
+  :named |ax.set.eq Z|))
 (assert (!
   (|set.in POW POW Z| vset (|non empty sub-sets POW Z| (|non empty sub-sets Z| INTEGER)))
   :named |Define:lprp:1|)

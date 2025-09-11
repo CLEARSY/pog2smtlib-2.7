@@ -47,6 +47,15 @@
     (= (|set.in POW Z| x (|UNION (Z x POW POW Z) POW Z| P E))
        (exists ((e |(Z x POW POW Z)|)) (and (P e) (|set.in POW Z| x (E e))))))
   :named |ax.set.in.quantified.union ((Z x POW POW Z) x POW Z)|))
+
+(assert (!
+  (forall ((s |POW POW Z|) (t |POW POW Z|))
+    (=
+      (= s t)
+      (forall ((e |POW Z|)) (= (|set.in POW Z| e s) (|set.in POW Z| e t)))
+    )
+  )
+  :named |ax.set.eq POW Z|))
 (assert (!
   (not (= (|UNION (Z x POW POW Z) POW Z| (lambda ((c |(Z x POW POW Z)|)) (and
 (|set.in Z| (fst c) (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4)))))

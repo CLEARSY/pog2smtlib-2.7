@@ -18,6 +18,11 @@ macro(add_cl_test id)
     set_tests_properties(${id} PROPERTIES LABELS "command line")
 endmacro(add_cl_test)
 
+# Non regression
+
+add_cl_test("issue_clearsy_11")
+add_cl_test("issue_clearsy_14")
+
 # 3 Types
 
 add_cl_test("type_struct")
@@ -25,8 +30,6 @@ add_cl_test("type_struct")
 # 4 Predicates
 
 # 4.1 Propositions
-
-add_cl_test("issue_clearsy_11")
 
 add_cl_test("expr_comparison_1")
 add_cl_test("expr_comparison_2")

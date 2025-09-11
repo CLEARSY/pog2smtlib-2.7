@@ -18,6 +18,20 @@
        (exists ((y |Z|)) (|set.in (Z x Z)| (maplet e y) r))))
   :named |ax:set.in.domain (Z x Z)|))
 
+(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
+(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
+(assert (!
+  (forall ((p |? (Z x Z)|))
+    (forall ((x |(Z x Z)|))
+      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
+         (p x))))
+  :named |ax:set.in.intent (Z x Z)|))
+
+(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
+(assert (!
+  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
+  :named |ax.set.in.empty (Z x Z)|))
+
 (declare-fun |rel.overwrite Z Z| (|POW (Z x Z)| |POW (Z x Z)|) |POW (Z x Z)|)
 (assert (!
   (forall ((r1 |POW (Z x Z)|) (r2 |POW (Z x Z)|))
@@ -28,19 +42,14 @@
              (|set.in (Z x Z)| x r2)))))
   :named |ax:set.in.overwrite (Z x Z)|))
 
-(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
 (assert (!
-  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
-  :named |ax.set.in.empty (Z x Z)|))
-
-(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
-(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
-(assert (!
-  (forall ((p |? (Z x Z)|))
-    (forall ((x |(Z x Z)|))
-      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
-         (p x))))
-  :named |ax:set.in.intent (Z x Z)|))
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
+    )
+  )
+  :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not (= (|rel.overwrite Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 1))(= x (maplet 1 1))(= x (maplet 1 2))))) |set.empty (Z x Z)|) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 1))(= x (maplet 1 1))(= x (maplet 1 2)))))))
   :named |Goal|)

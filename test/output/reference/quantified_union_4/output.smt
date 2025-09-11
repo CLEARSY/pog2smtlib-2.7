@@ -47,6 +47,15 @@
       (= (|set.in POW Z| x (|set.intent POW Z| p))
          (p x))))
   :named |ax:set.in.intent POW Z|))
+
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))
+    )
+  )
+  :named |ax.set.eq Z|))
 (assert (!
   (not (= (|UNION (Z x POW Z) Z| (lambda ((c |(Z x POW Z)|)) (and
 (|set.in Z| (fst c) (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4)))))

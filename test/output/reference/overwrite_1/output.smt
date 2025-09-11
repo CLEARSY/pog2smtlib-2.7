@@ -36,6 +36,15 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
+
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
+    )
+  )
+  :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not (= (|rel.overwrite Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 2 5))(= x (maplet 2 4))(= x (maplet 3 5))(= x (maplet 4 1))(= x (maplet 4 0))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 9))(= x (maplet 2 2)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 9))(= x (maplet 2 2))(= x (maplet 3 5))(= x (maplet 4 1)))))))
   :named |Goal|)

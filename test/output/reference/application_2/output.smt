@@ -17,6 +17,15 @@
         (|set.in (Z x POW Z)| (maplet x (|fun.eval Z POW Z| f x)) f))
     :named |ax.fun.eval (Z x POW Z)|))
 
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))
+    )
+  )
+  :named |ax.set.eq Z|))
+
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
