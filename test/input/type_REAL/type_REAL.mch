@@ -1,0 +1,9 @@
+MACHINE
+    type_REAL
+CONSTANTS
+    co
+PROPERTIES
+    co : REAL
+ASSERTIONS
+    co = 1.0
+END

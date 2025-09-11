@@ -1,0 +1,9 @@
+MACHINE
+    type_INTEGER
+CONSTANTS
+    co
+PROPERTIES
+    co : INTEGER
+ASSERTIONS
+    co = 0
+END

@@ -1,0 +1,6 @@
+
+MACHINE
+    equal
+ASSERTIONS
+    2+2=5
+END

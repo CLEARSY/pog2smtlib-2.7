@@ -17,6 +17,20 @@ else()
   set(PROJECT_IS_TOP_LEVEL FALSE)
 endif()
 
+
+if(PROJECT_IS_TOP_LEVEL)
+  set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
+  if(PRODUCE_COVERAGE_REPORT STREQUAL "ON")
+    include(CodeCoverage)
+    set(COVERAGE_EXCLUDES extern "*fmt-src*")
+    setup_target_for_coverage_gcovr_html(
+      NAME coverage
+      EXECUTABLE ctest --test-dir ${CMAKE_BINARY_DIR}
+      DEPENDENCIES pog2smtlib27
+    )
+  endif()
+endif(PROJECT_IS_TOP_LEVEL)
+
 foreach(submodule
     "${PROJECT_SOURCE_DIR}/extern/POGLIB")
   if(NOT EXISTS "${submodule}/CMakeLists.txt")

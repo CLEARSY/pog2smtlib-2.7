@@ -24,17 +24,14 @@ namespace BConstruct::Predicate {
 static constexpr std::string_view SCRIPT = R"(
 (declare-fun {0} ({1} {1}) Bool)
 (assert (!
-    (forall ((s {1}) (t {1}))
-      (=
-        ({0} s t)
-        (and
-          ({2} s t)
-          (not (= s t)))
-      )
-    )
-    :named |ax.set.subset {3}|
-  )
-  )";
+  (forall ((s {1}) (t {1}))
+    (=
+      ({0} s t)
+      (and
+        ({2} s t)
+        (not (= s t)))))
+  :named |ax.set.subset {3}|))
+)";
 
 StrictInclusion::StrictInclusion(const BType &t) : UnaryBType(t) {
   const BType pt = BType::POW(t);

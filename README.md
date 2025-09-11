@@ -31,6 +31,18 @@ cd build
 ctest
 ```
 
+## Code coverage
+
+Code coverage reports are generated using `gcovr` by running the program over the test suite.
+
+```sh
+mkdir build-coverage
+cd build-coverage
+cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON ..
+cmake --build . --target coverage
+xdg-open coverage/index.html
+```
+
 ## Contributing
 
 We welcome external contributors to `pog2smtlib-2.7`!
@@ -46,4 +58,3 @@ See the LICENSE file in this repository.
 
 This project is developed and maintained by [CLEARSY](https://www.clearsy.com/). It has been partly financed by the [Agence Nationale de la Recherche](https://anr.fr) grant ANR-21-CE25-0010 for the
 [BLaSST](https://anr.fr/Project-ANR-21-CE25-0010) project (Enhancing B Language Reasoners with SAT and SMT Techniques).
-

@@ -1,0 +1,9 @@
+MACHINE
+    type_BOOL
+CONSTANTS
+    co
+PROPERTIES
+    co : BOOL
+ASSERTIONS
+    co = TRUE
+END

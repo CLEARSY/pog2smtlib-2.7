@@ -22,30 +22,69 @@ endmacro(add_cl_test)
 
 add_cl_test("issue_clearsy_11")
 add_cl_test("issue_clearsy_14")
+add_cl_test("issue_clearsy_15")
+add_cl_test("issue_clearsy_16")
 
-# 3 Types
+# 3.2 Types
 
+add_cl_test("type_INTEGER")
+add_cl_test("type_BOOL")
+add_cl_test("type_REAL")
+add_cl_test("type_STRING")
+add_cl_test("type_abstract_set")
+add_cl_test("type_enumerated_set")
+add_cl_test("type_power")
+add_cl_test("type_product")
 add_cl_test("type_struct")
 
 # 4 Predicates
 
 # 4.1 Propositions
 
-add_cl_test("expr_comparison_1")
-add_cl_test("expr_comparison_2")
-add_cl_test("expr_comparison_3")
-add_cl_test("expr_comparison_5")
-add_cl_test("expr_comparison_6")
-add_cl_test("expr_comparison_7")
-add_cl_test("expr_comparison_8")
-add_cl_test("expr_comparison_9")
-add_cl_test("expr_comparison_10")
-add_cl_test("expr_comparison_11")
+add_cl_test("propositions")
+
+# 4.2 Quantified Predicates
 
 add_cl_test("forall_1")
 add_cl_test("forall_2")
 add_cl_test("exists_1")
 add_cl_test("exists_2")
+
+# 4.3 Equality Predicates
+
+add_cl_test("equal")
+add_cl_test("unequal")
+
+add_cl_test("expr_comparison_1")
+add_cl_test("expr_comparison_2")
+add_cl_test("expr_comparison_3")
+add_cl_test("expr_comparison_4")
+add_cl_test("expr_comparison_5")
+add_cl_test("expr_comparison_12")
+
+# 4.4 Belonging Predicates
+
+add_cl_test("belonging_predicate_1")
+add_cl_test("belonging_predicate_2")
+add_cl_test("non_belonging_predicate_1")
+
+# 4.5 Inclusion Predicates
+
+add_cl_test("inclusion_1")
+add_cl_test("inclusion_2")
+add_cl_test("non_inclusion_1")
+add_cl_test("strict_inclusion_1")
+add_cl_test("strict_inclusion_2")
+add_cl_test("non_strict_inclusion_1")
+
+# 4.5 Number Comparison Predicates
+
+add_cl_test("less_than_or_equal_to")
+add_cl_test("strictly_less_than")
+add_cl_test("greater_than_or_equal_to")
+add_cl_test("strictly_greater_than")
+
+# 5 Expressions
 
 # 5.1 Primary Expressions
 

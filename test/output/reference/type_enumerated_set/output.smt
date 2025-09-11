@@ -1,0 +1,20 @@
+(set-option :print-success false)
+(set-logic HO_ALL)
+(define-sort |Z| () Int)
+(declare-sort P 1)
+(define-sort |POW Z| () (P |Z|))
+(declare-const co |Z|)
+
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
+(declare-const ES |POW Z|)
+(declare-const e0 |Z|)
+(assert (!
+  (|set.in Z| co ES)
+  :named |Define:lprp:2|)
+)
+(assert (!
+  (not (= co e0))
+  :named |Goal|)
+)
+(check-sat)
+(exit)
