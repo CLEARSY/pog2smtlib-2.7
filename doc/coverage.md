@@ -117,7 +117,9 @@ Coverage is justified based on the test bench of the tool. For each construct, t
 ### 5.3 Arithmetical Expressions
 
 * The largest implementable integer
+  * semantic coverage: maxint_1
 * The smallest implementable integer
+  * semantic coverage: minint_1
 * Addition
 * Difference, and also unary minus
 * Product

@@ -1,0 +1,5 @@
+MACHINE
+    maxint_1
+ASSERTIONS
+    MAXINT = 0
+END

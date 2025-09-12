@@ -37,6 +37,8 @@ Minint::Minint() {
 
   m_script = fmt::format(SCRIPT, smtSymbol(Expr::Visitor::EConstant::MinInt),
                          symbol(BType::INT), smtLiteral);
+  m_prerequisites.insert(
+      {std::make_shared<BConstruct::Type::Type>(BType::INT)});
   m_label = "MININT";
   m_debug_string = "MININT";
 }

@@ -97,6 +97,8 @@ add_cl_test("bool_2")
 
 # 5.3 Arithmetical Expressions
 
+add_cl_test("maxint_1")
+add_cl_test("minint_1")
 add_cl_test("integer_const_expr")
 add_cl_test("arithmetical_expression_1")
 add_cl_test("arithmetical_expression_2")

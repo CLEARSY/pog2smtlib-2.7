@@ -1,0 +1,5 @@
+MACHINE
+    minint_1
+ASSERTIONS
+    MININT = 0
+END

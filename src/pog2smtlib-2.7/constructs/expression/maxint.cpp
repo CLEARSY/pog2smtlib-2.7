@@ -29,6 +29,8 @@ static constexpr std::string_view SCRIPT = R"(
 Maxint::Maxint() {
   m_script = fmt::format(SCRIPT, smtSymbol(Expr::Visitor::EConstant::MaxInt),
                          symbol(BType::INT), Parameters::MAXINT);
+  m_prerequisites.insert(
+      {std::make_shared<BConstruct::Type::Type>(BType::INT)});
   m_label = "MAXINT";
   m_debug_string = "MAXINT";
 }
