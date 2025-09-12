@@ -1,17 +1,10 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(define-sort |Z| () Int)
+(declare-datatype |ES| ((e0)(e1)(e2)))
 (declare-sort P 1)
-(define-sort |POW Z| () (P |Z|))
-(declare-const co |Z|)
-
-(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-(declare-const ES |POW Z|)
-(declare-const e0 |Z|)
-(assert (!
-  (|set.in Z| co ES)
-  :named |Define:lprp:2|)
-)
+(define-sort |POW ES| () (P |ES|))
+(declare-const co |ES|)
+(declare-const ES |POW ES|)
 (assert (!
   (not (= co e0))
   :named |Goal|)

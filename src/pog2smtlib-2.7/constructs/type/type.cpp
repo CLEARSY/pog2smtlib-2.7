@@ -31,8 +31,9 @@ Type::Type(const BType &type) : UnaryBType(type) {
   auto enumeratedValues = [](const std::vector<std::string> &values) {
     std::string result;
     for (size_t i = 0; i < values.size(); ++i) {
-      result += " ";
-      result += values.at(i);
+      result.push_back('(');
+      result.append(values.at(i));
+      result.push_back(')');
     }
     return result;
   };
@@ -93,11 +94,11 @@ Type::Type(const BType &type) : UnaryBType(type) {
       break;
     }
     case BType::Kind::AbstractSet:
-      m_script = fmt::format("(define-sort {0} 0))\n", symbol(type));
+      m_script = fmt::format("(declare-sort {0} 0)\n", symbol(type));
       break;
     case BType::Kind::EnumeratedSet:
       m_script = fmt::format(
-          "(declare-datatype {0} ({1})))\n", symbol(type),
+          "(declare-datatype {0} ({1}))\n", symbol(type),
           enumeratedValues(type.toEnumeratedSetType().getContent()));
       break;
     case BType::Kind::Struct:

@@ -2,17 +2,17 @@
 <Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
     <Define name="B definitions" hash="7128875304803749033">
         <Exp_Comparison op="=">
-            <Id value="NAT" typref="0"/>
-            <Binary_Exp op=".." typref="0">
-                <Integer_Literal value="0" typref="1"/>
-                <Id value="MAXINT" typref="1"/>
+            <Id value="NAT" richtypref="3"/>
+            <Binary_Exp op=".." richtypref="3">
+                <Integer_Literal value="0" richtypref="1"/>
+                <Id value="MAXINT" richtypref="1"/>
             </Binary_Exp>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="INT" typref="0"/>
-            <Binary_Exp op=".." typref="0">
-                <Id value="MININT" typref="1"/>
-                <Id value="MAXINT" typref="1"/>
+            <Id value="INT" richtypref="3"/>
+            <Binary_Exp op=".." richtypref="3">
+                <Id value="MININT" richtypref="1"/>
+                <Id value="MAXINT" richtypref="1"/>
             </Binary_Exp>
         </Exp_Comparison>
     </Define>
@@ -20,15 +20,15 @@
     <Define name="seext" hash="0"/>
     <Define name="lprp" hash="3355831595478349318">
         <Set>
-            <Id value="AS" typref="0"/>
+            <Id value="AS" richtypref="2"/>
         </Set>
         <Exp_Comparison op=":">
-            <Id value="co1" typref="1" tag="type_abstract_set.bxml:1:3:1:1:1"/>
-            <Id value="AS" typref="0" tag="type_abstract_set.bxml:1:3:1:1:2"/>
-        </Exp_Comparison>
+            <Id value="co1" tag="type_abstract_set.bxml:1:3:1:1:1" richtypref="0"/>
+            <Id value="AS" tag="type_abstract_set.bxml:1:3:1:1:2" richtypref="2"/>
+        </Exp_Comparison>2
         <Exp_Comparison op=":">
-            <Id value="co2" typref="1" tag="type_abstract_set.bxml:1:3:1:2:1"/>
-            <Id value="INTEGER" typref="0" tag="type_abstract_set.bxml:1:3:1:2:2"/>
+            <Id value="co2" tag="type_abstract_set.bxml:1:3:1:2:1" richtypref="1"/>
+            <Id value="INTEGER" tag="type_abstract_set.bxml:1:3:1:2:2" richtypref="3"/>
         </Exp_Comparison>
     </Define>
     <Define name="inprp" hash="0"/>
@@ -36,14 +36,14 @@
     <Define name="inv" hash="0"/>
     <Define name="ass" hash="7476669894350903234">
         <Exp_Comparison op="=">
-            <Id value="co2" typref="1" tag="type_abstract_set.bxml:1:5:1:1"/>
-            <Integer_Literal value="0" typref="1" tag="type_abstract_set.bxml:1:5:1:2"/>
+            <Id value="co2" tag="type_abstract_set.bxml:1:5:1:1" richtypref="1"/>
+            <Integer_Literal value="0" tag="type_abstract_set.bxml:1:5:1:2" richtypref="1"/>
         </Exp_Comparison>
     </Define>
     <Define name="cst" hash="0"/>
     <Define name="sets" hash="4045090334473377363">
         <Set>
-            <Id value="AS" typref="0"/>
+            <Id value="AS" richtypref="2"/>
         </Set>
     </Define>
     <Proof_Obligation goalHash="7476263063343186365">
@@ -60,20 +60,24 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op="=">
-                    <Id value="co2" typref="1" tag="type_abstract_set.bxml:1:5:1:1"/>
-                    <Integer_Literal value="0" typref="1" tag="type_abstract_set.bxml:1:5:1:2"/>
+                    <Id value="co2" tag="type_abstract_set.bxml:1:5:1:1" richtypref="1"/>
+                    <Integer_Literal value="0" tag="type_abstract_set.bxml:1:5:1:2" richtypref="1"/>
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
     </Proof_Obligation>
-    <TypeInfos>
-        <Type id="0">
-            <Unary_Exp op="POW">
-                <Id value="INTEGER"/>
-            </Unary_Exp>
-        </Type>
-        <Type id="1">
-            <Id value="INTEGER"/>
-        </Type>
-    </TypeInfos>
+    <RichTypesInfo>
+        <RichType id="0">
+            <AbstractSet id="AS"/>
+        </RichType>
+        <RichType id="1">
+            <INTEGER/>
+        </RichType>
+        <RichType id="2">
+            <PowerSet arg="0"/>
+        </RichType>
+        <RichType id="3">
+            <PowerSet arg="1"/>
+        </RichType>
+    </RichTypesInfo>
 </Proof_Obligations>

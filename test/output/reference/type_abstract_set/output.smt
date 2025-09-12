@@ -1,17 +1,12 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(define-sort |Z| () Int)
+(declare-sort |AS| 0)
 (declare-sort P 1)
-(define-sort |POW Z| () (P |Z|))
+(define-sort |Z| () Int)
+(define-sort |POW AS| () (P |AS|))
 (declare-const co2 |Z|)
-(declare-const co1 |Z|)
-(declare-const AS |POW Z|)
-
-(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-(assert (!
-  (|set.in Z| co1 AS)
-  :named |Define:lprp:2|)
-)
+(declare-const co1 |AS|)
+(declare-const AS |POW AS|)
 (assert (!
   (not (= co2 0))
   :named |Goal|)

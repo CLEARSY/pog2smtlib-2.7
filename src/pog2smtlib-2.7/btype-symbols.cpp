@@ -90,11 +90,11 @@ void BTypeSymbolVisitor::visitRecordType(
   }
   m_symbol.append(")");
 }
-void BTypeSymbolVisitor::visitAbstractSet(const BType::AbstractSet &) {
-  throw "not implemented";
+void BTypeSymbolVisitor::visitAbstractSet(const BType::AbstractSet &t) {
+  m_symbol += t.getName();
 }
-void BTypeSymbolVisitor::visitEnumeratedSet(const BType::EnumeratedSet &) {
-  throw "not implemented";
+void BTypeSymbolVisitor::visitEnumeratedSet(const BType::EnumeratedSet &t) {
+  m_symbol += t.getName();
 }
 
 std::string symbol(const BType &btype) {
