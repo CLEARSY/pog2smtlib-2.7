@@ -20,8 +20,8 @@
     <Define name="seext" hash="0"/>
     <Define name="lprp" hash="3346334535668688401">
         <Exp_Comparison op=":">
-            <Id value="c1" typref="2" tag="boolean_expression_2.bxml:1:2:1:1"/>
-            <Id value="BOOL" typref="3" tag="boolean_expression_2.bxml:1:2:1:2"/>
+            <Id value="c1" typref="2" tag="true_1.bxml:1:2:1:1"/>
+            <Id value="BOOL" typref="3" tag="true_1.bxml:1:2:1:2"/>
         </Exp_Comparison>
     </Define>
     <Define name="inprp" hash="0"/>
@@ -29,8 +29,8 @@
     <Define name="inv" hash="0"/>
     <Define name="ass" hash="5112713154476116106">
         <Exp_Comparison op="=">
-            <Boolean_Literal value="FALSE" typref="2" tag="boolean_expression_2.bxml:1:4:1:1"/>
-            <Id value="c1" typref="2" tag="boolean_expression_2.bxml:1:4:1:2"/>
+            <Boolean_Literal value="FALSE" typref="2" tag="true_1.bxml:1:4:1:1"/>
+            <Id value="c1" typref="2" tag="true_1.bxml:1:4:1:2"/>
         </Exp_Comparison>
     </Define>
     <Define name="cst" hash="0"/>
@@ -49,8 +49,8 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op="=">
-                    <Boolean_Literal value="FALSE" typref="2" tag="boolean_expression_2.bxml:1:4:1:1"/>
-                    <Id value="c1" typref="2" tag="boolean_expression_2.bxml:1:4:1:2"/>
+                    <Boolean_Literal value="FALSE" typref="2" tag="true_1.bxml:1:4:1:1"/>
+                    <Id value="c1" typref="2" tag="true_1.bxml:1:4:1:2"/>
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>

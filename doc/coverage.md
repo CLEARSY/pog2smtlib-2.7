@@ -108,8 +108,11 @@ Coverage is justified based on the test bench of the tool. For each construct, t
 ### 5.2 Boolean Expressions
 
 * value of true
+  * semantic coverage: true_1
 * value of false
+  * semantic coverage: false_1
 * conversion of a predicate into a Boolean expression
+  * semantic coverage: bool_1, bool_2
 
 ### 5.3 Arithmetical Expressions
 

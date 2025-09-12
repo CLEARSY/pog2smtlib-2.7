@@ -831,9 +831,8 @@ void SmtTranslatorVisitor::visitNaryExpression(
   }
 }
 void SmtTranslatorVisitor::visitBooleanExpression(
-    const BType &, const std::vector<std::string> &, const Pred &) {
-  throw std::runtime_error(fmt::format("{}:{} Construct not covered (todo)",
-                                       FILE_NAME, LINE_NUMBER));
+    const BType &, const std::vector<std::string> &, const Pred &p) {
+  p.accept(*this);
 }
 void SmtTranslatorVisitor::visitRecord(
     const BType &type, const std::vector<std::string> &,

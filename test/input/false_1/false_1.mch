@@ -1,5 +1,5 @@
 MACHINE
-    boolean_expression_1
+    false_1
 CONSTANTS
     c1
 PROPERTIES

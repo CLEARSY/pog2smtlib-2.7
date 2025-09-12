@@ -90,8 +90,10 @@ add_cl_test("strictly_greater_than")
 
 # 5.1 Boolean Expressions
 
-add_cl_test("boolean_expression_1")
-add_cl_test("boolean_expression_2")
+add_cl_test("false_1")
+add_cl_test("true_1")
+add_cl_test("bool_1")
+add_cl_test("bool_2")
 
 # 5.3 Arithmetical Expressions
 
