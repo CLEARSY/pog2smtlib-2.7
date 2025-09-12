@@ -43,7 +43,7 @@
       (= (|set.in ((POW Z x Z) x POW POW Z)| p (|set.lambda (POW Z x Z) POW POW Z| P E))
          (and (P (fst p))
               (= (snd p) (E (fst p)))))))
-    :named |ax.set.in.lambda|))
+    :named |ax.set.in.lambda (POW Z x Z) POW POW Z|))
 
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))

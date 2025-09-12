@@ -27,7 +27,7 @@
       (= (|set.in (Z x Z)| p (|set.lambda Z Z| P E))
          (and (P (fst p))
               (= (snd p) (E (fst p)))))))
-    :named |ax.set.in.lambda|))
+    :named |ax.set.in.lambda Z Z|))
 
 (declare-const INTEGER |POW Z|)
 (assert (!
