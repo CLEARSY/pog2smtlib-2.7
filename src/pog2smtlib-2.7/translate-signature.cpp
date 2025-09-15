@@ -36,8 +36,6 @@ using std::vector;
 
 using BConstructPtr = shared_ptr<BConstruct::Abstract>;
 
-static constexpr bool debug_me = false;
-
 static stack<BConstructPtr> sortConstructsAndPrerequisites(
     stack<BConstructPtr> &todo, const BConstruct::Context &context);
 
@@ -93,10 +91,6 @@ std::string translate(const Signature &signature,
     const auto construct = sequence.top();
     sequence.pop();
     if (context.find(construct) == context.end()) {
-      if (debug_me) {
-        std::cerr << fmt::format("{}:{} construct {}\n", FILE_NAME, LINE_NUMBER,
-                                 construct->to_string());
-      }
       result.append(construct->script());
       context.insert(construct);
     }
@@ -123,10 +117,6 @@ static stack<BConstructPtr> sortConstructsAndPrerequisites(
       all.insert(construct);
       in_degree[construct] = 0;
       for (const auto &p : construct->prerequisites()) {
-        if (debug_me) {
-          std::cerr << fmt::format("{}:{}    prerequisite {}\n", FILE_NAME,
-                                   LINE_NUMBER, p->to_string());
-        }
         if (context.find(p) == context.end()) {
           init.push(p);
         }

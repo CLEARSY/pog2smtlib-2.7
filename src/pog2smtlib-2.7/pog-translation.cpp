@@ -18,6 +18,7 @@
 #include <variant>
 
 #include "cc-compatibility.h"
+#include "signature.h"
 #include "translate-predicate.h"
 #include "translate-signature.h"
 
@@ -26,136 +27,169 @@ using std::string;
 using std::string_view;
 using std::unordered_set;
 
-static constexpr bool debug_me = false;
+string POGTranslations::toString(const BConstruct::Context &c) {
+  string result;
+  for (const auto &v : c) {
+    result.append(v->script());
+  }
+  return result;
+}
+string POGTranslations::toString(const POGTranslations::groupPreludeCache &c) {
+  string result;
+  result.append(fmt::format("- context: {}\n", toString(c.m_context)));
+  result.append(fmt::format("- script:\n", toString(c.m_context)));
+  result.append("...\n");
+  return result;
+}
 
-static string assertDefineHypothesisCommand(const string &formula,
-                                            const string &name, int i);
-static string assertHypothesisCommand(const string &formula, int i);
-static string assertLocalHypCommand(const string &formula, int i);
+string POGTranslations::to_string() const {
+  string result;
+  result.append("POGTranslations\n");
+  result.append("  m_pogSignatures\n");
+  result.append(m_pogSignatures.to_string());
+  result.append("  m_groupPreludes\n");
+  for (const auto &p : m_groupPreludes) {
+    result.append(fmt::format("    {}: {}\n", p.first, toString(p.second)));
+  }
+  result.append("  m_groupScripts\n");
+  for (const auto &p : m_groupScripts) {
+    result.append(fmt::format("    {}: {}\n", p.first, p.second));
+  }
+  result.append("  m_localHypScripts\n");
+  for (const auto &p : m_localHypScripts) {
+    result.append(fmt::format("    {}, {}: {}\n", p.first.first, p.first.second,
+                              p.second));
+  }
+  result.append("  m_hypothesisScripts\n");
+  for (const auto &p : m_hypothesisScripts) {
+    result.append(fmt::format("    {}, {}: {}\n", p.first.first, p.first.second,
+                              p.second));
+  }
+  result.append("  m_defineScripts\n");
+  for (const auto &p : m_defineScripts) {
+    result.append(fmt::format("    {}: {}\n", p.first, p.second));
+  }
+  return result;
+}
 
-inline string POGTranslations::assertGoalCommand(const string &formula) {
+inline const string POGTranslations::assertCommand(const string &formula,
+                                                   const string &label) {
+  constexpr string_view pattern = R"((assert (!
+  {}
+  :named {}))
+)";
+  return fmt::format(pattern, formula, label);
+}
+
+inline const string POGTranslations::assertGoalCommand(const string &formula) {
   constexpr string_view pattern = R"((assert (!
   (not {})
-  :named |Goal|)
-)
+  :named |Goal|))
 )";
   return fmt::format(pattern, formula);
 }
 
+inline const string POGTranslations::assertDefineHypothesisCommand(
+    const string &formula, const string &name, int i) {
+  constexpr string_view pattern = R"(|Define:{}:{}|)";
+  return assertCommand(formula, fmt::format(pattern, name, i));
+}
+
+inline const string POGTranslations::assertHypothesisCommand(
+    const string &formula, int i) {
+  constexpr string_view pattern = R"(|Hypothesis:{}|)";
+  return assertCommand(formula, fmt::format(pattern, i));
+}
+
+inline const string POGTranslations::assertLocalHypCommand(
+    const string &formula, int i) {
+  constexpr string_view pattern = R"(|Local_Hyp:{}|)";
+  return assertCommand(formula, fmt::format(pattern, i));
+}
+
 string POGTranslations::ofGoal(int group, int goal) {
-  if (debug_me) {
-    std::cerr << fmt::format("{0} {1} {2}\n", FILE_NAME, group, goal);
-  }
   /*
+  group is the index of the Proof_Obligation element for the current goal
+  goal is the index of the Single_Goal element in the group
+
   result is the concatenation of :
-  - prelude : the concatenation of
-    - declarations for signature of group
-    - declarations for additional operators found in goal and in referenced
-      local hypotheses
-  - script for group
-  - script for referenced local hypotheses
-  - script for goal (to be negated)
+  1. prelude : the concatenation of
+    1.1 declarations for signature of group
+    1.2 declarations for additional operators found in goal and in referenced
+      local hypotheses (complement signature)
+  2. script for group
+  3. script for referenced local hypotheses
+  4. script for goal (to be negated)
   */
-  assert(group <= static_cast<int>(m_pog.pos.size() - 1));
+  assert(group < static_cast<int>(m_pog.pos.size()));
   const pog::POGroup &POGroup = m_pog.pos.at(group);
-  assert(goal <= static_cast<int>(POGroup.simpleGoals.size()) - 1);
+  assert(goal < static_cast<int>(POGroup.simpleGoals.size()));
 
   string result;
   BConstruct::Context context;  // contains the constructs that have already
                                 // been translated (initially it is empty)
   const string_view strGroupPrelude = groupPrelude(group, context);
+
+  // 1.1 store in result the declarations for signature of group
   result.append(strGroupPrelude);
+
+  // 1.2 find all additional operators found in goal and in referenced local
+  // hypotheses
+
+  // accumulate signature of all referenced local hypotheses in
+  // localHypSignature
   Signature localHypSignature;
   const pog::PO &PO = POGroup.simpleGoals.at(goal);
   for (const auto localHypRef : PO.localHypsRef) {
     localHypSignature += m_pogSignatures.ofLocalHyp(group, localHypRef - 1);
   }
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "signature of local hypothesis :\n"
-        "{0}\n"
-        "fin signature of local hypothesis\n",
-        toString(localHypSignature));
-  }
-  Signature goalSignature;
-  goalSignature = m_pogSignatures.ofGoal(group, goal);
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "signature of goal :\n"
-        "{0}\n"
-        "fin signature of goal\n",
-        toString(goalSignature));
-  }
-  Signature groupSignature;
-  groupSignature = m_pogSignatures.ofGroup(group);
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "signature of group :\n"
-        "{0}\n"
-        "end signature of group\n",
-        toString(groupSignature));
-  }
-  Signature signature;
-  signature += localHypSignature;
-  signature += goalSignature;
-  signature -= groupSignature;
-  const string strPreludeComplement = translate(signature, context);
+
+  const Signature goalSignature = m_pogSignatures.ofGoal(group, goal);
+  Signature complementSignature;
+  complementSignature += localHypSignature;
+  complementSignature += goalSignature;
+  complementSignature -= m_pogSignatures.ofGroup(group);
+  const string strPreludeComplement = translate(complementSignature, context);
+  // 1.2 append to result the declarations for additional operators found in
+  // goal and in referenced local hypotheses
   result.append(strPreludeComplement);
 
   const string_view &strGroupScript = groupScript(group);
+  // 2. append to result the script for the group
   result.append(strGroupScript);
+
+  // 3. append to result the script for the referenced local hypotheses
   for (const auto localHypRef : PO.localHypsRef) {
     const string_view &strlocalHypScript =
         localHypScript(group, localHypRef - 1);
-    if (debug_me) {
-      std::cerr << fmt::format(
-          "script hypothese locale :\n"
-          "{0}\n"
-          "fin script hypothese locale\n",
-          strlocalHypScript);
-    }
     result.append(strlocalHypScript);
   }
+
+  // 4. appeld to result the script for the (negation of) the goal
   const string strGoalScript = goalScript(group, goal);
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "script but :\n"
-        "{0}\n"
-        "fin script but\n",
-        strGoalScript);
-  }
   result.append(strGoalScript);
+
   // add check-sat/unsat-core ?
   return result;
 }
 
-string_view POGTranslations::groupPrelude(int group,
-                                          BConstruct::Context &context) {
+const string &POGTranslations::groupPrelude(int group,
+                                            BConstruct::Context &context) {
   assert(context.empty());
-  if (debug_me) {
-    std::cerr << fmt::format("appel POGTranslations::groupPrelude({0})\n",
-                             group);
-  }
   auto itr = m_groupPreludes.find(group);
   if (itr != m_groupPreludes.end()) {
-    return itr->second;
+    context = itr->second.m_context;
+    return itr->second.m_script;
   }
   const Signature &signature = m_pogSignatures.ofGroup(group);
-  if (debug_me) {
-    std::cerr << fmt::format("{0} signature = {1}\n", FILE_NAME,
-                             toString(signature));
-  }
   string script = translate(signature, context);
-  m_groupPreludes.insert(make_pair(group, std::move(script)));
-  string_view result = m_groupPreludes.at(group);
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "prelude groupe {0}:\n {1}\n(fin prelude groupe {0})\n", group, result);
-  }
-  return result;
+  groupPreludeCache preludeCache = {script, context};
+  const auto p =
+      m_groupPreludes.insert(make_pair(group, std::move(preludeCache)));
+  return p.first->second.m_script;
 }
 
-string_view POGTranslations::groupScript(int group) {
+const string &POGTranslations::groupScript(int group) {
   auto itr = m_groupScripts.find(group);
   if (itr != m_groupScripts.end()) {
     return itr->second;
@@ -175,19 +209,12 @@ string_view POGTranslations::groupScript(int group) {
     }
     ++i;
   }
-  m_groupScripts.insert(make_pair(group, std::move(script)));
-  string_view result = m_groupScripts.at(group);
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "script groupe {0}:\n"
-        "{1}\n"
-        "(fin script groupe {0})",
-        group, result);
-  }
+  const auto &p = m_groupScripts.insert(make_pair(group, std::move(script)));
+  const string &result = p.first->second;
   return result;
 }
 
-string_view POGTranslations::localHypScript(int group, int localHyp) {
+const string &POGTranslations::localHypScript(int group, int localHyp) {
   const auto index = make_pair(group, localHyp);
   auto itr = m_localHypScripts.find(index);
   if (itr != m_localHypScripts.end()) {
@@ -200,19 +227,12 @@ string_view POGTranslations::localHypScript(int group, int localHyp) {
   const string translation = translate(pred);
   const string other = assertLocalHypCommand(translation, localHyp);
   script.append(other);
-  m_localHypScripts.insert(make_pair(index, std::move(script)));
-  string_view result = m_localHypScripts.at(index);
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "script hypothese locale {0},{1}:\n"
-        "{2}\n"
-        "(fin script hypothese locale {0},{1})\n",
-        group, localHyp, result);
-  }
+  const auto &p = m_localHypScripts.insert(make_pair(index, std::move(script)));
+  const string &result = p.first->second;
   return result;
 }
 
-string POGTranslations::goalScript(int group, int goal) {
+const string POGTranslations::goalScript(int group, int goal) {
   string result;
   const Pred &pred = m_pog.pos.at(group).simpleGoals.at(goal).goal;
   if (!pred.isPureTypingPredicate()) {
@@ -224,17 +244,10 @@ string POGTranslations::goalScript(int group, int goal) {
     const string command = assertGoalCommand(tautology);
     result.append(command);
   }
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "script but {0},{1}:\n"
-        "{2}\n"
-        "(fin script but {0},{1})\n",
-        group, goal, result);
-  }
   return result;
 }
 
-string_view POGTranslations::defineScript(const std::string &name) {
+const string &POGTranslations::defineScript(const std::string &name) {
   const auto &index = name;
   auto itr = m_defineScripts.find(index);
   if (itr != m_defineScripts.end()) {
@@ -261,39 +274,7 @@ string_view POGTranslations::defineScript(const std::string &name) {
       }
     }
   }
-  m_defineScripts.insert(make_pair(index, std::move(script)));
-  string_view result = m_defineScripts.at(index);
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "script define {0}:\n"
-        "{1}\n"
-        "(fin script define {0})\n",
-        name, result);
-  }
+  const auto &p = m_defineScripts.insert(make_pair(index, std::move(script)));
+  const string &result = p.first->second;
   return result;
-}
-
-static string assertCommand(const string &formula, const string &label) {
-  constexpr string_view pattern = R"((assert (!
-  {}
-  :named {})
-)
-)";
-  return fmt::format(pattern, formula, label);
-}
-
-static string assertDefineHypothesisCommand(const string &formula,
-                                            const string &name, int i) {
-  constexpr string_view pattern = R"(|Define:{}:{}|)";
-  return assertCommand(formula, fmt::format(pattern, name, i));
-}
-
-static string assertHypothesisCommand(const string &formula, int i) {
-  constexpr string_view pattern = R"(|Hypothesis:{}|)";
-  return assertCommand(formula, fmt::format(pattern, i));
-}
-
-static string assertLocalHypCommand(const string &formula, int i) {
-  constexpr string_view pattern = R"(|Local_Hyp:{}|)";
-  return assertCommand(formula, fmt::format(pattern, i));
 }

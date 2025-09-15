@@ -1,0 +1,24 @@
+(set-option :print-success false)
+(set-logic HO_ALL)
+(define-sort |Z| () Int)
+(declare-sort P 1)
+(define-sort |POW Z| () (P |Z|))
+
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
+
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
+(assert (!
+  (not (|set.in Z| 3 (|set.intent Z| (lambda ((x |Z|)) (and
+true
+(= x 2)
+)))))
+  :named |Goal|))
+(check-sat)
+(exit)

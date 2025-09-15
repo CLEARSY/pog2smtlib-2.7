@@ -1,0 +1,55 @@
+(set-option :print-success false)
+(set-logic HO_ALL)
+(define-sort |Z| () Int)
+(declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
+(define-sort |(Z x Z)| () (C |Z| |Z|))
+(declare-sort P 1)
+(define-sort |((Z x Z) x Z)| () (C |(Z x Z)| |Z|))
+(define-sort |POW Z| () (P |Z|))
+(define-sort |POW ((Z x Z) x Z)| () (P |((Z x Z) x Z)|))
+
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
+
+(declare-fun |set.in ((Z x Z) x Z)| (|((Z x Z) x Z)| |POW ((Z x Z) x Z)|) Bool)
+
+(declare-fun |prj1 Z Z| (|POW Z| |POW Z|) |POW ((Z x Z) x Z)|)
+(assert (!
+  (forall ((E |POW Z|) (F |POW Z|) (t |((Z x Z) x Z)|))
+    (= (|set.in ((Z x Z) x Z)| t (|prj1 Z Z| E F))
+       (and
+				 (|set.in Z| (fst (fst t)) E)
+				 (|set.in Z| (snd (fst t)) F)
+				 (= (snd t) (fst (fst t))))))
+  :named |ax.set.in.prj1 (Z x Z)|))
+
+(define-sort |? ((Z x Z) x Z)| () (-> |((Z x Z) x Z)| Bool))
+(declare-const |set.intent ((Z x Z) x Z)| (-> |? ((Z x Z) x Z)| |POW ((Z x Z) x Z)|))
+(assert (!
+  (forall ((p |? ((Z x Z) x Z)|))
+    (forall ((x |((Z x Z) x Z)|))
+      (= (|set.in ((Z x Z) x Z)| x (|set.intent ((Z x Z) x Z)| p))
+         (p x))))
+  :named |ax:set.in.intent ((Z x Z) x Z)|))
+
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
+
+(assert (!
+  (forall ((s |POW ((Z x Z) x Z)|) (t |POW ((Z x Z) x Z)|))
+    (=
+      (= s t)
+      (forall ((e |((Z x Z) x Z)|)) (= (|set.in ((Z x Z) x Z)| e s) (|set.in ((Z x Z) x Z)| e t)))
+    )
+  )
+  :named |ax.set.eq ((Z x Z) x Z)|))
+(assert (!
+  (not (= (|prj1 Z Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2))))) (|set.intent ((Z x Z) x Z)| (lambda ((x |((Z x Z) x Z)|)) (or (= x (maplet (maplet 0 1) 0))(= x (maplet (maplet 0 2) 0))(= x (maplet (maplet 1 1) 1))(= x (maplet (maplet 1 2) 0)))))))
+  :named |Goal|))
+(check-sat)
+(exit)

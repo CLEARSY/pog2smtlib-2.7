@@ -22,7 +22,7 @@ function prepare_pog() {
 
 export -f prepare_pog
 
-TRANSLATOR_EXE=../build-17/src/pog2smtlib-2.7/pog2smtlib27
+TRANSLATOR_EXE=../build-debug/src/pog2smtlib-2.7/pog2smtlib27
 SMT_EXE="/usr/bin/cvc5 --tlimit=10000" # timeout in ms
 
 #
@@ -36,9 +36,9 @@ SMT_EXE="/usr/bin/cvc5 --tlimit=10000" # timeout in ms
 #
 function prepare_test_output() {
   id=$1
-  $TRANSLATOR_EXE -a 0 0 -i input/$id/input.pog -o output > stdout 2> stderr
+  $TRANSLATOR_EXE -i input/$id/input.pog -o output > stdout 2> stderr
   echo $? > exitcode
-  mv output_0_0.po2 output.smt
+  find . -type f -name "output*.po2" -exec sh -c 'mv "$1" "${1%.po2}.smt"' _ {} \;
   echo "> exitcode:"
   cat exitcode
   echo "> stdout:"
@@ -46,9 +46,13 @@ function prepare_test_output() {
   echo "> stderr:"
   cat stderr
   echo "> output:"
-  cat output.smt
-  echo "> CVC5 says "
-  $SMT_EXE output.smt
+  for file in `ls output*.smt`
+  do
+      echo ">> $file"
+      cat $file
+      echo ">> CVC5 says "
+      $SMT_EXE $file
+  done
 }
 
 export -f prepare_test_output
@@ -68,7 +72,7 @@ function install_test_output() {
   id=$1
   destdir=output/reference/$id
   mkdir -p $destdir
-  mv exitcode stdout stderr output.smt $destdir
+  mv exitcode stdout stderr output*.smt $destdir
   echo "> contents of $destdir"
   ls -al $destdir
 }

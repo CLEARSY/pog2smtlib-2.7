@@ -41,30 +41,32 @@ class MonomorphizedOperator {
   mutable size_t m_hash = 0;
 
  public:
-  MonomorphizedOperator(const BOperator &op) : m_operator(op), m_types() {}
+  MonomorphizedOperator(const BOperator &op)
+      : m_operator(op), m_types(), m_string() {}
   MonomorphizedOperator(const BOperator &op, std::shared_ptr<BType> type)
-      : m_operator(op), m_types({type}) {}
+      : m_operator(op), m_types({type}), m_string() {}
   MonomorphizedOperator(const BOperator &op, std::shared_ptr<BType> type1,
                         std::shared_ptr<BType> type2)
-      : m_operator(op), m_types({type1, type2}) {}
+      : m_operator(op), m_types({type1, type2}), m_string() {}
   MonomorphizedOperator(const BOperator &op, std::shared_ptr<BType> type1,
                         std::shared_ptr<BType> type2,
                         std::shared_ptr<BType> type3)
-      : m_operator(op), m_types({type1, type2, type3}) {}
+      : m_operator(op), m_types({type1, type2, type3}), m_string() {}
   MonomorphizedOperator(const BOperator &op, std::shared_ptr<BType> type1,
                         std::shared_ptr<BType> type2,
                         std::shared_ptr<BType> type3,
                         std::shared_ptr<BType> type4)
-      : m_operator(op), m_types({type1, type2, type3, type4}) {}
+      : m_operator(op), m_types({type1, type2, type3, type4}), m_string() {}
   MonomorphizedOperator(const BOperator &op,
                         const std::vector<std::shared_ptr<BType>> &types)
-      : m_operator(op), m_types(types) {}
+      : m_operator(op), m_types(types), m_string() {}
 
   MonomorphizedOperator(const MonomorphizedOperator &other)
       : m_operator(other.m_operator),
         m_types(other.m_types),
         m_hash_valid(other.m_hash_valid),
-        m_hash(other.m_hash) {}
+        m_hash(other.m_hash),
+        m_string() {}
 
   MonomorphizedOperator &operator=(const MonomorphizedOperator &other) {
     if (this != &other) {
@@ -72,6 +74,7 @@ class MonomorphizedOperator {
       m_types = other.m_types;
       m_hash_valid = other.m_hash_valid;
       m_hash = other.m_hash;
+      m_string = other.m_string;
     }
     return *this;
   }
@@ -99,6 +102,9 @@ class MonomorphizedOperator {
   const std::vector<std::shared_ptr<BType>> &getTypes() const {
     return m_types;
   }
+
+ private:
+  mutable std::string m_string;
 };
 
 namespace std {
@@ -165,6 +171,8 @@ struct Signature {
   std::unordered_set<std::shared_ptr<BType>> m_types;
 
   Signature() : m_operators{}, m_data{}, m_types{} {}
+
+  std::string to_string() const;
 };
 
 /**

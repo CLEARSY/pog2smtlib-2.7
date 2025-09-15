@@ -24,8 +24,6 @@ using std::unordered_set;
 
 #include "type-utils.h"
 
-[[maybe_unused]] static constexpr bool debug_me = false;
-
 class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
  public:
   GetSignatureVisitor() {}
@@ -167,15 +165,18 @@ size_t MonomorphizedOperator::opHash() const {
 }
 
 std::string MonomorphizedOperator::to_string() const {
-  if (m_types.empty()) {
-    return fmt::format("{}", m_operator);
-  } else {
-    std::vector<BType> args;
-    for (const auto &type : m_types) {
-      args.push_back(*type);
+  if (m_string.empty()) {
+    if (m_types.empty()) {
+      m_string = fmt::format("{}", m_operator);
+    } else {
+      std::vector<BType> args;
+      for (const auto &type : m_types) {
+        args.push_back(*type);
+      }
+      m_string = fmt::format("{}<{}>", m_operator, fmt::join(m_types, " "));
     }
-    return fmt::format("{}<{}>", m_operator, fmt::join(m_types, " "));
   }
+  return m_string;
 }
 
 std::string Data::to_string() const { return m_name->show(); }
@@ -971,16 +972,20 @@ const BType &GetSignatureVisitor::rhsOfProductType(const BOperator &op,
 };
 
 std::string toString(const Signature &sig) {
+  std::vector<std::string> ty_strs;
   std::vector<std::string> op_strs;
   std::vector<std::string> dt_strs;
+  for (const auto &ty : sig.m_types) {
+    ty_strs.push_back(ty->to_string());
+  }
   for (const auto &op : sig.m_operators) {
     op_strs.push_back(op.to_string());
   }
   for (const auto &dt : sig.m_data) {
     dt_strs.push_back(dt.to_string());
   }
-  return fmt::format("[{} | {}]", fmt::join(op_strs, ", "),
-                     fmt::join(dt_strs, ", "));
+  return fmt::format("[{} | {} | {}]", fmt::join(ty_strs, ", "),
+                     fmt::join(op_strs, ", "), fmt::join(dt_strs, ", "));
 }
 
 bool operator==(const std::vector<std::shared_ptr<BType>> &lhs,

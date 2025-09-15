@@ -6,8 +6,6 @@ id="$2"
 echo "testdir: $testdir"
 echo "id: $id"
 
-set -x
-
 cd "$testdir"
 
 . ./setenv.sh
@@ -19,6 +17,8 @@ refdir="$testdir/output/reference/$id"
 outdir="$testdir/output/result/$id"
 rm -rf "$outdir"
 mkdir -p "$outdir"
+
+set -x
 
 $program -i "$inpdir/input.pog" -o "$outdir/output" > "$outdir/stdout" 2> "$outdir/stderr"
 echo $? > "$outdir/exitcode"
@@ -41,11 +41,34 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-diff "$outdir/output_0_0.po2" "$refdir/output.smt"
-if [ $? -ne 0 ]; then
-    echo "Test failed: produced SMT differs"
+pushd "$outdir"
+find . -type f -name "*.po2" -exec sh -c 'mv "$1" "${1%.po2}.smt"' _ {} \;
+popd
+
+reffiles=($(find "$refdir" -maxdepth 1 -name "*.smt" -printf "%f\n" | sort))
+outfiles=($(find "$outdir" -maxdepth 1 -name "*.smt" -printf "%f\n" | sort))
+
+# Compare lists
+if [[ ! "${reffiles[*]}" == "${outfiles[*]}" ]]; then
+    echo "Test failed: .smt files differ."
+    echo "Reference: ${reffiles[*]}"
+    echo "Target:    ${outfiles[*]}"
     exit 1
 fi
 
-echo "Test passed"
+# Compare contents
+for outfile in "$outdir"/*.smt
+do
+    echo $outfile
+    filename=$(basename "$outfile")
+    if ! diff "$outfile" "$refdir/$filename" >/dev/null; then
+        echo "Error: $filename content differs." >&2
+        diff "$outfile" "$refdir/$filename" | tee >(cat 1>&2)
+        exit 1
+    fi
+done
+
+set +x
+
+echo "Test passed $id"
 exit 0

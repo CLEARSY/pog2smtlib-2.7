@@ -36,13 +36,22 @@ class POGTranslations {
   void ofGoal(ostream &os, int group, int goal);  // todo
   std::string ofGoal(int group, int goal);
 
+  string to_string() const;
+
  private:
   const pog::pog &m_pog;
   POGSignatures &m_pogSignatures;
 
   using int_X_int = std::pair<int, int>;
 
-  std::map<int, std::string> m_groupPreludes;
+  struct groupPreludeCache {
+    std::string m_script;
+    BConstruct::Context m_context;
+  };
+  static string toString(const groupPreludeCache &);
+  static string toString(const BConstruct::Context &);
+
+  std::map<int, groupPreludeCache> m_groupPreludes;
   std::map<int, std::string> m_groupScripts;
   std::map<int_X_int, std::string> m_localHypScripts;
   std::map<int_X_int, std::string> m_hypothesisScripts;
@@ -58,19 +67,23 @@ class POGTranslations {
    * @param context (output) the constructs that have been translated
    * @pre context is empty
    */
-  std::string_view groupPrelude(int group, BConstruct::Context &context);
+  const std::string &groupPrelude(int group, BConstruct::Context &context);
 
   // the following contains SMT commands: labeled assert
-  std::string_view groupScript(int group);
-  std::string_view localHypScript(int group, int localHypRef);
-  std::string_view defineScript(const std::string &name);
-  std::string_view hypothesisScript(int group, int hypothesis);
-  std::string goalScript(int group, int goal);
+  const std::string &groupScript(int group);
+  const std::string &localHypScript(int group, int localHypRef);
+  const std::string &defineScript(const std::string &name);
+  const std::string goalScript(int group, int goal);
 
-  static std::string assertCommand(const string &&formula,
-                                   const string &&label);
-  static std::string assertGoalCommand(const string &&formula);
-  static inline std::string assertGoalCommand(const string &formula);
+  static inline const std::string assertCommand(const string &formula,
+                                                const string &label);
+  static inline const std::string assertDefineHypothesisCommand(
+      const string &formula, const string &name, int i);
+  static inline const std::string assertHypothesisCommand(const string &formula,
+                                                          int i);
+  static inline const std::string assertLocalHypCommand(const string &formula,
+                                                        int i);
+  static inline const std::string assertGoalCommand(const string &formula);
 };
 
 #endif  // POG_TRANSLATION_H

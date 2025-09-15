@@ -1,0 +1,10 @@
+(set-option :print-success false)
+(set-logic HO_ALL)
+(define-sort |REAL| () Real)
+(declare-const wreal |REAL|)
+(declare-const vreal |REAL|)
+(assert (!
+  (not (= vreal wreal))
+  :named |Goal|))
+(check-sat)
+(exit)

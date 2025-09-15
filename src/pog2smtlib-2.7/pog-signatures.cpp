@@ -18,7 +18,46 @@
 
 #include "cc-compatibility.h"
 
-static constexpr bool debug_me = false;
+string POGSignatures::to_string() const {
+  string result;
+  result.append("POGSignatures\n");
+  result.append("  m_defines\n");
+  for (const auto &p : m_defines) {
+    result.append(fmt::format("    {}: {}\n", p.first, toString(p.second)));
+  }
+  result.append("  m_groups\n");
+  for (const auto &g : m_groups) {
+    if (g.has_value()) {
+      const POGroupSignatures sig = g.value();
+      if (sig.common.has_value()) {
+        result.append("    - common: ");
+        result.append(toString(sig.common.value()));
+        result.append("\n");
+      }
+      result.append("    - localHyps\n");
+      for (const auto &v : sig.localHyps) {
+        if (v.has_value()) {
+          result.append("      - ");
+          result.append(toString(v.value()));
+          result.append("\n");
+        } else {
+          result.append("      - (?)\n");
+        }
+      }
+      result.append("    - goals\n");
+      for (const auto &v : sig.goals) {
+        if (v.has_value()) {
+          result.append("      - ");
+          result.append(toString(v.value()));
+          result.append("\n");
+        } else {
+          result.append("      - (?)\n");
+        }
+      }
+    }
+  }
+  return result;
+}
 
 POGSignatures::POGSignatures(const pog::pog &pog)
     : m_defines{}, m_groups{pog.pos.size(), std::nullopt}, m_pog(pog) {}
@@ -51,9 +90,6 @@ insert:
 }
 
 void POGSignatures::initGroupSignatures(int group) {
-  if (debug_me) {
-    std::cerr << fmt::format("{0} group = {1}\n", FILE_NAME, group);
-  };
   const pog::POGroup &pogroup = m_pog.pos.at(group);
   if (m_groups.at(group) == std::nullopt) {
     POGroupSignatures groupSignatures;
@@ -83,49 +119,19 @@ const Signature &POGSignatures::ofLocalHyp(int group, int localHyp) {
 const Signature POGSignatures::ofGoal(int group, int goal) {
   Signature result;
 
-  if (debug_me) {
-    std::cerr << fmt::format("POGSignatures::ofGoal {} {} - initial\n{}\n",
-                             group, goal, toString(result));
-  }
-
   initGroupSignatures(group);
   const POGroupSignatures &groupSignatures = m_groups.at(group).value();
   result += groupSignatures.common.value();
-
-  if (debug_me) {
-    std::cerr << fmt::format("POGSignatures::ofGoal {} {} - group\n{}\n", group,
-                             goal, toString(result));
-  }
-
   for (auto lhypRef : m_pog.pos.at(group).simpleGoals.at(goal).localHypsRef) {
     result += ofLocalHyp(group, lhypRef - 1);
   }
-
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "POGSignatures::ofGoal {} {} - group+local hyps\n{}\n", group, goal,
-        toString(result));
-  }
-
   Signature goalSig =
       predicateSignature(m_pog.pos.at(group).simpleGoals.at(goal).goal);
-  if (debug_me) {
-    std::cerr << fmt::format("POGSignatures::ofGoal {} {} - goal\n{}\n", group,
-                             goal, toString(goalSig));
-  }
   result += goalSig;
-  if (debug_me) {
-    std::cerr << fmt::format(
-        "POGSignatures::ofGoal {} {} - group+local hyps+goal\n{}\n", group,
-        goal, toString(result));
-  }
   return result;
 }
 
 const Signature &POGSignatures::ofGroup(int group) {
-  if (debug_me) {
-    std::cerr << fmt::format("{0} group = {1}\n", FILE_NAME, group);
-  };
   initGroupSignatures(group);
   return m_groups.at(group)->common.value();
 }

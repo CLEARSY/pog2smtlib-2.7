@@ -89,6 +89,8 @@ class POGSignatures {
   const Signature& ofGroup(int group);
   const Signature& ofLocalHyp(int group, int localHyp);
 
+  string to_string() const;
+
  private:
   const pog::pog& m_pog;
 

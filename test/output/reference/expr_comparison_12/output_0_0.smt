@@ -1,0 +1,41 @@
+(set-option :print-success false)
+(set-logic HO_ALL)
+(define-sort |Z| () Int)
+(declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
+(define-sort |(Z x Z)| () (C |Z| |Z|))
+(declare-sort P 1)
+(define-sort |POW (Z x Z)| () (P |(Z x Z)|))
+(define-sort |POW Z| () (P |Z|))
+
+(declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
+
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
+(declare-const wproduct |(Z x Z)|)
+
+(declare-fun |set.product Z Z| (|POW Z| |POW Z|) |POW (Z x Z)|)
+(assert (!
+  (forall ((s1 |POW Z|) (s2 |POW Z|))
+    (forall ((p |(Z x Z)|))
+      (= (|set.in (Z x Z)| p (|set.product Z Z| s1 s2))
+        (and (|set.in Z| (fst p) s1) (|set.in Z| (snd p) s2)))))
+  :named |ax.set.in.product.1 (Z x Z)|))
+(assert (!
+  (forall ((s1 |POW Z|) (s2 |POW Z|))
+    (forall ((x1 |Z|) (x2 |Z|))
+      (= (|set.in (Z x Z)| (maplet x1 x2) (|set.product Z Z| s1 s2))
+        (and (|set.in Z| x1 s1) (|set.in Z| x2 s2)))))
+  :named |ax.set.in.product.2 (Z x Z)|))
+(declare-const vproduct |(Z x Z)|)
+(declare-const S2 |POW Z|)
+(declare-const S1 |POW Z|)
+(assert (!
+  (|set.in (Z x Z)| vproduct (|set.product Z Z| S1 S2))
+  :named |Define:lprp:3|))
+(assert (!
+  (|set.in (Z x Z)| wproduct (|set.product Z Z| S1 S2))
+  :named |Define:lprp:4|))
+(assert (!
+  (not (= vproduct wproduct))
+  :named |Goal|))
+(check-sat)
+(exit)

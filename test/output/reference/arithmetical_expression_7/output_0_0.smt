@@ -1,0 +1,25 @@
+(set-option :print-success false)
+(set-logic HO_ALL)
+(define-sort |REAL| () Real)
+(declare-const c2 |REAL|)
+(declare-const c3 |REAL|)
+(declare-const c1 |REAL|)
+
+(declare-fun |real.div| (|REAL| |REAL|) |REAL|)
+(assert (!
+  (forall ((a |REAL|) (b |REAL|))
+    (and
+      (=> (and (<= 0 a) (< 0 b))
+        (= (|real.div| a b) (/ a b)))
+      (=> (and (<= 0 a) (< b 0))
+        (= (|real.div| a b) (- (/ a (- b)))))
+      (=> (and (< a 0) (< 0 b))
+        (= (|real.div| a b) (- (/ (- a) b))))
+      (=> (and (<= a 0) (< b 0))
+        (= (|real.div| a b) (/ a b)))))
+  :named |ax.real.div :1|))
+(assert (!
+  (not (= (+ c1 (* c2 c3)) (|real.div| (- c1 c2) c3)))
+  :named |Goal|))
+(check-sat)
+(exit)
