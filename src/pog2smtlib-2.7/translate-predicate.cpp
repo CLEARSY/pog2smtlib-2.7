@@ -288,6 +288,7 @@ void SmtTranslatorVisitor::visitIdent(const BType &,
     case VarName::Kind::NoSuffix:
       break;
     case VarName::Kind::WithSuffix:
+      m_translation.push_back('$');
       m_translation.append(std::to_string(b.suffix()));
       break;
     default:
