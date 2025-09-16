@@ -50,10 +50,6 @@ static void display_help() {
             << "\t\t\tproduces model" << std::endl
             << "\t\t-u" << std::endl
             << "\t\t\tproduces unsat core" << std::endl
-            << "\t\t--output-signature FILE" << std::endl
-            << "\t\t\t(for debugging only) outputs the list of monorphized "
-               "operators in the proof obligation."
-            << std::endl
             << "\t\t-h" << std::endl
             << "\t\t\tprints help" << std::endl;
 }
@@ -91,11 +87,7 @@ int main(int argc, char **argv) {
   char *input{nullptr};
   char *output{nullptr};
   goal_index_t goals;
-  [[maybe_unused]] bool incr = true;
-  [[maybe_unused]] bool produce_model = false;
-  [[maybe_unused]] bool produce_unsat_core = false;
-  [[maybe_unused]] bool output_signature = false;
-  [[maybe_unused]] char *output_signature_file{nullptr};
+  smt_options_t smt_options;
 
   int arg = 1;
   while (arg < argc) {
@@ -128,21 +120,12 @@ int main(int argc, char **argv) {
     } else if (strcmp(argv[arg], "-h") == 0) {
       display_help();
       arg += 1;
-    } else if (strcmp(argv[arg], "-n") == 0) {
-      incr = false;
-      arg += 1;
     } else if (strcmp(argv[arg], "-m") == 0) {
-      produce_model = true;
+      smt_options.produce_model = true;
       arg += 1;
     } else if (strcmp(argv[arg], "-u") == 0) {
-      produce_unsat_core = true;
+      smt_options.produce_unsat_core = true;
       arg += 1;
-    } else if (strcmp(argv[arg], "--output-signature") == 0) {
-      output_signature = true;
-      if (arg + 1 < argc) {
-        output_signature_file = argv[arg + 1];
-        arg += 2;
-      }
     } else {
       display_help();
       return EXIT_FAILURE;
@@ -190,10 +173,10 @@ int main(int argc, char **argv) {
    * only one file is produced. */
   if (1 <= goals.size()) {
     for (const auto &goal : goals) {
-      saveSmtLibFileOne(pog, goal, output, produce_unsat_core, produce_model);
+      saveSmtLibFileOne(pog, goal, output, smt_options);
     }
   } else {
-    saveSmtLibFile(pog, output, produce_unsat_core, produce_model);
+    saveSmtLibFile(pog, output, smt_options);
   }
   return EXIT_SUCCESS;
 }

@@ -26,14 +26,21 @@ using goal_t = std::pair<size_t, size_t>;  // <group, simple_goal>
 using goal_index_t = std::vector<goal_t>;
 using goal_selection_t = std::map<size_t, std::vector<size_t>>;
 
+struct smt_options_t {
+  bool produce_unsat_core;
+  bool produce_model;
+
+  smt_options_t() : produce_unsat_core{false}, produce_model{false} {}
+};
+
 /** @brief builds the translation to SMTLIB of one POG goal saves the
  * translation to file
  */
 extern void saveSmtLibFileOne(const pog::pog &pog, const goal_t &goal,
                               const std::string &output,
-                              bool produce_unsat_core, bool produce_model);
+                              const smt_options_t &options);
 
 extern void saveSmtLibFile(const pog::pog &pog, const std::string &output,
-                           bool produce_unsat_core, bool produce_model);
+                           const smt_options_t &options);
 
 #endif  // SMTLIB_H

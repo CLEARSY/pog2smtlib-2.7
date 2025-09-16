@@ -29,7 +29,7 @@
 
 static void translateAndSave(POGTranslations &pogTranslation,
                              const goal_t &goal, const std::string &filePrefix,
-                             bool setProduceUnsatCore, bool setProduceModel) {
+                             const smt_options_t &options) {
   using std::map;
   using std::set;
   using std::string;
@@ -45,19 +45,19 @@ static void translateAndSave(POGTranslations &pogTranslation,
   std::ofstream out;
   out.open(filename);
   out << "(set-option :print-success false)\n";
-  if (setProduceUnsatCore) {
+  if (options.produce_unsat_core) {
     out << "(set-option :produce-unsat-cores true)\n";
   }
-  if (setProduceModel) {
+  if (options.produce_model) {
     out << "(set-option :produce-models true)\n";
   }
   out << "(set-logic HO_ALL)\n";
   out << result;
   out << "(check-sat)\n";
-  if (setProduceUnsatCore) {
+  if (options.produce_unsat_core) {
     out << "(get-unsat-core)\n";
   }
-  if (setProduceModel) {
+  if (options.produce_model) {
     out << "(get-model)\n";
   }
   out << "(exit)\n";
@@ -65,24 +65,22 @@ static void translateAndSave(POGTranslations &pogTranslation,
 }
 
 void saveSmtLibFile(const pog::pog &pog, const std::string &output,
-                    bool setProduceUnsatCore, bool setProduceModel) {
+                    const smt_options_t &options) {
   POGSignatures pogSignatures(pog);
   POGTranslations pogTranslation(pog, pogSignatures);
   const string filePrefix = utils::absoluteBasename(output);
   for (size_t group = 0; group < pog.pos.size(); ++group) {
     for (size_t goal = 0; goal < pog.pos.at(group).simpleGoals.size(); ++goal) {
-      translateAndSave(pogTranslation, {group, goal}, filePrefix,
-                       setProduceUnsatCore, setProduceModel);
+      translateAndSave(pogTranslation, {group, goal}, filePrefix, options);
     }
   }
 }
 
 void saveSmtLibFileOne(const pog::pog &pog, const goal_t &goal,
-                       const std::string &output, bool setProduceUnsatCore,
-                       bool setProduceModel) {
+                       const std::string &output,
+                       const smt_options_t &options) {
   POGSignatures pogSignatures(pog);
   POGTranslations pogTranslation(pog, pogSignatures);
   const string filePrefix = utils::absoluteBasename(output);
-  translateAndSave(pogTranslation, goal, filePrefix, setProduceUnsatCore,
-                   setProduceModel);
+  translateAndSave(pogTranslation, goal, filePrefix, options);
 }

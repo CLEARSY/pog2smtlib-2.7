@@ -2,9 +2,11 @@
 
 testdir="$1"
 id="$2"
+options="${3:-}"
 
 echo "testdir: $testdir"
 echo "id: $id"
+echo "options: $options"
 
 cd "$testdir"
 
@@ -20,7 +22,7 @@ mkdir -p "$outdir"
 
 set -x
 
-$program -i "$inpdir/input.pog" -o "$outdir/output" > "$outdir/stdout" 2> "$outdir/stderr"
+$program $options -i "$inpdir/input.pog" -o "$outdir/output" > "$outdir/stdout" 2> "$outdir/stderr"
 echo $? > "$outdir/exitcode"
 
 diff "$outdir/stdout" "$refdir/stdout"

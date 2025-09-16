@@ -11,7 +11,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/setenv.sh.model ${CMAKE_CURRENT_SOURC
 # Add a test that runs the program with the given arguments and checks the output, the error and the exit code
 macro(add_cl_test id)
     add_test(NAME ${id}
-             COMMAND ${TEST_SHELL} ${CMAKE_CURRENT_SOURCE_DIR}/dotest.sh ${CMAKE_CURRENT_SOURCE_DIR} ${id})
+             COMMAND ${TEST_SHELL} ${CMAKE_CURRENT_SOURCE_DIR}/dotest.sh ${CMAKE_CURRENT_SOURCE_DIR} ${id} ${ARGN})
     set_tests_properties(${id} PROPERTIES FAIL_REGULAR_EXPRESSION "Test failed")
     set_tests_properties(${id} PROPERTIES PASS_REGULAR_EXPRESSION "Test passed")
     set_tests_properties(${id} PROPERTIES TIMEOUT 1)
@@ -348,3 +348,8 @@ add_cl_test("restrict_at_tail_1")
 add_cl_test("restrict_at_tail_2")
 add_cl_test("general_concatenation_1")
 add_cl_test("general_concatenation_2")
+
+# Program parameters
+
+add_cl_test("issue_clearsy_27a" "-u")
+add_cl_test("issue_clearsy_27b" "-m")
