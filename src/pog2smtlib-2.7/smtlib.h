@@ -15,19 +15,21 @@
 #ifndef SMTLIB_H
 #define SMTLIB_H
 
+#include <cstddef>
 #include <map>
 #include <vector>
 
 #include "pog.h"
 
-using goal_selection_t = std::map<int, std::vector<size_t>>;
+using std::size_t;
+using goal_t = std::pair<size_t, size_t>;  // <group, simple_goal>
+using goal_index_t = std::vector<goal_t>;
+using goal_selection_t = std::map<size_t, std::vector<size_t>>;
 
 /** @brief builds the translation to SMTLIB of one POG goal saves the
  * translation to file
- * @param groupId 0-indexed position of the POG goal group
- * @param goalId 0-indexed position of the goal within its POG group.
  */
-extern void saveSmtLibFileOne(const pog::pog &pog, int groupId, size_t goalId,
+extern void saveSmtLibFileOne(const pog::pog &pog, const goal_t &goal,
                               const std::string &output,
                               bool produce_unsat_core, bool produce_model);
 

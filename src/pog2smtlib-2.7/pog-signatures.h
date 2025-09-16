@@ -65,6 +65,8 @@ using std::optional;
 using std::string;
 using std::vector;
 
+using goal_t = std::pair<size_t, size_t>;
+
 class POGSignatures {
  public:
   map<string, Signature> m_defines;
@@ -80,14 +82,14 @@ class POGSignatures {
   POGSignatures(const POGSignatures& other) = delete;
   ~POGSignatures() = default;
 
-  const Signature ofGoal(int group, int goal);
+  const Signature ofGoal(const goal_t& goal);
   /** @brief the signature of all common elements of the group of PO
    * @param group the index of the group in the POG
    * @returns the signature of all the referenced 'Define' elements
    * and of all the 'Hypothesis' elements
    */
-  const Signature& ofGroup(int group);
-  const Signature& ofLocalHyp(int group, int localHyp);
+  const Signature& ofGroup(size_t group);
+  const Signature& ofLocalHyp(size_t group, size_t localHyp);
 
   string to_string() const;
 
@@ -103,10 +105,10 @@ class POGSignatures {
    * referenced by `definitions`
    * - hyps : the signature of the predicates in `hyps`.
    */
-  void initGroupSignatures(int group);
+  void initGroupSignatures(size_t group);
 
   const Signature& getDefineSignature(const std::string& name);
-  const Signature& getLocalHypSignature(int group, int lhypRef);
+  const Signature& getLocalHypSignature(size_t group, size_t lhypRef);
 };
 
 #endif  // POG_SIGNATURES_H

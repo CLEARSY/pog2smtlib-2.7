@@ -18,6 +18,8 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <stdexcept>
+#include <string>
 #include <vector>
 
 #include "pog-signatures.h"
@@ -56,9 +58,8 @@ static void display_help() {
             << "\t\t\tprints help" << std::endl;
 }
 
-[[maybe_unused]] static void classifyGoals(
-    const std::vector<std::pair<int, size_t>> &goals,
-    goal_selection_t &sgoals) {
+[[maybe_unused]] static void classifyGoals(const goal_index_t &goals,
+                                           goal_selection_t &sgoals) {
   for (auto &goal : goals) {
     if (sgoals.find(goal.first) == sgoals.end()) {
       sgoals.insert({goal.first, {}});
@@ -67,14 +68,29 @@ static void display_help() {
   }
   for (auto &sgoal : sgoals) {
     std::sort(sgoal.second.begin(), sgoal.second.end(),
-              [](int i, int j) { return i < j; });
+              [](size_t i, size_t j) { return i < j; });
   }
+}
+
+static size_t argtoul(const char *arg) {
+  size_t result;
+  try {
+    result = std::stoul(arg);
+  } catch (const std::invalid_argument &e) {
+    std::cerr << "Invalid argument " << arg
+              << " (non-negative integer expected)" << std::endl;
+    return EXIT_FAILURE;
+  } catch (const std::out_of_range &e) {
+    std::cerr << "Invalid argument " << arg << " (too large)" << std::endl;
+    return EXIT_FAILURE;
+  }
+  return result;
 }
 
 int main(int argc, char **argv) {
   char *input{nullptr};
   char *output{nullptr};
-  std::vector<std::pair<int, size_t>> goals;
+  goal_index_t goals;
   [[maybe_unused]] bool incr = true;
   [[maybe_unused]] bool produce_model = false;
   [[maybe_unused]] bool produce_unsat_core = false;
@@ -85,8 +101,9 @@ int main(int argc, char **argv) {
   while (arg < argc) {
     if (strcmp(argv[arg], "-a") == 0) {
       if (arg + 2 < argc) {
-        goals.push_back(
-            std::make_pair(atoi(argv[arg + 1]), atoi(argv[arg + 2])));
+        const size_t group = argtoul(argv[arg + 1]);
+        const size_t goal = argtoul(argv[arg + 2]);
+        goals.push_back(std::make_pair(group, goal));
         arg += 3;
       } else {
         display_help();
@@ -173,10 +190,7 @@ int main(int argc, char **argv) {
    * only one file is produced. */
   if (1 <= goals.size()) {
     for (const auto &goal : goals) {
-      const int group{goal.first};
-      const size_t id{goal.second};
-      saveSmtLibFileOne(pog, group, id, output, produce_unsat_core,
-                        produce_model);
+      saveSmtLibFileOne(pog, goal, output, produce_unsat_core, produce_model);
     }
   } else {
     saveSmtLibFile(pog, output, produce_unsat_core, produce_model);

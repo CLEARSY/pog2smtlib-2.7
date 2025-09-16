@@ -27,9 +27,8 @@
 #include "translate-signature.h"
 #include "utils.h"
 
-static void translateAndSave([[maybe_unused]] POGSignatures &pogSignatures,
-                             POGTranslations &pogTranslation, int group,
-                             size_t goal, const std::string &filePrefix,
+static void translateAndSave(POGTranslations &pogTranslation,
+                             const goal_t &goal, const std::string &filePrefix,
                              bool setProduceUnsatCore, bool setProduceModel) {
   using std::map;
   using std::set;
@@ -37,13 +36,11 @@ static void translateAndSave([[maybe_unused]] POGSignatures &pogSignatures,
   using std::to_string;
   using std::vector;
 
-  string filename{fmt::format("{}_{}_{}.po2", filePrefix, group, goal)};
-
-  // Signature signature = pogSignatures.ofGoal(group, goal);
+  string filename{
+      fmt::format("{}_{}_{}.po2", filePrefix, goal.first, goal.second)};
 
   string result;
-  // result.append(translate(signature));
-  result.append(pogTranslation.ofGoal(group, goal));
+  result.append(pogTranslation.ofGoal(goal));
 
   std::ofstream out;
   out.open(filename);
@@ -72,22 +69,20 @@ void saveSmtLibFile(const pog::pog &pog, const std::string &output,
   POGSignatures pogSignatures(pog);
   POGTranslations pogTranslation(pog, pogSignatures);
   const string filePrefix = utils::absoluteBasename(output);
-  for (int group = 0; group < static_cast<int>(pog.pos.size()); ++group) {
-    for (int goal = 0;
-         goal < static_cast<int>(pog.pos.at(group).simpleGoals.size());
-         ++goal) {
-      translateAndSave(pogSignatures, pogTranslation, group, goal, filePrefix,
+  for (size_t group = 0; group < pog.pos.size(); ++group) {
+    for (size_t goal = 0; goal < pog.pos.at(group).simpleGoals.size(); ++goal) {
+      translateAndSave(pogTranslation, {group, goal}, filePrefix,
                        setProduceUnsatCore, setProduceModel);
     }
   }
 }
 
-void saveSmtLibFileOne(const pog::pog &pog, int group, size_t goal,
+void saveSmtLibFileOne(const pog::pog &pog, const goal_t &goal,
                        const std::string &output, bool setProduceUnsatCore,
                        bool setProduceModel) {
   POGSignatures pogSignatures(pog);
   POGTranslations pogTranslation(pog, pogSignatures);
   const string filePrefix = utils::absoluteBasename(output);
-  translateAndSave(pogSignatures, pogTranslation, group, goal, filePrefix,
-                   setProduceUnsatCore, setProduceModel);
+  translateAndSave(pogTranslation, goal, filePrefix, setProduceUnsatCore,
+                   setProduceModel);
 }
