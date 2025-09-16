@@ -4,7 +4,8 @@
 (define-sort |Z| () Int)
 (declare-datatype |struct(Note : Z, Suffisant : BOOL)| ((|record struct(Note : Z, Suffisant : BOOL)| (Note Z) (Suffisant BOOL))))
 (assert (!
-  (not (= (|record struct(Note : Z, Suffisant : BOOL)| 21 true) (|record struct(Note : Z, Suffisant : BOOL)| 29 false)))
+  (not
+    (= (|record struct(Note : Z, Suffisant : BOOL)| 21 true) (|record struct(Note : Z, Suffisant : BOOL)| 29 false)))
   :named |Goal|))
 (check-sat)
 (exit)

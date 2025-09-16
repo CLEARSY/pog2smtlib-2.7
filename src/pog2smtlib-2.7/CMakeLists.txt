@@ -14,7 +14,6 @@ add_subdirectory(constructs/expression)
 add_subdirectory(constructs/predicate)
 
 set(POG2SMTLIB27_HEADERS
-    axiom-templates.h
     bconstruct.h
     bconstruct-utils.h
     btype-symbols.h
@@ -35,7 +34,6 @@ set(POG2SMTLIB27_SOURCES
     ${POG2SMTLIB27_TYPE_SOURCES}
     ${POG2SMTLIB27_EXPRESSION_SOURCES}
     ${POG2SMTLIB27_PREDICATE_SOURCES}
-    axiom-templates.cpp
     bconstruct.cpp
     btype-symbols.cpp
     main.cpp

@@ -21,8 +21,7 @@
 #include "pred.h"
 namespace BConstruct::Predicate {
 
-static constexpr std::string_view SCRIPT = R"(
-(declare-fun {0} ({1} {2}) Bool)
+static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) Bool)
 )";
 
 SetMembership::SetMembership(const BType &t) : UnaryBType(t) {

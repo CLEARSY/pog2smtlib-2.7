@@ -22,14 +22,11 @@
 
 namespace BConstruct::Predicate {
 
-static constexpr std::string_view SCRIPT = R"(
-(assert (!
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {1}) (t {1}))
     (=
       (= s t)
-      (forall ((e |{0}|)) (= (|set.in {0}| e s) (|set.in {0}| e t)))
-    )
-  )
+      (forall ((e |{0}|)) (= (|set.in {0}| e s) (|set.in {0}| e t)))))
   :named |ax.set.eq {0}|))
 )";
 

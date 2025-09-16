@@ -4,7 +4,6 @@
 (declare-const c2 |Z|)
 (declare-const c3 |Z|)
 (declare-const c1 |Z|)
-
 (declare-fun |int.div| (|Z| |Z|) |Z|)
 (assert (!
   (forall ((a |Z|) (b |Z|))
@@ -19,7 +18,8 @@
         (= (|int.div| a b) (/ a b)))))
   :named |ax.int.div :1|))
   (assert (!
-  (not (= c1 (|int.div| c2 c3)))
+  (not
+    (= c1 (|int.div| c2 c3)))
   :named |Goal|))
 (check-sat)
 (exit)

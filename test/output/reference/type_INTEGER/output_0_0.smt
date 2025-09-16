@@ -3,7 +3,8 @@
 (define-sort |Z| () Int)
 (declare-const co |Z|)
 (assert (!
-  (not (= co 0))
+  (not
+    (= co 0))
   :named |Goal|))
 (check-sat)
 (exit)

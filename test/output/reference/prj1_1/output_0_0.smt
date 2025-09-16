@@ -7,11 +7,8 @@
 (define-sort |((Z x Z) x Z)| () (C |(Z x Z)| |Z|))
 (define-sort |POW Z| () (P |Z|))
 (define-sort |POW ((Z x Z) x Z)| () (P |((Z x Z) x Z)|))
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-
 (declare-fun |set.in ((Z x Z) x Z)| (|((Z x Z) x Z)| |POW ((Z x Z) x Z)|) Bool)
-
 (declare-fun |prj1 Z Z| (|POW Z| |POW Z|) |POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((E |POW Z|) (F |POW Z|) (t |((Z x Z) x Z)|))
@@ -21,7 +18,6 @@
 				 (|set.in Z| (snd (fst t)) F)
 				 (= (snd t) (fst (fst t))))))
   :named |ax.set.in.prj1 (Z x Z)|))
-
 (define-sort |? ((Z x Z) x Z)| () (-> |((Z x Z) x Z)| Bool))
 (declare-const |set.intent ((Z x Z) x Z)| (-> |? ((Z x Z) x Z)| |POW ((Z x Z) x Z)|))
 (assert (!
@@ -30,7 +26,6 @@
       (= (|set.in ((Z x Z) x Z)| x (|set.intent ((Z x Z) x Z)| p))
          (p x))))
   :named |ax:set.in.intent ((Z x Z) x Z)|))
-
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -39,17 +34,15 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-
 (assert (!
   (forall ((s |POW ((Z x Z) x Z)|) (t |POW ((Z x Z) x Z)|))
     (=
       (= s t)
-      (forall ((e |((Z x Z) x Z)|)) (= (|set.in ((Z x Z) x Z)| e s) (|set.in ((Z x Z) x Z)| e t)))
-    )
-  )
+      (forall ((e |((Z x Z) x Z)|)) (= (|set.in ((Z x Z) x Z)| e s) (|set.in ((Z x Z) x Z)| e t)))))
   :named |ax.set.eq ((Z x Z) x Z)|))
 (assert (!
-  (not (= (|prj1 Z Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2))))) (|set.intent ((Z x Z) x Z)| (lambda ((x |((Z x Z) x Z)|)) (or (= x (maplet (maplet 0 1) 0))(= x (maplet (maplet 0 2) 0))(= x (maplet (maplet 1 1) 1))(= x (maplet (maplet 1 2) 0)))))))
+  (not
+    (= (|prj1 Z Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2))))) (|set.intent ((Z x Z) x Z)| (lambda ((x |((Z x Z) x Z)|)) (or (= x (maplet (maplet 0 1) 0))(= x (maplet (maplet 0 2) 0))(= x (maplet (maplet 1 1) 1))(= x (maplet (maplet 1 2) 0)))))))
   :named |Goal|))
 (check-sat)
 (exit)

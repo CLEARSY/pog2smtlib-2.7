@@ -7,11 +7,8 @@
 (define-sort |(Z x (Z x Z))| () (C |Z| |(Z x Z)|))
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
 (define-sort |POW (Z x (Z x Z))| () (P |(Z x (Z x Z))|))
-
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
-
 (declare-fun |set.in (Z x (Z x Z))| (|(Z x (Z x Z))| |POW (Z x (Z x Z))|) Bool)
-
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -20,7 +17,6 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
-
 (declare-fun |directproduct Z Z Z| (|POW (Z x Z)| |POW (Z x Z)|) |POW (Z x (Z x Z))|)
 (assert (!
   (forall ((R1 |POW (Z x Z)|) (R2 |POW (Z x Z)|) (p |(Z x (Z x Z))|))
@@ -33,7 +29,8 @@
   )
   :named |ax.set.in.directproduct ((Z x Z) x Z)|))
 (assert (!
-  (not (|set.in (Z x (Z x Z))| (maplet 1 (maplet 3 10)) (|directproduct Z Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 5 4))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 10))(= x (maplet 4 9))))))))
+  (not
+    (|set.in (Z x (Z x Z))| (maplet 1 (maplet 3 10)) (|directproduct Z Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 5 4))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 10))(= x (maplet 4 9))))))))
   :named |Goal|))
 (check-sat)
 (exit)

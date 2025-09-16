@@ -4,7 +4,8 @@
 (declare-const wint |Z|)
 (declare-const vint |Z|)
 (assert (!
-  (not (= vint wint))
+  (not
+    (= vint wint))
   :named |Goal|))
 (check-sat)
 (exit)

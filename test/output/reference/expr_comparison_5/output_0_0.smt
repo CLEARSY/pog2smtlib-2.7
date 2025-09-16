@@ -7,7 +7,8 @@
 (declare-const wproduct |(Z x BOOL)|)
 (declare-const vproduct |(Z x BOOL)|)
 (assert (!
-  (not (= vproduct wproduct))
+  (not
+    (= vproduct wproduct))
   :named |Goal|))
 (check-sat)
 (exit)

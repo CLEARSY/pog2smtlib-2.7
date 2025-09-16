@@ -11,13 +11,9 @@
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
 (define-sort |(Z x REAL)| () (C |Z| |REAL|))
 (define-sort |POW (Z x REAL)| () (P |(Z x REAL)|))
-
 (declare-fun |set.in (Z x REAL)| (|(Z x REAL)| |POW (Z x REAL)|) Bool)
-
 (declare-fun |set.in REAL| (|REAL| |POW REAL|) Bool)
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-
 (declare-fun |set.product Z REAL| (|POW Z| |POW REAL|) |POW (Z x REAL)|)
 (assert (!
   (forall ((s1 |POW Z|) (s2 |POW REAL|))
@@ -41,7 +37,8 @@
     )
     :named |ax.set.subseteq (Z x REAL)|))
 (assert (!
-  (not (|set.subseteq (Z x REAL)| (|set.product Z REAL| c1 c3) (|set.product Z REAL| c2 c3)))
+  (not
+    (|set.subseteq (Z x REAL)| (|set.product Z REAL| c1 c3) (|set.product Z REAL| c2 c3)))
   :named |Goal|))
 (check-sat)
 (exit)

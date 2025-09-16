@@ -22,8 +22,7 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(declare-const {0} {2})
+static constexpr std::string_view SCRIPT = R"((declare-const {0} {2})
 (assert (!
   (forall ((e {1})) (= ({3} e {0}) (<= 1 e)))
   :named |ax.set.in.NATURAL1|))

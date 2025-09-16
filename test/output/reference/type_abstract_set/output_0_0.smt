@@ -8,7 +8,8 @@
 (declare-const co1 |AS|)
 (declare-const AS |POW AS|)
 (assert (!
-  (not (= co2 0))
+  (not
+    (= co2 0))
   :named |Goal|))
 (check-sat)
 (exit)

@@ -6,12 +6,9 @@
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
 (define-sort |(Z x POW Z)| () (C |Z| |POW Z|))
 (define-sort |POW (Z x POW Z)| () (P |(Z x POW Z)|))
-
 (declare-fun |set.in (Z x POW Z)| (|(Z x POW Z)| |POW (Z x POW Z)|) Bool)
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-const func |POW (Z x POW Z)|)
-
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
 (declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
 (assert (!
@@ -20,7 +17,6 @@
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
-
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -29,20 +25,15 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-
 (assert (!
   (forall ((s |POW (Z x POW Z)|) (t |POW (Z x POW Z)|))
     (=
       (= s t)
-      (forall ((e |(Z x POW Z)|)) (= (|set.in (Z x POW Z)| e s) (|set.in (Z x POW Z)| e t)))
-    )
-  )
+      (forall ((e |(Z x POW Z)|)) (= (|set.in (Z x POW Z)| e s) (|set.in (Z x POW Z)| e t)))))
   :named |ax.set.eq (Z x POW Z)|))
 (define-sort |(Z x Z)| () (C |Z| |Z|))
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
-
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
-
 (declare-fun |rel Z Z| (|POW (Z x POW Z)|) |POW (Z x Z)|)
 (assert (!
   (forall ((f |POW (Z x POW Z)|)(p |(Z x Z)|))
@@ -54,7 +45,8 @@
   (= func (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 5)(= x 4))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 1)))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 6)(= x 8)(= x 5))))))))))
   :named |Define:lprp:1|))
 (assert (!
-  (not (|set.in (Z x Z)| (maplet 0 2) (|rel Z Z| func)))
+  (not
+    (|set.in (Z x Z)| (maplet 0 2) (|rel Z Z| func)))
   :named |Goal|))
 (check-sat)
 (exit)

@@ -4,7 +4,8 @@
 (declare-const wreal |REAL|)
 (declare-const vreal |REAL|)
 (assert (!
-  (not (= vreal wreal))
+  (not
+    (= vreal wreal))
   :named |Goal|))
 (check-sat)
 (exit)

@@ -8,17 +8,17 @@
 (declare-const c0 |Z|)
 (declare-const c4 |Z|)
 (assert (!
-  (not (or
-  (and
-(= c0 c1)
-    (not (= c0 c2))
-)
-  (=
-    (=>
-(= c0 c3)
-(= c0 c4))
-(= c0 c5))
-))
+  (not
+    (or
+      (and
+        (= c0 c1)
+        (not
+          (= c0 c2)))
+      (=
+        (=>
+          (= c0 c3)
+          (= c0 c4))
+        (= c0 c5))))
   :named |Goal|))
 (check-sat)
 (exit)

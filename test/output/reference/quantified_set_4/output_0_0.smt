@@ -6,11 +6,8 @@
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
 (define-sort |(Z x POW Z)| () (C |Z| |POW Z|))
 (define-sort |POW (Z x POW Z)| () (P |(Z x POW Z)|))
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-
 (declare-fun |set.in (Z x POW Z)| (|(Z x POW Z)| |POW (Z x POW Z)|) Bool)
-
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -19,7 +16,6 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
 (declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
 (assert (!
@@ -28,20 +24,17 @@
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
-
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))
     (=
       (= s t)
-      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))
-    )
-  )
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
   :named |ax.set.eq Z|))
 (assert (!
-  (not (|set.in (Z x POW Z)| (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (and
-(= (snd x) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)))))
-(= (fst x) 1)
-)))))
+  (not
+    (|set.in (Z x POW Z)| (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|))     (and
+      (= (snd x) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)))))
+      (= (fst x) 1))))))
   :named |Goal|))
 (check-sat)
 (exit)

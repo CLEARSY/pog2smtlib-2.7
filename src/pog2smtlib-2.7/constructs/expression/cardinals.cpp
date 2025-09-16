@@ -22,8 +22,8 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
+static constexpr std::string_view SCRIPT =
+    R"((declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 )";
 
 Cardinals::Cardinals() {

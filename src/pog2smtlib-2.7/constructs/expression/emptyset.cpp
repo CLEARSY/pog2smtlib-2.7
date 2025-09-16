@@ -26,8 +26,7 @@ namespace BConstruct::Expression {
 // 2: the SMT symbol for the type of the monomorphized empty set operator
 // 3: the SMT symbol for the element type of 2
 // 4: the auxiliary SMT symbol for 3
-static constexpr std::string_view SCRIPT = R"(
-(declare-const |{0} {4}| {2})
+static constexpr std::string_view SCRIPT = R"((declare-const |{0} {4}| {2})
 (assert (!
   (forall ((e {3})) (not (|{1} {4}| e |{0} {4}|)))
   :named |ax.set.in.empty {4}|))

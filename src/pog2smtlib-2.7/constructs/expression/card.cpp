@@ -22,8 +22,7 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(declare-fun {0} ({1}) Cardinals)
+static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) Cardinals)
 (assert (!
   (forall ((s {1}))
     (or (= ({0} s) Infinite)

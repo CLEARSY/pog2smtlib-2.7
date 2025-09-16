@@ -4,7 +4,6 @@
 (declare-const c2 |REAL|)
 (declare-const c3 |REAL|)
 (declare-const c1 |REAL|)
-
 (declare-fun |real.div| (|REAL| |REAL|) |REAL|)
 (assert (!
   (forall ((a |REAL|) (b |REAL|))
@@ -19,7 +18,8 @@
         (= (|real.div| a b) (/ a b)))))
   :named |ax.real.div :1|))
 (assert (!
-  (not (= (+ c1 (* c2 c3)) (|real.div| (- c1 c2) c3)))
+  (not
+    (= (+ c1 (* c2 c3)) (|real.div| (- c1 c2) c3)))
   :named |Goal|))
 (check-sat)
 (exit)

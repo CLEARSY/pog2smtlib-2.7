@@ -6,9 +6,7 @@
 (declare-const elt |Z|)
 (declare-const vset2 |POW Z|)
 (declare-const vset1 |POW Z|)
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-
 (declare-fun |set.inter Z| (|POW Z| |POW Z|) |POW Z|)
 (assert (!
   (forall ((e |Z|) (s |POW Z|) (t |POW Z|))
@@ -22,7 +20,8 @@
   (|set.in Z| elt vset2)
   :named |Define:lprp:4|))
 (assert (!
-  (not (|set.in Z| elt (|set.inter Z| vset1 vset2)))
+  (not
+    (|set.in Z| elt (|set.inter Z| vset1 vset2)))
   :named |Goal|))
 (check-sat)
 (exit)

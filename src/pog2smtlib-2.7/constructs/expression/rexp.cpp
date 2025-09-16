@@ -22,8 +22,8 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(define-fun-rec {0} ((n {1}) (p {2})) {1}
+static constexpr std::string_view SCRIPT =
+    R"((define-fun-rec {0} ((n {1}) (p {2})) {1}
  (ite (= p 0)
     1.0
     (ite (> p 0)

@@ -4,7 +4,8 @@
 (declare-const wbool |BOOL|)
 (declare-const vbool |BOOL|)
 (assert (!
-  (not (= vbool wbool))
+  (not
+    (= vbool wbool))
   :named |Goal|))
 (check-sat)
 (exit)

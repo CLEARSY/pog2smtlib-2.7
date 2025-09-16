@@ -3,9 +3,7 @@
 (define-sort |Z| () Int)
 (declare-sort P 1)
 (define-sort |POW Z| () (P |Z|))
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -15,7 +13,8 @@
          (p x))))
   :named |ax:set.in.intent Z|))
 (assert (!
-  (not (|set.in Z| 1 (|set.intent Z| (lambda ((x |Z|)) (= x 1)))))
+  (not
+    (|set.in Z| 1 (|set.intent Z| (lambda ((x |Z|))     (= x 1)))))
   :named |Goal|))
 (check-sat)
 (exit)

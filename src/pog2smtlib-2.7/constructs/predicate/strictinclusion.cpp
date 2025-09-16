@@ -21,8 +21,7 @@
 
 namespace BConstruct::Predicate {
 
-static constexpr std::string_view SCRIPT = R"(
-(declare-fun {0} ({1} {1}) Bool)
+static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) Bool)
 (assert (!
   (forall ((s {1}) (t {1}))
     (=

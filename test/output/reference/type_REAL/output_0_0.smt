@@ -3,7 +3,8 @@
 (define-sort |REAL| () Real)
 (declare-const co |REAL|)
 (assert (!
-  (not (= co 1.0))
+  (not
+    (= co 1.0))
   :named |Goal|))
 (check-sat)
 (exit)

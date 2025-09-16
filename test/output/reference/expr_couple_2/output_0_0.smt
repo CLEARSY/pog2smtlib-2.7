@@ -8,7 +8,8 @@
 (declare-const creal1 |REAL|)
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
 (assert (!
-  (not (= (maplet cint1 creal1) (maplet cint2 creal2)))
+  (not
+    (= (maplet cint1 creal1) (maplet cint2 creal2)))
   :named |Goal|))
 (check-sat)
 (exit)

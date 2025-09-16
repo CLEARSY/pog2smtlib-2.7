@@ -22,8 +22,8 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(define-fun {0} ((s {1})) {1} ({2} s (- ({3} s) 1)))
+static constexpr std::string_view SCRIPT =
+    R"((define-fun {0} ((s {1})) {1} ({2} s (- ({3} s) 1)))
 )";
 
 Front::Front(const BType &T) : UnaryBType(T) {

@@ -8,7 +8,8 @@
   (< 0 va)
   :named |Define:inv:2|))
 (assert (!
-  (not (< 0 (+ va 1)))
+  (not
+    (< 0 (+ va 1)))
   :named |Goal|))
 (check-sat)
 (exit)

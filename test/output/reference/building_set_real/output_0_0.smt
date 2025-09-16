@@ -3,7 +3,9 @@
 (define-sort |REAL| () Real)
 (declare-const co |REAL|)
 (assert (!
-  (not (not true))
+  (not
+    (not
+      true))
   :named |Goal|))
 (check-sat)
 (exit)

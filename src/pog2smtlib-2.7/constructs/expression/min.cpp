@@ -22,8 +22,7 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(declare-fun {0} ({2}) {1})
+static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) {1})
 (assert (!
   (forall ((s {2}))
     (=> (not (= s {3})) ({4} ({0} s) s)))

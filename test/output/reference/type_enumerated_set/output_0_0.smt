@@ -6,7 +6,8 @@
 (declare-const co |ES|)
 (declare-const ES |POW ES|)
 (assert (!
-  (not (= co e0))
+  (not
+    (= co e0))
   :named |Goal|))
 (check-sat)
 (exit)

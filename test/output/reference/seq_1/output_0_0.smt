@@ -5,9 +5,7 @@
 (define-sort |(Z x Z)| () (C |Z| |Z|))
 (declare-sort P 1)
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
-
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
-
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -17,7 +15,8 @@
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
-  (not (|set.in (Z x Z)| (maplet 1 2) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 1))(= x (maplet 2 2))(= x (maplet 3 3)))))))
+  (not
+    (|set.in (Z x Z)| (maplet 1 2) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 1))(= x (maplet 2 2))(= x (maplet 3 3)))))))
   :named |Goal|))
 (check-sat)
 (exit)

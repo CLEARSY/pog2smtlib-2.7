@@ -3,7 +3,9 @@
 (define-sort |BOOL| () Bool)
 (declare-const co |BOOL|)
 (assert (!
-  (not (not true))
+  (not
+    (not
+      true))
   :named |Goal|))
 (check-sat)
 (exit)

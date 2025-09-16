@@ -22,8 +22,8 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(declare-const |seq.empty {0}| {1})
+static constexpr std::string_view SCRIPT =
+    R"((declare-const |seq.empty {0}| {1})
 (assert (!
   (= |seq.empty {0}| {2})
   :named |ax:seq.empty.def {0}|))

@@ -22,8 +22,7 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(define-const {0} {1} {2})
+static constexpr std::string_view SCRIPT = R"((define-const {0} {1} {2})
 )";
 
 Maxint::Maxint() {

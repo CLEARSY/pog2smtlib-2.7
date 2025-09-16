@@ -5,7 +5,8 @@
 (define-sort |(Z x Z)| () (C |Z| |Z|))
 (declare-const co |(Z x Z)|)
 (assert (!
-  (not (= co (maplet 0 0)))
+  (not
+    (= co (maplet 0 0)))
   :named |Goal|))
 (check-sat)
 (exit)

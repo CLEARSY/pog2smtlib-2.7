@@ -3,14 +3,11 @@
 (define-sort |REAL| () Real)
 (declare-sort P 1)
 (define-sort |POW REAL| () (P |REAL|))
-
 (declare-fun |set.in REAL| (|REAL| |POW REAL|) Bool)
-
 (declare-const |set.empty REAL| |POW REAL|)
 (assert (!
   (forall ((e |REAL|)) (not (|set.in REAL| e |set.empty REAL|)))
   :named |ax.set.in.empty REAL|))
-
 (declare-fun |rmin| (|POW REAL|) |REAL|)
 (assert (!
   (forall ((s |POW REAL|))
@@ -21,7 +18,6 @@
      (forall ((e |REAL|))
         (=> (|set.in REAL| e s) (<= (|rmin| s) e))))
   :named |ax.rmin.is.ge|))
-
 (define-sort |? REAL| () (-> |REAL| Bool))
 (declare-const |set.intent REAL| (-> |? REAL| |POW REAL|))
 (assert (!
@@ -31,7 +27,8 @@
          (p x))))
   :named |ax:set.in.intent REAL|))
 (assert (!
-  (not (= (|rmin| (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 1.0)(= x 60.0)(= x 0.0)(= x 5.0)(= x 3.0))))) 0.0))
+  (not
+    (= (|rmin| (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 1.0)(= x 60.0)(= x 0.0)(= x 5.0)(= x 3.0))))) 0.0))
   :named |Goal|))
 (check-sat)
 (exit)

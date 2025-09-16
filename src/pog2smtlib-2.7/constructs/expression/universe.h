@@ -7,8 +7,8 @@
 #include "btype.h"
 
 namespace BConstruct::Expression {
-inline constexpr std::string_view SET_UNIVERSE_SCRIPT = R"(
-(declare-const {0} {3})
+inline constexpr std::string_view SET_UNIVERSE_SCRIPT =
+    R"((declare-const {0} {3})
 (assert (!
   (forall ((e {1})) (|set.in {2}| e {0}))
   :named |ax.set.in.{0}|))

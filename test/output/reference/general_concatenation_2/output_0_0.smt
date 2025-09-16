@@ -8,33 +8,24 @@
 (define-sort |((Z x POW Z) x Z)| () (C |(Z x POW Z)| |Z|))
 (define-sort |POW ((Z x POW Z) x Z)| () (P |((Z x POW Z) x Z)|))
 (define-sort |POW (Z x POW Z)| () (P |(Z x POW Z)|))
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-
 (declare-fun |set.in ((Z x POW Z) x Z)| (|((Z x POW Z) x Z)| |POW ((Z x POW Z) x Z)|) Bool)
-
 (declare-fun |set.in (Z x POW Z)| (|(Z x POW Z)| |POW (Z x POW Z)|) Bool)
 (define-sort |POW POW ((Z x POW Z) x Z)| () (P |POW ((Z x POW Z) x Z)|))
-
 (declare-fun |rel.range (Z x POW Z) Z| (|POW ((Z x POW Z) x Z)|) |POW Z|)
 (assert (!
   (forall ((r |POW ((Z x POW Z) x Z)|) (e |Z|))
     (= (|set.in Z| e (|rel.range (Z x POW Z) Z| r))
        (exists ((x |(Z x POW Z)|)) (|set.in ((Z x POW Z) x Z)| (maplet x e) r))))
   :named |ax:set.in.range ((Z x POW Z) x Z)|))
-
 (assert (!
   (forall ((s |POW (Z x POW Z)|) (t |POW (Z x POW Z)|))
     (=
       (= s t)
-      (forall ((e |(Z x POW Z)|)) (= (|set.in (Z x POW Z)| e s) (|set.in (Z x POW Z)| e t)))
-    )
-  )
+      (forall ((e |(Z x POW Z)|)) (= (|set.in (Z x POW Z)| e s) (|set.in (Z x POW Z)| e t)))))
   :named |ax.set.eq (Z x POW Z)|))
-
 (declare-fun |set.in POW ((Z x POW Z) x Z)| (|POW ((Z x POW Z) x Z)| |POW POW ((Z x POW Z) x Z)|) Bool)
 (define-sort |(Z x POW (Z x POW Z))| () (C |Z| |POW (Z x POW Z)|))
-
 (declare-fun |surjections (Z x POW Z) Z| (|POW (Z x POW Z)| |POW Z|) |POW POW ((Z x POW Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x POW Z)|) (Y |POW Z|))
@@ -43,7 +34,6 @@
          (= (|rel.range (Z x POW Z) Z| f) Y)
       )))
   :named |ax:set.in.surjections ((Z x POW Z) x Z)|))
-
 (declare-fun |injections (Z x POW Z) Z| (|POW (Z x POW Z)| |POW Z|) |POW POW ((Z x POW Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x POW Z)|) (Y |POW Z|) (f |POW ((Z x POW Z) x Z)|))
@@ -53,16 +43,13 @@
               (= (fst p1) (fst p2))))))
   :named |ax:set.in.injections ((Z x POW Z) x Z)|))
 (define-sort |POW (Z x POW (Z x POW Z))| () (P |(Z x POW (Z x POW Z))|))
-
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
-
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
-
 (declare-fun |bijections (Z x POW Z) Z| (|POW (Z x POW Z)| |POW Z|) |POW POW ((Z x POW Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x POW Z)|) (Y |POW Z|))
@@ -71,9 +58,7 @@
          (and (|set.in POW ((Z x POW Z) x Z)| f (|injections (Z x POW Z) Z| X Y))
               (|set.in POW ((Z x POW Z) x Z)| f (|surjections (Z x POW Z) Z| X Y))))))
   :named |ax:set.in.bijections ((Z x POW Z) x Z)|))
-
 (declare-fun |set.in (Z x POW (Z x POW Z))| (|(Z x POW (Z x POW Z))| |POW (Z x POW (Z x POW Z))|) Bool)
-
 (declare-fun |card (Z x POW Z)| (|POW (Z x POW Z)|) Cardinals)
 (assert (!
   (forall ((s |POW (Z x POW Z)|))
@@ -82,35 +67,28 @@
           (|set.in POW ((Z x POW Z) x Z)| f (|bijections (Z x POW Z) Z| s (|interval| 1 (Value (|card (Z x POW Z)| s))))))))
   :named |ax.card.definition (Z x POW Z)|))
 (define-sort |POW POW Z| () (P |POW Z|))
-
 (declare-const |set.empty (Z x POW Z)| |POW (Z x POW Z)|)
 (assert (!
   (forall ((e |(Z x POW Z)|)) (not (|set.in (Z x POW Z)| e |set.empty (Z x POW Z)|)))
   :named |ax.set.in.empty (Z x POW Z)|))
-
 (declare-const |set.empty (Z x POW (Z x POW Z))| |POW (Z x POW (Z x POW Z))|)
 (assert (!
   (forall ((e |(Z x POW (Z x POW Z))|)) (not (|set.in (Z x POW (Z x POW Z))| e |set.empty (Z x POW (Z x POW Z))|)))
   :named |ax.set.in.empty (Z x POW (Z x POW Z))|))
-
 (declare-fun |size POW Z| (|POW (Z x POW Z)|) |Z|)
 (assert (!
   (forall ((s |POW (Z x POW Z)|))
     (= (|size POW Z| s) (Value (|card (Z x POW Z)| s))))
   :named |ax.size.definition POW Z|))
-
 (declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
-
 (declare-const |seq.empty POW Z| |POW (Z x POW Z)|)
 (assert (!
   (= |seq.empty POW Z| |set.empty (Z x POW Z)|)
   :named |ax:seq.empty.def POW Z|))
-
 (declare-const |seq.empty POW (Z x POW Z)| |POW (Z x POW (Z x POW Z))|)
 (assert (!
   (= |seq.empty POW (Z x POW Z)| |set.empty (Z x POW (Z x POW Z))|)
   :named |ax:seq.empty.def POW (Z x POW Z)|))
-
 (declare-fun |^ POW Z| (|POW (Z x POW Z)| |POW (Z x POW Z)|) |POW (Z x POW Z)|)
 (assert (!
   (forall ((s1 |POW (Z x POW Z)|)(s2 |POW (Z x POW Z)|)(p |(Z x POW Z)|))
@@ -119,7 +97,6 @@
            (|set.in (Z x POW Z)| (maplet (- (fst p) (|size POW Z| s1)) (snd p)) s2))))
   :named |ax.conc.definition POW Z|
 ))
-
 (declare-fun |→ POW (Z x POW Z)| (|POW (Z x POW Z)| |POW (Z x POW (Z x POW Z))|) |POW (Z x POW (Z x POW Z))|)
 (assert (!
   (forall ((x |POW (Z x POW Z)|)(s |POW (Z x POW (Z x POW Z))|)(p |(Z x POW (Z x POW Z))|))
@@ -127,12 +104,10 @@
        (or (= p (maplet 1 x))
            (|set.in (Z x POW (Z x POW Z))| (maplet (- (fst p) 1) (snd p)) s))))
   :named |ax.insert.front.def POW (Z x POW Z)|))
-
 (declare-const |set.empty Z| |POW Z|)
 (assert (!
   (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
   :named |ax.set.in.empty Z|))
-
 (declare-fun |conc POW Z| (|POW (Z x POW (Z x POW Z))|) |POW (Z x POW Z)|)
 (assert (!
   (= (|conc POW Z| |seq.empty POW (Z x POW Z)|) |seq.empty POW Z|)
@@ -144,7 +119,6 @@
        (|^ POW Z| x (|conc POW Z| s))))
   :named |ax.generalized.concatenation.not.empty POW Z|
 ))
-
 (define-sort |? (Z x POW (Z x POW Z))| () (-> |(Z x POW (Z x POW Z))| Bool))
 (declare-const |set.intent (Z x POW (Z x POW Z))| (-> |? (Z x POW (Z x POW Z))| |POW (Z x POW (Z x POW Z))|))
 (assert (!
@@ -153,7 +127,6 @@
       (= (|set.in (Z x POW (Z x POW Z))| x (|set.intent (Z x POW (Z x POW Z))| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW (Z x POW Z))|))
-
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -162,7 +135,6 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
 (declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
 (assert (!
@@ -172,7 +144,8 @@
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
 (assert (!
-  (not (= (|conc POW Z| (|set.intent (Z x POW (Z x POW Z))| (lambda ((x |(Z x POW (Z x POW Z))|)) (or (= x (maplet 1 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 1 |set.empty Z|))))))(= x (maplet 2 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3))))))))))(= x (maplet 3 |set.empty (Z x POW Z)|))(= x (maplet 4 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 5))))))))))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 |set.empty Z|))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3))))))(= x (maplet 3 (|set.intent Z| (lambda ((x |Z|)) (= x 5))))))))))
+  (not
+    (= (|conc POW Z| (|set.intent (Z x POW (Z x POW Z))| (lambda ((x |(Z x POW (Z x POW Z))|)) (or (= x (maplet 1 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 1 |set.empty Z|))))))(= x (maplet 2 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3))))))))))(= x (maplet 3 |set.empty (Z x POW Z)|))(= x (maplet 4 (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 5))))))))))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 |set.empty Z|))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3))))))(= x (maplet 3 (|set.intent Z| (lambda ((x |Z|)) (= x 5))))))))))
   :named |Goal|))
 (check-sat)
 (exit)

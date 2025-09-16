@@ -83,7 +83,8 @@ inline const string POGTranslations::assertCommand(const string &formula,
 
 inline const string POGTranslations::assertGoalCommand(const string &formula) {
   constexpr string_view pattern = R"((assert (!
-  (not {})
+  (not
+{})
   :named |Goal|))
 )";
   return fmt::format(pattern, formula);
@@ -236,7 +237,8 @@ const string POGTranslations::goalScript(int group, int goal) {
   string result;
   const Pred &pred = m_pog.pos.at(group).simpleGoals.at(goal).goal;
   if (!pred.isPureTypingPredicate()) {
-    const string translation = translate(pred);
+    static const unsigned indent = 2u;
+    const string translation = translate(pred, indent);
     const string command = assertGoalCommand(translation);
     result.append(command);
   } else {

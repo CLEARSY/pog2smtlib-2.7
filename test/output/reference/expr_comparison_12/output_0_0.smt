@@ -6,12 +6,9 @@
 (declare-sort P 1)
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
 (define-sort |POW Z| () (P |Z|))
-
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-const wproduct |(Z x Z)|)
-
 (declare-fun |set.product Z Z| (|POW Z| |POW Z|) |POW (Z x Z)|)
 (assert (!
   (forall ((s1 |POW Z|) (s2 |POW Z|))
@@ -35,7 +32,8 @@
   (|set.in (Z x Z)| wproduct (|set.product Z Z| S1 S2))
   :named |Define:lprp:4|))
 (assert (!
-  (not (= vproduct wproduct))
+  (not
+    (= vproduct wproduct))
   :named |Goal|))
 (check-sat)
 (exit)

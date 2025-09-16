@@ -36,7 +36,7 @@ class SmtTranslatorVisitor : public Pred::Visitor, public Expr::Visitor {
  public:
   SmtTranslatorVisitor() = default;
   ~SmtTranslatorVisitor() = default;
-  void reset();
+  void reset(unsigned indent = 0);
   std::string get();
 
   virtual void visitImplication(const Pred &lhs, const Pred &rhs) override;
@@ -127,7 +127,9 @@ class SmtTranslatorVisitor : public Pred::Visitor, public Expr::Visitor {
 
   inline void visitPredicateGuard(const Pred &pred) {
     if (pred.isPureTypingPredicate()) {
-      m_translation.append(smtSymbol(Expr::Visitor::EConstant::TRUE));
+      m_translation.append(
+          fmt::format("{:{}}{}", "", m_indent * 2,
+                      smtSymbol(Expr::Visitor::EConstant::TRUE)));
     } else {
       pred.accept(*this);
     }
@@ -143,6 +145,7 @@ class SmtTranslatorVisitor : public Pred::Visitor, public Expr::Visitor {
     m_translation.append(")");
     m_indent -= 1;
   }
+
   inline void visitNaryPred(const string_view op, const vector<Pred> &vec) {
     m_translation.append(fmt::format("{:{}}({}\n", "", m_indent * 2, op));
     m_indent += 1;
@@ -153,22 +156,22 @@ class SmtTranslatorVisitor : public Pred::Visitor, public Expr::Visitor {
         m_translation.append("\n");
       else
         m_translation.append(")");
+      child += 1;
     }
-    if (child < vec.size()) m_translation.append(")");
     m_indent -= 1;
   }
 };
 
 static SmtTranslatorVisitor translator;
 
-string translate(const Pred &pred) {
-  translator.reset();
+string translate(const Pred &pred, unsigned indent) {
+  translator.reset(indent);
   pred.accept(translator);
   return translator.get();
 }
 
-void SmtTranslatorVisitor::reset() {
-  m_indent = 0;
+void SmtTranslatorVisitor::reset(unsigned indent) {
+  m_indent = indent;
   m_translation.clear();
 }
 
@@ -183,22 +186,26 @@ void SmtTranslatorVisitor::visitEquivalence(const Pred &lhs, const Pred &rhs) {
 }
 
 void SmtTranslatorVisitor::visitNegation(const Pred &p) {
-  m_translation.append(fmt::format("{:{}}({} ", "", m_indent * 2,
+  m_translation.append(fmt::format("{:{}}({}\n", "", m_indent * 2,
                                    smtSymbol(Pred::PKind::Negation)));
+  m_indent += 1;
   visitPredicateGuard(p);
   m_translation.append(")");
+  m_indent -= 1;
 }
 
 void SmtTranslatorVisitor::visitConjunction(const vector<Pred> &vec) {
   if (vec.size() == 0) {
-    m_translation.append(smtSymbol(Pred::PKind::True));
+    m_translation.append(
+        fmt::format("{:{}}{}", "", m_indent * 2, smtSymbol(Pred::PKind::True)));
   } else {
     visitNaryPred(smtSymbol(Pred::PKind::Conjunction), vec);
   }
 }
 void SmtTranslatorVisitor::visitDisjunction(const vector<Pred> &vec) {
   if (vec.size() == 0) {
-    m_translation.append(smtSymbol(Pred::PKind::False));
+    m_translation.append(fmt::format("{:{}}{}", "", m_indent * 2,
+                                     smtSymbol(Pred::PKind::False)));
   } else {
     visitNaryPred(smtSymbol(Pred::PKind::Disjunction), vec);
   }
@@ -206,7 +213,9 @@ void SmtTranslatorVisitor::visitDisjunction(const vector<Pred> &vec) {
 
 void SmtTranslatorVisitor::visitForall(const std::vector<TypedVar> &vars,
                                        const Pred &p) {
-  m_translation.append("(forall (");
+  m_translation.append(fmt::format("{:{}}(forall\n", "", m_indent * 2));
+  m_indent += 1;
+  m_translation.append(fmt::format("{:{}}(", "", m_indent * 2));
   for (auto &v : vars) {
     m_translation.append("(");
     m_translation.append(v.name.show());
@@ -214,14 +223,16 @@ void SmtTranslatorVisitor::visitForall(const std::vector<TypedVar> &vars,
     m_translation.append(symbol(v.type));
     m_translation.append(")");
   }
-  m_translation.push_back(')');
-  m_translation.append(" ");
+  m_translation.append(")\n");
   p.accept(*this);
   m_translation.push_back(')');
+  m_indent -= 1;
 }
 void SmtTranslatorVisitor::visitExists(const std::vector<TypedVar> &vars,
                                        const Pred &p) {
-  m_translation.append("(exists (");
+  m_translation.append(fmt::format("{:{}}(exists\n", "", m_indent * 2));
+  m_indent += 1;
+  m_translation.append(fmt::format("{:{}}(", "", m_indent * 2));
   for (auto &v : vars) {
     m_translation.append("(");
     m_translation.append(v.name.show());
@@ -229,17 +240,19 @@ void SmtTranslatorVisitor::visitExists(const std::vector<TypedVar> &vars,
     m_translation.append(symbol(v.type));
     m_translation.append(")");
   }
-  m_translation.push_back(')');
-  m_translation.append(" ");
+  m_translation.append(")\n");
   p.accept(*this);
   m_translation.push_back(')');
+  m_indent -= 1;
 }
 
 void SmtTranslatorVisitor::visitTrue() {
-  m_translation.append(smtSymbol(Pred::PKind::True));
+  m_translation.append(
+      fmt::format("{:{}}{}", "", m_indent * 2, smtSymbol(Pred::PKind::True)));
 }
 void SmtTranslatorVisitor::visitFalse() {
-  m_translation.append(smtSymbol(Pred::PKind::False));
+  m_translation.append(
+      fmt::format("{:{}}{}", "", m_indent * 2, smtSymbol(Pred::PKind::False)));
 }
 
 void SmtTranslatorVisitor::visitExprComparison(Pred::ComparisonOp op,
@@ -258,9 +271,7 @@ void SmtTranslatorVisitor::visitExprComparison(Pred::ComparisonOp op,
       smtOp = smtSymbol(op);
       break;
   }
-  m_translation.push_back('(');
-  m_translation.append(smtOp);
-  m_translation.push_back(' ');
+  m_translation.append(fmt::format("{:{}}({} ", "", m_indent * 2, smtOp));
   lhs.accept(*this);
   m_translation.push_back(' ');
   rhs.accept(*this);

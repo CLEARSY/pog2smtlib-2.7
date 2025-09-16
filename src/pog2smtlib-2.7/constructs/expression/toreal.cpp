@@ -22,8 +22,8 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(define-fun {0} ((x {1})) {2} (to_real x))
+static constexpr std::string_view SCRIPT =
+    R"((define-fun {0} ((x {1})) {2} (to_real x))
 )";
 
 ToReal::ToReal() {

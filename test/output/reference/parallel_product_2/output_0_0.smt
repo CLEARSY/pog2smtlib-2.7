@@ -7,11 +7,8 @@
 (declare-sort P 1)
 (define-sort |POW ((Z x Z) x (Z x Z))| () (P |((Z x Z) x (Z x Z))|))
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
-
 (declare-fun |set.in ((Z x Z) x (Z x Z))| (|((Z x Z) x (Z x Z))| |POW ((Z x Z) x (Z x Z))|) Bool)
-
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
-
 (define-sort |? ((Z x Z) x (Z x Z))| () (-> |((Z x Z) x (Z x Z))| Bool))
 (declare-const |set.intent ((Z x Z) x (Z x Z))| (-> |? ((Z x Z) x (Z x Z))| |POW ((Z x Z) x (Z x Z))|))
 (assert (!
@@ -20,7 +17,6 @@
       (= (|set.in ((Z x Z) x (Z x Z))| x (|set.intent ((Z x Z) x (Z x Z))| p))
          (p x))))
   :named |ax:set.in.intent ((Z x Z) x (Z x Z))|))
-
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -29,16 +25,12 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
-
 (assert (!
   (forall ((s |POW ((Z x Z) x (Z x Z))|) (t |POW ((Z x Z) x (Z x Z))|))
     (=
       (= s t)
-      (forall ((e |((Z x Z) x (Z x Z))|)) (= (|set.in ((Z x Z) x (Z x Z))| e s) (|set.in ((Z x Z) x (Z x Z))| e t)))
-    )
-  )
+      (forall ((e |((Z x Z) x (Z x Z))|)) (= (|set.in ((Z x Z) x (Z x Z))| e s) (|set.in ((Z x Z) x (Z x Z))| e t)))))
   :named |ax.set.eq ((Z x Z) x (Z x Z))|))
-
 (declare-fun |parallelproduct Z Z Z Z| (|POW (Z x Z)| |POW (Z x Z)|) |POW ((Z x Z) x (Z x Z))|)
 (assert (!
   (forall ((R1 |POW (Z x Z)|) (R2 |POW (Z x Z)|) (p |((Z x Z) x (Z x Z))|))
@@ -51,7 +43,8 @@
   )
   :named |ax.set.in.parallelproduct (((Z x Z) x Z) x Z)|))
 (assert (!
-  (not (= (|parallelproduct Z Z Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 0 1)))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 7 10))))) (|set.intent ((Z x Z) x (Z x Z))| (lambda ((x |((Z x Z) x (Z x Z))|)) (= x (maplet (maplet 0 7) (maplet 1 10)))))))
+  (not
+    (= (|parallelproduct Z Z Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 0 1)))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 7 10))))) (|set.intent ((Z x Z) x (Z x Z))| (lambda ((x |((Z x Z) x (Z x Z))|)) (= x (maplet (maplet 0 7) (maplet 1 10)))))))
   :named |Goal|))
 (check-sat)
 (exit)

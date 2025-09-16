@@ -22,8 +22,7 @@
 
 namespace BConstruct::Expression {
 
-static constexpr std::string_view SCRIPT = R"(
-(declare-fun {0} ({1}) {2})
+static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
 (assert (!
   (= ({0} |seq.empty {3}|) |seq.empty {6}|)
   :named |ax.generalized.concatenation.empty {6}|

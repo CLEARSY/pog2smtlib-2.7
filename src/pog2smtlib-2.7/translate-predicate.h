@@ -26,6 +26,6 @@ class Pred;
  * occurring in the formula.
  * @see translate(const std::unordered_set<MonomorphizedOperator> &)
  */
-extern std::string translate(const Pred& pred);
+extern std::string translate(const Pred& pred, unsigned indent = 0);
 
 #endif  // TRANSLATE_PREDICATE_H

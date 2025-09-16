@@ -9,32 +9,23 @@
 (define-sort |POW Z| () (P |Z|))
 (define-sort |POW ((REAL x REAL) x Z)| () (P |((REAL x REAL) x Z)|))
 (define-sort |POW (REAL x REAL)| () (P |(REAL x REAL)|))
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-
 (declare-fun |set.in ((REAL x REAL) x Z)| (|((REAL x REAL) x Z)| |POW ((REAL x REAL) x Z)|) Bool)
-
 (declare-fun |set.in (REAL x REAL)| (|(REAL x REAL)| |POW (REAL x REAL)|) Bool)
 (define-sort |POW POW ((REAL x REAL) x Z)| () (P |POW ((REAL x REAL) x Z)|))
-
 (declare-fun |rel.range (REAL x REAL) Z| (|POW ((REAL x REAL) x Z)|) |POW Z|)
 (assert (!
   (forall ((r |POW ((REAL x REAL) x Z)|) (e |Z|))
     (= (|set.in Z| e (|rel.range (REAL x REAL) Z| r))
        (exists ((x |(REAL x REAL)|)) (|set.in ((REAL x REAL) x Z)| (maplet x e) r))))
   :named |ax:set.in.range ((REAL x REAL) x Z)|))
-
 (assert (!
   (forall ((s |POW (REAL x REAL)|) (t |POW (REAL x REAL)|))
     (=
       (= s t)
-      (forall ((e |(REAL x REAL)|)) (= (|set.in (REAL x REAL)| e s) (|set.in (REAL x REAL)| e t)))
-    )
-  )
+      (forall ((e |(REAL x REAL)|)) (= (|set.in (REAL x REAL)| e s) (|set.in (REAL x REAL)| e t)))))
   :named |ax.set.eq (REAL x REAL)|))
-
 (declare-fun |set.in POW ((REAL x REAL) x Z)| (|POW ((REAL x REAL) x Z)| |POW POW ((REAL x REAL) x Z)|) Bool)
-
 (declare-fun |surjections (REAL x REAL) Z| (|POW (REAL x REAL)| |POW Z|) |POW POW ((REAL x REAL) x Z)|)
 (assert (!
   (forall ((X |POW (REAL x REAL)|) (Y |POW Z|))
@@ -43,7 +34,6 @@
          (= (|rel.range (REAL x REAL) Z| f) Y)
       )))
   :named |ax:set.in.surjections ((REAL x REAL) x Z)|))
-
 (declare-fun |injections (REAL x REAL) Z| (|POW (REAL x REAL)| |POW Z|) |POW POW ((REAL x REAL) x Z)|)
 (assert (!
   (forall ((X |POW (REAL x REAL)|) (Y |POW Z|) (f |POW ((REAL x REAL) x Z)|))
@@ -53,16 +43,13 @@
               (= (fst p1) (fst p2))))))
   :named |ax:set.in.injections ((REAL x REAL) x Z)|))
 (define-sort |POW POW (REAL x REAL)| () (P |POW (REAL x REAL)|))
-
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
-
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
-
 (declare-fun |bijections (REAL x REAL) Z| (|POW (REAL x REAL)| |POW Z|) |POW POW ((REAL x REAL) x Z)|)
 (assert (!
   (forall ((X |POW (REAL x REAL)|) (Y |POW Z|))
@@ -80,10 +67,8 @@
       )
     )
     :named |ax.set.subseteq (REAL x REAL)|))
-
 (declare-fun |set.in POW (REAL x REAL)| (|POW (REAL x REAL)| |POW POW (REAL x REAL)|) Bool)
 (define-sort |POW REAL| () (P |REAL|))
-
 (declare-fun |card (REAL x REAL)| (|POW (REAL x REAL)|) Cardinals)
 (assert (!
   (forall ((s |POW (REAL x REAL)|))
@@ -91,7 +76,6 @@
         (exists ((f |POW ((REAL x REAL) x Z)|))
           (|set.in POW ((REAL x REAL) x Z)| f (|bijections (REAL x REAL) Z| s (|interval| 1 (Value (|card (REAL x REAL)| s))))))))
   :named |ax.card.definition (REAL x REAL)|))
-
 (declare-fun |sub-sets (REAL x REAL)| (|POW (REAL x REAL)|) |POW POW (REAL x REAL)|)
 (assert (!
   (forall ((s |POW (REAL x REAL)|) (t |POW (REAL x REAL)|))
@@ -99,9 +83,7 @@
       (|set.in POW (REAL x REAL)| s (|sub-sets (REAL x REAL)| t))
       (|set.subseteq (REAL x REAL)| s t)))
   :named |ax.sub-sets (REAL x REAL)|))
-
 (declare-fun |set.in REAL| (|REAL| |POW REAL|) Bool)
-
 (declare-fun |finite sub-sets (REAL x REAL)| (|POW (REAL x REAL)|) |POW POW (REAL x REAL)|)
 (assert (!
   (forall ((s |POW (REAL x REAL)|) (t |POW (REAL x REAL)|))
@@ -110,7 +92,6 @@
          (|set.in POW (REAL x REAL)| s (|sub-sets (REAL x REAL)| t))
          (not (= (|card (REAL x REAL)| s) Infinite)))))
   :named |ax.finite sub-sets (REAL x REAL)|))
-
 (define-sort |? (REAL x REAL)| () (-> |(REAL x REAL)| Bool))
 (declare-const |set.intent (REAL x REAL)| (-> |? (REAL x REAL)| |POW (REAL x REAL)|))
 (assert (!
@@ -119,7 +100,6 @@
       (= (|set.in (REAL x REAL)| x (|set.intent (REAL x REAL)| p))
          (p x))))
   :named |ax:set.in.intent (REAL x REAL)|))
-
 (define-sort |? REAL| () (-> |REAL| Bool))
 (declare-const |set.intent REAL| (-> |? REAL| |POW REAL|))
 (assert (!
@@ -129,13 +109,12 @@
          (p x))))
   :named |ax:set.in.intent REAL|))
 (assert (!
-  (not (|set.in POW (REAL x REAL)| (|set.intent (REAL x REAL)| (lambda ((x |(REAL x REAL)|)) (and
-(|set.in REAL| (fst x) (|set.intent REAL| (lambda ((x |REAL|)) (= x 1.0))))
-(|set.in REAL| (snd x) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 3.0)(= x 4.0)))))
-))) (|finite sub-sets (REAL x REAL)| (|set.intent (REAL x REAL)| (lambda ((x |(REAL x REAL)|)) (and
-(|set.in REAL| (fst x) (|set.intent REAL| (lambda ((x |REAL|)) (= x 1.0))))
-(|set.in REAL| (snd x) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 3.0)(= x 4.0)))))
-))))))
+  (not
+    (|set.in POW (REAL x REAL)| (|set.intent (REAL x REAL)| (lambda ((x |(REAL x REAL)|))     (and
+      (|set.in REAL| (fst x) (|set.intent REAL| (lambda ((x |REAL|)) (= x 1.0))))
+      (|set.in REAL| (snd x) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 3.0)(= x 4.0)))))))) (|finite sub-sets (REAL x REAL)| (|set.intent (REAL x REAL)| (lambda ((x |(REAL x REAL)|))     (and
+      (|set.in REAL| (fst x) (|set.intent REAL| (lambda ((x |REAL|)) (= x 1.0))))
+      (|set.in REAL| (snd x) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 3.0)(= x 4.0)))))))))))
   :named |Goal|))
 (check-sat)
 (exit)
