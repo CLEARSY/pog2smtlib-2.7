@@ -7,7 +7,7 @@ See terms at https://creativecommons.org/licenses/by-nc/4.0/
 Copyright © CLEARSY 2022
 -->
 <Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
-    <Define name="B definitions" hash="17219133420564441872">
+    <Define name="B definitions">
         <Exp_Comparison op="=">
             <Id value="NAT" typref="0" />
             <Binary_Exp op=".." typref="0">
@@ -23,7 +23,7 @@ Copyright © CLEARSY 2022
             </Binary_Exp>
         </Exp_Comparison>
     </Define>
-    <Define name="ctx" hash="4438972575910939309">
+    <Define name="ctx">
         <Exp_Comparison op="=">
             <Id value="s5" typref="0" />
             <Binary_Exp op=".." typref="0">
@@ -32,7 +32,7 @@ Copyright © CLEARSY 2022
             </Binary_Exp>
         </Exp_Comparison>
     </Define>
-    <Define name="inv" hash="16309898624914160839">
+    <Define name="inv">
         <Exp_Comparison op=":">
             <Id value="s13" typref="1" />
             <Id value="s5" typref="0" />
@@ -42,7 +42,7 @@ Copyright © CLEARSY 2022
             <Id value="s5" typref="0" />
         </Exp_Comparison>
     </Define>
-    <Proof_Obligation goalHash="14537439065516012340">
+    <Proof_Obligation>
         <Tag>s18</Tag>
         <Definition name="B definitions" />
         <Definition name="ctx" />

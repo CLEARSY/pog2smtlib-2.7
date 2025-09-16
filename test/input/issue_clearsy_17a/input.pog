@@ -1,128 +1,128 @@
 <Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
     <Define name="B definitions">
         <Exp_Comparison op="=">
-            <Id value="NAT" typref="0"/>
+            <Id value="NAT" typref="0" />
             <Binary_Exp op=".." typref="0">
-                <Integer_Literal value="0" typref="1"/>
-                <Id value="MAXINT" typref="1"/>
+                <Integer_Literal value="0" typref="1" />
+                <Id value="MAXINT" typref="1" />
             </Binary_Exp>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="INT" typref="0"/>
+            <Id value="INT" typref="0" />
             <Binary_Exp op=".." typref="0">
-                <Id value="MININT" typref="1"/>
-                <Id value="MAXINT" typref="1"/>
+                <Id value="MININT" typref="1" />
+                <Id value="MAXINT" typref="1" />
             </Binary_Exp>
         </Exp_Comparison>
     </Define>
     <Define name="lprp">
         <Exp_Comparison op="=">
-            <Id value="struct1" typref="2"/>
+            <Id value="struct1" typref="2" />
             <Struct typref="2">
                 <Record_Item label="x1">
-                    <Id value="INTEGER" typref="0"/>
+                    <Id value="INTEGER" typref="0" />
                 </Record_Item>
                 <Record_Item label="y1">
-                    <Id value="INTEGER" typref="0"/>
+                    <Id value="INTEGER" typref="0" />
                 </Record_Item>
             </Struct>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="struct2" typref="3"/>
+            <Id value="struct2" typref="3" />
             <Struct typref="3">
                 <Record_Item label="x2">
-                    <Id value="INTEGER" typref="0"/>
+                    <Id value="INTEGER" typref="0" />
                 </Record_Item>
                 <Record_Item label="y2">
-                    <Id value="INTEGER" typref="0"/>
+                    <Id value="INTEGER" typref="0" />
                 </Record_Item>
             </Struct>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="record11" typref="4"/>
+            <Id value="record11" typref="4" />
             <Record typref="4">
                 <Record_Item label="x1">
-                    <Integer_Literal value="1" typref="1"/>
+                    <Integer_Literal value="1" typref="1" />
                 </Record_Item>
                 <Record_Item label="y1">
-                    <Integer_Literal value="1" typref="1"/>
+                    <Integer_Literal value="1" typref="1" />
                 </Record_Item>
             </Record>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="record12" typref="4"/>
+            <Id value="record12" typref="4" />
             <Record typref="4">
                 <Record_Item label="x1">
-                    <Integer_Literal value="1" typref="1"/>
+                    <Integer_Literal value="1" typref="1" />
                 </Record_Item>
                 <Record_Item label="y1">
-                    <Integer_Literal value="1" typref="1"/>
+                    <Integer_Literal value="1" typref="1" />
                 </Record_Item>
             </Record>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="record21" typref="5"/>
+            <Id value="record21" typref="5" />
             <Record typref="5">
                 <Record_Item label="x2">
-                    <Integer_Literal value="1" typref="1"/>
+                    <Integer_Literal value="1" typref="1" />
                 </Record_Item>
                 <Record_Item label="y2">
-                    <Integer_Literal value="1" typref="1"/>
+                    <Integer_Literal value="1" typref="1" />
                 </Record_Item>
             </Record>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="record22" typref="5"/>
+            <Id value="record22" typref="5" />
             <Record typref="5">
                 <Record_Item label="x2">
-                    <Integer_Literal value="1" typref="1"/>
+                    <Integer_Literal value="1" typref="1" />
                 </Record_Item>
                 <Record_Item label="y2">
-                    <Integer_Literal value="1" typref="1"/>
+                    <Integer_Literal value="1" typref="1" />
                 </Record_Item>
             </Record>
         </Exp_Comparison>
     </Define>
     <Define name="ass">
         <Exp_Comparison op="=">
-            <Id value="record11" typref="4"/>
-            <Id value="record12" typref="4"/>
+            <Id value="record11" typref="4" />
+            <Id value="record12" typref="4" />
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="record21" typref="5"/>
-            <Id value="record22" typref="5"/>
+            <Id value="record21" typref="5" />
+            <Id value="record22" typref="5" />
         </Exp_Comparison>
     </Define>
     <Proof_Obligation>
         <Tag>AssertionLemmas</Tag>
-        <Definition name="B definitions"/>
-        <Definition name="lprp"/>
+        <Definition name="B definitions" />
+        <Definition name="lprp" />
         <Simple_Goal>
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op="=">
-                    <Id value="record11" typref="4"/>
-                    <Id value="record12" typref="4"/>
+                    <Id value="record11" typref="4" />
+                    <Id value="record12" typref="4" />
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
     </Proof_Obligation>
     <Proof_Obligation>
         <Tag>AssertionLemmas</Tag>
-        <Definition name="B definitions"/>
-        <Definition name="lprp"/>
+        <Definition name="B definitions" />
+        <Definition name="lprp" />
         <Hypothesis>
             <Exp_Comparison op="=">
-                <Id value="record11" typref="4"/>
-                <Id value="record12" typref="4"/>
+                <Id value="record11" typref="4" />
+                <Id value="record12" typref="4" />
             </Exp_Comparison>
         </Hypothesis>
         <Simple_Goal>
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op="=">
-                    <Id value="record21" typref="5"/>
-                    <Id value="record22" typref="5"/>
+                    <Id value="record21" typref="5" />
+                    <Id value="record22" typref="5" />
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
@@ -130,20 +130,20 @@
     <TypeInfos>
         <Type id="0">
             <Unary_Exp op="POW">
-                <Id value="INTEGER"/>
+                <Id value="INTEGER" />
             </Unary_Exp>
         </Type>
         <Type id="1">
-            <Id value="INTEGER"/>
+            <Id value="INTEGER" />
         </Type>
         <Type id="2">
             <Unary_Exp op="POW">
                 <Struct>
                     <Record_Item label="x1">
-                        <Id value="INTEGER"/>
+                        <Id value="INTEGER" />
                     </Record_Item>
                     <Record_Item label="y1">
-                        <Id value="INTEGER"/>
+                        <Id value="INTEGER" />
                     </Record_Item>
                 </Struct>
             </Unary_Exp>
@@ -152,10 +152,10 @@
             <Unary_Exp op="POW">
                 <Struct>
                     <Record_Item label="x2">
-                        <Id value="INTEGER"/>
+                        <Id value="INTEGER" />
                     </Record_Item>
                     <Record_Item label="y2">
-                        <Id value="INTEGER"/>
+                        <Id value="INTEGER" />
                     </Record_Item>
                 </Struct>
             </Unary_Exp>
@@ -163,20 +163,20 @@
         <Type id="4">
             <Struct>
                 <Record_Item label="x1">
-                    <Id value="INTEGER"/>
+                    <Id value="INTEGER" />
                 </Record_Item>
                 <Record_Item label="y1">
-                    <Id value="INTEGER"/>
+                    <Id value="INTEGER" />
                 </Record_Item>
             </Struct>
         </Type>
         <Type id="5">
             <Struct>
                 <Record_Item label="x2">
-                    <Id value="INTEGER"/>
+                    <Id value="INTEGER" />
                 </Record_Item>
                 <Record_Item label="y2">
-                    <Id value="INTEGER"/>
+                    <Id value="INTEGER" />
                 </Record_Item>
             </Struct>
         </Type>

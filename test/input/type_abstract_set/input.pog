@@ -1,83 +1,83 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
-    <Define name="B definitions" hash="7128875304803749033">
+    <Define name="B definitions">
         <Exp_Comparison op="=">
-            <Id value="NAT" richtypref="3"/>
+            <Id value="NAT" richtypref="3" />
             <Binary_Exp op=".." richtypref="3">
-                <Integer_Literal value="0" richtypref="1"/>
-                <Id value="MAXINT" richtypref="1"/>
+                <Integer_Literal value="0" richtypref="1" />
+                <Id value="MAXINT" richtypref="1" />
             </Binary_Exp>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="INT" richtypref="3"/>
+            <Id value="INT" richtypref="3" />
             <Binary_Exp op=".." richtypref="3">
-                <Id value="MININT" richtypref="1"/>
-                <Id value="MAXINT" richtypref="1"/>
+                <Id value="MININT" richtypref="1" />
+                <Id value="MAXINT" richtypref="1" />
             </Binary_Exp>
         </Exp_Comparison>
     </Define>
-    <Define name="ctx" hash="0"/>
-    <Define name="seext" hash="0"/>
-    <Define name="lprp" hash="3355831595478349318">
+    <Define name="ctx" />
+    <Define name="seext" />
+    <Define name="lprp">
         <Set>
-            <Id value="AS" richtypref="2"/>
+            <Id value="AS" richtypref="2" />
         </Set>
         <Exp_Comparison op=":">
-            <Id value="co1" tag="type_abstract_set.bxml:1:3:1:1:1" richtypref="0"/>
-            <Id value="AS" tag="type_abstract_set.bxml:1:3:1:1:2" richtypref="2"/>
+            <Id value="co1" richtypref="0" />
+            <Id value="AS" richtypref="2" />
         </Exp_Comparison>2
         <Exp_Comparison op=":">
-            <Id value="co2" tag="type_abstract_set.bxml:1:3:1:2:1" richtypref="1"/>
-            <Id value="INTEGER" tag="type_abstract_set.bxml:1:3:1:2:2" richtypref="3"/>
+            <Id value="co2" richtypref="1" />
+            <Id value="INTEGER" richtypref="3" />
         </Exp_Comparison>
     </Define>
-    <Define name="inprp" hash="0"/>
-    <Define name="inext" hash="0"/>
-    <Define name="inv" hash="0"/>
-    <Define name="ass" hash="7476669894350903234">
+    <Define name="inprp" />
+    <Define name="inext" />
+    <Define name="inv" />
+    <Define name="ass">
         <Exp_Comparison op="=">
-            <Id value="co2" tag="type_abstract_set.bxml:1:5:1:1" richtypref="1"/>
-            <Integer_Literal value="0" tag="type_abstract_set.bxml:1:5:1:2" richtypref="1"/>
+            <Id value="co2" richtypref="1" />
+            <Integer_Literal value="0" richtypref="1" />
         </Exp_Comparison>
     </Define>
-    <Define name="cst" hash="0"/>
-    <Define name="sets" hash="4045090334473377363">
+    <Define name="cst" />
+    <Define name="sets">
         <Set>
-            <Id value="AS" richtypref="2"/>
+            <Id value="AS" richtypref="2" />
         </Set>
     </Define>
-    <Proof_Obligation goalHash="7476263063343186365">
+    <Proof_Obligation>
         <Tag>AssertionLemmas</Tag>
-        <Definition name="B definitions"/>
-        <Definition name="ctx"/>
-        <Definition name="cst"/>
-        <Definition name="lprp"/>
-        <Definition name="inprp"/>
-        <Definition name="inext"/>
-        <Definition name="seext"/>
-        <Definition name="inv"/>
+        <Definition name="B definitions" />
+        <Definition name="ctx" />
+        <Definition name="cst" />
+        <Definition name="lprp" />
+        <Definition name="inprp" />
+        <Definition name="inext" />
+        <Definition name="seext" />
+        <Definition name="inv" />
         <Simple_Goal>
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op="=">
-                    <Id value="co2" tag="type_abstract_set.bxml:1:5:1:1" richtypref="1"/>
-                    <Integer_Literal value="0" tag="type_abstract_set.bxml:1:5:1:2" richtypref="1"/>
+                    <Id value="co2" richtypref="1" />
+                    <Integer_Literal value="0" richtypref="1" />
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
     </Proof_Obligation>
     <RichTypesInfo>
         <RichType id="0">
-            <AbstractSet id="AS"/>
+            <AbstractSet id="AS" />
         </RichType>
         <RichType id="1">
-            <INTEGER/>
+            <INTEGER />
         </RichType>
         <RichType id="2">
-            <PowerSet arg="0"/>
+            <PowerSet arg="0" />
         </RichType>
         <RichType id="3">
-            <PowerSet arg="1"/>
+            <PowerSet arg="1" />
         </RichType>
     </RichTypesInfo>
 </Proof_Obligations>

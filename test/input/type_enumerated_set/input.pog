@@ -1,73 +1,73 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
-    <Define name="B definitions" hash="7128875304803749033">
+    <Define name="B definitions">
         <Exp_Comparison op="=">
-            <Id value="NAT" richtypref="3"/>
+            <Id value="NAT" richtypref="3" />
             <Binary_Exp op=".." richtypref="3">
-                <Integer_Literal value="0" richtypref="2"/>
-                <Id value="MAXINT" richtypref="2"/>
+                <Integer_Literal value="0" richtypref="2" />
+                <Id value="MAXINT" richtypref="2" />
             </Binary_Exp>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="INT" richtypref="3"/>
+            <Id value="INT" richtypref="3" />
             <Binary_Exp op=".." richtypref="3">
-                <Id value="MININT" richtypref="2"/>
-                <Id value="MAXINT" richtypref="2"/>
+                <Id value="MININT" richtypref="2" />
+                <Id value="MAXINT" richtypref="2" />
             </Binary_Exp>
         </Exp_Comparison>
     </Define>
-    <Define name="ctx" hash="0"/>
-    <Define name="seext" hash="0"/>
-    <Define name="lprp" hash="12874081713322579320">
+    <Define name="ctx" />
+    <Define name="seext" />
+    <Define name="lprp">
         <Set>
-            <Id value="ES" richtypref="1"/>
+            <Id value="ES" richtypref="1" />
             <Enumerated_Values>
-                <Id value="e0" richtypref="0"/>
-                <Id value="e1" richtypref="0"/>
-                <Id value="e2" richtypref="0"/>
+                <Id value="e0" richtypref="0" />
+                <Id value="e1" richtypref="0" />
+                <Id value="e2" richtypref="0" />
             </Enumerated_Values>
         </Set>
         <Exp_Comparison op=":">
-            <Id value="co" richtypref="0"/>
-            <Id value="ES" richtypref="1"/>
+            <Id value="co" richtypref="0" />
+            <Id value="ES" richtypref="1" />
         </Exp_Comparison>
     </Define>
-    <Define name="inprp" hash="0"/>
-    <Define name="inext" hash="0"/>
-    <Define name="inv" hash="0"/>
-    <Define name="ass" hash="16274824893574105545">
+    <Define name="inprp" />
+    <Define name="inext" />
+    <Define name="inv" />
+    <Define name="ass">
         <Exp_Comparison op="=">
-            <Id value="co" tag="type_enumerated_set.bxml:1:5:1:1" richtypref="0"/>
-            <Id value="e0" tag="type_enumerated_set.bxml:1:5:1:2" richtypref="0"/>
+            <Id value="co" richtypref="0" />
+            <Id value="e0" richtypref="0" />
         </Exp_Comparison>
     </Define>
-    <Define name="cst" hash="0"/>
-    <Define name="sets" hash="8474032265063288935">
+    <Define name="cst" />
+    <Define name="sets">
         <Set>
-            <Id value="ES" richtypref="1"/>
+            <Id value="ES" richtypref="1" />
             <Enumerated_Values>
-                <Id value="e0" richtypref="0"/>
-                <Id value="e1" richtypref="0"/>
-                <Id value="e2" richtypref="0"/>
+                <Id value="e0" richtypref="0" />
+                <Id value="e1" richtypref="0" />
+                <Id value="e2" richtypref="0" />
             </Enumerated_Values>
         </Set>
     </Define>
-    <Proof_Obligation goalHash="17874674968206238962">
+    <Proof_Obligation>
         <Tag>AssertionLemmas</Tag>
-        <Definition name="B definitions"/>
-        <Definition name="ctx"/>
-        <Definition name="cst"/>
-        <Definition name="lprp"/>
-        <Definition name="inprp"/>
-        <Definition name="inext"/>
-        <Definition name="seext"/>
-        <Definition name="inv"/>
+        <Definition name="B definitions" />
+        <Definition name="ctx" />
+        <Definition name="cst" />
+        <Definition name="lprp" />
+        <Definition name="inprp" />
+        <Definition name="inext" />
+        <Definition name="seext" />
+        <Definition name="inv" />
         <Simple_Goal>
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op="=">
-                    <Id value="co" tag="type_enumerated_set.bxml:1:5:1:1" richtypref="0"/>
-                    <Id value="e0" tag="type_enumerated_set.bxml:1:5:1:2" richtypref="0"/>
+                    <Id value="co" richtypref="0" />
+                    <Id value="e0" richtypref="0" />
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>
@@ -75,19 +75,19 @@
     <RichTypesInfo>
         <RichType id="0">
             <EnumeratedSet id="ES">
-                <EnumeratedValue id="e0"/>
-                <EnumeratedValue id="e1"/>
-                <EnumeratedValue id="e2"/>
+                <EnumeratedValue id="e0" />
+                <EnumeratedValue id="e1" />
+                <EnumeratedValue id="e2" />
             </EnumeratedSet>
         </RichType>
         <RichType id="1">
-            <PowerSet arg="0"/>
+            <PowerSet arg="0" />
         </RichType>
         <RichType id="2">
-            <INTEGER/>
+            <INTEGER />
         </RichType>
         <RichType id="3">
-            <PowerSet arg="2"/>
+            <PowerSet arg="2" />
         </RichType>
     </RichTypesInfo>
 </Proof_Obligations>

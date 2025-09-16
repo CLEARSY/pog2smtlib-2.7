@@ -1,59 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
-    <Define name="B definitions" hash="7128875304803749033">
+    <Define name="B definitions">
         <Exp_Comparison op="=">
-            <Id value="NAT" typref="0"/>
+            <Id value="NAT" typref="0" />
             <Binary_Exp op=".." typref="0">
-                <Integer_Literal value="0" typref="1"/>
-                <Id value="MAXINT" typref="1"/>
+                <Integer_Literal value="0" typref="1" />
+                <Id value="MAXINT" typref="1" />
             </Binary_Exp>
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="INT" typref="0"/>
+            <Id value="INT" typref="0" />
             <Binary_Exp op=".." typref="0">
-                <Id value="MININT" typref="1"/>
-                <Id value="MAXINT" typref="1"/>
+                <Id value="MININT" typref="1" />
+                <Id value="MAXINT" typref="1" />
             </Binary_Exp>
         </Exp_Comparison>
     </Define>
-    <Define name="ctx" hash="0"/>
-    <Define name="seext" hash="0"/>
-    <Define name="lprp" hash="862487301452871135">
+    <Define name="ctx" />
+    <Define name="seext" />
+    <Define name="lprp">
         <Exp_Comparison op=":">
-            <Id value="co" typref="2" tag="building_set_bool.bxml:1:2:1:1"/>
-            <Id value="BOOL" typref="3" tag="building_set_bool.bxml:1:2:1:2"/>
+            <Id value="co" typref="2" />
+            <Id value="BOOL" typref="3" />
         </Exp_Comparison>
     </Define>
-    <Define name="inprp" hash="0"/>
-    <Define name="inext" hash="0"/>
-    <Define name="inv" hash="0"/>
-    <Define name="ass" hash="788368434646698796">
+    <Define name="inprp" />
+    <Define name="inext" />
+    <Define name="inv" />
+    <Define name="ass">
         <Unary_Pred op="not">
             <Exp_Comparison op=":">
-                <Id value="co" typref="2" tag="building_set_bool.bxml:1:4:1:1"/>
-                <Id value="BOOL" typref="3" tag="building_set_bool.bxml:1:4:1:2"/>
+                <Id value="co" typref="2" />
+                <Id value="BOOL" typref="3" />
             </Exp_Comparison>
         </Unary_Pred>
     </Define>
-    <Define name="cst" hash="0"/>
-    <Define name="sets" hash="0"/>
-    <Proof_Obligation goalHash="788366873985711887">
+    <Define name="cst" />
+    <Define name="sets" />
+    <Proof_Obligation>
         <Tag>AssertionLemmas</Tag>
-        <Definition name="B definitions"/>
-        <Definition name="ctx"/>
-        <Definition name="cst"/>
-        <Definition name="lprp"/>
-        <Definition name="inprp"/>
-        <Definition name="inext"/>
-        <Definition name="seext"/>
-        <Definition name="inv"/>
+        <Definition name="B definitions" />
+        <Definition name="ctx" />
+        <Definition name="cst" />
+        <Definition name="lprp" />
+        <Definition name="inprp" />
+        <Definition name="inext" />
+        <Definition name="seext" />
+        <Definition name="inv" />
         <Simple_Goal>
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Unary_Pred op="not">
                     <Exp_Comparison op=":">
-                        <Id value="co" typref="2" tag="building_set_bool.bxml:1:4:1:1"/>
-                        <Id value="BOOL" typref="3" tag="building_set_bool.bxml:1:4:1:2"/>
+                        <Id value="co" typref="2" />
+                        <Id value="BOOL" typref="3" />
                     </Exp_Comparison>
                 </Unary_Pred>
             </Goal>
@@ -62,18 +62,18 @@
     <TypeInfos>
         <Type id="0">
             <Unary_Exp op="POW">
-                <Id value="INTEGER"/>
+                <Id value="INTEGER" />
             </Unary_Exp>
         </Type>
         <Type id="1">
-            <Id value="INTEGER"/>
+            <Id value="INTEGER" />
         </Type>
         <Type id="2">
-            <Id value="BOOL"/>
+            <Id value="BOOL" />
         </Type>
         <Type id="3">
             <Unary_Exp op="POW">
-                <Id value="BOOL"/>
+                <Id value="BOOL" />
             </Unary_Exp>
         </Type>
     </TypeInfos>
