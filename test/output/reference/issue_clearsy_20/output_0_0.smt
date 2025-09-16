@@ -1,10 +1,11 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(declare-datatype |ES| ((e0)(e1)(e2)))
-(declare-const co |ES|)
+(define-sort |Z| () Int)
+(declare-const c0 |Z|)
+(declare-const c1 |Z|)
 (assert (!
   (not
-    (= co e0))
+    (= c0 c1))
   :named |Goal|))
 (check-sat)
 (exit)

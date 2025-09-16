@@ -1,12 +1,9 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(declare-sort |AS| 0)
-(declare-sort P 1)
 (define-sort |Z| () Int)
-(define-sort |POW AS| () (P |AS|))
+(declare-sort |AS| 0)
 (declare-const co2 |Z|)
 (declare-const co1 |AS|)
-(declare-const AS |POW AS|)
 (assert (!
   (not
     (= co2 0))

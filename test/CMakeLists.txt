@@ -26,6 +26,7 @@ add_cl_test("issue_clearsy_15")
 add_cl_test("issue_clearsy_16")
 add_cl_test("issue_clearsy_17a")
 add_cl_test("issue_clearsy_17b")
+add_cl_test("issue_clearsy_20")
 add_cl_test("issue_clearsy_23")
 add_cl_test("issue_clearsy_26")
 

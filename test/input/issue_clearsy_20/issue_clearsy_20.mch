@@ -1,0 +1,9 @@
+MACHINE
+    issue_clearsy_20
+CONSTANTS
+    c0, c1
+PROPERTIES
+    c0, c1 : INTEGER*INTEGER
+ASSERTIONS
+    c0 = c1
+END

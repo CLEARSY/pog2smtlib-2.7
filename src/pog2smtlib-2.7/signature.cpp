@@ -22,6 +22,7 @@
 #include <unordered_set>
 using std::unordered_set;
 
+#include "predDesc.h"
 #include "type-utils.h"
 
 class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
@@ -939,10 +940,39 @@ void GetSignatureVisitor::visitRecordAccess(const BType &,
 
 Signature predicateSignature(const Pred &pred) {
   GetSignatureVisitor visitor;
-  pred.accept(visitor);
-  Signature result = visitor.getSignature();
+  Signature result;
+  /*
+  Assuming
+  > COLOR = { red, black }
+  then, consider the following predicates
+  > c0 : COLOR &            // P
+  > c1 : COLOR - { red }    // Q
+  P is a pure typing predicate, whereas Q is not.
+  What are the declarations that are needed for the encoding of each of these in
+  SMT ? For P, one expects >  (declare-datatype |COLOR| ((red)(black))) >
+  (declare-const c0 |COLOR|) For Q, one expects > (declare-datatype |COLOR|
+  ((red)(black))) > (declare-const c1 |COLOR|) > (declare-sort P 1) >
+  (declare-sort |POW COLOR| (P |COLOR|)) > (declare-const |COLOR| |POW COLOR|)
+  > ...
+
+  The case of pure typing predicates may be treated differently so that the
+  generated SMT does not contain useless commands.
+  */
   if (pred.isPureTypingPredicate()) {
+    const Pred::ExprComparison &typingPredicate = pred.toExprComparison();
+    const auto &lhs = typingPredicate.lhs;
+    lhs.accept(visitor);
+    result = visitor.getSignature();
+    /*
+    For the typing predicate
+    > c0, c1 : BOOL * BOOL
+    the maplet operator appears in the signature of the left hand side.
+    It may be removed from the result.
+    */
     result.m_operators.clear();
+  } else {
+    pred.accept(visitor);
+    result = visitor.getSignature();
   }
   return result;
 }
