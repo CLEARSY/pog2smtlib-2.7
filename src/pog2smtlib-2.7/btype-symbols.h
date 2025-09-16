@@ -19,7 +19,8 @@
 
 class BType;
 
-extern std::string symbol(const BType&);
-extern std::string symbolInner(const BType&);
+extern std::string symbol(const BType &);
+extern std::string symbolInner(const BType &);
+extern std::string symbolRecord(const BType &);
 
 #endif  // BTYPE_SYMBOL_H

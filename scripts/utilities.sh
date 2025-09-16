@@ -5,6 +5,14 @@ export pog2smtlib27_dir=$(readlink -f "$SCRIPT_DIR/..")
 export pog2smtlib27_test_dir="$pog2smtlib27_dir/test"
 
 #
+# renames all files with suffix .po2 to suffix .smt
+#
+function mv_po2_suffix() {
+    find . -type f -name "*.po2" -exec sh -c 'mv "$1" "${1%.po2}.smt"' _ {} \;
+}
+export -f mv_po2_suffix
+
+#
 # tests if two files have equivalent contents (i.e., disregards line breaks and spaces)
 #
 function files_are_equivalent() {
@@ -79,6 +87,7 @@ function update_references() {
 
 export -f update_references
 
+echo "mv_po2_suffix        renames files with .po2 suffix to .smt suffix"
 echo "ls_equivalent        list tests where result is equivalent to reference"
 echo "ls_not_equivalent    list tests where result is not equivalent to reference"
 echo "update_references    replaces reference with equivalent but not identical result"

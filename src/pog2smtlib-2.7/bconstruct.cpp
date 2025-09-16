@@ -737,12 +737,12 @@ string TernaryBType::to_string() const {
                      m_type2->to_string(), m_type3->to_string());
 }
 
-size_t NaryBType::hash_special() const {
+size_t QuaternaryBType::hash_special() const {
   return m_type4->hash_combine(m_type3->hash_combine(m_type2->hash_combine(
       m_type1->hash_combine(std::hash<std::string>{}(std::string(m_label))))));
 }
 
-string NaryBType::to_string() const {
+string QuaternaryBType::to_string() const {
   return fmt::format("{}_<{}, {}, {}, {}>", m_label, m_type1->to_string(),
                      m_type2->to_string(), m_type3->to_string(),
                      m_type4->to_string());

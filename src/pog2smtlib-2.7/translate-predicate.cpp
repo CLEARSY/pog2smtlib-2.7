@@ -850,9 +850,7 @@ void SmtTranslatorVisitor::visitRecord(
     const BType &type, const std::vector<std::string> &,
     const std::vector<std::pair<std::string, Expr>> &fds) {
   m_translation.push_back('(');
-  m_translation.append("|record ");
-  m_translation.append(symbolInner(type));
-  m_translation.append("| ");
+  m_translation.append(symbolRecord(type));
   bool first = true;
   for (const auto &fd : fds) {
     if (first) {

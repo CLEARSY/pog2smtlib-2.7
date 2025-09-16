@@ -36,7 +36,6 @@ class BTypeSymbolVisitor : public BType::Visitor {
 
   std::string m_symbol;
 
- private:
   static const std::string INTEGER;
   static const std::string BOOLEAN;
   static const std::string FLOAT;
@@ -76,8 +75,9 @@ void BTypeSymbolVisitor::visitPowerType(const BType &ty) {
 }
 void BTypeSymbolVisitor::visitRecordType(
     const std::vector<std::pair<std::string, BType>> &fds) {
-  m_symbol += STRUCT + "(";
+  m_symbol += STRUCT;
   bool first = true;
+  m_symbol += "(";
   for (auto &fd : fds) {
     if (!first) {
       m_symbol.append(", ");
@@ -85,8 +85,6 @@ void BTypeSymbolVisitor::visitRecordType(
       first = false;
     }
     m_symbol.append(fd.first);
-    m_symbol.append(" : ");
-    fd.second.accept(*this);
   }
   m_symbol.append(")");
 }
@@ -95,6 +93,15 @@ void BTypeSymbolVisitor::visitAbstractSet(const BType::AbstractSet &t) {
 }
 void BTypeSymbolVisitor::visitEnumeratedSet(const BType::EnumeratedSet &t) {
   m_symbol += t.getName();
+}
+
+std::string symbolRecord(const BType &btype) {
+  if (btype.getKind() != BType::Kind::Struct) {
+    throw std::runtime_error("Expected struct type not found");
+  }
+  std::string symbol = symbolInner(btype);
+  symbol.erase(0, BTypeSymbolVisitor::STRUCT.size());
+  return fmt::format("|rec{}|", symbol);
 }
 
 std::string symbol(const BType &btype) {

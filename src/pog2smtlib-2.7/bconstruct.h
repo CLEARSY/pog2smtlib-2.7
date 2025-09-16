@@ -1038,14 +1038,15 @@ class TernaryBType : public Abstract {
   std::shared_ptr<const BType> m_type3;
 };
 
-class NaryBType : public Abstract {
+class QuaternaryBType : public Abstract {
  public:
-  NaryBType(const BType &t1, const BType &t2, const BType &t3, const BType &t4)
+  QuaternaryBType(const BType &t1, const BType &t2, const BType &t3,
+                  const BType &t4)
       : m_type1(std::make_shared<const BType>(t1)),
         m_type2(std::make_shared<const BType>(t2)),
         m_type3(std::make_shared<const BType>(t3)),
         m_type4(std::make_shared<const BType>(t4)) {}
-  virtual ~NaryBType() = default;
+  virtual ~QuaternaryBType() = default;
 
   virtual std::string to_string() const override;
 
@@ -1515,7 +1516,7 @@ class Direct_Product : public TernaryBType {
   virtual ~Direct_Product() = default;
 };
 
-class Parallel_Product : public NaryBType {
+class Parallel_Product : public QuaternaryBType {
  public:
   explicit Parallel_Product(const BType &, const BType &, const BType &,
                             const BType &);

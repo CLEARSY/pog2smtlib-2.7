@@ -37,7 +37,7 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
 
 Parallel_Product::Parallel_Product(const BType &T, const BType &U,
                                    const BType &V, const BType &W)
-    : NaryBType(T, U, V, W) {
+    : QuaternaryBType(T, U, V, W) {
   const auto TxU = BType::PROD(T, U);
   const auto TxUxV = BType::PROD(TxU, V);
   const auto TxUxVxW = BType::PROD(TxUxV, W);
