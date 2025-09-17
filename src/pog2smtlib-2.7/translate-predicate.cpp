@@ -24,6 +24,7 @@
 #include "cc-compatibility.h"
 #include "expr.h"
 #include "pred.h"
+#include "special-cases.h"
 #include "symbols.h"
 #include "translate-token.h"
 #include "type-utils.h"
@@ -512,6 +513,22 @@ void SmtTranslatorVisitor::visitUnaryExpression(
 void SmtTranslatorVisitor::visitBinaryExpression(
     const BType &type, const std::vector<std::string> &, Expr::BinaryOp op,
     const Expr &lhs, const Expr &rhs) {
+
+  // special case of the application of succ or pred
+  if (isApplicationPredOrSucc(op, lhs, rhs)) {
+    if (isPred(lhs)) {
+      m_translation.append("(- ");
+      rhs.accept(*this);
+      m_translation.append(" 1)");
+      return;
+    }
+    if (isSucc(lhs)) {
+      m_translation.append("(+ ");
+      rhs.accept(*this);
+      m_translation.append(" 1)");
+      return;
+    }
+  }
   switch (op) {
     /* 5.3 Arithmetical Expressions I */
     case Expr::BinaryOp::IAddition:

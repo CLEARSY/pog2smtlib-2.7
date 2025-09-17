@@ -23,6 +23,7 @@ set(POG2SMTLIB27_HEADERS
     pog-translation.h
     signature.h
     smtlib.h
+    special-cases.h
     symbols.h
     translate-token.h
     translate-predicate.h

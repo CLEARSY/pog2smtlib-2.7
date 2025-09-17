@@ -23,6 +23,7 @@
 using std::unordered_set;
 
 #include "predDesc.h"
+#include "special-cases.h"
 #include "type-utils.h"
 
 class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
@@ -562,6 +563,14 @@ void GetSignatureVisitor::visitBinaryExpression(
     const Expr &lhs, const Expr &rhs) {
   SignatureReset(m_signature);
   Signature sig;
+
+  // Special case for application of successor or predecessor
+  if (isApplicationPredOrSucc(op, lhs, rhs)) {
+    rhs.accept(*this);
+    SignatureMoveInto(sig, m_signature);
+    return;
+  }
+
   lhs.accept(*this);
   SignatureMoveInto(sig, m_signature);
   rhs.accept(*this);
