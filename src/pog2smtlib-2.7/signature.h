@@ -142,7 +142,7 @@ template <> struct hash<VarName> {
  */
 typedef struct Data {
   std::shared_ptr<VarName> m_name;
-  std::shared_ptr<const BType> m_type;
+  const BType &m_type;
 
   std::string to_string() const;
   inline bool operator==(const Data &other) const {
