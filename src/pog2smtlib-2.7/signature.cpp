@@ -408,7 +408,8 @@ void GetSignatureVisitor::visitIdent(const BType &type,
     }
   }
   {
-    struct Data data{std::make_shared<VarName>(b), type};
+    struct Data data{std::make_shared<VarName>(b),
+                     std::make_shared<const BType>(type)};
     m_signature.m_data.emplace(data);
   }
 }
