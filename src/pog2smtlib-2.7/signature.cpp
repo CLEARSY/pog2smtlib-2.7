@@ -171,11 +171,11 @@ std::string MonomorphizedOperator::to_string() const {
     if (m_types.empty()) {
       m_string = fmt::format("{}", m_operator);
     } else {
-      std::vector<BType> args;
+      std::vector<std::string> args;
       for (const auto &type : m_types) {
-        args.push_back(*type);
+        args.push_back(type->to_string());
       }
-      m_string = fmt::format("{}<{}>", m_operator, fmt::join(m_types, " "));
+      m_string = fmt::format("{}<{}>", m_operator, fmt::join(args, " "));
     }
   }
   return m_string;
@@ -243,9 +243,9 @@ void GetSignatureVisitor::visitBinaryPred(const Pred &lhs, const Pred &rhs) {
   SignatureReset(m_signature);
   Signature sig;
   visitPredicatePureTypingGuard(lhs);
-  sig = std::move(m_signature);
-  rhs.accept(*this);
+  SignatureMoveInto(sig, m_signature);
   visitPredicatePureTypingGuard(rhs);
+  SignatureMoveInto(sig, m_signature);
   m_signature = std::move(sig);
 }
 
@@ -289,7 +289,7 @@ void GetSignatureVisitor::visitForall(const std::vector<TypedVar> &vars,
   for (auto v : vars) {
     m_bindings.insert(v.name);
   }
-  visitUnaryPred(p);
+  p.accept(*this);
   for (auto v : vars) {
     m_bindings.erase(v.name);
   }
@@ -300,7 +300,7 @@ void GetSignatureVisitor::visitExists(const std::vector<TypedVar> &vars,
   for (auto v : vars) {
     m_bindings.insert(v.name);
   }
-  visitUnaryPred(p);
+  p.accept(*this);
   for (auto v : vars) {
     m_bindings.erase(v.name);
   }

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+This work is licensed under a
+Creative Commons Attribution-NonCommercial 4.0 International License
+CC BY-NC 4.0
+See terms at https://creativecommons.org/licenses/by-nc/4.0/
+Copyright © CLEARSY 2022-2025
+-->
+<Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
+    <Define name="B definitions">
+        <Exp_Comparison op="=">
+            <Id value="NAT" typref="0" />
+            <Binary_Exp op=".." typref="0">
+                <Integer_Literal value="0" typref="1" />
+                <Id value="MAXINT" typref="1" />
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="INT" typref="0" />
+            <Binary_Exp op=".." typref="0">
+                <Id value="MININT" typref="1" />
+                <Id value="MAXINT" typref="1" />
+            </Binary_Exp>
+        </Exp_Comparison>
+    </Define>
+    <Define name="ctx">
+        <Set>
+            <Id value="s0" typref="0" />
+        </Set>
+        <Set>
+            <Id value="s130" typref="0" />
+        </Set>
+        <Set>
+            <Id value="s133" typref="0" />
+            <Enumerated_Values>
+                <Id value="s134" typref="1" />
+                <Id value="s135" typref="1" />
+            </Enumerated_Values>
+        </Set>
+        <Exp_Comparison op="=">
+            <Id value="s433" typref="0" />
+            <Id value="s133" typref="0" />
+        </Exp_Comparison>
+        <Exp_Comparison op=":">
+            <Id value="s643" typref="9" />
+            <Binary_Exp op="&gt;-&gt;" typref="10">
+                <Binary_Exp op="*s" typref="3">
+                    <Id value="s434" typref="0" />
+                    <Id value="s434" typref="0" />
+                </Binary_Exp>
+                <Id value="s434" typref="0" />
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op=":">
+            <Id value="s646" typref="3" />
+            <Binary_Exp op="--&gt;" typref="4">
+                <Id value="s434" typref="0" />
+                <Id value="s434" typref="0" />
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Quantified_Pred type="!">
+            <Variables>
+                <Id value="s640" typref="1" />
+            </Variables>
+            <Body>
+                <Binary_Pred op="=&gt;">
+                    <Exp_Comparison op=":">
+                        <Id value="s640" typref="1" />
+                        <Id value="s434" typref="0" />
+                    </Exp_Comparison>
+                    <Exp_Comparison op="=">
+                        <Id value="s640" typref="1" />
+                        <Binary_Exp op="(" typref="1">
+                            <Id value="s643" typref="9" />
+                            <Binary_Exp op="|-&gt;" typref="14">
+                                <Binary_Exp op="(" typref="1">
+                                    <Id value="s646" typref="3" />
+                                    <Id value="s640" typref="1" />
+                                </Binary_Exp>
+                                <Binary_Exp op="(" typref="1">
+                                    <Id value="s646" typref="3" />
+                                    <Id value="s640" typref="1" />
+                                </Binary_Exp>
+                            </Binary_Exp>
+                        </Binary_Exp>
+                    </Exp_Comparison>
+                </Binary_Pred>
+            </Body>
+        </Quantified_Pred>
+    </Define>
+    <Proof_Obligation>
+        <Tag>s700</Tag>
+        <Definition name="B definitions" />
+        <Definition name="ctx" />
+        <Simple_Goal>
+            <Tag>s703</Tag>
+            <Goal>
+                <Exp_Comparison op="&lt;:">
+                    <Id value="s468" typref="0" />
+                    <Id value="s468" typref="0" />
+                </Exp_Comparison>
+            </Goal>
+        </Simple_Goal>
+    </Proof_Obligation>
+    <TypeInfos>
+        <Type id="0">
+            <Unary_Exp op="POW">
+                <Id value="INTEGER" />
+            </Unary_Exp>
+        </Type>
+        <Type id="1">
+            <Id value="INTEGER" />
+        </Type>
+        <Type id="2">
+            <Unary_Exp op="POW">
+                <Id value="BOOL" />
+            </Unary_Exp>
+        </Type>
+        <Type id="3">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="4">
+            <Unary_Exp op="POW">
+                <Unary_Exp op="POW">
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                </Unary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="5">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="BOOL" />
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="6">
+            <Unary_Exp op="POW">
+                <Unary_Exp op="POW">
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="BOOL" />
+                    </Binary_Exp>
+                </Unary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="7">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Unary_Exp op="POW">
+                        <Binary_Exp op="*">
+                            <Id value="INTEGER" />
+                            <Id value="INTEGER" />
+                        </Binary_Exp>
+                    </Unary_Exp>
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="8">
+            <Unary_Exp op="POW">
+                <Unary_Exp op="POW">
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Unary_Exp op="POW">
+                            <Binary_Exp op="*">
+                                <Id value="INTEGER" />
+                                <Id value="INTEGER" />
+                            </Binary_Exp>
+                        </Unary_Exp>
+                    </Binary_Exp>
+                </Unary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="9">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="10">
+            <Unary_Exp op="POW">
+                <Unary_Exp op="POW">
+                    <Binary_Exp op="*">
+                        <Binary_Exp op="*">
+                            <Id value="INTEGER" />
+                            <Id value="INTEGER" />
+                        </Binary_Exp>
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                </Unary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="11">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                    <Unary_Exp op="POW">
+                        <Id value="INTEGER" />
+                    </Unary_Exp>
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="12">
+            <Unary_Exp op="POW">
+                <Unary_Exp op="POW">
+                    <Binary_Exp op="*">
+                        <Binary_Exp op="*">
+                            <Id value="INTEGER" />
+                            <Id value="INTEGER" />
+                        </Binary_Exp>
+                        <Unary_Exp op="POW">
+                            <Id value="INTEGER" />
+                        </Unary_Exp>
+                    </Binary_Exp>
+                </Unary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="13">
+            <Unary_Exp op="POW">
+                <Unary_Exp op="POW">
+                    <Id value="INTEGER" />
+                </Unary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="14">
+            <Binary_Exp op="*">
+                <Id value="INTEGER" />
+                <Id value="INTEGER" />
+            </Binary_Exp>
+        </Type>
+        <Type id="15">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="16">
+            <Id value="BOOL" />
+        </Type>
+    </TypeInfos>
+</Proof_Obligations>
