@@ -234,6 +234,10 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           /* case of operators having a counterpart in SMT theory ALL*/
 
           /* 5.3 Arithmetical Expressions */
+          case Expr::UnaryOp::IMinus:
+          case Expr::UnaryOp::RMinus:
+            construct = nullptr;
+            break;
           case Expr::UnaryOp::Floor:
             construct = BConstruct::Factory::factory().Floor();
             break;

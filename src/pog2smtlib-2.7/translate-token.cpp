@@ -95,6 +95,8 @@ std::string smtSymbol(Expr::EKind op, const BType& t) {
 
 static std::unordered_map<Expr::UnaryOp, std::string> unOpExprToStringMap = {
     /* 5.3 Arithmetical Expressions */
+    {Expr::UnaryOp::IMinus, "-"},
+    {Expr::UnaryOp::RMinus, "-"},
     {Expr::UnaryOp::Real, "|int.real|"},
     {Expr::UnaryOp::Floor, "|real.floor|"},
     {Expr::UnaryOp::Ceiling, "|real.ceiling|"},

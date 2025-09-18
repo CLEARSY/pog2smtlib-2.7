@@ -312,7 +312,16 @@ void SmtTranslatorVisitor::visitIdent(const BType &,
 void SmtTranslatorVisitor::visitIntegerLiteral(const BType &,
                                                const std::vector<std::string> &,
                                                const std::string &i) {
-  m_translation.append(i);
+  bool starts_with_minus = !i.empty() && i[0] == '-';
+  if (starts_with_minus) {
+    m_translation.push_back('(');
+    m_translation.append(smtSymbol(Expr::UnaryOp::IMinus));
+    m_translation.push_back(' ');
+    m_translation.append(i.substr(1));
+    m_translation.push_back(')');
+  } else {
+    m_translation.append(i);
+  }
 }
 
 void SmtTranslatorVisitor::visitStringLiteral(const BType &,
@@ -330,6 +339,8 @@ void SmtTranslatorVisitor::visitUnaryExpression(
     const Expr &e) {
   switch (op) {
     /* 5.3 Arithmetical Expressions */
+    case Expr::UnaryOp::IMinus:
+    case Expr::UnaryOp::RMinus:
     case Expr::UnaryOp::Real:
     case Expr::UnaryOp::Floor:
     case Expr::UnaryOp::Ceiling: {
