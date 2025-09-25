@@ -12,14 +12,41 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "powerset.h"
+
 #include "../../bconstruct.h"
 
-namespace BConstruct::Type {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
+
+namespace Type {
+
+shared_ptr<PowerSet> PowerSet::m_cache;
+
+PowerSet::PowerSet(const string& script, set<shared_ptr<Abstract>>& requisites)
+    : Uniform(script, requisites, "POW") {}
 
 PowerSet::PowerSet() {
   m_script = "(declare-sort P 1)\n";
   m_label = "POW";
+  m_prerequisites = {};
   m_debug_string = "PowerSet";
 }
 
-};  // namespace BConstruct::Type
+};  // namespace Type
+
+shared_ptr<Abstract> Factory::PowerSet() {
+  std::shared_ptr<Abstract> result = find(BConstruct::Type::PowerSet::m_cache);
+  if (!result) {
+    const string script = "(declare-sort P 1)\n";
+    set<shared_ptr<Abstract>> requisites{};
+    result = make(BConstruct::Type::PowerSet::m_cache, script, requisites);
+  }
+  return result;
+}
+
+};  // namespace BConstruct

@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "identity.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {3})
 (assert (!
@@ -32,23 +39,37 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {3})
   :named |def.id {4}|))
 )";
 
-Identity::Identity(const BType &T) : UnaryBType(T) {
-  const auto TxT = BType::PROD(T, T);
-  const auto PT = BType::POW(T);
-  const auto PTxT = BType::POW(TxT);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::UnaryOp::Identity, T),
-                         /*1*/ symbol(PT),
-                         /*2*/ smtSymbol(Expr::NaryOp::Set, TxT),
-                         /*3*/ symbol(PTxT),
-                         /*4*/ symbolInner(T),
-                         /*5*/ smtSymbol(Pred::ComparisonOp::Membership, T),
-                         /*6*/ symbol(TxT));
-  m_label = "id";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(T),
-       std::make_shared<BConstruct::Expression::Set>(TxT)});
-  m_debug_string = fmt::format("id_<{}>", T.to_string());
+namespace Expression {
+
+MapUnaryBType<Identity> Identity::m_cache;
+
+Identity::Identity(const BType& T, const string& script,
+                   set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "id") {}
+
+};  // namespace Expression
+
+std::shared_ptr<Abstract> Factory::Identity(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Identity::m_cache, T);
+  if (!result) {
+    const auto TxT = BType::PROD(T, T);
+    const auto PT = BType::POW(T);
+    const auto PTxT = BType::POW(TxT);
+    const string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Identity, T),
+                    /*1*/ symbol(PT),
+                    /*2*/ smtSymbol(Expr::NaryOp::Set, TxT),
+                    /*3*/ symbol(PTxT),
+                    /*4*/ symbolInner(T),
+                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, T),
+                    /*6*/ symbol(TxT));
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(T),
+                                         Factory::Set(TxT)};
+    result =
+        make(BConstruct::Expression::Identity::m_cache, T, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

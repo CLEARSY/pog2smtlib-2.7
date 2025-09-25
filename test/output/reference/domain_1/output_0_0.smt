@@ -1,7 +1,7 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(define-sort |Z| () Int)
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
+(define-sort |Z| () Int)
 (declare-sort P 1)
 (define-sort |(Z x Z)| () (C |Z| |Z|))
 (define-sort |POW Z| () (P |Z|))

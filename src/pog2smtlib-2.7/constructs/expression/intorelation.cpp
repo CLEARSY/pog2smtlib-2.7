@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "intorelation.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
 (assert (!
@@ -30,31 +37,44 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
          ({7} (snd p) (snd p2)))))))
     :named |ax.rel {8}|))
 )";
+namespace Expression {
 
-Transformed_Into_Relation::Transformed_Into_Relation(const BType &U,
-                                                     const BType &V)
-    : BinaryBType(U, V) {
-  const auto PV = BType::POW(V);
-  const auto UxV = BType::PROD(U, V);
-  const auto UxPV = BType::PROD(U, PV);
-  const auto PUxPV = BType::POW(UxPV);
-  const auto PUxV = BType::POW(UxV);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::UnaryOp::Rel, U, V),
-                         /*1*/ symbol(PUxPV),
-                         /*2*/ symbol(PUxV),
-                         /*3*/ symbol(UxV),
-                         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
-                         /*5*/ symbol(UxPV),
-                         /*6*/ smtSymbol(Pred::ComparisonOp::Membership, UxPV),
-                         /*7*/ smtSymbol(Pred::ComparisonOp::Membership, V),
-                         /*8*/ symbolInner(UxV));
-  m_label = "rel";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(UxV),
-       std::make_shared<BConstruct::Predicate::SetMembership>(UxPV),
-       std::make_shared<BConstruct::Predicate::SetMembership>(V)});
-  m_debug_string = fmt::format("rel_<{},{}>", U.to_string(), V.to_string());
+MapBinaryBType<Transformed_Into_Relation> Transformed_Into_Relation::m_cache;
+
+Transformed_Into_Relation::Transformed_Into_Relation(
+    const BType &U, const BType &V, const string &script,
+    set<shared_ptr<Abstract>> &requisites)
+    : BinaryBType(U, V, script, requisites, "rel") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType &U,
+                                                        const BType &V) {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Transformed_Into_Relation::m_cache, U, V);
+  if (!result) {
+    const auto PV = BType::POW(V);
+    const auto UxV = BType::PROD(U, V);
+    const auto UxPV = BType::PROD(U, PV);
+    const auto PUxPV = BType::POW(UxPV);
+    const auto PUxV = BType::POW(UxV);
+    const std::string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Rel, U, V),
+                    /*1*/ symbol(PUxPV),
+                    /*2*/ symbol(PUxV),
+                    /*3*/ symbol(UxV),
+                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
+                    /*5*/ symbol(UxPV),
+                    /*6*/ smtSymbol(Pred::ComparisonOp::Membership, UxPV),
+                    /*7*/ smtSymbol(Pred::ComparisonOp::Membership, V),
+                    /*8*/ symbolInner(UxV));
+    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV),
+                                            Factory::SetMembership(UxPV),
+                                            Factory::SetMembership(V)};
+    result = make(BConstruct::Expression::Transformed_Into_Relation::m_cache, U,
+                  V, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

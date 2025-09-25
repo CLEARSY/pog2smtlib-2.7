@@ -12,17 +12,35 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "real.h"
+
 #include "../../bconstruct.h"
 #include "universe.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
 
-Real::Real() {
-  m_script = universeScript("REAL", BType::REAL);
-  m_prerequisites.insert(
-      std::make_shared<Predicate::SetMembership>(BType::REAL));
-  m_label = "REAL";
-  m_debug_string = "REAL";
+namespace BConstruct {
+
+namespace Expression {
+
+std::shared_ptr<Real> Real::m_cache;
+
+Real::Real(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "REAL") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Real() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Real::m_cache);
+  if (!result) {
+    const string script = Expression::universeScript("REAL", BType::REAL);
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::REAL)};
+    result = make(BConstruct::Expression::Real::m_cache, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

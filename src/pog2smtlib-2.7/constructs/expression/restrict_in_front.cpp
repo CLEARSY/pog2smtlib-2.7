@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "restrict_in_front.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2} {1}) {2})
 (assert (!
@@ -31,26 +38,39 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2} {1}) {2})
   :named |ax.restrict.front.def {7}|))
 )";
 
-Restrict_In_Front::Restrict_In_Front(const BType &T) : UnaryBType(T) {
-  const auto ZxT = BType::PROD(BType::INT, T);
-  const auto PZxT = BType::POW(ZxT);
-  m_script =
-      fmt::format(SCRIPT,
-                  /*0*/ smtSymbol(Expr::BinaryOp::Head_Restriction, T),
-                  /*1*/ symbol(BType::INT),
-                  /*2*/ symbol(PZxT),
-                  /*3*/ symbol(ZxT),
-                  /*4*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
-                  /*5*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT),
-                  /*6*/ smtSymbol(Expr::BinaryOp::Interval),
-                  /*7*/ symbolInner(T));
-  m_label = "↑";
-  m_prerequisites.insert({
-      std::make_shared<BConstruct::Predicate::SetMembership>(ZxT),
-      std::make_shared<BConstruct::Predicate::SetMembership>(BType::INT),
-      std::make_shared<BConstruct::Expression::Interval>(),
-  });
-  m_debug_string = fmt::format("↑_{}", T.to_string());
-}
+namespace Expression {
 
-};  // namespace BConstruct::Expression
+MapUnaryBType<Restrict_In_Front> Restrict_In_Front::m_cache;
+
+Restrict_In_Front::Restrict_In_Front(const BType& T, const std::string& script,
+                                     set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "↑") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Restrict_In_Front(const BType& T) {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Restrict_In_Front::m_cache, T);
+  if (!result) {
+    const auto ZxT = BType::PROD(BType::INT, T);
+    const auto PZxT = BType::POW(ZxT);
+    const std::string script = fmt::format(
+        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Head_Restriction, T),
+        /*1*/ symbol(BType::INT),
+        /*2*/ symbol(PZxT),
+        /*3*/ symbol(ZxT),
+        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
+        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT),
+        /*6*/ smtSymbol(Expr::BinaryOp::Interval),
+        /*7*/ symbolInner(T));
+    set<shared_ptr<Abstract>> requisites = {
+        Factory::SetMembership(ZxT),
+        Factory::SetMembership(BType::INT),
+        Factory::Interval(),
+    };
+    result = make(BConstruct::Expression::Restrict_In_Front::m_cache, T, script,
+                  requisites);
+  }
+  return result;
+}
+};  // namespace BConstruct

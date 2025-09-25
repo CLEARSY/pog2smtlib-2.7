@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "data.h"
+
 #include <fmt/core.h>
 
 #include <string>
@@ -19,21 +21,46 @@
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../signature.h"
+#include "../type/type.h"
 #include "btype.h"
 #include "pred.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+namespace BConstruct {
 
-Data::Data(const struct ::Data &data)
-    : enable_shared_from_this<BConstruct::Expression::Data>(),
-      BConstruct::Uniform(),
+static constexpr std::string_view SCRIPT = "(declare-const {0} {1})\n";
+
+namespace Expression {
+
+MapData Data::m_cache;
+
+Data::Data(const struct ::Data &data, const string &script,
+           set<shared_ptr<Abstract>> &requisites)
+    : enable_shared_from_this<Data>(),
+      BConstruct::Uniform(script, requisites,
+                          fmt::format("_data<{}>", data.to_string())),
       m_type(*data.m_type),
-      m_name(data.to_string()) {
-  m_prerequisites.insert(std::make_shared<BConstruct::Type::Type>(m_type));
-  m_debug_string = fmt::format("Data<{}>", data.to_string());
-  m_label = m_name;
+      m_name(data.to_string()) {}
 
-  m_script = fmt::format("(declare-const {0} {1})\n", m_name, symbol(m_type));
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Data(const struct Data &data) {
+  shared_ptr<const struct Data> pt = make_shared<const struct Data>(data);
+  auto it = BConstruct::Expression::Data::m_cache.find(pt);
+  if (it != BConstruct::Expression::Data::m_cache.end()) {
+    return it->second;
+  }
+  const BType &type{data.type()};
+  const string script = fmt::format(SCRIPT, data.to_string(), symbol(type));
+  set<shared_ptr<Abstract>> requisites{Factory::Type(type)};
+  auto construct =
+      make_shared<BConstruct::Expression::Data>(data, script, requisites);
+  BConstruct::Expression::Data::m_cache[pt] = construct;
+  index(construct);
+  return construct;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

@@ -12,21 +12,43 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "maplet.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../parameters.h"
 #include "../../translate-token.h"
+#include "../type/cartesianproduct.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
 
-Maplet::Maplet() {
-  m_script = "";
-  m_prerequisites.insert(
-      std::make_shared<BConstruct::Type::CartesianProduct>());
-  m_label = "|->";
-  m_debug_string = "|->";
+namespace BConstruct {
+
+static constexpr std::string_view SCRIPT = "";
+
+namespace Expression {
+
+shared_ptr<Maplet> Maplet::m_cache;
+
+Maplet::Maplet(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "|->") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Maplet() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Maplet::m_cache);
+  if (!result) {
+    const string script = fmt::format(SCRIPT);
+    set<shared_ptr<Abstract>> requisites{Factory::CartesianProduct()};
+    result = make(BConstruct::Expression::Maplet::m_cache, script, requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+
+};  // namespace BConstruct

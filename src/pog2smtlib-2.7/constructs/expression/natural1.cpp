@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "natural1.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-const {0} {2})
 (assert (!
@@ -28,14 +35,28 @@ static constexpr std::string_view SCRIPT = R"((declare-const {0} {2})
   :named |ax.set.in.NATURAL1|))
 )";
 
-Natural1::Natural1() {
-  m_script = fmt::format(
-      SCRIPT, /*0*/ smtSymbol(Expr::Visitor::EConstant::NATURAL1),
-      /*1*/ symbol(BType::INT), /*2*/ symbol(BType::POW(BType::INT)),
-      /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
-  m_label = "NATURAL1";
-  m_prerequisites.insert(
-      std::make_shared<BConstruct::Predicate::SetMembership>(BType::INT));
-  m_debug_string = "NATURAL1";
+namespace Expression {
+
+std::shared_ptr<Natural1> Natural1::m_cache;
+
+Natural1::Natural1(const std::string &script,
+                   set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "NATURAL1") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Natural1() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Natural1::m_cache);
+  if (!result) {
+    const string script = fmt::format(
+        SCRIPT, /*0*/ smtSymbol(Expr::Visitor::EConstant::NATURAL1),
+        /*1*/ symbol(BType::INT), /*2*/ symbol(BType::POW(BType::INT)),
+        /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::INT)};
+    result =
+        make(BConstruct::Expression::Natural1::m_cache, script, requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+
+};  // namespace BConstruct

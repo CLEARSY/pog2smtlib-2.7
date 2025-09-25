@@ -183,6 +183,8 @@ std::string MonomorphizedOperator::to_string() const {
 
 std::string Data::to_string() const { return m_name->show(); }
 
+const BType &Data::type() const { return *m_type; }
+
 Signature &operator+=(Signature &lhs, const Signature &rhs) {
   lhs.m_operators.insert(rhs.m_operators.begin(), rhs.m_operators.end());
   lhs.m_data.insert(rhs.m_data.begin(), rhs.m_data.end());
@@ -1039,4 +1041,21 @@ bool operator==(const std::vector<std::shared_ptr<BType>> &lhs,
     }
   }
   return true;
+}
+
+std::string Signature::to_string() const {
+  std::vector<std::string> ty_strs;
+  std::vector<std::string> op_strs;
+  std::vector<std::string> dt_strs;
+  for (const auto &ty : m_types) {
+    ty_strs.push_back(ty->to_string());
+  }
+  for (const auto &op : m_operators) {
+    op_strs.push_back(op.to_string());
+  }
+  for (const auto &dt : m_data) {
+    dt_strs.push_back(dt.to_string());
+  }
+  return fmt::format("[{} | {} | {}]", fmt::join(ty_strs, ", "),
+                     fmt::join(op_strs, ", "), fmt::join(dt_strs, ", "));
 }

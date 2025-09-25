@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "interval.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {2})
  (assert (!
@@ -30,18 +37,30 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {2})
     :named |ax.set.in.interval|))
 )";
 
-Interval::Interval() {
-  const auto PZ = BType::POW(BType::INT);
-  m_script =
-      fmt::format(SCRIPT,
-                  /*0*/ smtSymbol(Expr::BinaryOp::Interval),
-                  /*1*/ symbol(BType::INT),
-                  /*2*/ symbol(PZ),
-                  /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
-  m_label = "..";
-  m_prerequisites.insert(
-      std::make_shared<BConstruct::Predicate::SetMembership>(BType::INT));
-  m_debug_string = fmt::format("..");
+namespace Expression {
+
+shared_ptr<Interval> Interval::m_cache;
+
+Interval::Interval(const std::string& script,
+                   set<shared_ptr<Abstract>>& requisites)
+    : Uniform(script, requisites, "..") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Interval() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Interval::m_cache);
+  if (!result) {
+    const auto& PZ = BType::POW(BType::INT);
+    const string script = fmt::format(
+        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Interval),
+        /*1*/ symbol(BType::INT),
+        /*2*/ symbol(PZ),
+        /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::INT)};
+    result =
+        make(BConstruct::Expression::Interval::m_cache, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

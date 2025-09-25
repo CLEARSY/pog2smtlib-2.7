@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "relations.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {4})
 (assert (!
@@ -30,26 +37,39 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {4})
     :named |def.relations {6}|))
 )";
 
-Relation::Relation(const BType &U, const BType &V) : BinaryBType(U, V) {
-  const auto PU = BType::POW(U);
-  const auto PV = BType::POW(V);
-  const auto UxV = BType::PROD(U, V);
-  const auto PUxV = BType::POW(UxV);
-  const auto PPUxV = BType::POW(PUxV);
-  m_script =
-      fmt::format(SCRIPT,
-                  /*0*/ smtSymbol(Expr::BinaryOp::Relations, U, V),
-                  /*1*/ symbol(PU),
-                  /*2*/ symbol(PV),
-                  /*3*/ smtSymbol(Expr::UnaryOp::Subsets, UxV),
-                  /*4*/ symbol(PPUxV),
-                  /*5*/ smtSymbol(Expr::BinaryOp::Cartesian_Product, U, V),
-                  /*6*/ symbolInner(UxV));
-  m_label = "<->";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Expression::CartesianProduct>(U, V),
-       std::make_shared<BConstruct::Expression::PowerSet>(UxV)});
-  m_debug_string = fmt::format("<->_<{},{}>", U.to_string(), V.to_string());
+namespace Expression {
+
+MapBinaryBType<Relation> Relation::m_cache;
+
+Relation::Relation(const BType &U, const BType &V, const string &script,
+                   set<shared_ptr<Abstract>> &requisites)
+    : BinaryBType(U, V, script, requisites, "<->") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Relation(const BType &U, const BType &V) {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Relation::m_cache, U, V);
+  if (!result) {
+    const auto PU = BType::POW(U);
+    const auto PV = BType::POW(V);
+    const auto UxV = BType::PROD(U, V);
+    const auto PUxV = BType::POW(UxV);
+    const auto PPUxV = BType::POW(PUxV);
+    const std::string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Relations, U, V),
+                    /*1*/ symbol(PU),
+                    /*2*/ symbol(PV),
+                    /*3*/ smtSymbol(Expr::UnaryOp::Subsets, UxV),
+                    /*4*/ symbol(PPUxV),
+                    /*5*/ smtSymbol(Expr::BinaryOp::Cartesian_Product, U, V),
+                    /*6*/ symbolInner(UxV));
+    set<shared_ptr<Abstract>> requisites = {
+        Factory::ExpressionCartesianProduct(U, V), Factory::PowerSet(UxV)};
+    result = make(BConstruct::Expression::Relation::m_cache, U, V, script,
+                  requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

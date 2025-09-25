@@ -1,13 +1,14 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
 (define-sort |Z| () Int)
-(declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
-(define-sort |(Z x Z)| () (C |Z| |Z|))
 (declare-sort P 1)
+(declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
+(define-sort |POW Z| () (P |Z|))
+(define-sort |(Z x Z)| () (C |Z| |Z|))
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 (define-sort |POW POW (Z x Z)| () (P |POW (Z x Z)|))
-(define-sort |POW Z| () (P |Z|))
 (declare-fun |set.subseteq (Z x Z)| (|POW (Z x Z)| |POW (Z x Z)|) Bool)
 (assert (!
     (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
@@ -18,7 +19,6 @@
     )
     :named |ax.set.subseteq (Z x Z)|))
 (declare-fun |set.in POW (Z x Z)| (|POW (Z x Z)| |POW POW (Z x Z)|) Bool)
-(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-fun |sub-sets (Z x Z)| (|POW (Z x Z)|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
@@ -120,6 +120,14 @@
          (and (|set.in POW (Z x Z)| f (|functions.partial Z Z| e1 e2))
               (|set.in POW (Z x Z)| f (|relations.total Z Z| e1 e2))))))
   :named |ax:def.tfun (Z x Z)|))
+(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
+(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
+(assert (!
+  (forall ((p |? (Z x Z)|))
+    (forall ((x |(Z x Z)|))
+      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
+         (p x))))
+  :named |ax:set.in.intent (Z x Z)|))
 (declare-fun |bijections.total Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((e1 |POW Z|) (e2 |POW Z|))
@@ -136,14 +144,6 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
-(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
-(assert (!
-  (forall ((p |? (Z x Z)|))
-    (forall ((x |(Z x Z)|))
-      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
-         (p x))))
-  :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (not
     (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 0 1)))) (|bijections.total Z Z| (|set.intent Z| (lambda ((x |Z|)) (= x 0))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)))))))

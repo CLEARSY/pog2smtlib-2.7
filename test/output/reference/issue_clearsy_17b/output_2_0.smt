@@ -2,8 +2,8 @@
 (set-logic HO_ALL)
 (define-sort |Z| () Int)
 (declare-datatype |struct(x1, y1)| ((|rec(x1, y1)| (x1 |Z|)(y1 |Z|))))
-(declare-datatype |struct(x2, y2)| ((|rec(x2, y2)| (x2 |struct(x1, y1)|)(y2 |struct(x1, y1)|))))
 (declare-sort P 1)
+(declare-datatype |struct(x2, y2)| ((|rec(x2, y2)| (x2 |struct(x1, y1)|)(y2 |struct(x1, y1)|))))
 (define-sort |POW struct(x2, y2)| () (P |struct(x2, y2)|))
 (define-sort |POW struct(x1, y1)| () (P |struct(x1, y1)|))
 (declare-fun |set.in struct(x2, y2)| (|struct(x2, y2)| |POW struct(x2, y2)|) Bool)
@@ -26,16 +26,6 @@
          (p x))))
   :named |ax:set.in.intent struct(x1, y1)|))
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-(declare-const record12 |struct(x1, y1)|)
-(declare-const struct1 |POW struct(x1, y1)|)
-(declare-const record22 |struct(x2, y2)|)
-(assert (!
-  (forall ((s |POW struct(x1, y1)|) (t |POW struct(x1, y1)|))
-    (=
-      (= s t)
-      (forall ((e |struct(x1, y1)|)) (= (|set.in struct(x1, y1)| e s) (|set.in struct(x1, y1)| e t)))))
-  :named |ax.set.eq struct(x1, y1)|))
-(declare-const record11 |struct(x1, y1)|)
 (declare-const |struct struct(x2, y2)| (-> |? struct(x2, y2)| |POW struct(x2, y2)|))
 (assert (!
   (forall ((p |? struct(x2, y2)|))
@@ -44,13 +34,15 @@
          (p x))))
   :named |ax.struct.definition struct(x2, y2)|))
 (declare-const struct2 |POW struct(x2, y2)|)
-(declare-const record21 |struct(x2, y2)|)
 (assert (!
   (forall ((s |POW struct(x2, y2)|) (t |POW struct(x2, y2)|))
     (=
       (= s t)
       (forall ((e |struct(x2, y2)|)) (= (|set.in struct(x2, y2)| e s) (|set.in struct(x2, y2)| e t)))))
   :named |ax.set.eq struct(x2, y2)|))
+(declare-const record22 |struct(x2, y2)|)
+(declare-const record12 |struct(x1, y1)|)
+(declare-const struct1 |POW struct(x1, y1)|)
 (declare-const |struct struct(x1, y1)| (-> |? struct(x1, y1)| |POW struct(x1, y1)|))
 (assert (!
   (forall ((p |? struct(x1, y1)|))
@@ -58,10 +50,18 @@
       (= (|set.in struct(x1, y1)| x (|struct struct(x1, y1)| p))
          (p x))))
   :named |ax.struct.definition struct(x1, y1)|))
+(declare-const record11 |struct(x1, y1)|)
+(declare-const record21 |struct(x2, y2)|)
 (declare-const INTEGER |POW Z|)
 (assert (!
   (forall ((e |Z|)) (|set.in Z| e INTEGER))
   :named |ax.set.in.INTEGER|))
+(assert (!
+  (forall ((s |POW struct(x1, y1)|) (t |POW struct(x1, y1)|))
+    (=
+      (= s t)
+      (forall ((e |struct(x1, y1)|)) (= (|set.in struct(x1, y1)| e s) (|set.in struct(x1, y1)| e t)))))
+  :named |ax.set.eq struct(x1, y1)|))
 (assert (!
   (= struct1 (|struct struct(x1, y1)| (lambda ((x |struct(x1, y1)|)) (and (|set.in Z| (x1 x) INTEGER)(|set.in Z| (y1 x) INTEGER)))))
   :named |Define:lprp:1|))

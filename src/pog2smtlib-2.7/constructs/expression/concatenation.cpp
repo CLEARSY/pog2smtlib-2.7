@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "concatenation.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
 (assert (!
@@ -32,22 +39,37 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
 ))
 )";
 
-Concatenation::Concatenation(const BType &T) : UnaryBType(T) {
-  const auto ZxT = BType::PROD(BType::INT, T);
-  const auto PZxT = BType::POW(ZxT);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::BinaryOp::Concatenation, T),
-                         /*1*/ symbol(PZxT),
-                         /*2*/ symbol(ZxT),
-                         /*3*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
-                         /*4*/ smtSymbol(Expr::UnaryOp::Size, T),
-                         /*5*/ symbolInner(T));
-  m_label = "^";
-  m_prerequisites.insert({
-      std::make_shared<BConstruct::Predicate::SetMembership>(T),
-      std::make_shared<BConstruct::Expression::Size>(T),
-  });
-  m_debug_string = fmt::format("^_{}", T.to_string());
+namespace Expression {
+
+MapUnaryBType<Concatenation> Concatenation::m_cache;
+
+Concatenation::Concatenation(const BType& T, const std::string& script,
+                             set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "^") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Concatenation(const BType& T) {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Concatenation::m_cache, T);
+  if (!result) {
+    const auto ZxT = BType::PROD(BType::INT, T);
+    const auto PZxT = BType::POW(ZxT);
+    const std::string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Concatenation, T),
+                    /*1*/ symbol(PZxT),
+                    /*2*/ symbol(ZxT),
+                    /*3*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
+                    /*4*/ smtSymbol(Expr::UnaryOp::Size, T),
+                    /*5*/ symbolInner(T));
+    set<shared_ptr<Abstract>> requisites = {
+        Factory::SetMembership(T),
+        Factory::Size(T),
+    };
+    result = make(BConstruct::Expression::Concatenation::m_cache, T, script,
+                  requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

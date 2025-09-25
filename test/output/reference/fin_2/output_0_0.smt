@@ -1,7 +1,7 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(define-sort |Z| () Int)
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
+(define-sort |Z| () Int)
 (declare-sort P 1)
 (define-sort |(Z x Z)| () (C |Z| |Z|))
 (define-sort |POW Z| () (P |Z|))
@@ -39,13 +39,6 @@
               (= (fst p1) (fst p2))))))
   :named |ax:set.in.injections (Z x Z)|))
 (define-sort |POW POW Z| () (P |POW Z|))
-(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
-(declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
 (declare-fun |bijections Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((X |POW Z|) (Y |POW Z|))
@@ -54,6 +47,13 @@
          (and (|set.in POW (Z x Z)| f (|injections Z Z| X Y))
               (|set.in POW (Z x Z)| f (|surjections Z Z| X Y))))))
   :named |ax:set.in.bijections (Z x Z)|))
+(declare-fun |interval| (|Z| |Z|) |POW Z|)
+ (assert (!
+    (forall ((l |Z|) (u |Z|) (e |Z|))
+        (= (|set.in Z| e (|interval| l u))
+            (and (<= l e) (<= e u))))
+    :named |ax.set.in.interval|))
+(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
     (forall ((s |POW Z|) (t |POW Z|))
@@ -78,8 +78,8 @@
       (|set.in POW Z| s (|sub-sets Z| t))
       (|set.subseteq Z| s t)))
   :named |ax.sub-sets Z|))
-(declare-const p2 |POW POW Z|)
 (declare-const p1 |POW POW Z|)
+(declare-const p2 |POW POW Z|)
 (declare-fun |finite sub-sets Z| (|POW Z|) |POW POW Z|)
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))

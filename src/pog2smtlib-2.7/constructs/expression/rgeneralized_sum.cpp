@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "rgeneralized_sum.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) |{1}|)
 (assert (!
@@ -38,22 +45,34 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) |{1}|)
   :named |ax.rsigma.incr|))
 )";
 
-RGeneralizedSum::RGeneralizedSum() {
-  const auto PREAL = BType::POW(BType::REAL);
-  m_script = fmt::format(
-      SCRIPT,
-      /*0*/ smtSymbol(Expr::QuantifiedOp::RSum),
-      /*1*/ symbolInner(BType::REAL),
-      /*2*/ symbol(PREAL),
-      /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::REAL),
-      /*4*/ smtSymbol(Pred::ComparisonOp::Membership, BType::REAL),
-      /*5*/ smtSymbol(Expr::NaryOp::Set, BType::REAL));
-  m_label = "rΣ";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(BType::REAL),
-       std::make_shared<BConstruct::Expression::Set>(BType::REAL),
-       std::make_shared<BConstruct::Expression::EmptySet>(BType::REAL)});
-  m_debug_string = "rΣ";
+namespace Expression {
+
+shared_ptr<RGeneralizedSum> RGeneralizedSum::m_cache;
+
+RGeneralizedSum::RGeneralizedSum(const std::string &script,
+                                 set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "rΣ") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::RGeneralizedSum() {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::RGeneralizedSum::m_cache);
+  if (!result) {
+    const auto PREAL = BType::POW(BType::REAL);
+    const string script = fmt::format(
+        SCRIPT, /*0*/ smtSymbol(Expr::QuantifiedOp::RSum),
+        /*1*/ symbolInner(BType::REAL),
+        /*2*/ symbol(PREAL),
+        /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::REAL),
+        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, BType::REAL),
+        /*5*/ smtSymbol(Expr::NaryOp::Set, BType::REAL));
+    set<shared_ptr<Abstract>> requisites{Factory::Set(BType::REAL),
+                                         Factory::EmptySet(BType::REAL)};
+    result = make(BConstruct::Expression::RGeneralizedSum::m_cache, script,
+                  requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

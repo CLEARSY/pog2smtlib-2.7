@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "closure1.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {1})
 (assert (!
@@ -32,22 +39,36 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {1})
   :named |ax.closure1 {6}|))
 )";
 
-Closure1::Closure1(const BType &T) : UnaryBType(T) {
-  const auto TxT = BType::PROD(T, T);
-  const auto PTxT = BType::POW(TxT);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::UnaryOp::Transitive_Closure, T),
-                         /*1*/ symbol(PTxT),
-                         /*2*/ symbol(TxT),
-                         /*3*/ smtSymbol(Pred::ComparisonOp::Membership, TxT),
-                         /*4*/ symbol(BType::INT),
-                         /*5*/ smtSymbol(Expr::BinaryOp::Iteration, T),
-                         /*6*/ symbolInner(T));
-  m_label = "closure1";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(TxT),
-       std::make_shared<BConstruct::Expression::Iteration>(T)});
-  m_debug_string = fmt::format("closure1_{}", T.to_string());
+namespace Expression {
+
+MapUnaryBType<Closure1> Closure1::m_cache;
+
+Closure1::Closure1(const BType& T, const string& script,
+                   set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "closure1") {}
+
+};  // namespace Expression
+
+std::shared_ptr<Abstract> Factory::Closure1(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Closure1::m_cache, T);
+  if (!result) {
+    const auto TxT = BType::PROD(T, T);
+    const auto PTxT = BType::POW(TxT);
+    const string script = fmt::format(
+        SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Transitive_Closure, T),
+        /*1*/ symbol(PTxT),
+        /*2*/ symbol(TxT),
+        /*3*/ smtSymbol(Pred::ComparisonOp::Membership, TxT),
+        /*4*/ symbol(BType::INT),
+        /*5*/ smtSymbol(Expr::BinaryOp::Iteration, T),
+        /*6*/ symbolInner(T));
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(TxT),
+                                         Factory::Iteration(T)};
+    result =
+        make(BConstruct::Expression::Closure1::m_cache, T, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

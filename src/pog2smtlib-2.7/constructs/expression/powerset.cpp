@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "powerset.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) {3})
 (assert (!
@@ -31,21 +38,35 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) {3})
   :named |ax.sub-sets {5}|))
 )";
 
-PowerSet::PowerSet(const BType &T) : UnaryBType(T) {
-  const auto PT = BType::POW(T);
-  const auto PPT = BType::POW(PT);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::UnaryOp::Subsets, T),
-                         /*1*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
-                         /*2*/ symbol(PT),
-                         /*3*/ symbol(PPT),
-                         /*4*/ smtSymbol(Pred::ComparisonOp::Subset, T),
-                         /*5*/ symbolInner(T));
-  m_label = "POW";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(PT),
-       std::make_shared<BConstruct::Predicate::Inclusion>(T)});
-  m_debug_string = fmt::format("POW_{}", T.to_string());
-}
+namespace Expression {
 
-};  // namespace BConstruct::Expression
+MapUnaryBType<PowerSet> PowerSet::m_cache;
+
+PowerSet::PowerSet(const BType& T, const string& script,
+                   set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "POW") {}
+
+};  // namespace Expression
+
+std::shared_ptr<Abstract> Factory::PowerSet(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::PowerSet::m_cache, T);
+  if (!result) {
+    const auto PT = BType::POW(T);
+    const auto PPT = BType::POW(PT);
+    const string script =
+        fmt::format(SCRIPT,
+                    /*0*/ smtSymbol(Expr::UnaryOp::Subsets, T),
+                    /*1*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
+                    /*2*/ symbol(PT),
+                    /*3*/ symbol(PPT),
+                    /*4*/ smtSymbol(Pred::ComparisonOp::Subset, T),
+                    /*5*/ symbolInner(T));
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(PT),
+                                         Factory::Inclusion(T)};
+    result =
+        make(BConstruct::Expression::PowerSet::m_cache, T, script, requisites);
+  }
+  return result;
+}
+};  // namespace BConstruct

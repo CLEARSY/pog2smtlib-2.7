@@ -8,6 +8,7 @@
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-const c2 |POW Z|)
 (declare-const c3 |POW REAL|)
+(declare-const c1 |POW Z|)
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
     (forall ((s |POW Z|) (t |POW Z|))
@@ -17,12 +18,11 @@
       )
     )
     :named |ax.set.subseteq Z|))
-(declare-const c1 |POW Z|)
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
 (define-sort |(Z x REAL)| () (C |Z| |REAL|))
+(declare-fun |set.in REAL| (|REAL| |POW REAL|) Bool)
 (define-sort |POW (Z x REAL)| () (P |(Z x REAL)|))
 (declare-fun |set.in (Z x REAL)| (|(Z x REAL)| |POW (Z x REAL)|) Bool)
-(declare-fun |set.in REAL| (|REAL| |POW REAL|) Bool)
 (declare-fun |set.product Z REAL| (|POW Z| |POW REAL|) |POW (Z x REAL)|)
 (assert (!
   (forall ((s1 |POW Z|) (s2 |POW REAL|))

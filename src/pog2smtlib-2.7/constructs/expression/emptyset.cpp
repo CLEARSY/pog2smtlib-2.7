@@ -12,14 +12,21 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "emptyset.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../translate-token.h"
 #include "btype.h"
-#include "pred.h"
-namespace BConstruct::Expression {
+
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 // 0: the SMT symbol for generic empty set operator
 // 1: the SMT symbol for the generic "is element of" operator
@@ -34,15 +41,30 @@ static constexpr std::string_view SCRIPT = R"((declare-const |{0} {4}| {2})
 static constexpr std::string_view emptySetOperatorStr = "set.empty";
 static constexpr std::string_view isElementOfOperatorStr = "set.in";
 
-EmptySet::EmptySet(const BType &t) : UnaryBType(t) {
-  const BType pt = BType::POW(t);
-  m_script = fmt::format(SCRIPT, emptySetOperatorStr, isElementOfOperatorStr,
-                         symbol(pt), symbol(t), symbolInner(t));
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Type::Type>(pt),
-       std::make_shared<BConstruct::Predicate::SetMembership>(t)});
-  m_label = "{}";
-  m_debug_string = fmt::format("{{}}_<{}>", t.to_string());
+namespace Expression {
+
+MapUnaryBType<EmptySet> EmptySet::m_cache;
+
+EmptySet::EmptySet(const BType& T, const string& script,
+                   set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "{}") {}
+
+};  // namespace Expression
+
+std::shared_ptr<Abstract> Factory::EmptySet(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::EmptySet::m_cache, T);
+  if (!result) {
+    const BType PT = BType::POW(T);
+    const string script =
+        fmt::format(SCRIPT, emptySetOperatorStr, isElementOfOperatorStr,
+                    symbol(PT), symbol(T), symbolInner(T));
+    set<shared_ptr<Abstract>> requisites{Factory::Type(PT),
+                                         Factory::SetMembership(T)};
+    result =
+        make(BConstruct::Expression::EmptySet::m_cache, T, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

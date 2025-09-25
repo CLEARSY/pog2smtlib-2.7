@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "ceiling.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,16 +22,35 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((define-fun {0} ((x {1})) {2} (+ 1 (to_int x)))
 )";
 
-Ceiling::Ceiling() {
-  m_script = fmt::format(SCRIPT, smtSymbol(Expr::UnaryOp::Ceiling),
-                         symbol(BType::REAL), symbol(BType::INT));
-  m_label = "ceiling";
-  m_debug_string = "ceiling";
+namespace Expression {
+
+std::shared_ptr<Ceiling> Ceiling::m_cache;
+
+Ceiling::Ceiling(const std::string &script,
+                 set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "ceiling") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Ceiling() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Ceiling::m_cache);
+  if (!result) {
+    const string script = fmt::format(SCRIPT, smtSymbol(Expr::UnaryOp::Ceiling),
+                                      symbol(BType::REAL), symbol(BType::INT));
+    set<shared_ptr<Abstract>> requisites{};
+    result = make(BConstruct::Expression::Ceiling::m_cache, script, requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

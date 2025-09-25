@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "fin.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
 (assert (!
@@ -32,21 +39,33 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
   :named |ax.finite sub-sets {6}|))
 )";
 
-Fin::Fin(const BType &T) : UnaryBType(T) {
-  const auto PT = BType::POW(T);
-  const auto PPT = BType::POW(PT);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::UnaryOp::Finite_Subsets, T),
-                         /*1*/ symbol(PT),
-                         /*2*/ symbol(PPT),
-                         /*3*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
-                         /*4*/ smtSymbol(Expr::UnaryOp::Subsets, T),
-                         /*5*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
-                         /*6*/ symbolInner(T));
-  m_label = "FIN";
-  m_prerequisites.insert({std::make_shared<BConstruct::Expression::PowerSet>(T),
-                          std::make_shared<BConstruct::Expression::Card>(T)});
-  m_debug_string = fmt::format("FIN_{}", T.to_string());
-}
+namespace Expression {
 
-};  // namespace BConstruct::Expression
+MapUnaryBType<Fin> Fin::m_cache;
+
+Fin::Fin(const BType& T, const string& script,
+         set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "FIN") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Fin(const BType& T) {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Fin::m_cache, T);
+  if (!result) {
+    const auto PT = BType::POW(T);
+    const auto PPT = BType::POW(PT);
+    const std::string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Finite_Subsets, T),
+                    /*1*/ symbol(PT),
+                    /*2*/ symbol(PPT),
+                    /*3*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
+                    /*4*/ smtSymbol(Expr::UnaryOp::Subsets, T),
+                    /*5*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
+                    /*6*/ symbolInner(T));
+    set<shared_ptr<Abstract>> requisites = {Factory::PowerSet(T),
+                                            Factory::Card(T)};
+    result = make(BConstruct::Expression::Fin::m_cache, T, script, requisites);
+  }
+  return result;
+}
+};  // namespace BConstruct

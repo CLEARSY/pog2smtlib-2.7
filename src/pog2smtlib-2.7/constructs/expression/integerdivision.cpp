@@ -12,15 +12,23 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "integerdivision.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../parameters.h"
 #include "../../translate-token.h"
+#include "../type/type.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
 (assert (!
@@ -37,12 +45,27 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
   :named |ax.int.div :1|))
   )";
 
-IntegerDivision::IntegerDivision() {
-  m_script = fmt::format(SCRIPT, smtSymbol(Expr::BinaryOp::IDivision),
-                         symbol(BType::INT));
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Type::Type>(BType::INT)});
-  m_label = "/i";
-  m_debug_string = "/i";
+namespace Expression {
+
+std::shared_ptr<IntegerDivision> IntegerDivision::m_cache;
+
+IntegerDivision::IntegerDivision(const std::string &script,
+                                 set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "/i") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::IntegerDivision() {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::IntegerDivision::m_cache);
+  if (!result) {
+    const string script = fmt::format(
+        SCRIPT, smtSymbol(Expr::BinaryOp::IDivision), symbol(BType::INT));
+    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT)};
+    result = make(BConstruct::Expression::IntegerDivision::m_cache, script,
+                  requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+
+};  // namespace BConstruct

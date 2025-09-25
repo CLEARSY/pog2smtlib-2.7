@@ -3,9 +3,9 @@
 (define-sort |REAL| () Real)
 (define-sort |Z| () Int)
 (declare-const creal2 |REAL|)
-(declare-const cint1 |Z|)
 (declare-const cint2 |Z|)
 (declare-const creal1 |REAL|)
+(declare-const cint1 |Z|)
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
 (assert (!
   (not

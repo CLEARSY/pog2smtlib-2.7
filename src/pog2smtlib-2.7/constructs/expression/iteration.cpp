@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "iteration.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {1})
 (assert (!
@@ -32,19 +39,34 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {1})
   :named |ax.set.iterate.n+1 {4}|))
 )";
 
-Iteration::Iteration(const BType &T) : UnaryBType(T) {
-  const auto TxT = BType::PROD(T, T);
-  const auto PTxT = BType::POW(TxT);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::BinaryOp::Iteration, T),
-                         /*1*/ symbol(PTxT),
-                         /*2*/ symbol(BType::INT),
-                         /*3*/ smtSymbol(Expr::BinaryOp::Composition, T, T, T),
-                         /*4*/ symbolInner(BType::INT));
-  m_label = "iterate";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Expression::Composition>(T, T, T)});
-  m_debug_string = fmt::format("iterate_{}", T.to_string());
+namespace Expression {
+
+MapUnaryBType<Iteration> Iteration::m_cache;
+
+Iteration::Iteration(const BType& T, const string& script,
+                     set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "iterate") {}
+
+};  // namespace Expression
+
+std::shared_ptr<Abstract> Factory::Iteration(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Iteration::m_cache, T);
+  if (!result) {
+    const auto TxT = BType::PROD(T, T);
+    const auto PTxT = BType::POW(TxT);
+    const string script =
+        fmt::format(SCRIPT,
+                    /*0*/ smtSymbol(Expr::BinaryOp::Iteration, T),
+                    /*1*/ symbol(PTxT),
+                    /*2*/ symbol(BType::INT),
+                    /*3*/ smtSymbol(Expr::BinaryOp::Composition, T, T, T),
+                    /*4*/ symbolInner(BType::INT));
+    set<shared_ptr<Abstract>> requisites{Factory::Composition(T, T, T)};
+    result =
+        make(BConstruct::Expression::Iteration::m_cache, T, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

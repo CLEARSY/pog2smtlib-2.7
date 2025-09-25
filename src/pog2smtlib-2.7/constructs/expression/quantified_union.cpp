@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "quantified_union.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((declare-fun {0} (|? {1}| (-> {2} {3})) {3})
@@ -31,23 +38,38 @@ static constexpr std::string_view SCRIPT =
   :named |ax.set.in.quantified.union {6}|))
 )";
 
-Quantified_Union::Quantified_Union(const BType &U, const BType &V)
-    : BinaryBType(U, V) {
-  const auto PV = BType::POW(V);
-  const auto UxV = BType::PROD(U, V);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::QuantifiedOp::Union, U, V),
-                         /*1*/ symbolInner(U),
-                         /*2*/ symbol(U),
-                         /*3*/ symbol(PV),
-                         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, V),
-                         /*5*/ symbol(V),
-                         /*6*/ symbolInner(UxV));
-  m_label = "UNION";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(V),
-       std::make_shared<BConstruct::Expression::Set>(U)});
-  m_debug_string = fmt::format("UNION_<{},{}>", U.to_string(), V.to_string());
+namespace Expression {
+
+MapBinaryBType<Quantified_Union> Quantified_Union::m_cache;
+
+Quantified_Union::Quantified_Union(const BType& U, const BType& V,
+                                   const string& script,
+                                   set<shared_ptr<Abstract>>& requisites)
+    : BinaryBType(U, V, script, requisites, "UNION") {}
+
+};  // namespace Expression
+
+std::shared_ptr<Abstract> Factory::Quantified_Union(const BType& U,
+                                                    const BType& V) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Quantified_Union::m_cache, U, V);
+  if (!result) {
+    const auto PV = BType::POW(V);
+    const auto UxV = BType::PROD(U, V);
+    const string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::QuantifiedOp::Union, U, V),
+                    /*1*/ symbolInner(U),
+                    /*2*/ symbol(U),
+                    /*3*/ symbol(PV),
+                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, V),
+                    /*5*/ symbol(V),
+                    /*6*/ symbolInner(UxV));
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(V),
+                                         Factory::Set(U)};
+    result = make(BConstruct::Expression::Quantified_Union::m_cache, U, V,
+                  script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

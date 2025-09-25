@@ -12,17 +12,36 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "integer.h"
+
 #include "../../bconstruct.h"
 #include "universe.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
 
-Integer::Integer() {
-  m_script = universeScript("INTEGER", BType::INT);
-  m_label = "INTEGER";
-  m_prerequisites.insert(
-      std::make_shared<Predicate::SetMembership>(BType::INT));
-  m_debug_string = "INTEGER";
+namespace BConstruct {
+
+namespace Expression {
+
+std::shared_ptr<Integer> Integer::m_cache;
+
+Integer::Integer(const std::string &script,
+                 set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "INTEGER") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Integer() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Integer::m_cache);
+  if (!result) {
+    const string script = Expression::universeScript("INTEGER", BType::INT);
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::INT)};
+    result = make(BConstruct::Expression::Integer::m_cache, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

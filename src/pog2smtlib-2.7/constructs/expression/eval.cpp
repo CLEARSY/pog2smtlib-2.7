@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "eval.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
  (assert (!
@@ -29,20 +36,33 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
     :named |ax.fun.eval {5}|))
 )";
 
-Evaluation::Evaluation(const BType &U, const BType &V) : BinaryBType(U, V) {
-  const auto UxV = BType::PROD(U, V);
-  const auto PUxV = BType::POW(UxV);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::BinaryOp::Application, U, V),
-                         /*1*/ symbol(PUxV),
-                         /*2*/ symbol(U),
-                         /*3*/ symbol(V),
-                         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
-                         /*5*/ symbolInner(UxV));
-  m_label = "eval";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(UxV)});
-  m_debug_string = fmt::format("eval_<{},{}>", U.to_string(), V.to_string());
-}
+namespace Expression {
 
-};  // namespace BConstruct::Expression
+MapBinaryBType<Evaluation> Evaluation::m_cache;
+
+Evaluation::Evaluation(const BType &U, const BType &V, const string &script,
+                       set<shared_ptr<Abstract>> &requisites)
+    : BinaryBType(U, V, script, requisites, "_eval") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Evaluation(const BType &U, const BType &V) {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Evaluation::m_cache, U, V);
+  if (!result) {
+    const auto UxV = BType::PROD(U, V);
+    const auto PUxV = BType::POW(UxV);
+    const std::string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Application, U, V),
+                    /*1*/ symbol(PUxV),
+                    /*2*/ symbol(U),
+                    /*3*/ symbol(V),
+                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
+                    /*5*/ symbolInner(UxV));
+    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV)};
+    result = make(BConstruct::Expression::Evaluation::m_cache, U, V, script,
+                  requisites);
+  }
+  return result;
+}
+};  // namespace BConstruct

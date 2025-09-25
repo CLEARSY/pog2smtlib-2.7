@@ -23,7 +23,7 @@ string POGSignatures::to_string() const {
   result.append("POGSignatures\n");
   result.append("  m_defines\n");
   for (const auto &p : m_defines) {
-    result.append(fmt::format("    {}: {}\n", p.first, toString(p.second)));
+    result.append(fmt::format("    {}: {}\n", p.first, p.second.to_string()));
   }
   result.append("  m_groups\n");
   for (const auto &g : m_groups) {
@@ -31,14 +31,14 @@ string POGSignatures::to_string() const {
       const POGroupSignatures sig = g.value();
       if (sig.common.has_value()) {
         result.append("    - common: ");
-        result.append(toString(sig.common.value()));
+        result.append(sig.common.value().to_string());
         result.append("\n");
       }
       result.append("    - localHyps\n");
       for (const auto &v : sig.localHyps) {
         if (v.has_value()) {
           result.append("      - ");
-          result.append(toString(v.value()));
+          result.append(v.value().to_string());
           result.append("\n");
         } else {
           result.append("      - (?)\n");
@@ -48,7 +48,7 @@ string POGSignatures::to_string() const {
       for (const auto &v : sig.goals) {
         if (v.has_value()) {
           result.append("      - ");
-          result.append(toString(v.value()));
+          result.append(v.value().to_string());
           result.append("\n");
         } else {
           result.append("      - (?)\n");

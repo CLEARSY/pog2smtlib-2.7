@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "strictinclusion.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -19,7 +21,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Predicate {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) Bool)
 (assert (!
@@ -32,15 +39,31 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) Bool)
   :named |ax.set.subset {3}|))
 )";
 
-StrictInclusion::StrictInclusion(const BType &t) : UnaryBType(t) {
-  const BType pt = BType::POW(t);
-  m_script = fmt::format(
-      SCRIPT, smtSymbol(Pred::ComparisonOp::Strict_Subset, t), symbol(pt),
-      smtSymbol(Pred::ComparisonOp::Subset, t), symbolInner(t));
-  m_prerequisites.insert(
-      {std::make_shared<Equality>(t), std::make_shared<Inclusion>(t)});
-  m_label = "<<:";
-  m_debug_string = fmt::format("<<:_<{}>", t.to_string());
+namespace Predicate {
+
+MapUnaryBType<StrictInclusion> StrictInclusion::m_cache;
+
+StrictInclusion::StrictInclusion(const BType& T, const std::string& script,
+                                 set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "<<:") {}
+
+};  // namespace Predicate
+
+shared_ptr<Abstract> Factory::StrictInclusion(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Predicate::StrictInclusion::m_cache, T);
+  if (!result) {
+    const BType PT = BType::POW(T);
+    const std::string op = smtSymbol(Pred::ComparisonOp::Membership, T);
+    const string script = fmt::format(
+        SCRIPT, smtSymbol(Pred::ComparisonOp::Strict_Subset, T), symbol(PT),
+        smtSymbol(Pred::ComparisonOp::Subset, T), symbolInner(T));
+    set<shared_ptr<Abstract>> requisites = {Factory::Equality(T),
+                                            Factory::Inclusion(T)};
+    result = make(BConstruct::Predicate::StrictInclusion::m_cache, T, script,
+                  requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Predicate
+};  // namespace BConstruct

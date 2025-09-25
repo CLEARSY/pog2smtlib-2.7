@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "front.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,25 +22,43 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((define-fun {0} ((s {1})) {1} ({2} s (- ({3} s) 1)))
 )";
 
-Front::Front(const BType &T) : UnaryBType(T) {
-  const auto ZxT = BType::PROD(BType::INT, T);
-  const auto PZxT = BType::POW(ZxT);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::UnaryOp::Front, T),
-                         /*1*/ symbol(PZxT),
-                         /*2*/ smtSymbol(Expr::BinaryOp::Head_Restriction, T),
-                         /*3*/ smtSymbol(Expr::UnaryOp::Size, T));
-  m_label = "front";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Expression::Size>(T),
-       std::make_shared<BConstruct::Expression::Restrict_In_Front>(T)});
-  m_debug_string = fmt::format("front_{}", T.to_string());
+namespace Expression {
+
+MapUnaryBType<Front> Front::m_cache;
+
+Front::Front(const BType& T, const std::string& script,
+             set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "front") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Front(const BType& T) {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Front::m_cache, T);
+  if (!result) {
+    const auto ZxT = BType::PROD(BType::INT, T);
+    const auto PZxT = BType::POW(ZxT);
+    const std::string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Front, T),
+                    /*1*/ symbol(PZxT),
+                    /*2*/ smtSymbol(Expr::BinaryOp::Head_Restriction, T),
+                    /*3*/ smtSymbol(Expr::UnaryOp::Size, T));
+    set<shared_ptr<Abstract>> requisites = {Factory::Size(T),
+                                            Factory::Restrict_In_Front(T)};
+    result =
+        make(BConstruct::Expression::Front::m_cache, T, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

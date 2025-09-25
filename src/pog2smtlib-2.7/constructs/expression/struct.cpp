@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "struct.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((declare-const {0} (-> |? {1}| {2}))
@@ -32,17 +39,32 @@ static constexpr std::string_view SCRIPT =
   :named |ax.struct.definition {1}|))
 )";
 
-Struct::Struct(const BType &T) : UnaryBType(T) {
-  const auto PT = BType::POW(T);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::EKind::Struct, T),
-                         /*1*/ symbolInner(T),
-                         /*2*/ symbol(PT),
-                         /*3*/ symbol(T),
-                         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T));
-  m_label = "struct";
-  m_prerequisites.insert({std::make_shared<BConstruct::Expression::Set>(T)});
-  m_debug_string = fmt::format("struct_{}", T.to_string());
+namespace Expression {
+
+MapUnaryBType<Struct> Struct::m_cache;
+
+Struct::Struct(const BType& T, const string& script,
+               set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "struct") {}
+
+};  // namespace Expression
+
+std::shared_ptr<Abstract> Factory::Struct(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Struct::m_cache, T);
+  if (!result) {
+    const auto PT = BType::POW(T);
+    const string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::EKind::Struct, T),
+                    /*1*/ symbolInner(T),
+                    /*2*/ symbol(PT),
+                    /*3*/ symbol(T),
+                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T));
+    set<shared_ptr<Abstract>> requisites{Factory::Set(T)};
+    result =
+        make(BConstruct::Expression::Struct::m_cache, T, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

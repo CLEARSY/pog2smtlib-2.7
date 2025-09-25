@@ -27,21 +27,6 @@ using std::string;
 using std::string_view;
 using std::unordered_set;
 
-string POGTranslations::toString(const BConstruct::Context &c) {
-  string result;
-  for (const auto &v : c) {
-    result.append(v->script());
-  }
-  return result;
-}
-string POGTranslations::toString(const POGTranslations::groupPreludeCache &c) {
-  string result;
-  result.append(fmt::format("- context: {}\n", toString(c.m_context)));
-  result.append(fmt::format("- script:\n", toString(c.m_context)));
-  result.append("...\n");
-  return result;
-}
-
 string POGTranslations::to_string() const {
   string result;
   result.append("POGTranslations\n");
@@ -109,6 +94,7 @@ inline const string POGTranslations::assertLocalHypCommand(
 }
 
 string POGTranslations::ofGoal(const goal_t &goal) {
+  static constexpr bool debug_me = false;
   const size_t &group = goal.first;
   const size_t &sgoal = goal.second;
   /*
@@ -135,7 +121,13 @@ string POGTranslations::ofGoal(const goal_t &goal) {
 
   // 1.1 store in result the declarations for signature of group
   result.append(strGroupPrelude);
-
+  if (debug_me) {
+    std::cerr << "1.1" << std::endl
+              << "-- context" << std::endl
+              << ::toString(context) << std::endl
+              << "-- result" << std::endl
+              << result << std::endl;
+  }
   // 1.2 find all additional operators found in goal and in referenced local
   // hypotheses
 
@@ -159,6 +151,19 @@ string POGTranslations::ofGoal(const goal_t &goal) {
   // 1.2 append to result the declarations for additional operators found in
   // goal and in referenced local hypotheses
   result.append(strPreludeComplement);
+  if (debug_me) {
+    std::cerr << "1.2" << std::endl
+              << "-- localHypSignature" << std::endl
+              << localHypSignature.to_string() << std::endl
+              << "-- goalSignature" << std::endl
+              << goalSignature.to_string() << std::endl
+              << "-- complementSignature" << std::endl
+              << complementSignature.to_string() << std::endl
+              << "-- context" << std::endl
+              << ::toString(context) << std::endl
+              << "-- result" << std::endl
+              << result << std::endl;
+  }
 
   const string_view &strGroupScript = groupScript(group);
   // 2. append to result the script for the group
@@ -286,4 +291,10 @@ const string &POGTranslations::defineScript(const std::string &name) {
   const auto &p = m_defineScripts.insert(make_pair(index, std::move(script)));
   const string &result = p.first->second;
   return result;
+}
+
+string POGTranslations::toString(
+    POGTranslations::groupPreludeCache const &prelude) {
+  return fmt::format("  - script: \n{}\n  -context: {}\n", prelude.m_script,
+                     ::toString(prelude.m_context));
 }

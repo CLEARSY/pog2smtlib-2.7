@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "cardinals.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,15 +22,37 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 )";
 
-Cardinals::Cardinals() {
-  m_script = fmt::format(SCRIPT);
-  m_label = "cardinals";
-  m_debug_string = "cardinals";
+namespace Expression {
+
+std::shared_ptr<Cardinals> Cardinals::m_cache;
+
+Cardinals::Cardinals(const std::string &script,
+                     set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "cardinals") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Cardinals() {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Cardinals::m_cache);
+  if (!result) {
+    const string script = fmt::format(SCRIPT);
+    set<shared_ptr<Abstract>> requisites{};
+    result =
+        make(BConstruct::Expression::Cardinals::m_cache, script, requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+
+};  // namespace BConstruct

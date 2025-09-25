@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
     <Define name="B definitions">
         <Exp_Comparison op="=">
@@ -23,12 +22,15 @@
     <Define name="inext" />
     <Define name="inv" />
     <Define name="ass">
-        <Unary_Pred op="not">
-            <Exp_Comparison op=":">
-                <Integer_Literal value="1" typref="1" />
+        <Exp_Comparison op="=">
+            <Binary_Exp op="-s" typref="0">
                 <Id value="INTEGER" typref="0" />
-            </Exp_Comparison>
-        </Unary_Pred>
+                <Nary_Exp op="{" typref="0">
+                    <Integer_Literal value="0" typref="1" />
+                </Nary_Exp>
+            </Binary_Exp>
+            <Id value="INTEGER" typref="0" />
+        </Exp_Comparison>
     </Define>
     <Define name="cst" />
     <Define name="sets" />
@@ -45,12 +47,15 @@
         <Simple_Goal>
             <Tag>Assertion is verified</Tag>
             <Goal>
-                <Unary_Pred op="not">
-                    <Exp_Comparison op=":">
-                        <Integer_Literal value="1" typref="1" />
+                <Exp_Comparison op="=">
+                    <Binary_Exp op="-s" typref="0">
                         <Id value="INTEGER" typref="0" />
-                    </Exp_Comparison>
-                </Unary_Pred>
+                        <Nary_Exp op="{" typref="0">
+                            <Integer_Literal value="0" typref="1" />
+                        </Nary_Exp>
+                    </Binary_Exp>
+                    <Id value="INTEGER" typref="0" />
+                </Exp_Comparison>
             </Goal>
         </Simple_Goal>
     </Proof_Obligation>

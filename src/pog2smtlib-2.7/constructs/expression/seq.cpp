@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "seq.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
 (assert (!
@@ -37,32 +44,42 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
   :named |ax.seq.is.total.fun {10}|))
 )";
 
-Seq::Seq(const BType &T) : UnaryBType(T) {
-  const auto PT = BType::POW(T);
-  const auto ZxT = BType::PROD(BType::INT, T);
-  const auto PZxT = BType::POW(ZxT);
-  const auto PPZxT = BType::POW(PZxT);
-  m_script = fmt::format(
-      SCRIPT,
-      /*0*/ smtSymbol(Expr::UnaryOp::Sequences, T),
-      /*1*/ symbol(PT),
-      /*2*/ symbol(PPZxT),
-      /*3*/ symbol(PZxT),
-      /*4*/ smtSymbol(Pred::ComparisonOp::Membership, PZxT),
-      /*5*/ smtSymbol(Expr::UnaryOp::Cardinality, ZxT),
-      /*6*/ smtSymbol(Pred::ComparisonOp::Subset, PZxT),
-      /*7*/ smtSymbol(Expr::BinaryOp::Total_Functions, BType::INT, T),
-      /*8*/ smtSymbol(Expr::BinaryOp::Interval),
-      /*9*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
-      /*10*/ symbolInner(T));
-  m_label = "seq";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Expression::Interval>(),
-       std::make_shared<BConstruct::Expression::Card>(T),
-       std::make_shared<BConstruct::Expression::Card>(ZxT),
-       std::make_shared<BConstruct::Expression::Total_Function>(BType::INT, T),
-       std::make_shared<BConstruct::Predicate::Inclusion>(PZxT)});
-  m_debug_string = fmt::format("seq_{}", T.to_string());
+namespace Expression {
+
+MapUnaryBType<Seq> Seq::m_cache;
+
+Seq::Seq(const BType& T, const string& script,
+         set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "seq") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Seq(const BType& T) {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Seq::m_cache, T);
+  if (!result) {
+    const auto PT = BType::POW(T);
+    const auto ZxT = BType::PROD(BType::INT, T);
+    const auto PZxT = BType::POW(ZxT);
+    const auto PPZxT = BType::POW(PZxT);
+    const std::string script = fmt::format(
+        SCRIPT,
+        /*0*/ smtSymbol(Expr::UnaryOp::Sequences, T),
+        /*1*/ symbol(PT),
+        /*2*/ symbol(PPZxT),
+        /*3*/ symbol(PZxT),
+        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, PZxT),
+        /*5*/ smtSymbol(Expr::UnaryOp::Cardinality, ZxT),
+        /*6*/ smtSymbol(Pred::ComparisonOp::Subset, PZxT),
+        /*7*/ smtSymbol(Expr::BinaryOp::Total_Functions, BType::INT, T),
+        /*8*/ smtSymbol(Expr::BinaryOp::Interval),
+        /*9*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
+        /*10*/ symbolInner(T));
+    set<shared_ptr<Abstract>> requisites = {
+        Factory::Interval(), Factory::Card(T), Factory::Card(ZxT),
+        Factory::Total_Function(BType::INT, T), Factory::Inclusion(PZxT)};
+    result = make(BConstruct::Expression::Seq::m_cache, T, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

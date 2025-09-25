@@ -12,17 +12,35 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "string.h"
+
 #include "../../bconstruct.h"
 #include "universe.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
 
-String::String() {
-  m_script = universeScript("STRING", BType::STRING);
-  m_prerequisites.insert(
-      std::make_shared<Predicate::SetMembership>(BType::STRING));
-  m_label = "STRING";
-  m_debug_string = "STRING";
+namespace BConstruct {
+
+namespace Expression {
+
+std::shared_ptr<String> String::m_cache;
+
+String::String(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "STRING") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::String() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::String::m_cache);
+  if (!result) {
+    const string script = Expression::universeScript("STRING", BType::STRING);
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::STRING)};
+    result = make(BConstruct::Expression::String::m_cache, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

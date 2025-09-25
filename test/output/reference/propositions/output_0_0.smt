@@ -4,8 +4,8 @@
 (declare-const c5 |Z|)
 (declare-const c2 |Z|)
 (declare-const c3 |Z|)
-(declare-const c1 |Z|)
 (declare-const c0 |Z|)
+(declare-const c1 |Z|)
 (declare-const c4 |Z|)
 (assert (!
   (not

@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "inclusion.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -19,7 +21,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Predicate {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((declare-fun {0} ({1} {1}) Bool)
@@ -33,14 +40,30 @@ static constexpr std::string_view SCRIPT =
     :named |ax.set.subseteq {2}|))
 )";
 
-Inclusion::Inclusion(const BType &t) : UnaryBType(t) {
-  const BType pt = BType::POW(t);
-  m_script =
-      fmt::format(SCRIPT, smtSymbol(Pred::ComparisonOp::Subset, t), symbol(pt),
-                  symbolInner(t), smtSymbol(Pred::ComparisonOp::Membership, t));
-  m_prerequisites.insert(std::make_shared<SetMembership>(t));
-  m_label = "<:";
-  m_debug_string = fmt::format("<:_<{}>", t.to_string());
+namespace Predicate {
+
+MapUnaryBType<Inclusion> Inclusion::m_cache;
+
+Inclusion::Inclusion(const BType& T, const std::string& script,
+                     set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "<:") {}
+
+};  // namespace Predicate
+
+shared_ptr<Abstract> Factory::Inclusion(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Predicate::Inclusion::m_cache, T);
+  if (!result) {
+    const BType PT = BType::POW(T);
+    const std::string op = smtSymbol(Pred::ComparisonOp::Membership, T);
+    const string script = fmt::format(
+        SCRIPT, smtSymbol(Pred::ComparisonOp::Subset, T), symbol(PT),
+        symbolInner(T), smtSymbol(Pred::ComparisonOp::Membership, T));
+    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(T)};
+    result =
+        make(BConstruct::Predicate::Inclusion::m_cache, T, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Predicate
+};  // namespace BConstruct

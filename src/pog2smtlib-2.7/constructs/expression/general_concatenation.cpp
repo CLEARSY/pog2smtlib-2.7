@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "general_concatenation.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -19,8 +21,14 @@
 #include "../../parameters.h"
 #include "../../translate-token.h"
 #include "btype.h"
+#include "emptyseq.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
 (assert (!
@@ -35,27 +43,44 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
 ))
 )";
 
-General_Concatenation::General_Concatenation(const BType &T) : UnaryBType(T) {
-  const auto ZxT = BType::PROD(BType::INT, T);
-  const auto PZxT = BType::POW(ZxT);
-  const auto ZxPZxT = BType::PROD(BType::INT, PZxT);
-  const auto PZxPZxT = BType::POW(ZxPZxT);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::UnaryOp::Concatenation, T),
-                         /*1*/ symbol(PZxPZxT),
-                         /*2*/ symbol(PZxT),
-                         /*3*/ symbolInner(PZxT),
-                         /*4*/ smtSymbol(Expr::BinaryOp::Head_Insertion, PZxT),
-                         /*5*/ smtSymbol(Expr::BinaryOp::Concatenation, T),
-                         /*6*/ symbolInner(T));
-  m_label = "conc";
-  m_prerequisites.insert({
-      std::make_shared<BConstruct::Expression::Insert_In_Front>(PZxT),
-      std::make_shared<BConstruct::Expression::Concatenation>(T),
-      std::make_shared<BConstruct::Expression::EmptySeq>(PZxT),
-      std::make_shared<BConstruct::Expression::EmptySeq>(T),
-  });
-  m_debug_string = fmt::format("conc_{}", T.to_string());
+namespace Expression {
+
+MapUnaryBType<General_Concatenation> General_Concatenation::m_cache;
+
+General_Concatenation::General_Concatenation(
+    const BType& T, const std::string& script,
+    set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "conc") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::General_Concatenation(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::General_Concatenation::m_cache, T);
+  if (!result) {
+    const auto ZxT = BType::PROD(BType::INT, T);
+    const auto PZxT = BType::POW(ZxT);
+    const auto ZxPZxT = BType::PROD(BType::INT, PZxT);
+    const auto PZxPZxT = BType::POW(ZxPZxT);
+    const string script =
+        fmt::format(SCRIPT,
+                    /*0*/ smtSymbol(Expr::UnaryOp::Concatenation, T),
+                    /*1*/ symbol(PZxPZxT),
+                    /*2*/ symbol(PZxT),
+                    /*3*/ symbolInner(PZxT),
+                    /*4*/ smtSymbol(Expr::BinaryOp::Head_Insertion, PZxT),
+                    /*5*/ smtSymbol(Expr::BinaryOp::Concatenation, T),
+                    /*6*/ symbolInner(T));
+    set<shared_ptr<Abstract>> requisites = {
+        Factory::Insert_In_Front(PZxT),
+        Factory::Concatenation(T),
+        Factory::EmptySeq(PZxT),
+        Factory::EmptySeq(T),
+    };
+    result = make(BConstruct::Expression::General_Concatenation::m_cache, T,
+                  script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

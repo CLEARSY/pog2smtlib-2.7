@@ -12,33 +12,57 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "rexp.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../parameters.h"
 #include "../../translate-token.h"
+#include "../type/type.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((define-fun-rec {0} ((n {1}) (p {2})) {1}
- (ite (= p 0)
+  (ite (= p 0)
     1.0
     (ite (> p 0)
-        (* n ({0} n (- p 1)))
-        0.0))
- )
- )";
+      (* n ({0} n (- p 1)))
+      0.0)))
+)";
 
-RExponentiation::RExponentiation() {
-  m_script = fmt::format(SCRIPT, smtSymbol(Expr::BinaryOp::RExponentiation),
-                         symbol(BType::REAL), symbol(BType::INT));
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Type::Type>(BType::INT),
-       std::make_shared<BConstruct::Type::Type>(BType::REAL)});
-  m_label = "**r";
-  m_debug_string = "**r";
+namespace Expression {
+
+std::shared_ptr<RExponentiation> RExponentiation::m_cache;
+
+RExponentiation::RExponentiation(const std::string &script,
+                                 set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "**r") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::RExponentiation() {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::RExponentiation::m_cache);
+  if (!result) {
+    const string script =
+        fmt::format(SCRIPT, smtSymbol(Expr::BinaryOp::RExponentiation),
+                    symbol(BType::REAL), symbol(BType::INT));
+    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT),
+                                         Factory::Type(BType::INT),
+                                         Factory::Type(BType::REAL)};
+    result = make(BConstruct::Expression::RExponentiation::m_cache, script,
+                  requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+
+};  // namespace BConstruct

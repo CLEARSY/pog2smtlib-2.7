@@ -12,33 +12,55 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "minint.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../parameters.h"
 #include "../../translate-token.h"
+#include "../type/type.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((define-const {0} {1} {2})
 )";
 
-Minint::Minint() {
-  std::string smtLiteral;
-  if (Parameters::MININT.at(0) == '-') {
-    smtLiteral = fmt::format(
-        "(- {})", Parameters::MININT.substr(1, Parameters::MININT.size() - 1));
-  } else {
-    smtLiteral = Parameters::MININT;
-  }
+namespace Expression {
 
-  m_script = fmt::format(SCRIPT, smtSymbol(Expr::Visitor::EConstant::MinInt),
-                         symbol(BType::INT), smtLiteral);
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Type::Type>(BType::INT)});
-  m_label = "MININT";
-  m_debug_string = "MININT";
+shared_ptr<Minint> Minint::m_cache;
+
+Minint::Minint(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "MININT") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Minint() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Minint::m_cache);
+  if (!result) {
+    std::string smtLiteral;
+    if (Parameters::MININT.at(0) == '-') {
+      smtLiteral = fmt::format("(- {})", Parameters::MININT.substr(
+                                             1, Parameters::MININT.size() - 1));
+    } else {
+      smtLiteral = Parameters::MININT;
+    }
+    const string script =
+        fmt::format(SCRIPT,
+                    /*0*/ smtSymbol(Expr::Visitor::EConstant::MinInt),
+                    /*1*/ symbol(BType::INT),
+                    /*2*/ smtLiteral);
+    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT)};
+    result = make(BConstruct::Expression::Minint::m_cache, script, requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+
+};  // namespace BConstruct

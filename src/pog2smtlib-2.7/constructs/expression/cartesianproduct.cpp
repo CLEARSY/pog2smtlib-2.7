@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "cartesianproduct.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
 (assert (!
@@ -37,31 +44,43 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
   :named |ax.set.in.product.2 {8}|))
 )";
 
-CartesianProduct::CartesianProduct(const BType &U, const BType &V)
-    : BinaryBType(U, V) {
-  const auto PU = BType::POW(U);
-  const auto PV = BType::POW(V);
-  const auto UxV = BType::PROD(U, V);
-  const auto PUxV = BType::POW(UxV);
-  m_script =
-      fmt::format(SCRIPT,
-                  /*0*/ smtSymbol(Expr::BinaryOp::Cartesian_Product, U, V),
-                  /*1*/ symbol(PU),
-                  /*2*/ symbol(PV),
-                  /*3*/ symbol(PUxV),
-                  /*4*/ symbol(UxV),
-                  /*5*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
-                  /*6*/ smtSymbol(Pred::ComparisonOp::Membership, U),
-                  /*7*/ smtSymbol(Pred::ComparisonOp::Membership, V),
-                  /*8*/ symbolInner(UxV),
-                  /*9*/ symbol(U),
-                  /*10*/ symbol(V));
-  m_label = "*";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(U),
-       std::make_shared<BConstruct::Predicate::SetMembership>(V),
-       std::make_shared<BConstruct::Predicate::SetMembership>(UxV)});
-  m_debug_string = fmt::format("*_<{},{}>", U.to_string(), V.to_string());
+namespace Expression {
+
+MapBinaryBType<CartesianProduct> CartesianProduct::m_cache;
+
+CartesianProduct::CartesianProduct(const BType &U, const BType &V,
+                                   const string &script,
+                                   set<shared_ptr<Abstract>> &requisites)
+    : BinaryBType(U, V, script, requisites, "*") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::ExpressionCartesianProduct(const BType &U,
+                                                         const BType &V) {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::CartesianProduct::m_cache, U, V);
+  if (!result) {
+    const auto PU = BType::POW(U);
+    const auto PV = BType::POW(V);
+    const auto UxV = BType::PROD(U, V);
+    const auto PUxV = BType::POW(UxV);
+    const std::string script = fmt::format(
+        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Cartesian_Product, U, V),
+        /*1*/ symbol(PU),
+        /*2*/ symbol(PV),
+        /*3*/ symbol(PUxV),
+        /*4*/ symbol(UxV),
+        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
+        /*6*/ smtSymbol(Pred::ComparisonOp::Membership, U),
+        /*7*/ smtSymbol(Pred::ComparisonOp::Membership, V),
+        /*8*/ symbolInner(UxV),
+        /*9*/ symbol(U),
+        /*10*/ symbol(V));
+    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV)};
+    result = make(BConstruct::Expression::CartesianProduct::m_cache, U, V,
+                  script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

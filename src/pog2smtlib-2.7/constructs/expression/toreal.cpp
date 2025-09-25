@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "toreal.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,16 +22,35 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((define-fun {0} ((x {1})) {2} (to_real x))
 )";
 
-ToReal::ToReal() {
-  m_script = fmt::format(SCRIPT, smtSymbol(Expr::UnaryOp::Real),
-                         symbol(BType::INT), symbol(BType::REAL));
-  m_label = "to_real";
-  m_debug_string = "to_real";
+namespace Expression {
+
+std::shared_ptr<ToReal> ToReal::m_cache;
+
+ToReal::ToReal(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "to_real") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::ToReal() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::ToReal::m_cache);
+  if (!result) {
+    const string script = fmt::format(SCRIPT, smtSymbol(Expr::UnaryOp::Real),
+                                      symbol(BType::INT), symbol(BType::REAL));
+    set<shared_ptr<Abstract>> requisites{};
+    result = make(BConstruct::Expression::ToReal::m_cache, script, requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+
+};  // namespace BConstruct

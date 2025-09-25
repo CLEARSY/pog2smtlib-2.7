@@ -1,13 +1,13 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
 (define-sort |Z| () Int)
-(declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
-(define-sort |(Z x Z)| () (C |Z| |Z|))
 (declare-sort P 1)
-(define-sort |POW (Z x Z)| () (P |(Z x Z)|))
+(declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
 (define-sort |POW Z| () (P |Z|))
-(declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
+(define-sort |(Z x Z)| () (C |Z| |Z|))
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
+(define-sort |POW (Z x Z)| () (P |(Z x Z)|))
+(declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -24,6 +24,10 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
+(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
+(assert (!
+  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
+  :named |ax.set.in.empty (Z x Z)|))
 (declare-fun |rel.subtract.ran Z Z| (|POW (Z x Z)| |POW Z|) |POW (Z x Z)|)
 (assert (!
   (forall ((r |POW (Z x Z)|) (e |POW Z|))
@@ -31,10 +35,6 @@
       (= (|set.in (Z x Z)| x (|rel.subtract.ran Z Z| r e))
         (and (|set.in (Z x Z)| x r) (not (|set.in Z| (snd x) e))))))
   :named |ax:set.in.subtract.ran (Z x Z)|))
-(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
-(assert (!
-  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
-  :named |ax.set.in.empty (Z x Z)|))
 (assert (!
   (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
     (=

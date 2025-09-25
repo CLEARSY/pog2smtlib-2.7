@@ -18,6 +18,11 @@ macro(add_cl_test id)
     set_tests_properties(${id} PROPERTIES LABELS "command line")
 endmacro(add_cl_test)
 
+# Program parameters
+
+add_cl_test("issue_clearsy_27a" "-u")
+add_cl_test("issue_clearsy_27b" "-m")
+
 # Non regression
 
 add_cl_test("issue_clearsy_11")
@@ -30,6 +35,7 @@ add_cl_test("issue_clearsy_20")
 add_cl_test("issue_clearsy_23")
 add_cl_test("issue_clearsy_26")
 add_cl_test("issue_clearsy_31")
+add_cl_test("issue_clearsy_34")
 
 # 3.2 Types
 
@@ -353,8 +359,3 @@ add_cl_test("restrict_at_tail_1")
 add_cl_test("restrict_at_tail_2")
 add_cl_test("general_concatenation_1")
 add_cl_test("general_concatenation_2")
-
-# Program parameters
-
-add_cl_test("issue_clearsy_27a" "-u")
-add_cl_test("issue_clearsy_27b" "-m")

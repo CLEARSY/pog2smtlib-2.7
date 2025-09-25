@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "generalizedunion.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
 (assert (!
@@ -30,22 +37,34 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
   :named |ax.set.in.generalized.union {6}|))
 )";
 
-GeneralizedUnion::GeneralizedUnion(const BType &T) : UnaryBType(T) {
-  const auto PT = BType::POW(T);
-  const auto PPT = BType::POW(PT);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::UnaryOp::Union, T),
-                         /*1*/ symbol(PPT),
-                         /*2*/ symbol(PT),
-                         /*3*/ symbol(T),
-                         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T),
-                         /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
-                         /*6*/ symbolInner(T));
-  m_label = "union";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(PT),
-       std::make_shared<BConstruct::Predicate::SetMembership>(T)});
-  m_debug_string = fmt::format("union_{}", T.to_string());
-}
+namespace Expression {
 
-};  // namespace BConstruct::Expression
+MapUnaryBType<GeneralizedUnion> GeneralizedUnion::m_cache;
+
+GeneralizedUnion::GeneralizedUnion(const BType& T, const string& script,
+                                   set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "union") {}
+
+};  // namespace Expression
+
+std::shared_ptr<Abstract> Factory::GeneralizedUnion(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::GeneralizedUnion::m_cache, T);
+  if (!result) {
+    const auto PT = BType::POW(T);
+    const auto PPT = BType::POW(PT);
+    const string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Union, T),
+                    /*1*/ symbol(PPT),
+                    /*2*/ symbol(PT),
+                    /*3*/ symbol(T),
+                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T),
+                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
+                    /*6*/ symbolInner(T));
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(PT)};
+    result = make(BConstruct::Expression::GeneralizedUnion::m_cache, T, script,
+                  requisites);
+  }
+  return result;
+}
+};  // namespace BConstruct

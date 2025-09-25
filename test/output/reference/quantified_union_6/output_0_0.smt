@@ -4,6 +4,7 @@
 (declare-sort P 1)
 (define-sort |POW Z| () (P |Z|))
 (define-sort |POW POW Z| () (P |POW Z|))
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
 (define-sort |? POW Z| () (-> |POW Z| Bool))
 (declare-const |set.intent POW Z| (-> |? POW Z| |POW POW Z|))
@@ -13,7 +14,6 @@
       (= (|set.in POW Z| x (|set.intent POW Z| p))
          (p x))))
   :named |ax:set.in.intent POW Z|))
-(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-fun |UNION POW Z Z| (|? POW Z| (-> |POW Z| |POW Z|)) |POW Z|)
 (assert (!
   (forall ((P |? POW Z|)(E (-> |POW Z| |POW Z|))(x |Z|))

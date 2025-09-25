@@ -145,6 +145,7 @@ typedef struct Data {
   std::shared_ptr<const BType> m_type;
 
   std::string to_string() const;
+  const BType &type() const;
   inline bool operator==(const Data &other) const {
     return (*m_name == *(other.m_name) ||
             m_name->show() == other.m_name->show());
@@ -195,7 +196,5 @@ extern Signature &operator+=(Signature &lhs, const Signature &rhs);
 
 /** @brief removes elements of a signature from another signature */
 extern Signature &operator-=(Signature &lhs, const Signature &rhs);
-
-extern std::string toString(const Signature &sig);
 
 #endif  // SIGNATURE_H

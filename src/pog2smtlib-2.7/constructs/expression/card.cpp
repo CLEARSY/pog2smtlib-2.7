@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "card.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) Cardinals)
 (assert (!
@@ -31,25 +38,37 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) Cardinals)
   :named |ax.card.definition {4}|))
 )";
 
-Card::Card(const BType &T) : UnaryBType(T) {
-  const auto PT = BType::POW(T);
-  const auto TxZ = BType::PROD(T, BType::INT);
-  const auto PTxZ = BType::POW(TxZ);
-  m_script = fmt::format(SCRIPT,
-                         /*0*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
-                         /*1*/ symbol(PT),
-                         /*2*/ symbol(PTxZ),
-                         /*3*/ smtSymbol(Pred::ComparisonOp::Membership, PTxZ),
-                         /*4*/ symbolInner(T),
-                         /*5*/ symbolInner(BType::INT),
-                         /*6*/ smtSymbol(Expr::BinaryOp::Interval));
-  m_label = "card";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(TxZ),
-       std::make_shared<BConstruct::Expression::Bijection>(T, BType::INT),
-       std::make_shared<BConstruct::Expression::Interval>(),
-       std::make_shared<BConstruct::Expression::Cardinals>()});
-  m_debug_string = fmt::format("card_{}", T.to_string());
-}
+namespace Expression {
 
-};  // namespace BConstruct::Expression
+MapUnaryBType<Card> Card::m_cache;
+
+Card::Card(const BType& T, const string& script,
+           set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "card") {}
+
+};  // namespace Expression
+
+std::shared_ptr<Abstract> Factory::Card(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Card::m_cache, T);
+  if (!result) {
+    const auto PT = BType::POW(T);
+    const auto TxZ = BType::PROD(T, BType::INT);
+    const auto PTxZ = BType::POW(TxZ);
+    const string script =
+        fmt::format(SCRIPT,
+                    /*0*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
+                    /*1*/ symbol(PT),
+                    /*2*/ symbol(PTxZ),
+                    /*3*/ smtSymbol(Pred::ComparisonOp::Membership, PTxZ),
+                    /*4*/ symbolInner(T),
+                    /*5*/ symbolInner(BType::INT),
+                    /*6*/ smtSymbol(Expr::BinaryOp::Interval));
+    set<shared_ptr<Abstract>> requisites{
+        Factory::SetMembership(TxZ), Factory::Bijection(T, BType::INT),
+        Factory::Interval(), Factory::Cardinals()};
+    result = make(BConstruct::Expression::Card::m_cache, T, script, requisites);
+  }
+  return result;
+}
+};  // namespace BConstruct

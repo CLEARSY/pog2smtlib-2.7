@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "realdivision.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
 (assert (!
@@ -37,12 +44,27 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
   :named |ax.real.div :1|))
 )";
 
-RealDivision::RealDivision() {
-  m_script = fmt::format(SCRIPT, smtSymbol(Expr::BinaryOp::RDivision),
-                         symbol(BType::REAL));
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Type::Type>(BType::REAL)});
-  m_label = "/r";
-  m_debug_string = "/r";
+namespace Expression {
+
+std::shared_ptr<RealDivision> RealDivision::m_cache;
+
+RealDivision::RealDivision(const std::string &script,
+                           set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "/r") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::RealDivision() {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::RealDivision::m_cache);
+  if (!result) {
+    const string script = fmt::format(
+        SCRIPT, smtSymbol(Expr::BinaryOp::RDivision), symbol(BType::REAL));
+    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::REAL)};
+    result =
+        make(BConstruct::Expression::RealDivision::m_cache, script, requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+
+};  // namespace BConstruct

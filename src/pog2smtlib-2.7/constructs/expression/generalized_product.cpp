@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "generalized_product.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) |{1}|)
 (assert (!
@@ -40,22 +47,33 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) |{1}|)
 )
 )";
 
-GeneralizedProduct::GeneralizedProduct() {
-  const auto PZ = BType::POW(BType::INT);
-  m_script = fmt::format(
-      SCRIPT,
-      /*0*/ smtSymbol(Expr::QuantifiedOp::IProduct),
-      /*1*/ symbolInner(BType::INT),
-      /*2*/ symbol(PZ),
-      /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::INT),
-      /*4*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT),
-      /*5*/ smtSymbol(Expr::NaryOp::Set, BType::INT));
-  m_label = "Π";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(BType::INT),
-       std::make_shared<BConstruct::Expression::Set>(BType::INT),
-       std::make_shared<BConstruct::Expression::EmptySet>(BType::INT)});
-  m_debug_string = "Π";
-}
+namespace Expression {
 
-};  // namespace BConstruct::Expression
+shared_ptr<GeneralizedProduct> GeneralizedProduct::m_cache;
+
+GeneralizedProduct::GeneralizedProduct(const std::string &script,
+                                       set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "Π") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::GeneralizedProduct() {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::GeneralizedProduct::m_cache);
+  if (!result) {
+    const auto PZ = BType::POW(BType::INT);
+    const string script = fmt::format(
+        SCRIPT, /*0*/ smtSymbol(Expr::QuantifiedOp::IProduct),
+        /*1*/ symbolInner(BType::INT),
+        /*2*/ symbol(PZ),
+        /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::INT),
+        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT),
+        /*5*/ smtSymbol(Expr::NaryOp::Set, BType::INT));
+    set<shared_ptr<Abstract>> requisites{Factory::Set(BType::INT),
+                                         Factory::EmptySet(BType::INT)};
+    result = make(BConstruct::Expression::GeneralizedProduct::m_cache, script,
+                  requisites);
+  }
+  return result;
+}
+};  // namespace BConstruct

@@ -12,15 +12,23 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "exp.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../parameters.h"
 #include "../../translate-token.h"
+#include "../type/type.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((define-fun-rec {0} ((n {1}) (p {1})) {1}
@@ -31,12 +39,26 @@ static constexpr std::string_view SCRIPT =
         0)))
 )";
 
-Exponentiation::Exponentiation() {
-  m_script = fmt::format(SCRIPT, smtSymbol(Expr::BinaryOp::IExponentiation),
-                         symbol(BType::INT));
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Type::Type>(BType::INT)});
-  m_label = "**i";
-  m_debug_string = "**i";
+namespace Expression {
+
+std::shared_ptr<Exponentiation> Exponentiation::m_cache;
+
+Exponentiation::Exponentiation(const std::string &script,
+                               set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "**i") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Exponentiation() {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Exponentiation::m_cache);
+  if (!result) {
+    const string script = fmt::format(
+        SCRIPT, smtSymbol(Expr::BinaryOp::IExponentiation), symbol(BType::INT));
+    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT)};
+    result = make(BConstruct::Expression::Exponentiation::m_cache, script,
+                  requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

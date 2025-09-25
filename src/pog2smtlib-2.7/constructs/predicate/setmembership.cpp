@@ -12,25 +12,60 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "setmembership.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../translate-token.h"
+#include "../type/type.h"
 #include "btype.h"
 #include "pred.h"
-namespace BConstruct::Predicate {
+
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) Bool)
 )";
 
-SetMembership::SetMembership(const BType &t) : UnaryBType(t) {
-  const BType pt = BType::POW(t);
-  const std::string op = smtSymbol(Pred::ComparisonOp::Membership, t);
-  m_script = fmt::format(SCRIPT, op, symbol(t), symbol(pt));
-  m_prerequisites.insert(std::make_shared<BConstruct::Type::Type>(pt));
-  m_label = ":";
-  m_debug_string = fmt::format(":_<{}>", t.to_string());
+namespace Predicate {
+
+MapUnaryBType<SetMembership> SetMembership::m_cache;
+
+SetMembership::SetMembership(const BType& T, const std::string& script,
+                             set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, ":") {}
+
+};  // namespace Predicate
+
+shared_ptr<Abstract> Factory::SetMembership(const BType& T) {
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Predicate::SetMembership::m_cache, T);
+  if (!result) {
+    const BType PT = BType::POW(T);
+    const std::string op = smtSymbol(Pred::ComparisonOp::Membership, T);
+    const string script = fmt::format(SCRIPT, op, symbol(T), symbol(PT));
+    set<shared_ptr<Abstract>> requisites = {Factory::Type(PT)};
+    switch (T.getKind()) {
+      case BType::Kind::PowerType:
+        requisites.insert({Factory::SetMembership(T.toPowerType().content)});
+        break;
+      case BType::Kind::ProductType:
+        requisites.insert({Factory::SetMembership(T.toProductType().lhs),
+                           Factory::SetMembership(T.toProductType().rhs)});
+        break;
+      default:
+        break;
+    }
+    result = make(BConstruct::Predicate::SetMembership::m_cache, T, script,
+                  requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Predicate
+};  // namespace BConstruct

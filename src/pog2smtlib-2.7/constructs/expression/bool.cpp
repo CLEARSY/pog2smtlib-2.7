@@ -12,17 +12,34 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "bool.h"
+
 #include "../../bconstruct.h"
 #include "universe.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
 
-Bool::Bool() {
-  m_script = universeScript("BOOL", BType::BOOL);
-  m_prerequisites.insert(
-      std::make_shared<Predicate::SetMembership>(BType::BOOL));
-  m_label = "BOOL";
-  m_debug_string = "BOOL";
+namespace BConstruct {
+namespace Expression {
+
+std::shared_ptr<Bool> Bool::m_cache;
+
+Bool::Bool(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "BOOL") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Bool() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Bool::m_cache);
+  if (!result) {
+    const string script = Expression::universeScript("BOOL", BType::BOOL);
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::BOOL)};
+    result = make(BConstruct::Expression::Bool::m_cache, script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

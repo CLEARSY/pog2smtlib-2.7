@@ -12,26 +12,45 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "maxint.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../parameters.h"
 #include "../../translate-token.h"
+#include "../type/type.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((define-const {0} {1} {2})
 )";
 
-Maxint::Maxint() {
-  m_script = fmt::format(SCRIPT, smtSymbol(Expr::Visitor::EConstant::MaxInt),
-                         symbol(BType::INT), Parameters::MAXINT);
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Type::Type>(BType::INT)});
-  m_label = "MAXINT";
-  m_debug_string = "MAXINT";
-}
+namespace Expression {
 
-};  // namespace BConstruct::Expression
+shared_ptr<Maxint> Maxint::m_cache;
+
+Maxint::Maxint(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "MAXINT") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Maxint() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Maxint::m_cache);
+  if (!result) {
+    const string script =
+        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::Visitor::EConstant::MaxInt),
+                    /*1*/ symbol(BType::INT), /*2*/ Parameters::MAXINT);
+    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT)};
+    result = make(BConstruct::Expression::Maxint::m_cache, script, requisites);
+  }
+  return result;
+}
+};  // namespace BConstruct

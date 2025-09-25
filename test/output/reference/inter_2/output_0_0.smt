@@ -3,10 +3,16 @@
 (define-sort |Z| () Int)
 (declare-sort P 1)
 (define-sort |POW Z| () (P |Z|))
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (define-sort |POW POW Z| () (P |POW Z|))
 (declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
-(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-const vset |POW POW Z|)
+(assert (!
+  (forall ((s |POW POW Z|) (t |POW POW Z|))
+    (=
+      (= s t)
+      (forall ((e |POW Z|)) (= (|set.in POW Z| e s) (|set.in POW Z| e t)))))
+  :named |ax.set.eq POW Z|))
 (define-sort |? POW Z| () (-> |POW Z| Bool))
 (declare-const |set.intent POW Z| (-> |? POW Z| |POW POW Z|))
 (assert (!
@@ -15,12 +21,6 @@
       (= (|set.in POW Z| x (|set.intent POW Z| p))
          (p x))))
   :named |ax:set.in.intent POW Z|))
-(assert (!
-  (forall ((s |POW POW Z|) (t |POW POW Z|))
-    (=
-      (= s t)
-      (forall ((e |POW Z|)) (= (|set.in POW Z| e s) (|set.in POW Z| e t)))))
-  :named |ax.set.eq POW Z|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!

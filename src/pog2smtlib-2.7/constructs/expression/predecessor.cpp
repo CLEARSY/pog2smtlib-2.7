@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "predecessor.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-const {0} {1})
 (assert (!
@@ -33,19 +40,31 @@ static constexpr std::string_view SCRIPT = R"((declare-const {0} {1})
   :named |ax:int.succ|))
 )";
 
-Predecessor::Predecessor() {
-  m_script =
-      fmt::format(SCRIPT,
-                  /*0*/ smtSymbol(Expr::Visitor::EConstant::Predecessor),
-                  /*1*/ symbol(BType::POW(BType::PROD(BType::INT, BType::INT))),
-                  /*2*/
-                  smtSymbol(Pred::ComparisonOp::Membership,
-                            BType::PROD(BType::INT, BType::INT)),
-                  /*3*/ symbol(BType::PROD(BType::INT, BType::INT)));
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(
-          BType::PROD(BType::INT, BType::INT))});
-  m_label = "pred";
-  m_debug_string = "pred";
+namespace Expression {
+
+std::shared_ptr<Predecessor> Predecessor::m_cache;
+
+Predecessor::Predecessor(const std::string &script,
+                         set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "pred") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Predecessor() {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Predecessor::m_cache);
+  if (!result) {
+    const auto xZZ = BType::PROD(BType::INT, BType::INT);
+    const string script = fmt::format(
+        SCRIPT, /*0*/ smtSymbol(Expr::Visitor::EConstant::Predecessor),
+        /*1*/ symbol(BType::POW(xZZ)),
+        /*2*/
+        smtSymbol(Pred::ComparisonOp::Membership, xZZ),
+        /*3*/ symbol(xZZ));
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(xZZ)};
+    result =
+        make(BConstruct::Expression::Predecessor::m_cache, script, requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct

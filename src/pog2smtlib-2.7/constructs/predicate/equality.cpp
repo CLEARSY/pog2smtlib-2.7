@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "equality.h"
+
 #include <fmt/core.h>
 
 #include <string>
@@ -20,7 +22,12 @@
 #include "../../btype-symbols.h"
 #include "btype.h"
 
-namespace BConstruct::Predicate {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {1}) (t {1}))
@@ -30,14 +37,32 @@ static constexpr std::string_view SCRIPT = R"((assert (!
   :named |ax.set.eq {0}|))
 )";
 
-Equality::Equality(const BType &t) : UnaryBType(t) {
-  if (t.getKind() == BType::Kind::PowerType) {
-    const BType &u = t.toPowerType().content;
-    m_script = fmt::format(SCRIPT, symbolInner(u), symbol(t));
-    m_prerequisites.insert(std::make_shared<SetMembership>(u));
+namespace Predicate {
+
+MapUnaryBType<Equality> Equality::m_cache;
+
+Equality::Equality(const BType &T, const std::string &script,
+                   set<shared_ptr<Abstract>> &requisites)
+    : UnaryBType(T, script, requisites, "=") {}
+
+};  // namespace Predicate
+
+shared_ptr<Abstract> Factory::Equality(const BType &T) {
+
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Predicate::Equality::m_cache, T);
+  if (!result) {
+    string script{};
+    set<shared_ptr<Abstract>> requisites{};
+    if (T.getKind() == BType::Kind::PowerType) {
+      const BType &U = T.toPowerType().content;
+      script = fmt::format(SCRIPT, symbolInner(U), symbol(T));
+      requisites.insert({Factory::SetMembership(U)});
+    }
+    result =
+        make(BConstruct::Predicate::Equality::m_cache, T, script, requisites);
   }
-  m_label = "=";
-  m_debug_string = fmt::format("=_<{}>", t.to_string());
+  return result;
 }
 
-};  // namespace BConstruct::Predicate
+};  // namespace BConstruct

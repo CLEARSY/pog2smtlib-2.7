@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bconstruct-utils.h"
 #include "bconstruct.h"
 #include "cc-compatibility.h"
+#include "pog-translation.h"
 #include "signature.h"
 #include "symbols.h"
 
@@ -72,8 +73,18 @@ std::string translate(const Signature &signature) {
 
 std::string translate(const Signature &signature,
                       BConstruct::Context &context) {
+  static constexpr bool debug_me = false;
   stack<BConstructPtr> todo;
   stack<BConstructPtr> sequence;
+  if (debug_me) {
+    std::cerr << fmt::format(R"(> translate 1
+-- signature
+{}
+-- context
+{}
+)",
+                             signature.to_string(), toString(context));
+  }
   for (auto &t : signature.m_types) {
     buildAndQueueConstruct(t, todo, context);
   }
@@ -82,6 +93,32 @@ std::string translate(const Signature &signature,
   }
   for (auto &dt : signature.m_data) {
     buildAndQueueConstruct(dt, todo, context);
+  }
+  if (debug_me) {
+    std::vector<string> args;
+    stack<BConstructPtr> tmp;
+    unsigned size = 0;
+    while (!todo.empty()) {
+      size += 1;
+      tmp.push(todo.top());
+      todo.pop();
+    }
+    while (!tmp.empty()) {
+      args.push_back(tmp.top()->to_string());
+      todo.push(tmp.top());
+      tmp.pop();
+    }
+    if (size == 0) {
+      std::cerr << fmt::format(R"(> translate 2
+-- todo empty
+)");
+    } else {
+      std::cerr << fmt::format(R"(> translate 2
+-- todo
+{}
+)",
+                               fmt::join(args, " "));
+    }
   }
 
   sequence = sortConstructsAndPrerequisites(todo, context);
@@ -179,9 +216,18 @@ static void buildAndQueueConstruct(const struct Data &dt,
 static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                                    stack<BConstructPtr> &queue,
                                    const BConstruct::Context &context) {
+  static constexpr bool debug_me = false;
   BOperator op = o.getOperator();
   vector<shared_ptr<BType>> types = o.getTypes();
   BConstructPtr construct;
+
+  if (debug_me) {
+    std::cerr << fmt::format(R"(> buildAndQueueConstruct<MonomorphizedOperator>)
+-- o
+{}
+)",
+                             o.to_string());
+  }
 
   switch (op.index()) {
     case 0:  // Pred::Comparison
@@ -734,5 +780,20 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
 
   if (construct != nullptr && context.find(construct) == context.end()) {
     queue.push(construct);
+    if (debug_me) {
+      std::cerr << fmt::format(
+          R"(> buildAndQueueConstruct<MonomorphizedOperator>)
+-- push {}
+)",
+          o.to_string());
+    }
+  } else {
+    if (debug_me) {
+      std::cerr << fmt::format(
+          R"(> buildAndQueueConstruct<MonomorphizedOperator>)
+-- skip {}
+)",
+          o.to_string());
+    }
   }
 }

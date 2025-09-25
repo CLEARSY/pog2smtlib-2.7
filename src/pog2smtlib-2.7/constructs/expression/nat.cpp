@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "nat.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-const {0} {2})
 (assert (!
@@ -28,18 +35,30 @@ static constexpr std::string_view SCRIPT = R"((declare-const {0} {2})
   :named |ax.set.in.NAT|))
 )";
 
-Nat::Nat() {
-  m_script =
-      fmt::format(SCRIPT,
-                  /*0*/ smtSymbol(Expr::Visitor::EConstant::NAT),
-                  /*1*/ symbol(BType::INT),
-                  /*2*/ symbol(BType::POW(BType::INT)),
-                  /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT),
-                  /*4*/ smtSymbol(Expr::Visitor::EConstant::MaxInt));
-  m_label = "NAT";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(BType::INT),
-       std::make_shared<BConstruct::Expression::Maxint>()});
-  m_debug_string = "NAT";
+namespace Expression {
+
+std::shared_ptr<Nat> Nat::m_cache;
+
+Nat::Nat(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+    : Uniform(script, requisites, "NAT") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Nat() {
+  shared_ptr<Abstract> result = find(BConstruct::Expression::Nat::m_cache);
+  if (!result) {
+    const string script =
+        fmt::format(SCRIPT,
+                    /*0*/ smtSymbol(Expr::Visitor::EConstant::NAT),
+                    /*1*/ symbol(BType::INT),
+                    /*2*/ symbol(BType::POW(BType::INT)),
+                    /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT),
+                    /*4*/ smtSymbol(Expr::Visitor::EConstant::MaxInt));
+    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::INT),
+                                         Factory::Maxint()};
+    result = make(BConstruct::Expression::Nat::m_cache, script, requisites);
+  }
+  return result;
 }
-};  // namespace BConstruct::Expression
+
+};  // namespace BConstruct

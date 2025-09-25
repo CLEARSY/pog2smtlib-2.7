@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "emptyseq.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT =
     R"((declare-const |seq.empty {0}| {1})
@@ -29,18 +36,33 @@ static constexpr std::string_view SCRIPT =
   :named |ax:seq.empty.def {0}|))
 )";
 
-EmptySeq::EmptySeq(const BType &T) : UnaryBType(T) {
-  const auto ZxT = BType::PROD(BType::INT, T);
-  const auto PZxT = BType::POW(ZxT);
-  m_script =
-      fmt::format(SCRIPT,
-                  /*0*/ symbolInner(T),
-                  /*1*/ symbol(PZxT),
-                  /*2*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, ZxT));
-  m_label = "[]";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Expression::EmptySet>(ZxT)});
-  m_debug_string = fmt::format("[]_{}", T.to_string());
-}
+namespace Expression {
 
-};  // namespace BConstruct::Expression
+MapUnaryBType<EmptySeq> EmptySeq::m_cache;
+
+EmptySeq::EmptySeq(const BType& T, const std::string& script,
+                   set<shared_ptr<Abstract>>& requisites)
+    : UnaryBType(T, script, requisites, "[]") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::EmptySeq(const BType& T) {
+
+  std::shared_ptr<Abstract> result =
+      find(BConstruct::Expression::EmptySeq::m_cache, T);
+  if (!result) {
+    const auto ZxT = BType::PROD(BType::INT, T);
+    const auto PZxT = BType::POW(ZxT);
+    const string script =
+        fmt::format(SCRIPT,
+                    /*0*/ symbolInner(T),
+                    /*1*/ symbol(PZxT),
+                    /*2*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, ZxT));
+    set<shared_ptr<Abstract>> requisites = {Factory::EmptySet(ZxT)};
+
+    result =
+        make(BConstruct::Expression::EmptySeq::m_cache, T, script, requisites);
+  }
+  return result;
+}
+};  // namespace BConstruct

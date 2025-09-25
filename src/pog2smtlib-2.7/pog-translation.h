@@ -48,7 +48,6 @@ class POGTranslations {
     BConstruct::Context m_context;
   };
   static string toString(const groupPreludeCache &);
-  static string toString(const BConstruct::Context &);
 
   std::map<size_t, groupPreludeCache> m_groupPreludes;
   std::map<size_t, std::string> m_groupScripts;

@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "parallelproduct.h"
+
 #include <fmt/core.h>
 
 #include "../../bconstruct.h"
@@ -20,7 +22,12 @@
 #include "../../translate-token.h"
 #include "btype.h"
 
-namespace BConstruct::Expression {
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::string;
+
+namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
 (assert (!
@@ -35,35 +42,48 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
   :named |ax.set.in.parallelproduct {8}|))
 )";
 
+namespace Expression {
+
+MapQuadrupleBType<Parallel_Product> Parallel_Product::m_cache;
+
 Parallel_Product::Parallel_Product(const BType &T, const BType &U,
-                                   const BType &V, const BType &W)
-    : QuaternaryBType(T, U, V, W) {
-  const auto TxU = BType::PROD(T, U);
-  const auto TxUxV = BType::PROD(TxU, V);
-  const auto TxUxVxW = BType::PROD(TxUxV, W);
-  const auto VxW = BType::PROD(V, W);
-  const auto TxVxUxW = BType::PROD(TxU, VxW);
-  const auto PTxU = BType::POW(TxU);
-  const auto PVxW = BType::POW(VxW);
-  const auto PTxVxUxW = BType::POW(TxVxUxW);
-  m_script =
-      fmt::format(SCRIPT,
-                  /*0*/ smtSymbol(Expr::BinaryOp::Parallel_Product, T, U, V, W),
-                  /*1*/ symbol(PTxU),
-                  /*2*/ symbol(PVxW),
-                  /*3*/ symbol(PTxVxUxW),
-                  /*4*/ symbol(TxVxUxW),
-                  /*5*/ smtSymbol(Pred::ComparisonOp::Membership, TxVxUxW),
-                  /*6*/ smtSymbol(Pred::ComparisonOp::Membership, TxU),
-                  /*7*/ smtSymbol(Pred::ComparisonOp::Membership, VxW),
-                  /*8*/ symbolInner(TxUxVxW));
-  m_label = "∥";
-  m_prerequisites.insert(
-      {std::make_shared<BConstruct::Predicate::SetMembership>(TxVxUxW),
-       std::make_shared<BConstruct::Predicate::SetMembership>(TxU),
-       std::make_shared<BConstruct::Predicate::SetMembership>(VxW)});
-  m_debug_string = fmt::format("∥_<{},{},{}>", T.to_string(), U.to_string(),
-                               V.to_string(), W.to_string());
+                                   const BType &V, const BType &W,
+                                   const string &script,
+                                   set<shared_ptr<Abstract>> &requisites)
+    : QuaternaryBType(T, U, V, W, script, requisites, "∥") {}
+
+};  // namespace Expression
+
+shared_ptr<Abstract> Factory::Parallel_Product(const BType &T, const BType &U,
+                                               const BType &V, const BType &W) {
+  shared_ptr<Abstract> result =
+      find(BConstruct::Expression::Parallel_Product::m_cache, T, U, V, W);
+  if (!result) {
+    const auto xTU = BType::PROD(T, U);
+    const auto xxTUV = BType::PROD(xTU, V);
+    const auto xxxTUVW = BType::PROD(xxTUV, W);
+    const auto xVW = BType::PROD(V, W);
+    const auto xxTUxVW = BType::PROD(xTU, xVW);
+    const auto PxTU = BType::POW(xTU);
+    const auto PxVW = BType::POW(xVW);
+    const auto PxxTUxVW = BType::POW(xxTUxVW);
+    const std::string script = fmt::format(
+        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Parallel_Product, T, U, V, W),
+        /*1*/ symbol(PxTU),
+        /*2*/ symbol(PxVW),
+        /*3*/ symbol(PxxTUxVW),
+        /*4*/ symbol(xxTUxVW),
+        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, xxTUxVW),
+        /*6*/ smtSymbol(Pred::ComparisonOp::Membership, xTU),
+        /*7*/ smtSymbol(Pred::ComparisonOp::Membership, xVW),
+        /*8*/ symbolInner(xxxTUVW));
+    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(xxTUxVW),
+                                            Factory::SetMembership(xTU),
+                                            Factory::SetMembership(xVW)};
+    result = make(BConstruct::Expression::Parallel_Product::m_cache, T, U, V, W,
+                  script, requisites);
+  }
+  return result;
 }
 
-};  // namespace BConstruct::Expression
+};  // namespace BConstruct
