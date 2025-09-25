@@ -24,7 +24,7 @@
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (not
-    (|set.in Z| 0 (|rel.domain Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 1))(= x (maplet 2 2))))))))
+    (|set.in Z| 0 (|rel.domain Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 1))(= _c0 (maplet 2 2))))))))
   :named |Goal|))
 (check-sat)
 (exit)

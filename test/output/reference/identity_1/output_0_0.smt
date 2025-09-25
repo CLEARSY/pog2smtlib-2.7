@@ -44,7 +44,7 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (= (|id Z| (|set.intent Z| (lambda ((x |Z|)) (= x 3)))) |set.empty (Z x Z)|))
+    (= (|id Z| (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 3)))) |set.empty (Z x Z)|))
   :named |Goal|))
 (check-sat)
 (exit)

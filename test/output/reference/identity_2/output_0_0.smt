@@ -40,7 +40,7 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (= (|id Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 3)(= x 5))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 3 3))(= x (maplet 5 5)))))))
+    (= (|id Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 3)(= _c0 5))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 3 3))(= _c0 (maplet 5 5)))))))
   :named |Goal|))
 (check-sat)
 (exit)

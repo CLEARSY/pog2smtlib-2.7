@@ -21,7 +21,7 @@
   :named |ax.set.eq Z|))
 (assert (!
   (not
-    (= co (|set.intent Z| (lambda ((x |Z|)) (= x 0)))))
+    (= co (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 0)))))
   :named |Goal|))
 (check-sat)
 (exit)

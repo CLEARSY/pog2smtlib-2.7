@@ -84,7 +84,7 @@
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (not
-    (= (|rev Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 1))(= x (maplet 2 5))(= x (maplet 3 2))(= x (maplet 4 9)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 9))(= x (maplet 2 2))(= x (maplet 3 5))(= x (maplet 4 1)))))))
+    (= (|rev Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 1))(= _c0 (maplet 2 5))(= _c0 (maplet 3 2))(= _c0 (maplet 4 9)))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 9))(= _c0 (maplet 2 2))(= _c0 (maplet 3 5))(= _c0 (maplet 4 1)))))))
   :named |Goal|))
 (check-sat)
 (exit)

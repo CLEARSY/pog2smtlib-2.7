@@ -17,11 +17,11 @@
     (exists
       ((xx |REAL|))
       (and
-        (|set.in REAL| xx (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 1.0)(= x 60.0)(= x 0.0)(= x 5.0)(= x 3.0)))))
+        (|set.in REAL| xx (|set.intent REAL| (lambda ((_c0 |REAL|)) (or (= _c0 1.0)(= _c0 60.0)(= _c0 0.0)(= _c0 5.0)(= _c0 3.0)))))
         (forall
           ((yy |REAL|))
           (=>
-            (|set.in REAL| yy (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 1.0)(= x 60.0)(= x 0.0)(= x 5.0)(= x 3.0)))))
+            (|set.in REAL| yy (|set.intent REAL| (lambda ((_c0 |REAL|)) (or (= _c0 1.0)(= _c0 60.0)(= _c0 0.0)(= _c0 5.0)(= _c0 3.0)))))
             (<= xx yy))))))
   :named |Goal|))
 (check-sat)

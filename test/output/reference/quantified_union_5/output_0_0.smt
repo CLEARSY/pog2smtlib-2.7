@@ -50,11 +50,11 @@
   :named |ax.set.eq POW Z|))
 (assert (!
   (not
-    (= (|UNION (Z x POW POW Z) POW Z| (lambda ((c |(Z x POW POW Z)|))     (and
-      (|set.in Z| (fst c) (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4)))))
-      (= (snd c) (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 10)))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4)))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 30)(= x 5)))))))))))  (lambda ((c |(Z x POW POW Z)|)) (|set.intent POW Z| (lambda ((x |POW Z|))     (and
-      (|set.in POW Z| x (snd c))
-      (|set.in Z| (fst c) x)))))) (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4)))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 30)(= x 5))))))))))
+    (= (|UNION (Z x POW POW Z) POW Z| (lambda ((_c0 |(Z x POW POW Z)|))     (and
+      (|set.in Z| (fst _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 2)(= _c1 4)))))
+      (= (snd _c0) (|set.intent POW Z| (lambda ((_c1 |POW Z|)) (or (= _c1 (|set.intent Z| (lambda ((_c2 |Z|)) (or (= _c2 0)(= _c2 1)(= _c2 10)))))(= _c1 (|set.intent Z| (lambda ((_c2 |Z|)) (or (= _c2 2)(= _c2 4)))))(= _c1 (|set.intent Z| (lambda ((_c2 |Z|)) (or (= _c2 2)(= _c2 30)(= _c2 5))))))))))) (lambda ((_c0 |(Z x POW POW Z)|)) (|set.intent POW Z| (lambda ((_c1 |POW Z|))     (and
+      (|set.in POW Z| _c1 (snd _c0))
+      (|set.in Z| (fst _c0) _c1)))))) (|set.intent POW Z| (lambda ((_c0 |POW Z|)) (or (= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 2)(= _c1 4)))))(= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 2)(= _c1 30)(= _c1 5))))))))))
   :named |Goal|))
 (check-sat)
 (exit)

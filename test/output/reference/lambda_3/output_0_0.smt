@@ -55,9 +55,9 @@
   :named |ax:set.in.intent POW Z|))
 (assert (!
   (not
-    (|set.in ((POW Z x Z) x POW POW Z)| (maplet (maplet (|set.intent Z| (lambda ((x |Z|)) (= x 1))) 2) (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (|set.intent Z| (lambda ((x |Z|)) (= x 1))))(= x (|set.intent Z| (lambda ((x |Z|)) (= x 3)))))))) (|set.lambda (POW Z x Z) POW POW Z| (lambda ((c |(POW Z x Z)|))     (and
+    (|set.in ((POW Z x Z) x POW POW Z)| (maplet (maplet (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 1))) 2) (|set.intent POW Z| (lambda ((_c0 |POW Z|)) (or (= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1))))(= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 3)))))))) (|set.lambda (POW Z x Z) POW POW Z| (lambda ((_c0 |(POW Z x Z)|))     (and
       true
-      true))  (lambda ((c |(POW Z x Z)|)) (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (fst c))(= x (|set.intent Z| (lambda ((x |Z|)) (= x (snd c))))))))))))
+      true))  (lambda ((_c0 |(POW Z x Z)|)) (|set.intent POW Z| (lambda ((_c1 |POW Z|)) (or (= _c1 (fst _c0))(= _c1 (|set.intent Z| (lambda ((_c2 |Z|)) (= _c2 (snd _c0))))))))))))
   :named |Goal|))
 (check-sat)
 (exit)

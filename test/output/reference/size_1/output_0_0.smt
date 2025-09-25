@@ -92,7 +92,7 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (= (|size POW Z| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 3))))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 6)(= x 7)(= x 8))))))(= x (maplet 3 |set.empty Z|))(= x (maplet 4 (|set.intent Z| (lambda ((x |Z|)) (= x 1))))))))) 3))
+    (= (|size POW Z| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 2)(= _c1 3))))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 6)(= _c1 7)(= _c1 8))))))(= _c0 (maplet 3 |set.empty Z|))(= _c0 (maplet 4 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1))))))))) 3))
   :named |Goal|))
 (check-sat)
 (exit)

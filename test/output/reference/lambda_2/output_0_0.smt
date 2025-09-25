@@ -30,7 +30,7 @@
   :named |ax.set.in.INTEGER|))
 (assert (!
   (not
-    (|set.in (Z x Z)| (maplet 1 2) (|set.lambda Z Z| (lambda ((c |Z|))     (|set.in Z| c INTEGER))  (lambda ((c |Z|)) (+ c 1)))))
+    (|set.in (Z x Z)| (maplet 1 2) (|set.lambda Z Z| (lambda ((_c0 |Z|))     (|set.in Z| _c0 INTEGER))  (lambda ((_c0 |Z|)) (+ _c0 1)))))
   :named |Goal|))
 (check-sat)
 (exit)

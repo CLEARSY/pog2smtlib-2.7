@@ -28,7 +28,7 @@
   :named |ax:set.in.intent REAL|))
 (assert (!
   (not
-    (= (|rmax| (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 1.0)(= x 60.0)(= x 0.0)(= x 5.0)(= x 3.0))))) 5.0))
+    (= (|rmax| (|set.intent REAL| (lambda ((_c0 |REAL|)) (or (= _c0 1.0)(= _c0 60.0)(= _c0 0.0)(= _c0 5.0)(= _c0 3.0))))) 5.0))
   :named |Goal|))
 (check-sat)
 (exit)

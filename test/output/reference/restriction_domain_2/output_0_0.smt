@@ -39,7 +39,7 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (= (|rel.restrict.dom Z Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 2 0))(= x (maplet 2 1))(= x (maplet 3 5))(= x (maplet 4 0))(= x (maplet 4 9)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 2 0))(= x (maplet 2 1))(= x (maplet 3 5)))))))
+    (= (|rel.restrict.dom Z Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 2)(= _c0 3)))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 2 0))(= _c0 (maplet 2 1))(= _c0 (maplet 3 5))(= _c0 (maplet 4 0))(= _c0 (maplet 4 9)))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 2 0))(= _c0 (maplet 2 1))(= _c0 (maplet 3 5)))))))
   :named |Goal|))
 (check-sat)
 (exit)

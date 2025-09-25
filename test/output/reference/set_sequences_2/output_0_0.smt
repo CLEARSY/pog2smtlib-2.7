@@ -256,7 +256,7 @@
   :named |ax.sub-sets Z|))
 (assert (!
   (not
-    (|set.in POW (Z x POW Z)| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 2)(= x 4)))))))) (|seq POW Z| (|sub-sets Z| NAT))))
+    (|set.in POW (Z x POW Z)| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 0)(= _c1 1)(= _c1 2)(= _c1 4)))))))) (|seq POW Z| (|sub-sets Z| NAT))))
   :named |Goal|))
 (check-sat)
 (exit)

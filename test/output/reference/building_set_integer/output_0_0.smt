@@ -30,7 +30,7 @@
   :named |ax.set.in.INTEGER|))
 (assert (!
   (not
-    (= (|set.diff Z| INTEGER (|set.intent Z| (lambda ((x |Z|)) (= x 0)))) INTEGER))
+    (= (|set.diff Z| INTEGER (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 0)))) INTEGER))
   :named |Goal|))
 (check-sat)
 (exit)

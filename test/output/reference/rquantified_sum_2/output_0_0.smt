@@ -36,9 +36,9 @@
 (declare-fun |set.in (REAL x REAL)| (|(REAL x REAL)| |POW (REAL x REAL)|) Bool)
 (assert (!
   (not
-    (= (|rSIGMA| (|set.intent REAL| (lambda ((c |REAL|)) (exists ((y |(REAL x REAL)|)) (and     (and
-      (|set.in REAL| (fst y) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 1.0)(= x 2.0)))))
-      (|set.in REAL| (snd y) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 0.0)(= x 3.0)(= x 4.0)))))) (= c (+ (fst y) (snd y)))))))) 23.0))
+    (= (|rSIGMA| (|set.intent REAL| (lambda ((_c0 |REAL|)) (exists ((_c1 |(REAL x REAL)|)) (and     (and
+      (|set.in REAL| (fst _c1) (|set.intent REAL| (lambda ((_c2 |REAL|)) (or (= _c2 1.0)(= _c2 2.0)))))
+      (|set.in REAL| (snd _c1) (|set.intent REAL| (lambda ((_c2 |REAL|)) (or (= _c2 0.0)(= _c2 3.0)(= _c2 4.0)))))) (= _c0 (+ (fst _c1) (snd _c1)))))))) 23.0))
   :named |Goal|))
 (check-sat)
 (exit)

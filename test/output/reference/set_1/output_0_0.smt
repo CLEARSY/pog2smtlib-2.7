@@ -27,7 +27,7 @@
       (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
   :named |ax.set.eq Z|))
 (assert (!
-  (= vset (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)(= x 4)(= x 10)))))
+  (= vset (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 2)(= _c0 3)(= _c0 4)(= _c0 10)))))
   :named |Define:lprp:1|))
 (assert (!
   (|set.in Z| vconst (|interval| 9 12))

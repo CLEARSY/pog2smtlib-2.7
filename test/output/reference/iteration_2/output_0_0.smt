@@ -45,7 +45,7 @@
   :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not
-    (= (|iterate Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 1 0)))) 2) |set.empty (Z x Z)|))
+    (= (|iterate Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (= _c0 (maplet 1 0)))) 2) |set.empty (Z x Z)|))
   :named |Goal|))
 (check-sat)
 (exit)

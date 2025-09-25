@@ -86,7 +86,7 @@
 (define-fun |front Z| ((s |POW (Z x Z)|)) |POW (Z x Z)| (|/\ Z| s (- (|size Z| s) 1)))
 (assert (!
   (not
-    (= (|front Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 5))(= x (maplet 2 4))(= x (maplet 3 7))(= x (maplet 4 8)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 5))(= x (maplet 2 4))(= x (maplet 3 7)))))))
+    (= (|front Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 5))(= _c0 (maplet 2 4))(= _c0 (maplet 3 7))(= _c0 (maplet 4 8)))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 5))(= _c0 (maplet 2 4))(= _c0 (maplet 3 7)))))))
   :named |Goal|))
 (check-sat)
 (exit)

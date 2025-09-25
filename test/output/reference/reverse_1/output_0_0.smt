@@ -57,7 +57,7 @@
   :named |ax.set.eq (POW Z x Z)|))
 (assert (!
   (not
-    (= (|~ Z POW Z| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (= x 3)))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (= x 4)))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (= x 7)))))(= x (maplet 3 (|set.intent Z| (lambda ((x |Z|)) (= x 3))))))))) |set.empty (POW Z x Z)|))
+    (= (|~ Z POW Z| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 3)))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 4)))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 7)))))(= _c0 (maplet 3 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 3))))))))) |set.empty (POW Z x Z)|))
   :named |Goal|))
 (check-sat)
 (exit)

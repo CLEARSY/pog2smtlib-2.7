@@ -32,7 +32,7 @@
   :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not
-    (= (|~ Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 3))(= x (maplet 2 4)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 3 0))(= x (maplet 4 2)))))))
+    (= (|~ Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 0 3))(= _c0 (maplet 2 4)))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 3 0))(= _c0 (maplet 4 2)))))))
   :named |Goal|))
 (check-sat)
 (exit)

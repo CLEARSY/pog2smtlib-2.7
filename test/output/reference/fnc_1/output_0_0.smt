@@ -56,11 +56,11 @@
          (p x))))
   :named |ax:set.in.intent POW Z|))
 (assert (!
-  (= func (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4))))))(= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4)(= x 6)(= x 7))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 5)(= x 4))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 1)))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (or (= x 6)(= x 8)(= x 5))))))))))
+  (= func (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)(= _c1 4))))))(= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)(= _c1 4)(= _c1 6)(= _c1 7))))))(= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 5)(= _c1 4))))))(= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1)))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 6)(= _c1 8)(= _c1 5))))))))))
   :named |Define:lprp:1|))
 (assert (!
   (not
-    (|set.in (Z x POW POW Z)| (maplet 0 (|set.intent POW Z| (lambda ((x |POW Z|)) (= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4)))))))) (|fnc Z POW Z| func)))
+    (|set.in (Z x POW POW Z)| (maplet 0 (|set.intent POW Z| (lambda ((_c0 |POW Z|)) (= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)(= _c1 4)))))))) (|fnc Z POW Z| func)))
   :named |Goal|))
 (check-sat)
 (exit)

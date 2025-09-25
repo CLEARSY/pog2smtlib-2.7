@@ -29,7 +29,7 @@
 (assert (!
   (not
     (not
-      (= (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 5))(= x (maplet 2 4))(= x (maplet 3 7))(= x (maplet 4 8))))) |set.empty (Z x Z)|)))
+      (= (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 5))(= _c0 (maplet 2 4))(= _c0 (maplet 3 7))(= _c0 (maplet 4 8))))) |set.empty (Z x Z)|)))
   :named |Goal|))
 (check-sat)
 (exit)

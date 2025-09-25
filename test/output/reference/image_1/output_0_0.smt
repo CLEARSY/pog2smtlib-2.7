@@ -38,7 +38,7 @@
   :named |ax.set.eq Z|))
 (assert (!
   (not
-    (= (|rel.image Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 1))(= x (maplet 1 1))(= x (maplet 1 6))(= x (maplet 4 1))))) (|set.intent Z| (lambda ((x |Z|)) (= x 1)))) (|set.intent Z| (lambda ((x |Z|)) (= x 1)))))
+    (= (|rel.image Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 0 1))(= _c0 (maplet 1 1))(= _c0 (maplet 1 6))(= _c0 (maplet 4 1))))) (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 1)))) (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 1)))))
   :named |Goal|))
 (check-sat)
 (exit)

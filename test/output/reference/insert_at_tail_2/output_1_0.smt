@@ -241,7 +241,7 @@
   :named |ax.seq.is.total.fun POW Z|))
 (assert (!
   (not
-    (|set.in POW (Z x POW Z)| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 2)))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (= x 3)))))))) (|seq POW Z| (|rel.range Z POW Z| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 2)))))(= x (maplet 2 (|set.intent Z| (lambda ((x |Z|)) (= x 3))))))))))))
+    (|set.in POW (Z x POW Z)| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 2)))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 3)))))))) (|seq POW Z| (|rel.range Z POW Z| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 2)))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 3))))))))))))
   :named |Goal|))
 (check-sat)
 (exit)

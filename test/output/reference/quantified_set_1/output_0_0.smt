@@ -14,9 +14,9 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (|set.in Z| 3 (|set.intent Z| (lambda ((x |Z|))     (and
+    (|set.in Z| 3 (|set.intent Z| (lambda ((_c0 |Z|))     (and
       true
-      (= x 2))))))
+      (= _c0 2))))))
   :named |Goal|))
 (check-sat)
 (exit)

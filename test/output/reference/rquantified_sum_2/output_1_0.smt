@@ -110,11 +110,11 @@
   :named |ax.finite sub-sets (REAL x REAL)|))
 (assert (!
   (not
-    (|set.in POW (REAL x REAL)| (|set.intent (REAL x REAL)| (lambda ((x |(REAL x REAL)|))     (and
-      (|set.in REAL| (fst x) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 1.0)(= x 2.0)))))
-      (|set.in REAL| (snd x) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 0.0)(= x 3.0)(= x 4.0)))))))) (|finite sub-sets (REAL x REAL)| (|set.intent (REAL x REAL)| (lambda ((x |(REAL x REAL)|))     (and
-      (|set.in REAL| (fst x) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 1.0)(= x 2.0)))))
-      (|set.in REAL| (snd x) (|set.intent REAL| (lambda ((x |REAL|)) (or (= x 0.0)(= x 3.0)(= x 4.0)))))))))))
+    (|set.in POW (REAL x REAL)| (|set.intent (REAL x REAL)| (lambda ((_c0 |(REAL x REAL)|))     (and
+      (|set.in REAL| (fst _c0) (|set.intent REAL| (lambda ((_c1 |REAL|)) (or (= _c1 1.0)(= _c1 2.0)))))
+      (|set.in REAL| (snd _c0) (|set.intent REAL| (lambda ((_c1 |REAL|)) (or (= _c1 0.0)(= _c1 3.0)(= _c1 4.0)))))))) (|finite sub-sets (REAL x REAL)| (|set.intent (REAL x REAL)| (lambda ((_c0 |(REAL x REAL)|))     (and
+      (|set.in REAL| (fst _c0) (|set.intent REAL| (lambda ((_c1 |REAL|)) (or (= _c1 1.0)(= _c1 2.0)))))
+      (|set.in REAL| (snd _c0) (|set.intent REAL| (lambda ((_c1 |REAL|)) (or (= _c1 0.0)(= _c1 3.0)(= _c1 4.0)))))))))))
   :named |Goal|))
 (check-sat)
 (exit)

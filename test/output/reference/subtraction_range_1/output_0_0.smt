@@ -43,7 +43,7 @@
   :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not
-    (= (|rel.subtract.ran Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 2 1))(= x (maplet 3 1))(= x (maplet 5 5))))) (|set.intent Z| (lambda ((x |Z|)) (= x 1)))) |set.empty (Z x Z)|))
+    (= (|rel.subtract.ran Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 2 1))(= _c0 (maplet 3 1))(= _c0 (maplet 5 5))))) (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 1)))) |set.empty (Z x Z)|))
   :named |Goal|))
 (check-sat)
 (exit)

@@ -42,11 +42,11 @@
       (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
   :named |ax.set.eq Z|))
 (assert (!
-  (= vset (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 2)))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 2)))))))))
+  (= vset (|set.intent POW Z| (lambda ((_c0 |POW Z|)) (or (= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 0)(= _c1 1)))))(= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 0)(= _c1 2)))))(= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 0)(= _c1 1)(= _c1 2)))))))))
   :named |Define:lprp:1|))
 (assert (!
   (not
-    (= (|inter Z| vset) (|set.intent Z| (lambda ((x |Z|)) (= x 0)))))
+    (= (|inter Z| vset) (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 0)))))
   :named |Goal|))
 (check-sat)
 (exit)

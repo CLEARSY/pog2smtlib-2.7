@@ -214,7 +214,7 @@
   :named |ax.seq.is.total.fun Z|))
 (assert (!
   (not
-    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 2 1))))) (|seq Z| (|rel.range Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 2 1)))))))))
+    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 3))(= _c0 (maplet 2 1))))) (|seq Z| (|rel.range Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 3))(= _c0 (maplet 2 1)))))))))
   :named |Goal|))
 (check-sat)
 (exit)

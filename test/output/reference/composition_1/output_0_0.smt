@@ -51,7 +51,7 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (|set.in (Z x Z)| (maplet 1 9) (|relcomp Z POW Z Z| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (= x 3)))))(= x (maplet 5 (|set.intent Z| (lambda ((x |Z|)) (= x 4)))))))) (|set.intent (POW Z x Z)| (lambda ((x |(POW Z x Z)|)) (or (= x (maplet (|set.intent Z| (lambda ((x |Z|)) (= x 3))) 10))(= x (maplet (|set.intent Z| (lambda ((x |Z|)) (= x 4))) 9))))))))
+    (|set.in (Z x Z)| (maplet 1 9) (|relcomp Z POW Z Z| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 3)))))(= _c0 (maplet 5 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 4)))))))) (|set.intent (POW Z x Z)| (lambda ((_c0 |(POW Z x Z)|)) (or (= _c0 (maplet (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 3))) 10))(= _c0 (maplet (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 4))) 9))))))))
   :named |Goal|))
 (check-sat)
 (exit)

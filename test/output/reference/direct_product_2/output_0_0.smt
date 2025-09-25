@@ -32,7 +32,7 @@
   :named |ax.set.in.directproduct ((Z x Z) x Z)|))
 (assert (!
   (not
-    (|set.in (Z x (Z x Z))| (maplet 1 (maplet 3 10)) (|directproduct Z Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 3))(= x (maplet 5 4))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 10))(= x (maplet 4 9))))))))
+    (|set.in (Z x (Z x Z))| (maplet 1 (maplet 3 10)) (|directproduct Z Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 3))(= _c0 (maplet 5 4))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 10))(= _c0 (maplet 4 9))))))))
   :named |Goal|))
 (check-sat)
 (exit)

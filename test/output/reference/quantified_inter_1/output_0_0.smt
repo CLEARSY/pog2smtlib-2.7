@@ -26,9 +26,9 @@
   :named |ax.set.eq Z|))
 (assert (!
   (not
-    (= (|INTER Z Z| (lambda ((c |Z|))     (|set.in Z| c (|set.intent Z| (lambda ((x |Z|)) (or (= x 2)(= x 4))))))  (lambda ((c |Z|)) (|set.intent Z| (lambda ((x |Z|))     (and
+    (= (|INTER Z Z| (lambda ((_c0 |Z|))     (|set.in Z| _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 2)(= _c1 4)))))) (lambda ((_c0 |Z|)) (|set.intent Z| (lambda ((_c1 |Z|))     (and
       true
-      (<= x c)))))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 2)(= x 3))))))
+      (<= _c1 _c0)))))) (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)(= _c0 2)(= _c0 3))))))
   :named |Goal|))
 (check-sat)
 (exit)

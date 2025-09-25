@@ -105,11 +105,11 @@
   (|set.in POW POW Z| vset (|non empty sub-sets POW Z| (|non empty sub-sets Z| INTEGER)))
   :named |Define:lprp:1|))
 (assert (!
-  (= vset (|set.intent POW Z| (lambda ((x |POW Z|)) (or (= x (|set.intent Z| (lambda ((x |Z|)) (= x 0))))(= x (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)))))))))
+  (= vset (|set.intent POW Z| (lambda ((_c0 |POW Z|)) (or (= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 0))))(= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)))))))))
   :named |Define:lprp:2|))
 (assert (!
   (not
-    (= (|union Z| vset) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 2))))))
+    (= (|union Z| vset) (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)(= _c0 2))))))
   :named |Goal|))
 (check-sat)
 (exit)

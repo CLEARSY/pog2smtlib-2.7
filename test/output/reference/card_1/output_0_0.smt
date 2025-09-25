@@ -70,7 +70,7 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (= (Value (|card Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 4)(= x 5)(= x 6)))))) 4))
+    (= (Value (|card Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 2)(= _c0 4)(= _c0 5)(= _c0 6)))))) 4))
   :named |Goal|))
 (check-sat)
 (exit)

@@ -34,11 +34,11 @@
   :named |ax.set.eq Z|))
 (assert (!
   (not
-    (|set.in (Z x POW Z)| (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2))))) (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|))     (and
+    (|set.in (Z x POW Z)| (maplet 1 (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 2))))) (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|))     (and
       true
       true
-      (= (snd x) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)))))
-      (|set.in Z| (fst x) (snd x)))))))
+      (= (snd _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)))))
+      (|set.in Z| (fst _c0) (snd _c0)))))))
   :named |Goal|))
 (check-sat)
 (exit)

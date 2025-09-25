@@ -28,7 +28,7 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (= (|max| (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 60)(= x 0)(= x 5)(= x 3))))) 60))
+    (= (|max| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 60)(= _c0 0)(= _c0 5)(= _c0 3))))) 60))
   :named |Goal|))
 (check-sat)
 (exit)

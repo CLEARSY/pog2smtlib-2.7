@@ -46,7 +46,7 @@
   :named |ax.set.eq ((Z x Z) x (Z x Z))|))
 (assert (!
   (not
-    (= (|parallelproduct Z Z Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 0 1)))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (= x (maplet 7 10))))) (|set.intent ((Z x Z) x (Z x Z))| (lambda ((x |((Z x Z) x (Z x Z))|)) (= x (maplet (maplet 0 7) (maplet 1 9)))))))
+    (= (|parallelproduct Z Z Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (= _c0 (maplet 0 1)))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (= _c0 (maplet 7 10))))) (|set.intent ((Z x Z) x (Z x Z))| (lambda ((_c0 |((Z x Z) x (Z x Z))|)) (= _c0 (maplet (maplet 0 7) (maplet 1 9)))))))
   :named |Goal|))
 (check-sat)
 (exit)

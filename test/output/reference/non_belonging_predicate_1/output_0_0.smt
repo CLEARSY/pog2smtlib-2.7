@@ -15,7 +15,7 @@
 (assert (!
   (not
     (not
-      (|set.in Z| 0 (|set.intent Z| (lambda ((x |Z|)) (= x 1))))))
+      (|set.in Z| 0 (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 1))))))
   :named |Goal|))
 (check-sat)
 (exit)

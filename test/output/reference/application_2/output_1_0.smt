@@ -34,7 +34,7 @@
   :named |ax:set.in.domain (Z x POW Z)|))
 (assert (!
   (not
-    (|set.in Z| 3 (|rel.domain Z POW Z| (|set.intent (Z x POW Z)| (lambda ((x |(Z x POW Z)|)) (or (= x (maplet 0 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 3)(= x 4))))))(= x (maplet 1 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 3)(= x 5))))))(= x (maplet 3 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 6)(= x 4))))))(= x (maplet 4 (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 1)(= x 4))))))))))))
+    (|set.in Z| 3 (|rel.domain Z POW Z| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 3)(= _c1 4))))))(= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 3)(= _c1 5))))))(= _c0 (maplet 3 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 6)(= _c1 4))))))(= _c0 (maplet 4 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 1)(= _c1 4))))))))))))
   :named |Goal|))
 (check-sat)
 (exit)

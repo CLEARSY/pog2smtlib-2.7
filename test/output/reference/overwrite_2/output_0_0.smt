@@ -39,7 +39,7 @@
   :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not
-    (= (|rel.overwrite Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 2 5))(= x (maplet 2 4))(= x (maplet 3 5))(= x (maplet 4 1))(= x (maplet 4 0))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 9))(= x (maplet 2 2)))))) (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 0))(= x (maplet 1 9))(= x (maplet 2 2))(= x (maplet 3 5))(= x (maplet 4 1))(= x (maplet 4 0)))))))
+    (= (|rel.overwrite Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 2 5))(= _c0 (maplet 2 4))(= _c0 (maplet 3 5))(= _c0 (maplet 4 1))(= _c0 (maplet 4 0))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 0 0))(= _c0 (maplet 1 9))(= _c0 (maplet 2 2)))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 0 0))(= _c0 (maplet 1 9))(= _c0 (maplet 2 2))(= _c0 (maplet 3 5))(= _c0 (maplet 4 1))(= _c0 (maplet 4 0)))))))
   :named |Goal|))
 (check-sat)
 (exit)

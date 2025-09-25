@@ -122,6 +122,20 @@ class SmtTranslatorVisitor : public Pred::Visitor, public Expr::Visitor {
  private:
   size_t m_indent;
   string m_translation;
+  unsigned m_lambda_depth = 0;
+  string m_lambda_arg;
+  string lambda_begin() {
+    m_lambda_arg = string("_c") + std::to_string(m_lambda_depth);
+    m_lambda_depth += 1;
+    return m_lambda_arg;
+  }
+  void lambda_end() {
+    if (m_lambda_depth == 0)
+      throw std::runtime_error("error managing lambda term parameters");
+    m_lambda_depth -= 1;
+    m_lambda_arg = string("_c") + std::to_string(m_lambda_depth);
+  }
+
   static constexpr const char *MSG_NOT_SUPPORTED =
       "POG to SMT syntax transformation: application of {} operator is not "
       "supported";
@@ -802,23 +816,16 @@ void SmtTranslatorVisitor::visitNaryExpression(
   switch (op) {
     /* 5.7 Set List Expressions */
     case Expr::NaryOp::Set: {
-      m_translation.push_back('(');
-      m_translation.append(smtSymbol(op, type.toPowerType().content));
-      m_translation.append(" (lambda (");
-
-      m_translation.push_back('(');
-      m_translation.push_back('x');
-      m_translation.push_back(' ');
-      m_translation.append(symbol(type.toPowerType().content));
-      m_translation.push_back(')');
-      m_translation.push_back(')');
-      m_translation.push_back(' ');
-
+      const string lambda_arg = lambda_begin();
+      m_translation.append(
+          fmt::format("({0} (lambda (({1} {2})) ",
+                      smtSymbol(op, type.toPowerType().content), lambda_arg,
+                      symbol(type.toPowerType().content)));
       if (vec.size() > 1) {
         m_translation.append("(or ");
       }
       for (const Expr &v : vec) {
-        m_translation.append("(= x ");
+        m_translation.append(fmt::format("(= {0} ", lambda_arg));
         v.accept(*this);
         m_translation.push_back(')');
       }
@@ -828,20 +835,15 @@ void SmtTranslatorVisitor::visitNaryExpression(
 
       m_translation.push_back(')');
       m_translation.push_back(')');
+      lambda_end();
       break;
     }
     case Expr::NaryOp::Sequence: {
-      m_translation.push_back('(');
-      m_translation.append(smtSymbol(op, type.toPowerType().content));
-      m_translation.append(" (lambda (");
-
-      m_translation.push_back('(');
-      m_translation.push_back('x');
-      m_translation.push_back(' ');
-      m_translation.append(symbol(type.toPowerType().content));
-      m_translation.push_back(')');
-      m_translation.push_back(')');
-      m_translation.push_back(' ');
+      const string lambda_arg = lambda_begin();
+      m_translation.append(
+          fmt::format("({0} (lambda (({1} {2})) ",
+                      smtSymbol(op, type.toPowerType().content), lambda_arg,
+                      symbol(type.toPowerType().content)));
 
       int i = 1;
 
@@ -849,9 +851,7 @@ void SmtTranslatorVisitor::visitNaryExpression(
         m_translation.append("(or ");
       }
       for (const Expr &v : vec) {
-        m_translation.append("(= x (maplet ");
-        m_translation.append(std::to_string(i));
-        m_translation.push_back(' ');
+        m_translation.append(fmt::format("(= {0} (maplet {1} ", lambda_arg, i));
         v.accept(*this);
         m_translation.push_back(')');
         m_translation.push_back(')');
@@ -862,6 +862,7 @@ void SmtTranslatorVisitor::visitNaryExpression(
       }
       m_translation.push_back(')');
       m_translation.push_back(')');
+      lambda_end();
       break;
     }
     default:
@@ -893,30 +894,21 @@ void SmtTranslatorVisitor::visitRecord(
 void SmtTranslatorVisitor::visitStruct(
     const BType &type, const std::vector<std::string> &,
     const std::vector<std::pair<std::string, Expr>> &fds) {
-  m_translation.push_back('(');
+  const string lambda_arg = lambda_begin();
   m_translation.append(
-      smtSymbol(Expr::EKind::Struct, type.toPowerType().content));
-  m_translation.append(" (lambda (");
-
-  m_translation.push_back('(');
-  m_translation.push_back('x');
-  m_translation.push_back(' ');
-  m_translation.append(symbol(type.toPowerType().content));
-  m_translation.push_back(')');
-  m_translation.push_back(')');
-  m_translation.push_back(' ');
+      fmt::format("({0} (lambda (({1} {2})) ",
+                  smtSymbol(Expr::EKind::Struct, type.toPowerType().content),
+                  lambda_arg, symbol(type.toPowerType().content)));
 
   if (fds.size() > 1) {
     m_translation.append("(and ");
   }
   for (const auto &fd : fds) {
-    m_translation.append("(");
     m_translation.append(
-        smtSymbol(Pred::ComparisonOp::Membership,
-                  (fd.second.getType()).toPowerType().content));
-    m_translation.append(" (");
-    m_translation.append(fd.first);
-    m_translation.append(" x) ");
+        fmt::format("({0} ({1} {2}) ",
+                    smtSymbol(Pred::ComparisonOp::Membership,
+                              (fd.second.getType()).toPowerType().content),
+                    fd.first, lambda_arg));
     fd.second.accept(*this);
     m_translation.push_back(')');
   }
@@ -926,25 +918,25 @@ void SmtTranslatorVisitor::visitStruct(
 
   m_translation.push_back(')');
   m_translation.push_back(')');
+  lambda_end();
 }
 void SmtTranslatorVisitor::visitQuantifiedExpr(
     const BType &type, const std::vector<std::string> &, Expr::QuantifiedOp op,
     const std::vector<TypedVar> vars, const Pred &cond, const Expr &body) {
   switch (op) {
     case Expr::QuantifiedOp::Lambda: {
-      m_translation.push_back('(');
-      m_translation.append(
+      m_translation.append(fmt::format(
+          "({0} ",
           smtSymbol(op, (type.toPowerType().content).toProductType().lhs,
-                    (type.toPowerType().content).toProductType().rhs));
-
-      m_translation.append(" (lambda ((c ");
-      m_translation.append(
-          symbol((type.toPowerType().content).toProductType().lhs));
-      m_translation.append(")) ");
+                    (type.toPowerType().content).toProductType().rhs)));
+      const string lambda_arg = lambda_begin();
+      m_translation.append(fmt::format(
+          "(lambda (({0} {1})) ", lambda_arg,
+          symbol((type.toPowerType().content).toProductType().lhs)));
       Pred condCopy = cond.copy();
       std::map<VarName, VarName> map;
       for (size_t i = 0; i < vars.size(); ++i) {
-        std::string access = "c";
+        std::string access = lambda_arg;
         for (size_t j = 0; j < vars.size() - i - 1; ++j) {
           access = "(fst " + access + ")";
         }
@@ -955,16 +947,16 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
       condCopy.accept(*this);
       m_translation.push_back(')');
       m_translation.push_back(' ');
-
-      m_translation.append(" (lambda ((c ");
-      m_translation.append(
-          symbol((type.toPowerType().content).toProductType().lhs));
-      m_translation.append(")) ");
+      // the lambda argument is at the same depth as the previous, and is
+      // homonymous ; also the renaming map is the same.
+      m_translation.append(fmt::format(
+          " (lambda (({0} {1})) ", lambda_arg,
+          symbol((type.toPowerType().content).toProductType().lhs)));
       Expr bodyCopy = body.copy();
       bodyCopy.alpha(map);
       bodyCopy.accept(*this);
       m_translation.push_back(')');
-
+      lambda_end();
       m_translation.push_back(')');
       break;
     }
@@ -974,16 +966,15 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
       for (size_t i = 1; i < vars.size(); ++i) {
         tp = BType::PROD(tp, vars[i].type);
       }
-      m_translation.push_back('(');
-      m_translation.append(smtSymbol(op, tp, type.toPowerType().content));
-
-      m_translation.append(" (lambda ((c ");
-      m_translation.append(symbol(tp));
-      m_translation.append(")) ");
+      m_translation.append(
+          fmt::format("({0} ", smtSymbol(op, tp, type.toPowerType().content)));
+      const string lambda_arg = lambda_begin();
+      m_translation.append(
+          fmt::format("(lambda (({0} {1})) ", lambda_arg, symbol(tp)));
       Pred condCopy = cond.copy();
       std::map<VarName, VarName> map;
       for (size_t i = 0; i < vars.size(); ++i) {
-        std::string access = "c";
+        std::string access = lambda_arg;
         for (size_t j = 0; j < vars.size() - i - 1; ++j) {
           access = "(fst " + access + ")";
         }
@@ -994,40 +985,37 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
       condCopy.accept(*this);
       m_translation.push_back(')');
       m_translation.push_back(' ');
-
-      m_translation.append(" (lambda ((c ");
-      m_translation.append(symbol(tp));
-      m_translation.append(")) ");
+      // the lambda argument is at the same depth as the previous, and is
+      // homonymous ; also the renaming map is the same.
+      m_translation.append(
+          fmt::format("(lambda (({0} {1})) ", lambda_arg, symbol(tp)));
       Expr bodyCopy = body.copy();
       bodyCopy.alpha(map);
       bodyCopy.accept(*this);
       m_translation.push_back(')');
-
+      lambda_end();
       m_translation.push_back(')');
       break;
     }
     case Expr::QuantifiedOp::ISum:
     case Expr::QuantifiedOp::IProduct: {
-      m_translation.push_back('(');
-      m_translation.append(smtSymbol(op));
-      m_translation.push_back(' ');
-
-      m_translation.push_back('(');
-      m_translation.append(smtSymbol(Expr::NaryOp::Set, BType::INT));
-      m_translation.append(" (lambda ((c ");
-      m_translation.append(symbol(BType::INT));
-      m_translation.append(")) ");
-
+      const string lambda_arg = lambda_begin();
+      m_translation.append(fmt::format("({0} ({1} (lambda (({2} {3})) ",
+                                       smtSymbol(op),
+                                       smtSymbol(Expr::NaryOp::Set, BType::INT),
+                                       lambda_arg, symbol(BType::INT)));
       BType tp = BType::INT;
       for (size_t i = 1; i < vars.size(); ++i) {
         tp = BType::PROD(tp, BType::INT);
       }
-
+      const string exists_arg = lambda_begin();
+      m_translation.append(
+          fmt::format("(exists (({0} {1})) (and ", exists_arg, symbol(tp)));
       Pred condCopy = cond.copy();
       Expr bodyCopy = body.copy();
       std::map<VarName, VarName> map;
       for (size_t i = 0; i < vars.size(); ++i) {
-        std::string access = "y";
+        std::string access = exists_arg;
         for (size_t j = 0; j < vars.size() - i - 1; ++j) {
           access = "(fst " + access + ")";
         }
@@ -1039,43 +1027,37 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
       condCopy.alpha(map);
       bodyCopy.alpha(map);
 
-      m_translation.append("(exists ((y ");
-      m_translation.append(symbol(tp));
-      m_translation.append(")) ");
-
-      m_translation.append("(and ");
       condCopy.accept(*this);
-      m_translation.append(" (= c ");
+      m_translation.append(fmt::format(" (= {0} ", lambda_arg));
       bodyCopy.accept(*this);
       m_translation.append(")))");
+      lambda_end();
 
       m_translation.append(")");
       m_translation.append(")");
       m_translation.append(")");
+      lambda_end();
       break;
     }
     case Expr::QuantifiedOp::RSum:
     case Expr::QuantifiedOp::RProduct: {
-      m_translation.push_back('(');
-      m_translation.append(smtSymbol(op));
-      m_translation.push_back(' ');
-
-      m_translation.push_back('(');
-      m_translation.append(smtSymbol(Expr::NaryOp::Set, BType::REAL));
-      m_translation.append(" (lambda ((c ");
-      m_translation.append(symbol(BType::REAL));
-      m_translation.append(")) ");
-
+      const string lambda_arg = lambda_begin();
+      m_translation.append(
+          fmt::format("({0} ({1} (lambda (({2} {3})) ", smtSymbol(op),
+                      smtSymbol(Expr::NaryOp::Set, BType::REAL), lambda_arg,
+                      symbol(BType::REAL)));
       BType tp = BType::REAL;
       for (size_t i = 1; i < vars.size(); ++i) {
         tp = BType::PROD(tp, BType::REAL);
       }
-
+      const string exists_arg = lambda_begin();
+      m_translation.append(
+          fmt::format("(exists (({0} {1})) (and ", exists_arg, symbol(tp)));
       Pred condCopy = cond.copy();
       Expr bodyCopy = body.copy();
       std::map<VarName, VarName> map;
       for (size_t i = 0; i < vars.size(); ++i) {
-        std::string access = "y";
+        std::string access = exists_arg;
         for (size_t j = 0; j < vars.size() - i - 1; ++j) {
           access = "(fst " + access + ")";
         }
@@ -1087,19 +1069,16 @@ void SmtTranslatorVisitor::visitQuantifiedExpr(
       condCopy.alpha(map);
       bodyCopy.alpha(map);
 
-      m_translation.append("(exists ((y ");
-      m_translation.append(symbol(tp));
-      m_translation.append(")) ");
-
-      m_translation.append("(and ");
       condCopy.accept(*this);
-      m_translation.append(" (= c ");
+      m_translation.append(fmt::format(" (= {0} ", lambda_arg));
       bodyCopy.accept(*this);
       m_translation.append(")))");
+      lambda_end();
 
       m_translation.append(")");
       m_translation.append(")");
       m_translation.append(")");
+      lambda_end();
       break;
     }
     default:
@@ -1112,16 +1091,16 @@ void SmtTranslatorVisitor::visitQuantifiedSet(const BType &type,
                                               const std::vector<std::string> &,
                                               const std::vector<TypedVar> vars,
                                               const Pred &cond) {
-  m_translation.push_back('(');
+  lambda_begin();
+  const string lambda_arg = m_lambda_arg;
   m_translation.append(
-      smtSymbol(Expr::NaryOp::Set, type.toPowerType().content));
-  m_translation.append(" (lambda ((x ");
-  m_translation.append(symbol(type.toPowerType().content));
-  m_translation.append(")) ");
+      fmt::format("({0} (lambda (({1} {2})) ",
+                  smtSymbol(Expr::NaryOp::Set, type.toPowerType().content),
+                  m_lambda_arg, symbol(type.toPowerType().content)));
   Pred condCopy = cond.copy();
   std::map<VarName, VarName> map;
   for (size_t i = 0; i < vars.size(); ++i) {
-    std::string access = "x";
+    std::string access = lambda_arg;
     for (size_t j = 0; j < vars.size() - i - 1; ++j) {
       access = "(fst " + access + ")";
     }
@@ -1132,6 +1111,7 @@ void SmtTranslatorVisitor::visitQuantifiedSet(const BType &type,
   condCopy.accept(*this);
   m_translation.push_back(')');
   m_translation.push_back(')');
+  lambda_end();
 }
 void SmtTranslatorVisitor::visitRecordUpdate(const BType &,
                                              const std::vector<std::string> &,

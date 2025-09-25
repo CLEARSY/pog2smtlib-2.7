@@ -97,7 +97,7 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 0 1))(= x (maplet 1 2))))) (|injections.partial Z Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 2)))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)(= x 2)))))))
+    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 0 1))(= _c0 (maplet 1 2))))) (|injections.partial Z Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)(= _c0 2)))) (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)(= _c0 2)))))))
   :named |Goal|))
 (check-sat)
 (exit)

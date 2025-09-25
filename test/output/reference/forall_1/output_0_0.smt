@@ -26,8 +26,8 @@
         ((xx |Z|)(yy |Z|))
         (=>
           (and
-            (|set.in Z| xx (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)(= x 3)(= x 4)))))
-            (|set.in Z| yy (|set.intent Z| (lambda ((x |Z|)) (or (= x 4)(= x 5))))))
+            (|set.in Z| xx (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 2)(= _c0 3)(= _c0 4)))))
+            (|set.in Z| yy (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 4)(= _c0 5))))))
           (< xx yy)))))
   :named |Goal|))
 (check-sat)

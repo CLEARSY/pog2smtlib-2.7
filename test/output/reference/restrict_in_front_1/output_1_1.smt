@@ -78,7 +78,7 @@
   :named |ax.size.definition Z|))
 (assert (!
   (not
-    (|set.in Z| 2 (|interval| 0 (|size Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))(= x (maplet 2 5))(= x (maplet 3 4)))))))))
+    (|set.in Z| 2 (|interval| 0 (|size Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4)))))))))
   :named |Goal|))
 (check-sat)
 (exit)

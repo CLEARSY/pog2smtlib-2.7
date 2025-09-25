@@ -89,14 +89,6 @@
     (= (|set.in Z| e (|rel.domain Z Z| r))
        (exists ((y |Z|)) (|set.in (Z x Z)| (maplet e y) r))))
   :named |ax:set.in.domain (Z x Z)|))
-(declare-fun |surjections Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
-(assert (!
-  (forall ((X |POW Z|) (Y |POW Z|))
-    (forall ((f |POW (Z x Z)|))
-      (= (|set.in POW (Z x Z)| f (|surjections Z Z| X Y))
-         (= (|rel.range Z Z| f) Y)
-      )))
-  :named |ax:set.in.surjections (Z x Z)|))
 (declare-fun |injections Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((X |POW Z|) (Y |POW Z|) (f |POW (Z x Z)|))
@@ -105,6 +97,14 @@
           (=> (and (|set.in (Z x Z)| p1 f) (|set.in (Z x Z)| p2 f) (= (snd p1) (snd p2)))
               (= (fst p1) (fst p2))))))
   :named |ax:set.in.injections (Z x Z)|))
+(declare-fun |surjections Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
+(assert (!
+  (forall ((X |POW Z|) (Y |POW Z|))
+    (forall ((f |POW (Z x Z)|))
+      (= (|set.in POW (Z x Z)| f (|surjections Z Z| X Y))
+         (= (|rel.range Z Z| f) Y)
+      )))
+  :named |ax:set.in.surjections (Z x Z)|))
 (declare-fun |surjections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|))
@@ -214,7 +214,7 @@
   :named |ax.seq.is.total.fun Z|))
 (assert (!
   (not
-    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))(= x (maplet 2 5))(= x (maplet 3 4))))) (|seq Z| (|rel.range Z Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))(= x (maplet 2 5))(= x (maplet 3 4)))))))))
+    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4))))) (|seq Z| (|rel.range Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4)))))))))
   :named |Goal|))
 (check-sat)
 (exit)

@@ -83,7 +83,7 @@
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (not
-    (= (|last Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 5))(= x (maplet 2 5))(= x (maplet 3 7)))))) 7))
+    (= (|last Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 5))(= _c0 (maplet 2 5))(= _c0 (maplet 3 7)))))) 7))
   :named |Goal|))
 (check-sat)
 (exit)

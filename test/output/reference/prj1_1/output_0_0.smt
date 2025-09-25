@@ -44,7 +44,7 @@
   :named |ax:set.in.intent ((Z x Z) x Z)|))
 (assert (!
   (not
-    (= (|prj1 Z Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)))) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2))))) (|set.intent ((Z x Z) x Z)| (lambda ((x |((Z x Z) x Z)|)) (or (= x (maplet (maplet 0 1) 0))(= x (maplet (maplet 0 2) 0))(= x (maplet (maplet 1 1) 1))(= x (maplet (maplet 1 2) 0)))))))
+    (= (|prj1 Z Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)))) (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 2))))) (|set.intent ((Z x Z) x Z)| (lambda ((_c0 |((Z x Z) x Z)|)) (or (= _c0 (maplet (maplet 0 1) 0))(= _c0 (maplet (maplet 0 2) 0))(= _c0 (maplet (maplet 1 1) 1))(= _c0 (maplet (maplet 1 2) 0)))))))
   :named |Goal|))
 (check-sat)
 (exit)

@@ -60,7 +60,7 @@
   :named |ax.set.in.NAT|))
 (assert (!
   (not
-    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 2))(= x (maplet 0 2))))) (|relations Z Z| NAT NAT)))
+    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 2))(= _c0 (maplet 0 2))))) (|relations Z Z| NAT NAT)))
   :named |Goal|))
 (check-sat)
 (exit)

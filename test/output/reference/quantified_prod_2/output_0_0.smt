@@ -38,9 +38,9 @@
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 (assert (!
   (not
-    (= (|PI| (|set.intent Z| (lambda ((c |Z|)) (exists ((y |(Z x Z)|)) (and     (and
-      (|set.in Z| (fst y) (|set.intent Z| (lambda ((x |Z|)) (= x 1))))
-      (|set.in Z| (snd y) (|set.intent Z| (lambda ((x |Z|)) (or (= x 3)(= x 4)))))) (= c (+ (fst y) (snd y)))))))) 12))
+    (= (|PI| (|set.intent Z| (lambda ((_c0 |Z|)) (exists ((_c1 |(Z x Z)|)) (and     (and
+      (|set.in Z| (fst _c1) (|set.intent Z| (lambda ((_c2 |Z|)) (= _c2 1))))
+      (|set.in Z| (snd _c1) (|set.intent Z| (lambda ((_c2 |Z|)) (or (= _c2 3)(= _c2 4)))))) (= _c0 (+ (fst _c1) (snd _c1)))))))) 12))
   :named |Goal|))
 (check-sat)
 (exit)

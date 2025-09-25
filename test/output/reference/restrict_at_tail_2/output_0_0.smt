@@ -89,7 +89,7 @@
   :named |ax.set.in.empty (Z x Z)|))
 (assert (!
   (not
-    (= (|\/ Z| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))(= x (maplet 2 5))(= x (maplet 3 4))))) 3) |set.empty (Z x Z)|))
+    (= (|\/ Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4))))) 3) |set.empty (Z x Z)|))
   :named |Goal|))
 (check-sat)
 (exit)

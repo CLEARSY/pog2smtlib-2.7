@@ -243,7 +243,7 @@
   :named |ax.set.in.INTEGER|))
 (assert (!
   (not
-    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|)) (or (= x (maplet 1 0))(= x (maplet 2 1))(= x (maplet 3 2))))) (|iseq1 Z| INTEGER)))
+    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 1))(= _c0 (maplet 3 2))))) (|iseq1 Z| INTEGER)))
   :named |Goal|))
 (check-sat)
 (exit)

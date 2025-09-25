@@ -46,7 +46,7 @@
   :named |ax.struct.definition struct(Note, Suffisant)|))
 (assert (!
   (not
-    (|set.subseteq struct(Note, Suffisant)| (|struct struct(Note, Suffisant)| (lambda ((x |struct(Note, Suffisant)|)) (and (|set.in Z| (Note x) (|interval| 0 21))(|set.in BOOL| (Suffisant x) BOOL)))) (|struct struct(Note, Suffisant)| (lambda ((x |struct(Note, Suffisant)|)) (and (|set.in Z| (Note x) (|interval| 0 20))(|set.in BOOL| (Suffisant x) BOOL))))))
+    (|set.subseteq struct(Note, Suffisant)| (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (Note _c0) (|interval| 0 21))(|set.in BOOL| (Suffisant _c0) BOOL)))) (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (Note _c0) (|interval| 0 20))(|set.in BOOL| (Suffisant _c0) BOOL))))))
   :named |Goal|))
 (check-sat)
 (exit)

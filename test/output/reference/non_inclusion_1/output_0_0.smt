@@ -24,7 +24,7 @@
 (assert (!
   (not
     (not
-      (|set.subseteq Z| (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 1)))) (|set.intent Z| (lambda ((x |Z|)) (or (= x (+ 0 1))(= x (+ 1 1))))))))
+      (|set.subseteq Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)))) (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 (+ 0 1))(= _c0 (+ 1 1))))))))
   :named |Goal|))
 (check-sat)
 (exit)

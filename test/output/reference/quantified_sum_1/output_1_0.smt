@@ -48,7 +48,6 @@
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
-(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |bijections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|))
@@ -57,6 +56,7 @@
          (and (|set.in POW ((Z x Z) x Z)| f (|injections (Z x Z) Z| X Y))
               (|set.in POW ((Z x Z) x Z)| f (|surjections (Z x Z) Z| X Y))))))
   :named |ax:set.in.bijections ((Z x Z) x Z)|))
+(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |set.subseteq (Z x Z)| (|POW (Z x Z)| |POW (Z x Z)|) Bool)
 (assert (!
     (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
@@ -107,11 +107,11 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|))     (and
-      (|set.in Z| (fst x) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)))))
-      (|set.in Z| (snd x) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 3)(= x 4)))))))) (|finite sub-sets (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|))     (and
-      (|set.in Z| (fst x) (|set.intent Z| (lambda ((x |Z|)) (or (= x 1)(= x 2)))))
-      (|set.in Z| (snd x) (|set.intent Z| (lambda ((x |Z|)) (or (= x 0)(= x 3)(= x 4)))))))))))
+    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|))     (and
+      (|set.in Z| (fst _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)))))
+      (|set.in Z| (snd _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 0)(= _c1 3)(= _c1 4)))))))) (|finite sub-sets (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|))     (and
+      (|set.in Z| (fst _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)))))
+      (|set.in Z| (snd _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 0)(= _c1 3)(= _c1 4)))))))))))
   :named |Goal|))
 (check-sat)
 (exit)

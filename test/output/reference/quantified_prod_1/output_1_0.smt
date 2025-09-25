@@ -107,11 +107,11 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|))     (and
-      (|set.in Z| (fst x) (|set.intent Z| (lambda ((x |Z|)) (= x 1))))
-      (|set.in Z| (snd x) (|set.intent Z| (lambda ((x |Z|)) (or (= x 3)(= x 4)))))))) (|finite sub-sets (Z x Z)| (|set.intent (Z x Z)| (lambda ((x |(Z x Z)|))     (and
-      (|set.in Z| (fst x) (|set.intent Z| (lambda ((x |Z|)) (= x 1))))
-      (|set.in Z| (snd x) (|set.intent Z| (lambda ((x |Z|)) (or (= x 3)(= x 4)))))))))))
+    (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|))     (and
+      (|set.in Z| (fst _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1))))
+      (|set.in Z| (snd _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 3)(= _c1 4)))))))) (|finite sub-sets (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|))     (and
+      (|set.in Z| (fst _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1))))
+      (|set.in Z| (snd _c0) (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 3)(= _c1 4)))))))))))
   :named |Goal|))
 (check-sat)
 (exit)

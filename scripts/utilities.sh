@@ -69,23 +69,46 @@ export -f ls_not_equivalent
 # - the result output file is not identical to the reference output file
 #
 function update_references() {
-    pushd "$pog2smtlib27_test_dir/output/result"
-    for file in `ls */output*.smt`
-    do
-	test=`dirname $file`
-	name=`basename $file`
-	f1="$test/$name"
-	f2="../reference/$test/$name"
-	if files_are_equivalent "$f1" "$f2" && ! cmp -s "$f1" "$f2"
-	then
-	    cp $f1 $f2
-	    echo "$test updated"
-	fi
-    done
-    popd
+  pushd "$pog2smtlib27_test_dir/output/result"
+  for file in `ls */output*.smt`
+  do
+		test=`dirname $file`
+		name=`basename $file`
+		f1="$test/$name"
+		f2="../reference/$test/$name"
+		if files_are_equivalent "$f1" "$f2" && ! cmp -s "$f1" "$f2"
+		then
+		    cp $f1 $f2
+		    echo "$test updated"
+		fi
+  done
+  popd
 }
 
 export -f update_references
+
+function overwrite_references() {
+  pushd "$pog2smtlib27_test_dir/output/result"
+  for file in `ls */output*.smt`
+  do
+		test=`dirname $file`
+		name=`basename $file`
+		f1="$test/$name"
+		f2="../reference/$test/$name"
+		diff $f1 $f2
+		if [ $? -ne 0 ]
+		then
+	    read -p "overwrite? [y/N] " -n 1 -r
+	    echo  # Move to a new line
+	    if [[ $REPLY =~ ^[Yy]$ ]]; then
+			    cp $f1 $f2
+	    fi
+		fi
+  done
+  popd
+}
+
+export -f overwrite_references
 
 function run_cvc5() {
     local path="$1"

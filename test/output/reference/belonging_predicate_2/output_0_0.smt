@@ -14,7 +14,7 @@
   :named |ax:set.in.intent Z|))
 (assert (!
   (not
-    (|set.in Z| (+ 1 1) (|set.intent Z| (lambda ((x |Z|)) (or (= x (- 1 1))(= x (- 2 1))(= x (- 3 1)))))))
+    (|set.in Z| (+ 1 1) (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 (- 1 1))(= _c0 (- 2 1))(= _c0 (- 3 1)))))))
   :named |Goal|))
 (check-sat)
 (exit)

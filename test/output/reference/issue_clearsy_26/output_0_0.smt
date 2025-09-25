@@ -127,7 +127,7 @@
   (|set.subseteq Z| s11 s5)
   :named |Define:ctx:5|))
 (assert (!
-  (= s12 (|set.intent (BOOL x Z)| (lambda ((x |(BOOL x Z)|)) (or (= x (maplet true s9))(= x (maplet false s10))))))
+  (= s12 (|set.intent (BOOL x Z)| (lambda ((_c0 |(BOOL x Z)|)) (or (= _c0 (maplet true s9))(= _c0 (maplet false s10))))))
   :named |Define:ctx:6|))
 (assert (!
   (|set.in POW (BOOL x Z)| s12 (|functions.partial BOOL Z| BOOL s5))
