@@ -527,7 +527,7 @@ class Factory {
   template <typename T>
   std::shared_ptr<Abstract> find(MapBinaryBType<T> &m, const BType &U,
                                  const BType &V) {
-    BinaryBType UxV = std::make_pair(std::make_shared<const BType>(U),
+    ::BinaryBType UxV = std::make_pair(std::make_shared<const BType>(U),
                                      std::make_shared<const BType>(V));
     auto it = m.find(UxV);
     if (it != m.end()) {
