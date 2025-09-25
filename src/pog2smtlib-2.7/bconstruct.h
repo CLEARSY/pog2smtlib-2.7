@@ -15,6 +15,7 @@
 #ifndef BBIT_H
 #define BBIT_H
 
+#include <array>
 #include <memory>
 #include <set>
 #include <string>
