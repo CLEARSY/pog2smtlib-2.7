@@ -215,7 +215,7 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
 
     /* 5.11 Expressions of Relations */
     {Expr::BinaryOp::First_Projection, "prj1"},
-    {Expr::BinaryOp::Second_Projection, "prj1"},
+    {Expr::BinaryOp::Second_Projection, "prj2"},
     {Expr::BinaryOp::Composition, "relcomp"},
     {Expr::BinaryOp::Direct_Product, "directproduct"},
     {Expr::BinaryOp::Parallel_Product, "parallelproduct"},

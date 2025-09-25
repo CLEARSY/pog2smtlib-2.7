@@ -87,10 +87,32 @@ function update_references() {
 
 export -f update_references
 
+function run_cvc5() {
+    local path="$1"
+		local name=`basename $path`
+		local prefix=`basename $name .smt`
+    local command="$HOME/bin/cvc5 --tlimit=100 ${path}"
+
+		($command > $prefix.stdout 2> $prefix.stderr) 2> /dev/null
+		local exit_code=$?
+
+    if [ $exit_code -eq 0 ]; then
+        echo -n "$name " && cat $prefix.stdout
+    elif [ $exit_code -eq 134 ]; then
+        echo "$name timeout"
+    else
+        echo -n "$name " && cat $prefix.stderr
+    fi
+}
+
+export -f run_cvc5
+
 echo "mv_po2_suffix        renames files with .po2 suffix to .smt suffix"
 echo "ls_equivalent        list tests where result is equivalent to reference"
 echo "ls_not_equivalent    list tests where result is not equivalent to reference"
 echo "update_references    replaces reference with equivalent but not identical result"
 echo
 echo "pog2smtlib27_dir     $pog2smtlib27_dir"
+echo
+echo "run_cvc5"
 echo
