@@ -422,3 +422,7 @@ std::string smtSymbol(const VarName& token) {
                     FILE_NAME, LINE_NUMBER, token.prefix()));
   }
 }
+
+std::string smtSymbolRecField(const std::string& field) {
+  return fmt::format("|'{0}|", field);
+}

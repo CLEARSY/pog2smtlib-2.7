@@ -48,4 +48,14 @@ extern std::string smtSymbol(Expr::Visitor::EConstant, const BType&);
 extern std::string smtSymbol(Expr::Visitor::EConstant);
 extern std::string smtSymbol(const VarName&);
 
+/**
+ * @brief mangles a record field name
+ * @details In B, a field label may be homonymous to another symbol. Since the
+ * encoding creates a symbol for the datatype accessor corresponding to this
+ * field, we cannot use the field name for this symbol. This function returns
+ * the SMT symbol created for this accessor.
+ *
+ */
+extern std::string smtSymbolRecField(const std::string& label);
+
 #endif  // TRANSLATE_OPERATOR_H

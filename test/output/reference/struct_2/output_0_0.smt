@@ -3,7 +3,7 @@
 (define-sort |BOOL| () Bool)
 (define-sort |Z| () Int)
 (declare-sort P 1)
-(declare-datatype |struct(Note, Suffisant)| ((|rec(Note, Suffisant)| (Note |Z|)(Suffisant |BOOL|))))
+(declare-datatype |struct(Note, Suffisant)| ((|rec(Note, Suffisant)| (|'Note| |Z|)(|'Suffisant| |BOOL|))))
 (define-sort |POW struct(Note, Suffisant)| () (P |struct(Note, Suffisant)|))
 (define-sort |POW BOOL| () (P |BOOL|))
 (define-sort |POW Z| () (P |Z|))
@@ -37,7 +37,7 @@
   :named |ax.struct.definition struct(Note, Suffisant)|))
 (assert (!
   (not
-    (|set.in struct(Note, Suffisant)| (|rec(Note, Suffisant)|12 true) (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (Note _c0) (|interval| 0 20))(|set.in BOOL| (Suffisant _c0) BOOL))))))
+    (|set.in struct(Note, Suffisant)| (|rec(Note, Suffisant)|12 true) (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (|'Note| _c0) (|interval| 0 20))(|set.in BOOL| (|'Suffisant| _c0) BOOL))))))
   :named |Goal|))
 (check-sat)
 (exit)

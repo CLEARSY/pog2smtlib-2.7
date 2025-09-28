@@ -22,6 +22,7 @@
 #include "../../bconstruct.h"
 #include "../../btype-symbols.h"
 #include "../../signature.h"
+#include "../../translate-token.h"
 #include "btype.h"
 #include "cartesianproduct.h"
 #include "powerset.h"
@@ -63,11 +64,9 @@ shared_ptr<Abstract> Factory::Type(const BType &T) {
         [](const std::vector<std::pair<std::string, BType>> &fds) {
           std::string result;
           for (size_t i = 0; i < fds.size(); ++i) {
-            result += "(";
-            result += fds[i].first;
-            result += " ";
-            result += symbol(fds[i].second);
-            result += ")";
+            result.append(fmt::format("({0} {1})",
+                                      smtSymbolRecField(fds[i].first),
+                                      symbol(fds[i].second)));
           }
           return result;
         };

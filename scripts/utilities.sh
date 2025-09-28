@@ -126,6 +126,7 @@ function run_cvc5() {
     else
         echo -n "$name " && cat $prefix.stderr
     fi
+    rm -f $prefix.stdout $prefix.stderr
 }
 
 export -f run_cvc5

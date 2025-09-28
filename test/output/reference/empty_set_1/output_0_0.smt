@@ -4,9 +4,7 @@
 (declare-sort P 1)
 (define-sort |POW Z| () (P |Z|))
 (declare-const vset |POW Z|)
-
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-
 (declare-const |set.empty Z| |POW Z|)
 (assert (!
   (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
@@ -21,8 +19,8 @@
     )
     :named |ax.set.subseteq Z|))
 (assert (!
-  (not (|set.subseteq Z| vset |set.empty Z|))
-  :named |Goal|)
-)
+  (not
+    (|set.subseteq Z| vset |set.empty Z|))
+  :named |Goal|))
 (check-sat)
 (exit)

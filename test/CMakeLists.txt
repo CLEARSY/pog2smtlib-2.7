@@ -176,6 +176,9 @@ add_cl_test("building_set_bool")
 add_cl_test("building_set_integer")
 add_cl_test("building_set_string")
 add_cl_test("building_set_real")
+add_cl_test("empty_set_1")
+add_cl_test("empty_set_2")
+add_cl_test("empty_set_3")
 
 # 5.7 Set List Expressions
 
@@ -331,6 +334,10 @@ add_cl_test("iseq_1")
 add_cl_test("iseq_2")
 add_cl_test("iseq1_1")
 add_cl_test("iseq1_2")
+add_cl_test("perm_1")
+add_cl_test("perm_2")
+add_cl_test("empty_seq_1")
+add_cl_test("empty_seq_2")
 
 # 5.18 Expressions of Sequences
 

@@ -1,9 +1,9 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
 (define-sort |Z| () Int)
-(declare-datatype |struct(x1, y1)| ((|rec(x1, y1)| (x1 |Z|)(y1 |Z|))))
+(declare-datatype |struct(x1, y1)| ((|rec(x1, y1)| (|'x1| |Z|)(|'y1| |Z|))))
 (declare-sort P 1)
-(declare-datatype |struct(x2, y2)| ((|rec(x2, y2)| (x2 |struct(x1, y1)|)(y2 |struct(x1, y1)|))))
+(declare-datatype |struct(x2, y2)| ((|rec(x2, y2)| (|'x2| |struct(x1, y1)|)(|'y2| |struct(x1, y1)|))))
 (define-sort |POW struct(x2, y2)| () (P |struct(x2, y2)|))
 (define-sort |POW struct(x1, y1)| () (P |struct(x1, y1)|))
 (declare-fun |set.in struct(x2, y2)| (|struct(x2, y2)| |POW struct(x2, y2)|) Bool)
@@ -63,10 +63,10 @@
       (forall ((e |struct(x1, y1)|)) (= (|set.in struct(x1, y1)| e s) (|set.in struct(x1, y1)| e t)))))
   :named |ax.set.eq struct(x1, y1)|))
 (assert (!
-  (= struct1 (|struct struct(x1, y1)| (lambda ((_c0 |struct(x1, y1)|)) (and (|set.in Z| (x1 _c0) INTEGER)(|set.in Z| (y1 _c0) INTEGER)))))
+  (= struct1 (|struct struct(x1, y1)| (lambda ((_c0 |struct(x1, y1)|)) (and (|set.in Z| (|'x1| _c0) INTEGER)(|set.in Z| (|'y1| _c0) INTEGER)))))
   :named |Define:lprp:1|))
 (assert (!
-  (= struct2 (|struct struct(x2, y2)| (lambda ((_c0 |struct(x2, y2)|)) (and (|set.in struct(x1, y1)| (x2 _c0) struct1)(|set.in struct(x1, y1)| (y2 _c0) struct1)))))
+  (= struct2 (|struct struct(x2, y2)| (lambda ((_c0 |struct(x2, y2)|)) (and (|set.in struct(x1, y1)| (|'x2| _c0) struct1)(|set.in struct(x1, y1)| (|'y2| _c0) struct1)))))
   :named |Define:lprp:2|))
 (assert (!
   (= record11 (|rec(x1, y1)|1 1))
@@ -81,13 +81,13 @@
   (= record22 (|rec(x2, y2)|record12 record11))
   :named |Define:lprp:6|))
 (assert (!
-  (= (x1 record11) 1)
+  (= (|'x1| record11) 1)
   :named |Hypothesis:1|))
 (assert (!
-  (= (x1 (x2 record21)) 1)
+  (= (|'x1| (|'x2| record21)) 1)
   :named |Hypothesis:2|))
 (assert (!
-  (= (x2 record21) record11)
+  (= (|'x2| record21) record11)
   :named |Hypothesis:3|))
 (assert (!
   (not

@@ -908,7 +908,7 @@ void SmtTranslatorVisitor::visitStruct(
         fmt::format("({0} ({1} {2}) ",
                     smtSymbol(Pred::ComparisonOp::Membership,
                               (fd.second.getType()).toPowerType().content),
-                    fd.first, lambda_arg));
+                    smtSymbolRecField(fd.first), lambda_arg));
     fd.second.accept(*this);
     m_translation.push_back(')');
   }
@@ -1125,7 +1125,7 @@ void SmtTranslatorVisitor::visitRecordAccess(const BType &,
                                              const Expr &rec,
                                              const std::string &label) {
   m_translation.push_back('(');
-  m_translation.append(label);
+  m_translation.append(smtSymbolRecField(label));
   m_translation.append(" ");
   rec.accept(*this);
   m_translation.push_back(')');
