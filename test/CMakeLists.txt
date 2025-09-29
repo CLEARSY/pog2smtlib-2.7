@@ -36,6 +36,7 @@ add_cl_test("issue_clearsy_23")
 add_cl_test("issue_clearsy_26")
 add_cl_test("issue_clearsy_31")
 add_cl_test("issue_clearsy_34")
+add_cl_test("issue_clearsy_41")
 
 # 3.2 Types
 

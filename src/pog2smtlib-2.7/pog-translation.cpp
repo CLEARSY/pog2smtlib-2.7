@@ -229,6 +229,7 @@ const string &POGTranslations::groupScript(size_t group) {
 }
 
 const string &POGTranslations::localHypScript(size_t group, size_t localHyp) {
+  const bool debug_me = false;
   const goal_t index = make_pair(group, localHyp);
   auto itr = m_localHypScripts.find(index);
   if (itr != m_localHypScripts.end()) {
@@ -237,11 +238,19 @@ const string &POGTranslations::localHypScript(size_t group, size_t localHyp) {
   string script;
   assert(localHyp < m_pog.pos.at(group).localHyps.size());
   const Pred &pred = m_pog.pos.at(group).localHyps.at(localHyp);
-  const string translation = translate(pred);
-  const string other = assertLocalHypCommand(translation, localHyp);
-  script.append(other);
+  if (!pred.isPureTypingPredicate()) {
+    const string translation = translate(pred);
+    const string other = assertLocalHypCommand(translation, localHyp);
+    script.append(other);
+  }
   const auto &p = m_localHypScripts.insert(make_pair(index, std::move(script)));
   const string &result = p.first->second;
+  if (debug_me) {
+    std::cerr << fmt::format("-- POGTranslations::localHypScript({}, {})",
+                             group, localHyp)
+              << std::endl
+              << result << std::endl;
+  }
   return result;
 }
 
