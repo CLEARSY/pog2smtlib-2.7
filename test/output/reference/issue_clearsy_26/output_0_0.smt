@@ -1,7 +1,7 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(define-sort |Z| () Int)
 (declare-sort P 1)
+(define-sort |Z| () Int)
 (define-sort |BOOL| () Bool)
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
 (define-sort |POW Z| () (P |Z|))
@@ -78,14 +78,8 @@
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
+(declare-const s14 |Z|)
 (declare-const s10 |Z|)
-(assert (!
-  (forall ((s |POW (BOOL x Z)|) (t |POW (BOOL x Z)|))
-    (=
-      (= s t)
-      (forall ((e |(BOOL x Z)|)) (= (|set.in (BOOL x Z)| e s) (|set.in (BOOL x Z)| e t)))))
-  :named |ax.set.eq (BOOL x Z)|))
-(declare-const s15 |BOOL|)
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
     (forall ((s |POW Z|) (t |POW Z|))
@@ -103,6 +97,15 @@
       (= (|set.in (BOOL x Z)| x (|set.intent (BOOL x Z)| p))
          (p x))))
   :named |ax:set.in.intent (BOOL x Z)|))
+(assert (!
+  (forall ((s |POW (BOOL x Z)|) (t |POW (BOOL x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(BOOL x Z)|)) (= (|set.in (BOOL x Z)| e s) (|set.in (BOOL x Z)| e t)))))
+  :named |ax.set.eq (BOOL x Z)|))
+(declare-const s15 |BOOL|)
+(declare-const s13 |Z|)
+(declare-const s9 |Z|)
 (declare-const s11 |POW Z|)
 (declare-const BOOL |POW BOOL|)
 (assert (!
@@ -110,9 +113,6 @@
   :named |ax.set.in.BOOL|))
 (declare-const s5 |POW Z|)
 (declare-const s12 |POW (BOOL x Z)|)
-(declare-const s13 |Z|)
-(declare-const s9 |Z|)
-(declare-const s14 |Z|)
 (declare-const s13$1 |Z|)
 (assert (!
   (= s5 (|interval| 0 255))

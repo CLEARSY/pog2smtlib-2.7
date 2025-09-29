@@ -131,6 +131,42 @@ function run_cvc5() {
 
 export -f run_cvc5
 
+pogdir="$HOME/données/zenodo-dataset-pog-20220905"
+encoder="$HOME/dev/pog2smtlib-2.7/build/src/pog2smtlib-2.7/pog2smtlib27"
+
+function encode() {
+  path="$1"
+  dir=`dirname $path`
+  dataset=`basename $dir`
+  file=`basename $path`
+  name=`basename $file .pog`
+  $encoder -i $path -o $dataset-$name
+}
+
+export -f encode
+
+function run_dataset() {
+    dataset=$1
+    result="results-${dataset}.txt"
+    for pogfile in $pogdir/$dataset/*.pog
+    do
+	encode $pogfile
+	mv_po2_suffix
+	for smtfile in `ls *.smt`
+	do
+	    run_cvc5 $smtfile | tee -a "$result"
+            rm -f $smtfile
+	done
+    done
+}
+export -f run_dataset
+
+function watch_run() {
+    local file="$1"
+    watch -n 1 'echo $(grep -c unsat "'"$file"'") $(grep -c timeout "'"$file"'") $(grep -c error "'"$file"'") $(wc -l < "'"$file"'")'
+}
+export -f watch_run
+
 echo "mv_po2_suffix        renames files with .po2 suffix to .smt suffix"
 echo "ls_equivalent        list tests where result is equivalent to reference"
 echo "ls_not_equivalent    list tests where result is not equivalent to reference"

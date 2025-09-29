@@ -148,7 +148,8 @@ typedef struct Data {
   const BType &type() const;
   inline bool operator==(const Data &other) const {
     return (*m_name == *(other.m_name) ||
-            m_name->show() == other.m_name->show());
+            m_name->show() == other.m_name->show()) &&
+           m_type == other.m_type;
   }
 } Data;
 

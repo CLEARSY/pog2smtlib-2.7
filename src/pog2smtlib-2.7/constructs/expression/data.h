@@ -25,7 +25,17 @@ struct DataHash {
 struct DataEqual {
   bool operator()(const std::shared_ptr<const struct Data> &lhs,
                   const std::shared_ptr<const struct Data> &rhs) const {
-    return lhs->to_string() == rhs->to_string();
+    constexpr bool debug_me = false;
+    const bool result =
+        lhs->to_string() == rhs->to_string() && *lhs->m_type == *rhs->m_type;
+    if (debug_me) {
+      std::cerr << fmt::format("DataEqual({0}: {2}, {1}: {3}) == {4}",
+                               lhs->to_string(), rhs->to_string(),
+                               lhs->m_type->to_string(),
+                               rhs->m_type->to_string(), result)
+                << std::endl;
+    }
+    return result;
   }
 };
 
