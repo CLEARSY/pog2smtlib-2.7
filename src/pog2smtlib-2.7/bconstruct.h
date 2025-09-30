@@ -528,7 +528,7 @@ class Factory {
   std::shared_ptr<Abstract> find(MapBinaryBType<T> &m, const BType &U,
                                  const BType &V) {
     ::BinaryBType UxV = std::make_pair(std::make_shared<const BType>(U),
-                                     std::make_shared<const BType>(V));
+                                       std::make_shared<const BType>(V));
     auto it = m.find(UxV);
     if (it != m.end()) {
       return it->second;
@@ -541,8 +541,8 @@ class Factory {
       MapBinaryBType<T> &m, const BType &U, const BType &V,
       const std::string &script,
       std::set<std::shared_ptr<Abstract>> &requisites) {
-    BinaryBType UxV = std::make_pair(std::make_shared<const BType>(U),
-                                     std::make_shared<const BType>(V));
+    ::BinaryBType UxV = std::make_pair(std::make_shared<const BType>(U),
+                                       std::make_shared<const BType>(V));
     auto it = m.find(UxV);
     if (it != m.end()) {
       return it->second;
@@ -556,9 +556,9 @@ class Factory {
   template <typename T>
   std::shared_ptr<Abstract> find(MapTernaryBType<T> &m, const BType &fst,
                                  const BType &snd, const BType &thd) {
-    TernaryBType pt = {std::make_shared<const BType>(fst),
-                       std::make_shared<const BType>(snd),
-                       std::make_shared<const BType>(thd)};
+    ::TernaryBType pt = {std::make_shared<const BType>(fst),
+                         std::make_shared<const BType>(snd),
+                         std::make_shared<const BType>(thd)};
     auto it = m.find(pt);
     if (it != m.end()) {
       return it->second;
@@ -571,9 +571,9 @@ class Factory {
       MapTernaryBType<T> &m, const BType &fst, const BType &snd,
       const BType &thd, const std::string &script,
       std::set<std::shared_ptr<Abstract>> &requisites) {
-    TernaryBType pt = {std::make_shared<const BType>(fst),
-                       std::make_shared<const BType>(snd),
-                       std::make_shared<const BType>(thd)};
+    ::TernaryBType pt = {std::make_shared<const BType>(fst),
+                         std::make_shared<const BType>(snd),
+                         std::make_shared<const BType>(thd)};
     auto it = m.find(pt);
     if (it != m.end()) {
       return it->second;
@@ -588,7 +588,7 @@ class Factory {
   std::shared_ptr<Abstract> find(MapQuadrupleBType<T> &m, const BType &U,
                                  const BType &V, const BType &W,
                                  const BType &Z) {
-    QuadrupleBType pt = {
+    ::QuadrupleBType pt = {
         std::make_shared<const BType>(U), std::make_shared<const BType>(V),
         std::make_shared<const BType>(W), std::make_shared<const BType>(Z)};
     auto it = m.find(pt);
@@ -603,7 +603,7 @@ class Factory {
       MapQuadrupleBType<T> &m, const BType &U, const BType &V, const BType &W,
       const BType &Z, const std::string &script,
       std::set<std::shared_ptr<Abstract>> &requisites) {
-    QuadrupleBType pt = {
+    ::QuadrupleBType pt = {
         std::make_shared<const BType>(U), std::make_shared<const BType>(V),
         std::make_shared<const BType>(W), std::make_shared<const BType>(Z)};
     auto it = m.find(pt);
