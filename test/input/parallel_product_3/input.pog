@@ -1,0 +1,781 @@
+<Proof_Obligations xmlns="https://www.atelierb.eu/Formats/pog" version="1.0">
+    <Define name="B definitions">
+        <Exp_Comparison op="=">
+            <Id value="NAT" typref="0" />
+            <Binary_Exp op=".." typref="0">
+                <Integer_Literal value="0" typref="1" />
+                <Id value="MAXINT" typref="1" />
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="INT" typref="0" />
+            <Binary_Exp op=".." typref="0">
+                <Id value="MININT" typref="1" />
+                <Id value="MAXINT" typref="1" />
+            </Binary_Exp>
+        </Exp_Comparison>
+    </Define>
+    <Define name="ctx" />
+    <Define name="seext" />
+    <Define name="lprp">
+        <Exp_Comparison op="=">
+            <Id value="co1" typref="2" />
+            <Binary_Exp op="|-&gt;" typref="2">
+                <Integer_Literal value="10" typref="1" />
+                <Boolean_Literal value="TRUE" typref="3" />
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="co2" typref="4" />
+            <Binary_Exp op="|-&gt;" typref="4">
+                <Integer_Literal value="20" typref="1" />
+                <Integer_Literal value="21" typref="1" />
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="co3" typref="5" />
+            <Binary_Exp op="|-&gt;" typref="5">
+                <Integer_Literal value="30" typref="1" />
+                <Real_Literal value="3.1" typref="6" />
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="co4" typref="4" />
+            <Binary_Exp op="|-&gt;" typref="4">
+                <Integer_Literal value="40" typref="1" />
+                <Integer_Literal value="41" typref="1" />
+            </Binary_Exp>
+        </Exp_Comparison>
+    </Define>
+    <Define name="inprp" />
+    <Define name="inext" />
+    <Define name="inv" />
+    <Define name="ass">
+        <Exp_Comparison op="=">
+            <Binary_Exp op="||" typref="7">
+                <Nary_Exp op="{" typref="8">
+                    <Id value="co1" typref="2" />
+                </Nary_Exp>
+                <Nary_Exp op="{" typref="9">
+                    <Id value="co2" typref="4" />
+                </Nary_Exp>
+            </Binary_Exp>
+            <Nary_Exp op="{" typref="7">
+                <Binary_Exp op="|-&gt;" typref="10">
+                    <Binary_Exp op="|-&gt;" typref="4">
+                        <Integer_Literal value="10" typref="1" />
+                        <Integer_Literal value="20" typref="1" />
+                    </Binary_Exp>
+                    <Binary_Exp op="|-&gt;" typref="11">
+                        <Boolean_Literal value="TRUE" typref="3" />
+                        <Integer_Literal value="21" typref="1" />
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Nary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Binary_Exp op="||" typref="12">
+                <Binary_Exp op="||" typref="7">
+                    <Nary_Exp op="{" typref="8">
+                        <Id value="co1" typref="2" />
+                    </Nary_Exp>
+                    <Nary_Exp op="{" typref="9">
+                        <Id value="co2" typref="4" />
+                    </Nary_Exp>
+                </Binary_Exp>
+                <Nary_Exp op="{" typref="13">
+                    <Id value="co3" typref="5" />
+                </Nary_Exp>
+            </Binary_Exp>
+            <Nary_Exp op="{" typref="12">
+                <Binary_Exp op="|-&gt;" typref="14">
+                    <Binary_Exp op="|-&gt;" typref="15">
+                        <Binary_Exp op="|-&gt;" typref="4">
+                            <Integer_Literal value="10" typref="1" />
+                            <Integer_Literal value="20" typref="1" />
+                        </Binary_Exp>
+                        <Integer_Literal value="30" typref="1" />
+                    </Binary_Exp>
+                    <Binary_Exp op="|-&gt;" typref="16">
+                        <Binary_Exp op="|-&gt;" typref="11">
+                            <Boolean_Literal value="TRUE" typref="3" />
+                            <Integer_Literal value="21" typref="1" />
+                        </Binary_Exp>
+                        <Real_Literal value="3.1" typref="6" />
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Nary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Binary_Exp op="||" typref="17">
+                <Nary_Exp op="{" typref="13">
+                    <Id value="co3" typref="5" />
+                </Nary_Exp>
+                <Nary_Exp op="{" typref="9">
+                    <Id value="co4" typref="4" />
+                </Nary_Exp>
+            </Binary_Exp>
+            <Nary_Exp op="{" typref="17">
+                <Binary_Exp op="|-&gt;" typref="18">
+                    <Binary_Exp op="|-&gt;" typref="4">
+                        <Integer_Literal value="30" typref="1" />
+                        <Integer_Literal value="40" typref="1" />
+                    </Binary_Exp>
+                    <Binary_Exp op="|-&gt;" typref="19">
+                        <Real_Literal value="3.1" typref="6" />
+                        <Integer_Literal value="41" typref="1" />
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Nary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Binary_Exp op="||" typref="20">
+                <Binary_Exp op="||" typref="7">
+                    <Nary_Exp op="{" typref="8">
+                        <Id value="co1" typref="2" />
+                    </Nary_Exp>
+                    <Nary_Exp op="{" typref="9">
+                        <Id value="co2" typref="4" />
+                    </Nary_Exp>
+                </Binary_Exp>
+                <Binary_Exp op="||" typref="17">
+                    <Nary_Exp op="{" typref="13">
+                        <Id value="co3" typref="5" />
+                    </Nary_Exp>
+                    <Nary_Exp op="{" typref="9">
+                        <Id value="co4" typref="4" />
+                    </Nary_Exp>
+                </Binary_Exp>
+            </Binary_Exp>
+            <Nary_Exp op="{" typref="20">
+                <Binary_Exp op="|-&gt;" typref="21">
+                    <Binary_Exp op="|-&gt;" typref="22">
+                        <Binary_Exp op="|-&gt;" typref="4">
+                            <Integer_Literal value="10" typref="1" />
+                            <Integer_Literal value="20" typref="1" />
+                        </Binary_Exp>
+                        <Binary_Exp op="|-&gt;" typref="4">
+                            <Integer_Literal value="30" typref="1" />
+                            <Integer_Literal value="40" typref="1" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                    <Binary_Exp op="|-&gt;" typref="23">
+                        <Binary_Exp op="|-&gt;" typref="11">
+                            <Boolean_Literal value="TRUE" typref="3" />
+                            <Integer_Literal value="21" typref="1" />
+                        </Binary_Exp>
+                        <Binary_Exp op="|-&gt;" typref="19">
+                            <Real_Literal value="3.1" typref="6" />
+                            <Integer_Literal value="41" typref="1" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Nary_Exp>
+        </Exp_Comparison>
+    </Define>
+    <Define name="cst" />
+    <Define name="sets" />
+    <Proof_Obligation>
+        <Tag>AssertionLemmas</Tag>
+        <Definition name="B definitions" />
+        <Definition name="ctx" />
+        <Definition name="cst" />
+        <Definition name="lprp" />
+        <Definition name="inprp" />
+        <Definition name="inext" />
+        <Definition name="seext" />
+        <Definition name="inv" />
+        <Simple_Goal>
+            <Tag>Assertion is verified</Tag>
+            <Goal>
+                <Exp_Comparison op="=">
+                    <Binary_Exp op="||" typref="7">
+                        <Nary_Exp op="{" typref="8">
+                            <Id value="co1" typref="2" />
+                        </Nary_Exp>
+                        <Nary_Exp op="{" typref="9">
+                            <Id value="co2" typref="4" />
+                        </Nary_Exp>
+                    </Binary_Exp>
+                    <Nary_Exp op="{" typref="7">
+                        <Binary_Exp op="|-&gt;" typref="10">
+                            <Binary_Exp op="|-&gt;" typref="4">
+                                <Integer_Literal value="10" typref="1" />
+                                <Integer_Literal value="20" typref="1" />
+                            </Binary_Exp>
+                            <Binary_Exp op="|-&gt;" typref="11">
+                                <Boolean_Literal value="TRUE" typref="3" />
+                                <Integer_Literal value="21" typref="1" />
+                            </Binary_Exp>
+                        </Binary_Exp>
+                    </Nary_Exp>
+                </Exp_Comparison>
+            </Goal>
+        </Simple_Goal>
+    </Proof_Obligation>
+    <Proof_Obligation>
+        <Tag>AssertionLemmas</Tag>
+        <Definition name="B definitions" />
+        <Definition name="ctx" />
+        <Definition name="cst" />
+        <Definition name="lprp" />
+        <Definition name="inprp" />
+        <Definition name="inext" />
+        <Definition name="seext" />
+        <Definition name="inv" />
+        <Hypothesis>
+            <Exp_Comparison op="=">
+                <Binary_Exp op="||" typref="7">
+                    <Nary_Exp op="{" typref="8">
+                        <Id value="co1" typref="2" />
+                    </Nary_Exp>
+                    <Nary_Exp op="{" typref="9">
+                        <Id value="co2" typref="4" />
+                    </Nary_Exp>
+                </Binary_Exp>
+                <Nary_Exp op="{" typref="7">
+                    <Binary_Exp op="|-&gt;" typref="10">
+                        <Binary_Exp op="|-&gt;" typref="4">
+                            <Integer_Literal value="10" typref="1" />
+                            <Integer_Literal value="20" typref="1" />
+                        </Binary_Exp>
+                        <Binary_Exp op="|-&gt;" typref="11">
+                            <Boolean_Literal value="TRUE" typref="3" />
+                            <Integer_Literal value="21" typref="1" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                </Nary_Exp>
+            </Exp_Comparison>
+        </Hypothesis>
+        <Simple_Goal>
+            <Tag>Assertion is verified</Tag>
+            <Goal>
+                <Exp_Comparison op="=">
+                    <Binary_Exp op="||" typref="12">
+                        <Binary_Exp op="||" typref="7">
+                            <Nary_Exp op="{" typref="8">
+                                <Id value="co1" typref="2" />
+                            </Nary_Exp>
+                            <Nary_Exp op="{" typref="9">
+                                <Id value="co2" typref="4" />
+                            </Nary_Exp>
+                        </Binary_Exp>
+                        <Nary_Exp op="{" typref="13">
+                            <Id value="co3" typref="5" />
+                        </Nary_Exp>
+                    </Binary_Exp>
+                    <Nary_Exp op="{" typref="12">
+                        <Binary_Exp op="|-&gt;" typref="14">
+                            <Binary_Exp op="|-&gt;" typref="15">
+                                <Binary_Exp op="|-&gt;" typref="4">
+                                    <Integer_Literal value="10" typref="1" />
+                                    <Integer_Literal value="20" typref="1" />
+                                </Binary_Exp>
+                                <Integer_Literal value="30" typref="1" />
+                            </Binary_Exp>
+                            <Binary_Exp op="|-&gt;" typref="16">
+                                <Binary_Exp op="|-&gt;" typref="11">
+                                    <Boolean_Literal value="TRUE" typref="3" />
+                                    <Integer_Literal value="21" typref="1" />
+                                </Binary_Exp>
+                                <Real_Literal value="3.1" typref="6" />
+                            </Binary_Exp>
+                        </Binary_Exp>
+                    </Nary_Exp>
+                </Exp_Comparison>
+            </Goal>
+        </Simple_Goal>
+    </Proof_Obligation>
+    <Proof_Obligation>
+        <Tag>AssertionLemmas</Tag>
+        <Definition name="B definitions" />
+        <Definition name="ctx" />
+        <Definition name="cst" />
+        <Definition name="lprp" />
+        <Definition name="inprp" />
+        <Definition name="inext" />
+        <Definition name="seext" />
+        <Definition name="inv" />
+        <Hypothesis>
+            <Exp_Comparison op="=">
+                <Binary_Exp op="||" typref="7">
+                    <Nary_Exp op="{" typref="8">
+                        <Id value="co1" typref="2" />
+                    </Nary_Exp>
+                    <Nary_Exp op="{" typref="9">
+                        <Id value="co2" typref="4" />
+                    </Nary_Exp>
+                </Binary_Exp>
+                <Nary_Exp op="{" typref="7">
+                    <Binary_Exp op="|-&gt;" typref="10">
+                        <Binary_Exp op="|-&gt;" typref="4">
+                            <Integer_Literal value="10" typref="1" />
+                            <Integer_Literal value="20" typref="1" />
+                        </Binary_Exp>
+                        <Binary_Exp op="|-&gt;" typref="11">
+                            <Boolean_Literal value="TRUE" typref="3" />
+                            <Integer_Literal value="21" typref="1" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                </Nary_Exp>
+            </Exp_Comparison>
+        </Hypothesis>
+        <Hypothesis>
+            <Exp_Comparison op="=">
+                <Binary_Exp op="||" typref="12">
+                    <Binary_Exp op="||" typref="7">
+                        <Nary_Exp op="{" typref="8">
+                            <Id value="co1" typref="2" />
+                        </Nary_Exp>
+                        <Nary_Exp op="{" typref="9">
+                            <Id value="co2" typref="4" />
+                        </Nary_Exp>
+                    </Binary_Exp>
+                    <Nary_Exp op="{" typref="13">
+                        <Id value="co3" typref="5" />
+                    </Nary_Exp>
+                </Binary_Exp>
+                <Nary_Exp op="{" typref="12">
+                    <Binary_Exp op="|-&gt;" typref="14">
+                        <Binary_Exp op="|-&gt;" typref="15">
+                            <Binary_Exp op="|-&gt;" typref="4">
+                                <Integer_Literal value="10" typref="1" />
+                                <Integer_Literal value="20" typref="1" />
+                            </Binary_Exp>
+                            <Integer_Literal value="30" typref="1" />
+                        </Binary_Exp>
+                        <Binary_Exp op="|-&gt;" typref="16">
+                            <Binary_Exp op="|-&gt;" typref="11">
+                                <Boolean_Literal value="TRUE" typref="3" />
+                                <Integer_Literal value="21" typref="1" />
+                            </Binary_Exp>
+                            <Real_Literal value="3.1" typref="6" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                </Nary_Exp>
+            </Exp_Comparison>
+        </Hypothesis>
+        <Simple_Goal>
+            <Tag>Assertion is verified</Tag>
+            <Goal>
+                <Exp_Comparison op="=">
+                    <Binary_Exp op="||" typref="17">
+                        <Nary_Exp op="{" typref="13">
+                            <Id value="co3" typref="5" />
+                        </Nary_Exp>
+                        <Nary_Exp op="{" typref="9">
+                            <Id value="co4" typref="4" />
+                        </Nary_Exp>
+                    </Binary_Exp>
+                    <Nary_Exp op="{" typref="17">
+                        <Binary_Exp op="|-&gt;" typref="18">
+                            <Binary_Exp op="|-&gt;" typref="4">
+                                <Integer_Literal value="30" typref="1" />
+                                <Integer_Literal value="40" typref="1" />
+                            </Binary_Exp>
+                            <Binary_Exp op="|-&gt;" typref="19">
+                                <Real_Literal value="3.1" typref="6" />
+                                <Integer_Literal value="41" typref="1" />
+                            </Binary_Exp>
+                        </Binary_Exp>
+                    </Nary_Exp>
+                </Exp_Comparison>
+            </Goal>
+        </Simple_Goal>
+    </Proof_Obligation>
+    <Proof_Obligation>
+        <Tag>AssertionLemmas</Tag>
+        <Definition name="B definitions" />
+        <Definition name="ctx" />
+        <Definition name="cst" />
+        <Definition name="lprp" />
+        <Definition name="inprp" />
+        <Definition name="inext" />
+        <Definition name="seext" />
+        <Definition name="inv" />
+        <Hypothesis>
+            <Exp_Comparison op="=">
+                <Binary_Exp op="||" typref="7">
+                    <Nary_Exp op="{" typref="8">
+                        <Id value="co1" typref="2" />
+                    </Nary_Exp>
+                    <Nary_Exp op="{" typref="9">
+                        <Id value="co2" typref="4" />
+                    </Nary_Exp>
+                </Binary_Exp>
+                <Nary_Exp op="{" typref="7">
+                    <Binary_Exp op="|-&gt;" typref="10">
+                        <Binary_Exp op="|-&gt;" typref="4">
+                            <Integer_Literal value="10" typref="1" />
+                            <Integer_Literal value="20" typref="1" />
+                        </Binary_Exp>
+                        <Binary_Exp op="|-&gt;" typref="11">
+                            <Boolean_Literal value="TRUE" typref="3" />
+                            <Integer_Literal value="21" typref="1" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                </Nary_Exp>
+            </Exp_Comparison>
+        </Hypothesis>
+        <Hypothesis>
+            <Exp_Comparison op="=">
+                <Binary_Exp op="||" typref="12">
+                    <Binary_Exp op="||" typref="7">
+                        <Nary_Exp op="{" typref="8">
+                            <Id value="co1" typref="2" />
+                        </Nary_Exp>
+                        <Nary_Exp op="{" typref="9">
+                            <Id value="co2" typref="4" />
+                        </Nary_Exp>
+                    </Binary_Exp>
+                    <Nary_Exp op="{" typref="13">
+                        <Id value="co3" typref="5" />
+                    </Nary_Exp>
+                </Binary_Exp>
+                <Nary_Exp op="{" typref="12">
+                    <Binary_Exp op="|-&gt;" typref="14">
+                        <Binary_Exp op="|-&gt;" typref="15">
+                            <Binary_Exp op="|-&gt;" typref="4">
+                                <Integer_Literal value="10" typref="1" />
+                                <Integer_Literal value="20" typref="1" />
+                            </Binary_Exp>
+                            <Integer_Literal value="30" typref="1" />
+                        </Binary_Exp>
+                        <Binary_Exp op="|-&gt;" typref="16">
+                            <Binary_Exp op="|-&gt;" typref="11">
+                                <Boolean_Literal value="TRUE" typref="3" />
+                                <Integer_Literal value="21" typref="1" />
+                            </Binary_Exp>
+                            <Real_Literal value="3.1" typref="6" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                </Nary_Exp>
+            </Exp_Comparison>
+        </Hypothesis>
+        <Hypothesis>
+            <Exp_Comparison op="=">
+                <Binary_Exp op="||" typref="17">
+                    <Nary_Exp op="{" typref="13">
+                        <Id value="co3" typref="5" />
+                    </Nary_Exp>
+                    <Nary_Exp op="{" typref="9">
+                        <Id value="co4" typref="4" />
+                    </Nary_Exp>
+                </Binary_Exp>
+                <Nary_Exp op="{" typref="17">
+                    <Binary_Exp op="|-&gt;" typref="18">
+                        <Binary_Exp op="|-&gt;" typref="4">
+                            <Integer_Literal value="30" typref="1" />
+                            <Integer_Literal value="40" typref="1" />
+                        </Binary_Exp>
+                        <Binary_Exp op="|-&gt;" typref="19">
+                            <Real_Literal value="3.1" typref="6" />
+                            <Integer_Literal value="41" typref="1" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                </Nary_Exp>
+            </Exp_Comparison>
+        </Hypothesis>
+        <Simple_Goal>
+            <Tag>Assertion is verified</Tag>
+            <Goal>
+                <Exp_Comparison op="=">
+                    <Binary_Exp op="||" typref="20">
+                        <Binary_Exp op="||" typref="7">
+                            <Nary_Exp op="{" typref="8">
+                                <Id value="co1" typref="2" />
+                            </Nary_Exp>
+                            <Nary_Exp op="{" typref="9">
+                                <Id value="co2" typref="4" />
+                            </Nary_Exp>
+                        </Binary_Exp>
+                        <Binary_Exp op="||" typref="17">
+                            <Nary_Exp op="{" typref="13">
+                                <Id value="co3" typref="5" />
+                            </Nary_Exp>
+                            <Nary_Exp op="{" typref="9">
+                                <Id value="co4" typref="4" />
+                            </Nary_Exp>
+                        </Binary_Exp>
+                    </Binary_Exp>
+                    <Nary_Exp op="{" typref="20">
+                        <Binary_Exp op="|-&gt;" typref="21">
+                            <Binary_Exp op="|-&gt;" typref="22">
+                                <Binary_Exp op="|-&gt;" typref="4">
+                                    <Integer_Literal value="10" typref="1" />
+                                    <Integer_Literal value="20" typref="1" />
+                                </Binary_Exp>
+                                <Binary_Exp op="|-&gt;" typref="4">
+                                    <Integer_Literal value="30" typref="1" />
+                                    <Integer_Literal value="40" typref="1" />
+                                </Binary_Exp>
+                            </Binary_Exp>
+                            <Binary_Exp op="|-&gt;" typref="23">
+                                <Binary_Exp op="|-&gt;" typref="11">
+                                    <Boolean_Literal value="TRUE" typref="3" />
+                                    <Integer_Literal value="21" typref="1" />
+                                </Binary_Exp>
+                                <Binary_Exp op="|-&gt;" typref="19">
+                                    <Real_Literal value="3.1" typref="6" />
+                                    <Integer_Literal value="41" typref="1" />
+                                </Binary_Exp>
+                            </Binary_Exp>
+                        </Binary_Exp>
+                    </Nary_Exp>
+                </Exp_Comparison>
+            </Goal>
+        </Simple_Goal>
+    </Proof_Obligation>
+    <TypeInfos>
+        <Type id="0">
+            <Unary_Exp op="POW">
+                <Id value="INTEGER" />
+            </Unary_Exp>
+        </Type>
+        <Type id="1">
+            <Id value="INTEGER" />
+        </Type>
+        <Type id="2">
+            <Binary_Exp op="*">
+                <Id value="INTEGER" />
+                <Id value="BOOL" />
+            </Binary_Exp>
+        </Type>
+        <Type id="3">
+            <Id value="BOOL" />
+        </Type>
+        <Type id="4">
+            <Binary_Exp op="*">
+                <Id value="INTEGER" />
+                <Id value="INTEGER" />
+            </Binary_Exp>
+        </Type>
+        <Type id="5">
+            <Binary_Exp op="*">
+                <Id value="INTEGER" />
+                <Id value="REAL" />
+            </Binary_Exp>
+        </Type>
+        <Type id="6">
+            <Id value="REAL" />
+        </Type>
+        <Type id="7">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                    <Binary_Exp op="*">
+                        <Id value="BOOL" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="8">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="BOOL" />
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="9">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="10">
+            <Binary_Exp op="*">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+                <Binary_Exp op="*">
+                    <Id value="BOOL" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+            </Binary_Exp>
+        </Type>
+        <Type id="11">
+            <Binary_Exp op="*">
+                <Id value="BOOL" />
+                <Id value="INTEGER" />
+            </Binary_Exp>
+        </Type>
+        <Type id="12">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Binary_Exp op="*">
+                            <Id value="INTEGER" />
+                            <Id value="INTEGER" />
+                        </Binary_Exp>
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                    <Binary_Exp op="*">
+                        <Binary_Exp op="*">
+                            <Id value="BOOL" />
+                            <Id value="INTEGER" />
+                        </Binary_Exp>
+                        <Id value="REAL" />
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="13">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="REAL" />
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="14">
+            <Binary_Exp op="*">
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Id value="BOOL" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                    <Id value="REAL" />
+                </Binary_Exp>
+            </Binary_Exp>
+        </Type>
+        <Type id="15">
+            <Binary_Exp op="*">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+                <Id value="INTEGER" />
+            </Binary_Exp>
+        </Type>
+        <Type id="16">
+            <Binary_Exp op="*">
+                <Binary_Exp op="*">
+                    <Id value="BOOL" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+                <Id value="REAL" />
+            </Binary_Exp>
+        </Type>
+        <Type id="17">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                    <Binary_Exp op="*">
+                        <Id value="REAL" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="18">
+            <Binary_Exp op="*">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+                <Binary_Exp op="*">
+                    <Id value="REAL" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+            </Binary_Exp>
+        </Type>
+        <Type id="19">
+            <Binary_Exp op="*">
+                <Id value="REAL" />
+                <Id value="INTEGER" />
+            </Binary_Exp>
+        </Type>
+        <Type id="20">
+            <Unary_Exp op="POW">
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Binary_Exp op="*">
+                            <Id value="INTEGER" />
+                            <Id value="INTEGER" />
+                        </Binary_Exp>
+                        <Binary_Exp op="*">
+                            <Id value="INTEGER" />
+                            <Id value="INTEGER" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                    <Binary_Exp op="*">
+                        <Binary_Exp op="*">
+                            <Id value="BOOL" />
+                            <Id value="INTEGER" />
+                        </Binary_Exp>
+                        <Binary_Exp op="*">
+                            <Id value="REAL" />
+                            <Id value="INTEGER" />
+                        </Binary_Exp>
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Unary_Exp>
+        </Type>
+        <Type id="21">
+            <Binary_Exp op="*">
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                    <Binary_Exp op="*">
+                        <Id value="INTEGER" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                </Binary_Exp>
+                <Binary_Exp op="*">
+                    <Binary_Exp op="*">
+                        <Id value="BOOL" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                    <Binary_Exp op="*">
+                        <Id value="REAL" />
+                        <Id value="INTEGER" />
+                    </Binary_Exp>
+                </Binary_Exp>
+            </Binary_Exp>
+        </Type>
+        <Type id="22">
+            <Binary_Exp op="*">
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+                <Binary_Exp op="*">
+                    <Id value="INTEGER" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+            </Binary_Exp>
+        </Type>
+        <Type id="23">
+            <Binary_Exp op="*">
+                <Binary_Exp op="*">
+                    <Id value="BOOL" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+                <Binary_Exp op="*">
+                    <Id value="REAL" />
+                    <Id value="INTEGER" />
+                </Binary_Exp>
+            </Binary_Exp>
+        </Type>
+    </TypeInfos>
+</Proof_Obligations>

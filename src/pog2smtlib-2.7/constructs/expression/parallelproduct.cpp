@@ -39,8 +39,16 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
        )
     )
   )
-  :named |ax.set.in.parallelproduct {8}|))
+  :named |ax.set.in.parallelproduct {8} {9} {10} {11}|))
 )";
+/*
+R1: P(T x U) , R2: P(V x W) -> P ((T x V) x (U x W))
+{1}: P(T x U) , {2}: P(V x W) -> {3}: P ((T x V) x (U x W))
+{4}: (T x V) x (U x W)
+{5}: set.in (T x V) x (U x W)
+{6}: set.in (T x U)
+{7}: set.in (V x W)
+*/
 
 namespace Expression {
 
@@ -60,24 +68,37 @@ shared_ptr<Abstract> Factory::Parallel_Product(const BType &T, const BType &U,
       find(BConstruct::Expression::Parallel_Product::m_cache, T, U, V, W);
   if (!result) {
     const auto xTU = BType::PROD(T, U);
-    const auto xxTUV = BType::PROD(xTU, V);
-    const auto xxxTUVW = BType::PROD(xxTUV, W);
-    const auto xVW = BType::PROD(V, W);
-    const auto xxTUxVW = BType::PROD(xTU, xVW);
     const auto PxTU = BType::POW(xTU);
+    const auto xVW = BType::PROD(V, W);
     const auto PxVW = BType::POW(xVW);
-    const auto PxxTUxVW = BType::POW(xxTUxVW);
+    const auto xTV = BType::PROD(T, V);
+    const auto xUW = BType::PROD(U, W);
+    const auto xxTVxUW = BType::PROD(xTV, xUW);
+    const auto PxxTVxUW = BType::POW(xxTVxUW);
+
+    /*
+    {1}: P(T x U)
+    {2}: P(V x W)
+    {3}: P ((T x V) x (U x W))
+    {4}: (T x V) x (U x W)
+    {5}: set.in (T x V) x (U x W)
+    {6}: set.in (T x U)
+    {7}: set.in (V x W)
+    */
     const std::string script = fmt::format(
         SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Parallel_Product, T, U, V, W),
         /*1*/ symbol(PxTU),
         /*2*/ symbol(PxVW),
-        /*3*/ symbol(PxxTUxVW),
-        /*4*/ symbol(xxTUxVW),
-        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, xxTUxVW),
+        /*3*/ symbol(PxxTVxUW),
+        /*4*/ symbol(xxTVxUW),
+        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, xxTVxUW),
         /*6*/ smtSymbol(Pred::ComparisonOp::Membership, xTU),
         /*7*/ smtSymbol(Pred::ComparisonOp::Membership, xVW),
-        /*8*/ symbolInner(xxxTUVW));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(xxTUxVW),
+        /*8*/ symbolInner(T),
+        /*9*/ symbolInner(U),
+        /*10*/ symbolInner(V),
+        /*11*/ symbolInner(W));
+    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(xxTVxUW),
                                             Factory::SetMembership(xTU),
                                             Factory::SetMembership(xVW)};
     result = make(BConstruct::Expression::Parallel_Product::m_cache, T, U, V, W,

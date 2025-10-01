@@ -101,7 +101,6 @@ class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
                                  const Expr &rec,
                                  const std::string &label) override;
   Signature getSignature() const { return m_signature; }
-  const Signature &getSignatureRef() const { return m_signature; }
 
   class Exception : public std::exception {
    public:
@@ -713,16 +712,17 @@ void GetSignatureVisitor::visitBinaryExpression(
     }
     /* Parallel_Product */
     case Expr::BinaryOp::Parallel_Product: {
-      const auto &etype2 = elementOfPowerType(op, type);
-      const auto &etype3 = lhsOfProductType(op, etype2);
-      const auto &etype4 = rhsOfProductType(op, etype2);
-      const auto &etype5 = lhsOfProductType(op, etype3);
-      const auto &etype6 = rhsOfProductType(op, etype3);
-      const auto &etype7 = lhsOfProductType(op, etype4);
-      const auto &etype8 = rhsOfProductType(op, etype4);
+      // R1: P(T x U) , R2: P(V x W) -> P ((T x V) x (U x W))
+      const auto &xxTVxUW = elementOfPowerType(op, type);
+      const auto &xTV = lhsOfProductType(op, xxTVxUW);
+      const auto &xUW = rhsOfProductType(op, xxTVxUW);
+      const auto &T = lhsOfProductType(op, xTV);
+      const auto &V = rhsOfProductType(op, xTV);
+      const auto &U = lhsOfProductType(op, xUW);
+      const auto &W = rhsOfProductType(op, xUW);
       sig.m_operators.emplace(MonomorphizedOperator(
-          op, std::make_shared<BType>(etype5), std::make_shared<BType>(etype6),
-          std::make_shared<BType>(etype7), std::make_shared<BType>(etype8)));
+          op, std::make_shared<BType>(T), std::make_shared<BType>(U),
+          std::make_shared<BType>(V), std::make_shared<BType>(W)));
       break;
     }
     /* Concatenation */
@@ -960,8 +960,8 @@ Signature predicateSignature(const Pred &pred) {
   > c0 : COLOR &            // P
   > c1 : COLOR - { red }    // Q
   P is a pure typing predicate, whereas Q is not.
-  What are the declarations that are needed for the encoding of each of these in
-  SMT ? For P, one expects
+  What are the declarations that are needed for the encoding of each of these
+  in SMT ? For P, one expects
 
   >  (declare-datatype |COLOR| ((red)(black)))
   >  (declare-const c0 |COLOR|)

@@ -29,7 +29,7 @@
        )
     )
   )
-  :named |ax.set.in.parallelproduct (((Z x Z) x Z) x Z)|))
+  :named |ax.set.in.parallelproduct Z Z Z Z|))
 (define-sort |? ((Z x Z) x (Z x Z))| () (-> |((Z x Z) x (Z x Z))| Bool))
 (declare-const |set.intent ((Z x Z) x (Z x Z))| (-> |? ((Z x Z) x (Z x Z))| |POW ((Z x Z) x (Z x Z))|))
 (assert (!

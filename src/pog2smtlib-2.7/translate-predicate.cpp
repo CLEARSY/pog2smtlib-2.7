@@ -17,6 +17,7 @@
 
 #include <fmt/core.h>
 
+#include <iostream>
 #include <unordered_map>
 #include <vector>
 
@@ -666,16 +667,15 @@ void SmtTranslatorVisitor::visitBinaryExpression(
       break;
     }
     case Expr::BinaryOp::Parallel_Product: {
+      const auto &xxTVxUW = type.toPowerType().content;
+      const auto &xTV = xxTVxUW.toProductType().lhs;
+      const auto &xUW = xxTVxUW.toProductType().rhs;
+      const auto &T = xTV.toProductType().lhs;
+      const auto &V = xTV.toProductType().rhs;
+      const auto &U = xUW.toProductType().lhs;
+      const auto &W = xUW.toProductType().rhs;
       m_translation.push_back('(');
-      m_translation.append(smtSymbol(
-          op,
-          (type.toPowerType().content).toProductType().lhs.toProductType().lhs,
-          (type.toPowerType().content).toProductType().lhs.toProductType().rhs,
-          (type.toPowerType().content).toProductType().rhs.toProductType().lhs,
-          (type.toPowerType().content)
-              .toProductType()
-              .rhs.toProductType()
-              .rhs));
+      m_translation.append(smtSymbol(op, T, U, V, W));
       m_translation.push_back(' ');
       lhs.accept(*this);
       m_translation.push_back(' ');
