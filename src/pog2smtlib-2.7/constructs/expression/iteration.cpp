@@ -61,7 +61,7 @@ std::shared_ptr<Abstract> Factory::Iteration(const BType& T) {
                     /*1*/ symbol(PTxT),
                     /*2*/ symbol(BType::INT),
                     /*3*/ smtSymbol(Expr::BinaryOp::Composition, T, T, T),
-                    /*4*/ symbolInner(BType::INT));
+                    /*4*/ symbolInner(T));
     set<shared_ptr<Abstract>> requisites{Factory::Composition(T, T, T)};
     result =
         make(BConstruct::Expression::Iteration::m_cache, T, script, requisites);

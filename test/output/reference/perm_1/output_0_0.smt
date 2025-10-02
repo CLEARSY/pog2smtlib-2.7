@@ -221,7 +221,7 @@
     (= (|set.in POW (Z x Z)| s (|perm Z| E))
        (and (|set.in POW (Z x Z)| s (|iseq Z| E))
             (|set.in POW (Z x Z)| s (|surjections Z Z| NATURAL1 E)))))
-  :named |ax.iseq1 Z|))
+  :named |ax.perm Z|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!

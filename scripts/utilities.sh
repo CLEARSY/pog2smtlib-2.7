@@ -116,8 +116,8 @@ function run_cvc5() {
 		local prefix=`basename $name .smt`
     local command="$HOME/bin/cvc5 --tlimit=100 ${path}"
 
-		($command > $prefix.stdout 2> $prefix.stderr) 2> /dev/null
-		local exit_code=$?
+    ($command > $prefix.stdout 2> $prefix.stderr) 2> /dev/null
+    local exit_code=$?
 
     if [ $exit_code -eq 0 ]; then
         echo -n "$name " && cat $prefix.stdout
@@ -163,7 +163,7 @@ export -f run_dataset
 
 function watch_run() {
     local file="$1"
-    watch -n 1 'echo $(grep -c unsat "'"$file"'") $(grep -c timeout "'"$file"'") $(grep -c error "'"$file"'") $(wc -l < "'"$file"'")'
+    watch -n 1 'echo unsat unknown timeout total && echo $(grep -c unsat "'"$file"'") $(grep -c unknown "'"$file"'") $(grep -c timeout "'"$file"'") $(grep -c error "'"$file"'") $(wc -l < "'"$file"'")'
 }
 export -f watch_run
 
