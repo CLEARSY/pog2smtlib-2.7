@@ -48,6 +48,14 @@ Data::Data(const struct ::Data &data, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Data(const struct Data &data) {
+  {
+    static constexpr bool debug_me = false;
+    if (debug_me) {
+      std::cerr << fmt::format("Factory::Data({0} {1})", data.to_string(),
+                               data.m_type->to_string())
+                << std::endl;
+    }
+  }
   shared_ptr<const struct Data> pt = make_shared<const struct Data>(data);
   auto it = BConstruct::Expression::Data::m_cache.find(pt);
   if (it != BConstruct::Expression::Data::m_cache.end()) {

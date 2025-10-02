@@ -147,9 +147,11 @@ typedef struct Data {
   std::string to_string() const;
   const BType &type() const;
   inline bool operator==(const Data &other) const {
-    return (*m_name == *(other.m_name) ||
-            m_name->show() == other.m_name->show()) &&
-           m_type == other.m_type;
+    const bool cmp_str = (*m_name == *(other.m_name)) ||
+                         (m_name->show() == other.m_name->show());
+    const bool cmp_type = (*m_type == *(other.m_type));
+    const bool result = cmp_str && cmp_type;
+    return result;
   }
 } Data;
 
@@ -163,7 +165,10 @@ template <> struct hash<Data> {
   hash &operator=(hash &&) = default;
   ~hash() = default;
 
-  size_t operator()(const Data &d) const { return d.m_name->hash_combine(0); }
+  size_t operator()(const Data &d) const {
+    const size_t result = d.m_name->hash_combine(0);
+    return result;
+  }
 };
 }  // namespace std
 

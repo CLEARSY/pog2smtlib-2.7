@@ -33,7 +33,6 @@
       (= (|set.in struct(x2, y2)| x (|struct struct(x2, y2)| p))
          (p x))))
   :named |ax.struct.definition struct(x2, y2)|))
-(declare-const record12 |struct(x1, y1)|)
 (declare-const struct2 |POW struct(x2, y2)|)
 (assert (!
   (forall ((s |POW struct(x2, y2)|) (t |POW struct(x2, y2)|))
@@ -42,8 +41,7 @@
       (forall ((e |struct(x2, y2)|)) (= (|set.in struct(x2, y2)| e s) (|set.in struct(x2, y2)| e t)))))
   :named |ax.set.eq struct(x2, y2)|))
 (declare-const record22 |struct(x2, y2)|)
-(declare-const record21 |struct(x2, y2)|)
-(declare-const record11 |struct(x1, y1)|)
+(declare-const record12 |struct(x1, y1)|)
 (declare-const struct1 |POW struct(x1, y1)|)
 (declare-const |struct struct(x1, y1)| (-> |? struct(x1, y1)| |POW struct(x1, y1)|))
 (assert (!
@@ -52,6 +50,8 @@
       (= (|set.in struct(x1, y1)| x (|struct struct(x1, y1)| p))
          (p x))))
   :named |ax.struct.definition struct(x1, y1)|))
+(declare-const record11 |struct(x1, y1)|)
+(declare-const record21 |struct(x2, y2)|)
 (declare-const INTEGER |POW Z|)
 (assert (!
   (forall ((e |Z|)) (|set.in Z| e INTEGER))

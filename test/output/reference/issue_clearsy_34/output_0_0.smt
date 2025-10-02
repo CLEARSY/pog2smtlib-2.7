@@ -300,8 +300,8 @@
       (|seq Z| E)
       (|functions.total Z Z| (|interval| 1 (Value (|card Z| E))) E)))
   :named |ax.seq.is.total.fun Z|))
-(declare-const s787 |POW (Z x POW (Z x Z))|)
 (declare-const s169 |POW Z|)
+(declare-const s787 |POW (Z x POW (Z x Z))|)
 (declare-fun |functions.total Z POW (Z x Z)| (|POW Z| |POW POW (Z x Z)|) |POW POW (Z x POW (Z x Z))|)
 (assert (!
   (forall ((e1 |POW Z|) (e2 |POW POW (Z x Z)|))

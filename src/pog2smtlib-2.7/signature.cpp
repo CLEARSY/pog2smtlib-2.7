@@ -18,14 +18,20 @@
 
 #include <iostream>
 #include <source_location>
+#include <string>
 #include <tuple>
 #include <unordered_set>
+#include <vector>
+
+using std::string;
 using std::unordered_set;
+using std::vector;
 
 #include "predDesc.h"
 #include "special-cases.h"
 #include "type-utils.h"
 
+static std::string toString(const Signature &sig);
 class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
  public:
   GetSignatureVisitor() {}
@@ -120,7 +126,13 @@ class GetSignatureVisitor : public Pred::Visitor, public Expr::Visitor {
 
   Signature m_signature;  // the signature resulting from the last call to a
   // visit function
-  unordered_set<VarName> m_bindings;
+  using bindings_t = vector<unordered_set<string>>;
+  bindings_t m_bindings;
+  void bindings_push(const vector<TypedVar> &vars);
+  void bindings_pop();
+  bool bindings_contains(const TypedVar &var);
+  bool bindings_contains(const string &symbol);
+  [[maybe_unused]] static string toString(const bindings_t &bindings);
 
   static constexpr const char *MSG_BAD_TYPE =
       "Signature computation: application of {} operator is not typed as "
@@ -287,24 +299,16 @@ void GetSignatureVisitor::visitDisjunction(const std::vector<Pred> &vec) {
 
 void GetSignatureVisitor::visitForall(const std::vector<TypedVar> &vars,
                                       const Pred &p) {
-  for (auto v : vars) {
-    m_bindings.insert(v.name);
-  }
+  bindings_push(vars);
   p.accept(*this);
-  for (auto v : vars) {
-    m_bindings.erase(v.name);
-  }
+  bindings_pop();
 }
 
 void GetSignatureVisitor::visitExists(const std::vector<TypedVar> &vars,
                                       const Pred &p) {
-  for (auto v : vars) {
-    m_bindings.insert(v.name);
-  }
+  bindings_push(vars);
   p.accept(*this);
-  for (auto v : vars) {
-    m_bindings.erase(v.name);
-  }
+  bindings_pop();
 }
 
 void GetSignatureVisitor::visitTrue() { visitNullaryPred(); }
@@ -401,7 +405,7 @@ void GetSignatureVisitor::visitIdent(const BType &type,
                                      const std::vector<std::string> &,
                                      const VarName &b) {
   SignatureReset(m_signature);
-  if (m_bindings.find(b) != m_bindings.end()) return;
+  if (bindings_contains(b.show())) return;
   if (type.getKind() == BType::Kind::EnumeratedSet) {
     auto etype = type.toEnumeratedSetType();
     const std::string name = b.show();
@@ -409,11 +413,9 @@ void GetSignatureVisitor::visitIdent(const BType &type,
       if (elem == name) return;
     }
   }
-  {
-    struct Data data{std::make_shared<VarName>(b),
-                     std::make_shared<const BType>(type)};
-    m_signature.m_data.emplace(data);
-  }
+  struct Data data{std::make_shared<VarName>(b),
+                   std::make_shared<const BType>(type)};
+  m_signature.m_data.emplace(data);
 }
 
 void GetSignatureVisitor::visitIntegerLiteral(const BType &,
@@ -857,16 +859,12 @@ void GetSignatureVisitor::visitQuantifiedExpr(
     const std::vector<TypedVar> vars, const Pred &cond, const Expr &body) {
   SignatureReset(m_signature);
   Signature sig;
-  for (auto v : vars) {
-    m_bindings.insert(v.name);
-  }
+  bindings_push(vars);
   cond.accept(*this);
   SignatureMoveInto(sig, m_signature);
   body.accept(*this);
   SignatureMoveInto(sig, m_signature);
-  for (auto v : vars) {
-    m_bindings.erase(v.name);
-  }
+  bindings_pop();
   switch (op) {
     case Expr::QuantifiedOp::Lambda: {
       const auto &etype1 = elementOfPowerType(op, type);
@@ -921,16 +919,12 @@ void GetSignatureVisitor::visitQuantifiedSet(const BType &type,
                                              const std::vector<TypedVar> vars,
                                              const Pred &cond) {
   SignatureReset(m_signature);
-  for (auto v : vars) {
-    m_bindings.insert(v.name);
-  }
+  bindings_push(vars);
   cond.accept(*this);
   const auto &etype = elementOfPowerType(Expr::EKind::QuantifiedSet, type);
   m_signature.m_operators.emplace(MonomorphizedOperator{
       Expr::EKind::QuantifiedSet, std::make_shared<BType>(etype)});
-  for (auto v : vars) {
-    m_bindings.erase(v.name);
-  }
+  bindings_pop();
 }
 
 void GetSignatureVisitor::visitRecordUpdate(const BType &,
@@ -1021,7 +1015,7 @@ const BType &GetSignatureVisitor::rhsOfProductType(const BOperator &op,
   return product.toProductType().rhs;
 };
 
-std::string toString(const Signature &sig) {
+[[maybe_unused]] std::string toString(const Signature &sig) {
   std::vector<std::string> ty_strs;
   std::vector<std::string> op_strs;
   std::vector<std::string> dt_strs;
@@ -1066,4 +1060,41 @@ std::string Signature::to_string() const {
   }
   return fmt::format("[{} | {} | {}]", fmt::join(ty_strs, ", "),
                      fmt::join(op_strs, ", "), fmt::join(dt_strs, ", "));
+}
+
+void GetSignatureVisitor::bindings_push(const std::vector<TypedVar> &vars) {
+  unordered_set<string> bindings;
+  for (auto v : vars) {
+    bindings.insert(v.name.show());
+  }
+  m_bindings.push_back(bindings);
+}
+
+void GetSignatureVisitor::bindings_pop() { m_bindings.pop_back(); }
+
+bool GetSignatureVisitor::bindings_contains(const string &str) {
+  size_t i;
+  for (i = m_bindings.size(); i != 0; --i) {
+    const unordered_set<string> &names{m_bindings.at(i - 1)};
+    if (names.find(str) != names.end()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool GetSignatureVisitor::bindings_contains(const TypedVar &var) {
+  return bindings_contains(var.name.show());
+}
+
+string GetSignatureVisitor::toString(const bindings_t &bindings) {
+  vector<string> args1;
+  for (const auto &us : bindings) {
+    vector<string> args2;
+    for (const auto &str : us) {
+      args2.push_back(str);
+    }
+    args1.push_back(fmt::format("[{}]", fmt::join(args2, " ")));
+  }
+  return fmt::format("[{}]", fmt::join(args1, ""));
 }
