@@ -260,7 +260,7 @@
     (= (|set.in POW (Z x POW Z)| s (|iseq POW Z| E))
        (and (|set.in POW (Z x POW Z)| s (|seq POW Z| E))
             (|set.in POW (Z x POW Z)| s (|injections Z POW Z| NATURAL1 E)))))
-  :named |ax.iseq Z|))
+  :named |ax.iseq POW Z|))
 (declare-const INTEGER |POW Z|)
 (assert (!
   (forall ((e |Z|)) (|set.in Z| e INTEGER))

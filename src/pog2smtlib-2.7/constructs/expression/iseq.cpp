@@ -35,7 +35,7 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
     (= ({4} s ({0} E))
        (and ({4} s ({5} E))
             ({4} s (|injections {6} {7}| {8} E)))))
-  :named |ax.iseq {6}|))
+  :named |ax.iseq {7}|))
 )";
 
 namespace Expression {
