@@ -54,14 +54,14 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
-(declare-const NAT1 |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (= (|set.in Z| e NAT1) (and (<= 1 e) (<= e MAXINT))))
-  :named |ax.set.in.NAT1|))
 (declare-const NAT |POW Z|)
 (assert (!
   (forall ((e |Z|)) (= (|set.in Z| e NAT) (and (<= 0 e) (<= e MAXINT))))
   :named |ax.set.in.NAT|))
+(declare-const NAT1 |POW Z|)
+(assert (!
+  (forall ((e |Z|)) (= (|set.in Z| e NAT1) (and (<= 1 e) (<= e MAXINT))))
+  :named |ax.set.in.NAT1|))
 (assert (!
   (not
     (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 2))(= _c0 (maplet 0 2))))) (|relations Z Z| NAT1 NAT)))

@@ -173,7 +173,6 @@
          (and (|set.in POW (POW Z x Z)| f (|injections POW Z Z| X Y))
               (|set.in POW (POW Z x Z)| f (|surjections POW Z Z| X Y))))))
   :named |ax:set.in.bijections (POW Z x Z)|))
-(define-const MAXINT |Z| 2147483647)
 (declare-fun |set.subseteq POW (Z x POW Z)| (|POW POW (Z x POW Z)| |POW POW (Z x POW Z)|) Bool)
 (assert (!
     (forall ((s |POW POW (Z x POW Z)|) (t |POW POW (Z x POW Z)|))
@@ -205,6 +204,7 @@
         (exists ((f |POW (POW Z x Z)|))
           (|set.in POW (POW Z x Z)| f (|bijections POW Z Z| s (|interval| 1 (Value (|card POW Z| s))))))))
   :named |ax.card.definition POW Z|))
+(define-const MAXINT |Z| 2147483647)
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
     (forall ((s |POW Z|) (t |POW Z|))
@@ -214,18 +214,6 @@
       )
     )
     :named |ax.set.subseteq Z|))
-(declare-const NAT |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (= (|set.in Z| e NAT) (and (<= 0 e) (<= e MAXINT))))
-  :named |ax.set.in.NAT|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
-(assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
 (declare-fun |seq POW Z| (|POW POW Z|) |POW POW (Z x POW Z)|)
 (assert (!
   (forall ((E |POW POW Z|) (s |POW (Z x POW Z)|))
@@ -239,6 +227,10 @@
       (|seq POW Z| E)
       (|functions.total Z POW Z| (|interval| 1 (Value (|card POW Z| E))) E)))
   :named |ax.seq.is.total.fun POW Z|))
+(declare-const NAT |POW Z|)
+(assert (!
+  (forall ((e |Z|)) (= (|set.in Z| e NAT) (and (<= 0 e) (<= e MAXINT))))
+  :named |ax.set.in.NAT|))
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
 (declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
 (assert (!
@@ -247,6 +239,14 @@
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (declare-fun |sub-sets Z| (|POW Z|) |POW POW Z|)
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))

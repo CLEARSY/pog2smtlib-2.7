@@ -24,16 +24,6 @@
          (lambda ((x |(Z x Z)|))
            (and (|set.in Z| (fst x) X) (= (fst x) (snd x)))))))
   :named |def.id Z|))
-(assert (!
-  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-    (=
-      (= s t)
-      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))))
-  :named |ax.set.eq (Z x Z)|))
-(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
-(assert (!
-  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
-  :named |ax.set.in.empty (Z x Z)|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -42,6 +32,16 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
+(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
+(assert (!
+  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
+  :named |ax.set.in.empty (Z x Z)|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))))
+  :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not
     (= (|id Z| (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 3)))) |set.empty (Z x Z)|))

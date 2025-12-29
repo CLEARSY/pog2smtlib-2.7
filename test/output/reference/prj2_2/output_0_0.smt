@@ -19,12 +19,6 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-(assert (!
-  (forall ((s |POW ((Z x Z) x Z)|) (t |POW ((Z x Z) x Z)|))
-    (=
-      (= s t)
-      (forall ((e |((Z x Z) x Z)|)) (= (|set.in ((Z x Z) x Z)| e s) (|set.in ((Z x Z) x Z)| e t)))))
-  :named |ax.set.eq ((Z x Z) x Z)|))
 (declare-fun |prj1 Z Z| (|POW Z| |POW Z|) |POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((E |POW Z|) (F |POW Z|) (t |((Z x Z) x Z)|))
@@ -42,6 +36,12 @@
       (= (|set.in ((Z x Z) x Z)| x (|set.intent ((Z x Z) x Z)| p))
          (p x))))
   :named |ax:set.in.intent ((Z x Z) x Z)|))
+(assert (!
+  (forall ((s |POW ((Z x Z) x Z)|) (t |POW ((Z x Z) x Z)|))
+    (=
+      (= s t)
+      (forall ((e |((Z x Z) x Z)|)) (= (|set.in ((Z x Z) x Z)| e s) (|set.in ((Z x Z) x Z)| e t)))))
+  :named |ax.set.eq ((Z x Z) x Z)|))
 (assert (!
   (not
     (= (|prj1 Z Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)))) (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 3)(= _c0 2))))) (|set.intent ((Z x Z) x Z)| (lambda ((_c0 |((Z x Z) x Z)|)) (or (= _c0 (maplet (maplet 0 3) 3))(= _c0 (maplet (maplet 0 2) 2))(= _c0 (maplet (maplet 1 3) 3))(= _c0 (maplet (maplet 1 2) 2)))))))

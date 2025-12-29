@@ -90,6 +90,20 @@
 (assert (!
   (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
   :named |ax.set.in.empty Z|))
+(declare-const p3 |POW POW Z|)
+(declare-const INTEGER |POW Z|)
+(assert (!
+  (forall ((e |Z|)) (|set.in Z| e INTEGER))
+  :named |ax.set.in.INTEGER|))
+(declare-const p2 |POW POW Z|)
+(declare-fun |non empty finite sub-sets Z| (|POW Z|) |POW POW Z|)
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (= (|set.in POW Z| s (|non empty finite sub-sets Z| t))
+       (and (|set.in POW Z| s (|finite sub-sets Z| t))
+            (not  (= s |set.empty Z|)))))
+  :named |ax.non empty finite sub-sets Z|))
+(declare-const p1 |POW POW Z|)
 (declare-fun |set.subseteq POW Z| (|POW POW Z| |POW POW Z|) Bool)
 (assert (!
     (forall ((s |POW POW Z|) (t |POW POW Z|))
@@ -99,20 +113,6 @@
       )
     )
     :named |ax.set.subseteq POW Z|))
-(declare-const p3 |POW POW Z|)
-(declare-const p2 |POW POW Z|)
-(declare-const p1 |POW POW Z|)
-(declare-fun |non empty finite sub-sets Z| (|POW Z|) |POW POW Z|)
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (= (|set.in POW Z| s (|non empty finite sub-sets Z| t))
-       (and (|set.in POW Z| s (|finite sub-sets Z| t))
-            (not  (= s |set.empty Z|)))))
-  :named |ax.non empty finite sub-sets Z|))
-(declare-const INTEGER |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
 (define-sort |POW POW POW Z| () (P |POW POW Z|))
 (declare-fun |set.in POW POW Z| (|POW POW Z| |POW POW POW Z|) Bool)
 (declare-fun |sub-sets POW Z| (|POW POW Z|) |POW POW POW Z|)

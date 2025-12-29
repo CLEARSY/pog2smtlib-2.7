@@ -15,12 +15,6 @@
       (= (|set.in (Z x Z)| x (|rel.subtract.dom Z Z| e r))
         (and (|set.in (Z x Z)| x r) (not (|set.in Z| (fst x) e))))))
   :named |ax:set.in.subtract.dom (Z x Z)|))
-(assert (!
-  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-    (=
-      (= s t)
-      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))))
-  :named |ax.set.eq (Z x Z)|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -37,6 +31,12 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))))
+  :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not
     (= (|rel.subtract.dom Z Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 2)(= _c0 3)))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 2 0))(= _c0 (maplet 2 1))(= _c0 (maplet 3 5))(= _c0 (maplet 4 0))(= _c0 (maplet 4 9)))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 4 0))(= _c0 (maplet 4 9)))))))

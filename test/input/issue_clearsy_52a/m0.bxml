@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Machine xmlns='https://www.atelierb.eu/Formats/bxml' version='1.0' name='m0' type='abstraction' position='false' semantic='true' b0check='false'>
+  <Sets>
+    <Set>
+      <Id value='ANNEES' typref='4'/>
+    </Set>
+  </Sets>
+  <Concrete_Constants>
+    <Id value='naissance' typref='5'/>
+    <Id value='deces' typref='5'/>
+  </Concrete_Constants>
+  <Properties>
+    <Nary_Pred op='&amp;'>
+      <Exp_Comparison op=':'>
+        <Id value='naissance' typref='5'/>
+        <Id value='ANNEES' typref='4'/>
+      </Exp_Comparison>
+      <Exp_Comparison op=':'>
+        <Id value='deces' typref='5'/>
+        <Id value='ANNEES' typref='4'/>
+      </Exp_Comparison>
+    </Nary_Pred>
+  </Properties>
+  <Initialisation>
+    <Skip/>
+  </Initialisation>
+  <Assertions>
+    <Unary_Pred op='not'>
+      <Exp_Comparison op='='>
+        <Id value='naissance' typref='5'/>
+        <Id value='deces' typref='5'/>
+      </Exp_Comparison>
+    </Unary_Pred>
+  </Assertions>
+  <TypeInfos>
+<Type id='0'>
+<Id value='BOOL'/>
+</Type>
+<Type id='1'>
+<Id value='INTEGER'/>
+</Type>
+<Type id='2'>
+<Unary_Exp op='POW'>
+<Id value='INTEGER'/>
+</Unary_Exp>
+</Type>
+<Type id='3'>
+<Unary_Exp op='POW'>
+<Unary_Exp op='POW'>
+<Id value='INTEGER'/>
+</Unary_Exp>
+</Unary_Exp>
+</Type>
+  <Type id='4'>
+    <Unary_Exp op='POW'>
+<Id value='ANNEES'/>
+</Unary_Exp>
+    </Type>
+  <Type id='5'>
+    <Id value='ANNEES'/>
+    </Type>
+</TypeInfos>
+  
+</Machine>

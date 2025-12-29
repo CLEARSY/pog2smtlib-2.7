@@ -79,19 +79,6 @@
       (|set.subseteq Z| s t)))
   :named |ax.sub-sets Z|))
 (declare-const p1 |POW POW Z|)
-(declare-fun |finite sub-sets Z| (|POW Z|) |POW POW Z|)
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (= (|set.in POW Z| s (|finite sub-sets Z| t))
-       (and
-         (|set.in POW Z| s (|sub-sets Z| t))
-         (not (= (|card Z| s) Infinite)))))
-  :named |ax.finite sub-sets Z|))
-(declare-const INTEGER |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
-(declare-const p2 |POW POW Z|)
 (declare-fun |set.subseteq POW Z| (|POW POW Z| |POW POW Z|) Bool)
 (assert (!
     (forall ((s |POW POW Z|) (t |POW POW Z|))
@@ -101,6 +88,19 @@
       )
     )
     :named |ax.set.subseteq POW Z|))
+(declare-const INTEGER |POW Z|)
+(assert (!
+  (forall ((e |Z|)) (|set.in Z| e INTEGER))
+  :named |ax.set.in.INTEGER|))
+(declare-fun |finite sub-sets Z| (|POW Z|) |POW POW Z|)
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (= (|set.in POW Z| s (|finite sub-sets Z| t))
+       (and
+         (|set.in POW Z| s (|sub-sets Z| t))
+         (not (= (|card Z| s) Infinite)))))
+  :named |ax.finite sub-sets Z|))
+(declare-const p2 |POW POW Z|)
 (define-sort |(POW Z x Z)| () (C |POW Z| |Z|))
 (define-sort |POW (POW Z x Z)| () (P |(POW Z x Z)|))
 (define-sort |POW POW (POW Z x Z)| () (P |POW (POW Z x Z)|))

@@ -5,6 +5,12 @@
 (define-sort |POW Z| () (P |Z|))
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-const vconst |Z|)
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
+  :named |ax.set.eq Z|))
 (declare-const vset |POW Z|)
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
@@ -20,12 +26,6 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (=
-      (= s t)
-      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
-  :named |ax.set.eq Z|))
 (assert (!
   (= vset (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 2)(= _c0 3)(= _c0 4)(= _c0 10)))))
   :named |Define:lprp:1|))

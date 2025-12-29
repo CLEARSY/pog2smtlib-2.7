@@ -23,12 +23,6 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-(assert (!
-  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-    (=
-      (= s t)
-      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))))
-  :named |ax.set.eq (Z x Z)|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -37,6 +31,12 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))))
+  :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not
     (= (|rel.restrict.ran Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 2 1))(= _c0 (maplet 3 1))(= _c0 (maplet 5 5))))) (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 1)))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 2 1))(= _c0 (maplet 3 1)))))))

@@ -215,13 +215,6 @@
        (and (|set.in POW (Z x Z)| s (|seq Z| E))
             (|set.in POW (Z x Z)| s (|injections Z Z| NATURAL1 E)))))
   :named |ax.iseq Z|))
-(declare-fun |perm Z| (|POW Z|) |POW POW (Z x Z)|)
-(assert (!
-  (forall ((E |POW Z|)(s |POW (Z x Z)|))
-    (= (|set.in POW (Z x Z)| s (|perm Z| E))
-       (and (|set.in POW (Z x Z)| s (|iseq Z| E))
-            (|set.in POW (Z x Z)| s (|surjections Z Z| NATURAL1 E)))))
-  :named |ax.perm Z|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -230,6 +223,13 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
+(declare-fun |perm Z| (|POW Z|) |POW POW (Z x Z)|)
+(assert (!
+  (forall ((E |POW Z|)(s |POW (Z x Z)|))
+    (= (|set.in POW (Z x Z)| s (|perm Z| E))
+       (and (|set.in POW (Z x Z)| s (|iseq Z| E))
+            (|set.in POW (Z x Z)| s (|surjections Z Z| NATURAL1 E)))))
+  :named |ax.perm Z|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!

@@ -61,10 +61,14 @@
          (and (|set.in POW (POW Z x Z)| f (|injections POW Z Z| X Y))
               (|set.in POW (POW Z x Z)| f (|surjections POW Z Z| X Y))))))
   :named |ax:set.in.bijections (POW Z x Z)|))
-(declare-const |set.empty Z| |POW Z|)
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
-  (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
-  :named |ax.set.in.empty Z|))
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (declare-fun |card POW Z| (|POW POW Z|) Cardinals)
 (assert (!
   (forall ((s |POW POW Z|))
@@ -80,14 +84,10 @@
       (= (|set.in POW Z| x (|set.intent POW Z| p))
          (p x))))
   :named |ax:set.in.intent POW Z|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(declare-const |set.empty Z| |POW Z|)
 (assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
+  (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
+  :named |ax.set.in.empty Z|))
 (assert (!
   (not
     (= (Value (|card POW Z| (|set.intent POW Z| (lambda ((_c0 |POW Z|)) (or (= _c0 |set.empty Z|)(= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1))))(= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)(= _c1 4)(= _c1 5)(= _c1 6)))))))))) 4))

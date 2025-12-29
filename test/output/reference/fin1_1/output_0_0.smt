@@ -90,17 +90,7 @@
 (assert (!
   (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
   :named |ax.set.in.empty Z|))
-(declare-fun |set.subseteq POW Z| (|POW POW Z| |POW POW Z|) Bool)
-(assert (!
-    (forall ((s |POW POW Z|) (t |POW POW Z|))
-      (=
-        (|set.subseteq POW Z| s t)
-        (forall ((e |POW Z|)) (=> (|set.in POW Z| e s) (|set.in POW Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq POW Z|))
 (declare-const p2 |POW POW Z|)
-(declare-const p1 |POW POW Z|)
 (declare-const INTEGER |POW Z|)
 (assert (!
   (forall ((e |Z|)) (|set.in Z| e INTEGER))
@@ -112,6 +102,16 @@
        (and (|set.in POW Z| s (|finite sub-sets Z| t))
             (not  (= s |set.empty Z|)))))
   :named |ax.non empty finite sub-sets Z|))
+(declare-const p1 |POW POW Z|)
+(declare-fun |set.subseteq POW Z| (|POW POW Z| |POW POW Z|) Bool)
+(assert (!
+    (forall ((s |POW POW Z|) (t |POW POW Z|))
+      (=
+        (|set.subseteq POW Z| s t)
+        (forall ((e |POW Z|)) (=> (|set.in POW Z| e s) (|set.in POW Z| e t)))
+      )
+    )
+    :named |ax.set.subseteq POW Z|))
 (define-sort |(POW Z x Z)| () (C |POW Z| |Z|))
 (define-sort |POW (POW Z x Z)| () (P |(POW Z x Z)|))
 (define-sort |POW POW (POW Z x Z)| () (P |POW (POW Z x Z)|))

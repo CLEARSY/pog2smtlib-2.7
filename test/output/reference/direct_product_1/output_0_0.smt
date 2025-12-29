@@ -16,6 +16,14 @@
 (define-sort |POW (Z x (Z x POW Z))| () (P |(Z x (Z x POW Z))|))
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 (declare-fun |set.in (Z x (Z x POW Z))| (|(Z x (Z x POW Z))| |POW (Z x (Z x POW Z))|) Bool)
+(define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
+(declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
+(assert (!
+  (forall ((p |? (Z x POW Z)|))
+    (forall ((x |(Z x POW Z)|))
+      (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
+         (p x))))
+  :named |ax:set.in.intent (Z x POW Z)|))
 (declare-fun |directproduct Z Z POW Z| (|POW (Z x Z)| |POW (Z x POW Z)|) |POW (Z x (Z x POW Z))|)
 (assert (!
   (forall ((R1 |POW (Z x Z)|) (R2 |POW (Z x POW Z)|) (p |(Z x (Z x POW Z))|))
@@ -27,14 +35,6 @@
     )
   )
   :named |ax.set.in.directproduct ((Z x Z) x POW Z)|))
-(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
-(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
-(assert (!
-  (forall ((p |? (Z x Z)|))
-    (forall ((x |(Z x Z)|))
-      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
-         (p x))))
-  :named |ax:set.in.intent (Z x Z)|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -43,14 +43,14 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-(define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
-(declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
+(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
+(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
-  (forall ((p |? (Z x POW Z)|))
-    (forall ((x |(Z x POW Z)|))
-      (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
+  (forall ((p |? (Z x Z)|))
+    (forall ((x |(Z x Z)|))
+      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
-  :named |ax:set.in.intent (Z x POW Z)|))
+  :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (not
     (|set.in (Z x (Z x POW Z))| (maplet 1 (maplet 3 (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 9))))) (|directproduct Z Z POW Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 3))(= _c0 (maplet 5 4))))) (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 10)))))(= _c0 (maplet 4 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 9)))))))))))

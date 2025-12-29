@@ -163,13 +163,6 @@
          (and (|set.in POW ((Z x Z) x Z)| f (|functions.partial (Z x Z) Z| e1 e2))
               (|set.in POW ((Z x Z) x Z)| f (|relations.total (Z x Z) Z| e1 e2))))))
   :named |ax:def.tfun ((Z x Z) x Z)|))
-(declare-const s643 |POW ((Z x Z) x Z)|)
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (=
-      (= s t)
-      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
-  :named |ax.set.eq Z|))
 (declare-fun |fun.eval (Z x Z) Z| (|POW ((Z x Z) x Z)| |(Z x Z)|) |Z|)
  (assert (!
     (forall ((f |POW ((Z x Z) x Z)|)(x |(Z x Z)|))
@@ -180,6 +173,7 @@
     (forall ((f |POW (Z x Z)|)(x |Z|))
         (|set.in (Z x Z)| (maplet x (|fun.eval Z Z| f x)) f))
     :named |ax.fun.eval (Z x Z)|))
+(declare-const s434 |POW Z|)
 (declare-const s646 |POW (Z x Z)|)
 (declare-fun |functions.total Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
@@ -189,8 +183,8 @@
          (and (|set.in POW (Z x Z)| f (|functions.partial Z Z| e1 e2))
               (|set.in POW (Z x Z)| f (|relations.total Z Z| e1 e2))))))
   :named |ax:def.tfun (Z x Z)|))
+(declare-const s643 |POW ((Z x Z) x Z)|)
 (declare-const s433 |POW Z|)
-(declare-const s434 |POW Z|)
 (declare-const s133 |POW Z|)
 (declare-fun |injections.total (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!
@@ -200,6 +194,12 @@
          (and (|set.in POW ((Z x Z) x Z)| f (|functions.total (Z x Z) Z| e1 e2))
               (|set.in POW ((Z x Z) x Z)| f (|injections (Z x Z) Z| e1 e2))))))
  :named |ax:def.tinj ((Z x Z) x Z)|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
+  :named |ax.set.eq Z|))
 (declare-const s468 |POW Z|)
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!

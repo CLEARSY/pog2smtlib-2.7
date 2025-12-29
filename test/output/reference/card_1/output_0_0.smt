@@ -53,13 +53,6 @@
          (and (|set.in POW (Z x Z)| f (|injections Z Z| X Y))
               (|set.in POW (Z x Z)| f (|surjections Z Z| X Y))))))
   :named |ax:set.in.bijections (Z x Z)|))
-(declare-fun |card Z| (|POW Z|) Cardinals)
-(assert (!
-  (forall ((s |POW Z|))
-    (or (= (|card Z| s) Infinite)
-        (exists ((f |POW (Z x Z)|))
-          (|set.in POW (Z x Z)| f (|bijections Z Z| s (|interval| 1 (Value (|card Z| s))))))))
-  :named |ax.card.definition Z|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -68,6 +61,13 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
+(declare-fun |card Z| (|POW Z|) Cardinals)
+(assert (!
+  (forall ((s |POW Z|))
+    (or (= (|card Z| s) Infinite)
+        (exists ((f |POW (Z x Z)|))
+          (|set.in POW (Z x Z)| f (|bijections Z Z| s (|interval| 1 (Value (|card Z| s))))))))
+  :named |ax.card.definition Z|))
 (assert (!
   (not
     (= (Value (|card Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 1)(= _c0 2)(= _c0 4)(= _c0 5)(= _c0 6)))))) 4))

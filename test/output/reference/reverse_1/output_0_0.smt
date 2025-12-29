@@ -7,12 +7,11 @@
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (define-sort |POW POW Z| () (P |POW Z|))
 (define-sort |(POW Z x Z)| () (C |POW Z| |Z|))
-(define-sort |(Z x POW Z)| () (C |Z| |POW Z|))
 (declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
 (define-sort |POW (POW Z x Z)| () (P |(POW Z x Z)|))
-(define-sort |POW (Z x POW Z)| () (P |(Z x POW Z)|))
+(define-sort |(Z x POW Z)| () (C |Z| |POW Z|))
 (declare-fun |set.in (POW Z x Z)| (|(POW Z x Z)| |POW (POW Z x Z)|) Bool)
-(declare-fun |set.in (Z x POW Z)| (|(Z x POW Z)| |POW (Z x POW Z)|) Bool)
+(define-sort |POW (Z x POW Z)| () (P |(Z x POW Z)|))
 (define-sort |? (POW Z x Z)| () (-> |(POW Z x Z)| Bool))
 (declare-const |set.intent (POW Z x Z)| (-> |? (POW Z x Z)| |POW (POW Z x Z)|))
 (assert (!
@@ -21,18 +20,7 @@
       (= (|set.in (POW Z x Z)| x (|set.intent (POW Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (POW Z x Z)|))
-(define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
-(declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
-(assert (!
-  (forall ((p |? (Z x POW Z)|))
-    (forall ((x |(Z x POW Z)|))
-      (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
-         (p x))))
-  :named |ax:set.in.intent (Z x POW Z)|))
-(declare-const |set.empty (POW Z x Z)| |POW (POW Z x Z)|)
-(assert (!
-  (forall ((e |(POW Z x Z)|)) (not (|set.in (POW Z x Z)| e |set.empty (POW Z x Z)|)))
-  :named |ax.set.in.empty (POW Z x Z)|))
+(declare-fun |set.in (Z x POW Z)| (|(Z x POW Z)| |POW (Z x POW Z)|) Bool)
 (declare-fun |~ Z POW Z| (|POW (Z x POW Z)|) |POW (POW Z x Z)|)
 (assert (!
   (forall ((R |POW (Z x POW Z)|))
@@ -49,6 +37,18 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
+(define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
+(declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
+(assert (!
+  (forall ((p |? (Z x POW Z)|))
+    (forall ((x |(Z x POW Z)|))
+      (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
+         (p x))))
+  :named |ax:set.in.intent (Z x POW Z)|))
+(declare-const |set.empty (POW Z x Z)| |POW (POW Z x Z)|)
+(assert (!
+  (forall ((e |(POW Z x Z)|)) (not (|set.in (POW Z x Z)| e |set.empty (POW Z x Z)|)))
+  :named |ax.set.in.empty (POW Z x Z)|))
 (assert (!
   (forall ((s |POW (POW Z x Z)|) (t |POW (POW Z x Z)|))
     (=

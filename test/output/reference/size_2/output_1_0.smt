@@ -204,14 +204,14 @@
         (exists ((f |POW ((Z x POW Z) x Z)|))
           (|set.in POW ((Z x POW Z) x Z)| f (|bijections (Z x POW Z) Z| s (|interval| 1 (Value (|card (Z x POW Z)| s))))))))
   :named |ax.card.definition (Z x POW Z)|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
+(declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
 (assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
+  (forall ((p |? (Z x POW Z)|))
+    (forall ((x |(Z x POW Z)|))
+      (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
-  :named |ax:set.in.intent Z|))
+  :named |ax:set.in.intent (Z x POW Z)|))
 (declare-fun |rel.range Z POW Z| (|POW (Z x POW Z)|) |POW POW Z|)
 (assert (!
   (forall ((r |POW (Z x POW Z)|) (e |POW Z|))
@@ -231,18 +231,18 @@
       (|seq POW Z| E)
       (|functions.total Z POW Z| (|interval| 1 (Value (|card POW Z| E))) E)))
   :named |ax.seq.is.total.fun POW Z|))
-(define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
-(declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
-(assert (!
-  (forall ((p |? (Z x POW Z)|))
-    (forall ((x |(Z x POW Z)|))
-      (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
-         (p x))))
-  :named |ax:set.in.intent (Z x POW Z)|))
 (declare-const |set.empty Z| |POW Z|)
 (assert (!
   (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
   :named |ax.set.in.empty Z|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (assert (!
   (not
     (|set.in POW (Z x POW Z)| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 2)(= _c1 3))))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 6)(= _c1 7)(= _c1 8))))))(= _c0 (maplet 3 |set.empty Z|))(= _c0 (maplet 4 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1)))))))) (|seq POW Z| (|rel.range Z POW Z| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 2)(= _c1 3))))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 6)(= _c1 7)(= _c1 8))))))(= _c0 (maplet 3 |set.empty Z|))(= _c0 (maplet 4 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1))))))))))))

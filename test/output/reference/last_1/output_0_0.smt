@@ -68,11 +68,6 @@
   (forall ((s |POW (Z x Z)|))
     (= (|size Z| s) (Value (|card (Z x Z)| s))))
   :named |ax.size.definition Z|))
-(declare-fun |last Z| (|POW (Z x Z)|) |Z|)
-(assert (!
-  (forall ((s |POW (Z x Z)|))
-    (|set.in (Z x Z)| (maplet (|size Z| s) (|last Z| s)) s))
-  :named |ax.last.definition Z|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -81,6 +76,11 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
+(declare-fun |last Z| (|POW (Z x Z)|) |Z|)
+(assert (!
+  (forall ((s |POW (Z x Z)|))
+    (|set.in (Z x Z)| (maplet (|size Z| s) (|last Z| s)) s))
+  :named |ax.last.definition Z|))
 (assert (!
   (not
     (= (|last Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 5))(= _c0 (maplet 2 5))(= _c0 (maplet 3 7)))))) 5))

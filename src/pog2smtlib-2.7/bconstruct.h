@@ -718,7 +718,8 @@ class UnaryBType : public Abstract {
   UnaryBType(const BType &T, const std::string script,
              std::set<std::shared_ptr<Abstract>> &requisites,
              const std::string &label)
-      : Abstract(script, requisites, label,
+      : Abstract(script, requisites,
+                 fmt::format("{}_<{}>", label, T.to_string()),
                  fmt::format("{}_<{}>", label, T.to_string())),
         m_type(std::make_shared<const BType>(T)) {}
   virtual ~UnaryBType() = default;

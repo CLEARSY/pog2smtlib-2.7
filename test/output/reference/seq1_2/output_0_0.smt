@@ -212,12 +212,6 @@
       (|seq Z| E)
       (|functions.total Z Z| (|interval| 1 (Value (|card Z| E))) E)))
   :named |ax.seq.is.total.fun Z|))
-(declare-fun |seq1 Z| (|POW Z|) |POW POW (Z x Z)|)
-(assert (!
-  (forall ((E |POW Z|)(s |POW (Z x Z)|))
-    (= (|set.in POW (Z x Z)| s (|seq1 Z| E))
-       (and (|set.in POW (Z x Z)| s (|seq Z| E)) (not (= s |seq.empty Z|)))))
-  :named |ax.seq1 Z|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -226,6 +220,12 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
+(declare-fun |seq1 Z| (|POW Z|) |POW POW (Z x Z)|)
+(assert (!
+  (forall ((E |POW Z|)(s |POW (Z x Z)|))
+    (= (|set.in POW (Z x Z)| s (|seq1 Z| E))
+       (and (|set.in POW (Z x Z)| s (|seq Z| E)) (not (= s |seq.empty Z|)))))
+  :named |ax.seq1 Z|))
 (declare-const INTEGER |POW Z|)
 (assert (!
   (forall ((e |Z|)) (|set.in Z| e INTEGER))

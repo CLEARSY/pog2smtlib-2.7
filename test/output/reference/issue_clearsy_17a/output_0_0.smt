@@ -26,8 +26,6 @@
          (p x))))
   :named |ax:set.in.intent struct(x1, y1)|))
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-(declare-const struct2 |POW struct(x2, y2)|)
-(declare-const record22 |struct(x2, y2)|)
 (declare-const |struct struct(x2, y2)| (-> |? struct(x2, y2)| |POW struct(x2, y2)|))
 (assert (!
   (forall ((p |? struct(x2, y2)|))
@@ -35,8 +33,21 @@
       (= (|set.in struct(x2, y2)| x (|struct struct(x2, y2)| p))
          (p x))))
   :named |ax.struct.definition struct(x2, y2)|))
+(declare-const struct2 |POW struct(x2, y2)|)
 (declare-const record12 |struct(x1, y1)|)
-(declare-const struct1 |POW struct(x1, y1)|)
+(declare-const record22 |struct(x2, y2)|)
+(assert (!
+  (forall ((s |POW struct(x2, y2)|) (t |POW struct(x2, y2)|))
+    (=
+      (= s t)
+      (forall ((e |struct(x2, y2)|)) (= (|set.in struct(x2, y2)| e s) (|set.in struct(x2, y2)| e t)))))
+  :named |ax.set.eq struct(x2, y2)|))
+(assert (!
+  (forall ((s |POW struct(x1, y1)|) (t |POW struct(x1, y1)|))
+    (=
+      (= s t)
+      (forall ((e |struct(x1, y1)|)) (= (|set.in struct(x1, y1)| e s) (|set.in struct(x1, y1)| e t)))))
+  :named |ax.set.eq struct(x1, y1)|))
 (declare-const |struct struct(x1, y1)| (-> |? struct(x1, y1)| |POW struct(x1, y1)|))
 (assert (!
   (forall ((p |? struct(x1, y1)|))
@@ -44,24 +55,13 @@
       (= (|set.in struct(x1, y1)| x (|struct struct(x1, y1)| p))
          (p x))))
   :named |ax.struct.definition struct(x1, y1)|))
+(declare-const struct1 |POW struct(x1, y1)|)
 (declare-const record11 |struct(x1, y1)|)
 (declare-const record21 |struct(x2, y2)|)
-(assert (!
-  (forall ((s |POW struct(x2, y2)|) (t |POW struct(x2, y2)|))
-    (=
-      (= s t)
-      (forall ((e |struct(x2, y2)|)) (= (|set.in struct(x2, y2)| e s) (|set.in struct(x2, y2)| e t)))))
-  :named |ax.set.eq struct(x2, y2)|))
 (declare-const INTEGER |POW Z|)
 (assert (!
   (forall ((e |Z|)) (|set.in Z| e INTEGER))
   :named |ax.set.in.INTEGER|))
-(assert (!
-  (forall ((s |POW struct(x1, y1)|) (t |POW struct(x1, y1)|))
-    (=
-      (= s t)
-      (forall ((e |struct(x1, y1)|)) (= (|set.in struct(x1, y1)| e s) (|set.in struct(x1, y1)| e t)))))
-  :named |ax.set.eq struct(x1, y1)|))
 (assert (!
   (= struct1 (|struct struct(x1, y1)| (lambda ((_c0 |struct(x1, y1)|)) (and (|set.in Z| (|'x1| _c0) INTEGER)(|set.in Z| (|'y1| _c0) INTEGER)))))
   :named |Define:lprp:1|))

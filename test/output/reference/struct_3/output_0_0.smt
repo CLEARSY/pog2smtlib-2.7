@@ -28,6 +28,13 @@
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
+(declare-const |struct struct(Note, Suffisant)| (-> |? struct(Note, Suffisant)| |POW struct(Note, Suffisant)|))
+(assert (!
+  (forall ((p |? struct(Note, Suffisant)|))
+    (forall ((x |struct(Note, Suffisant)|))
+      (= (|set.in struct(Note, Suffisant)| x (|struct struct(Note, Suffisant)| p))
+         (p x))))
+  :named |ax.struct.definition struct(Note, Suffisant)|))
 (declare-fun |set.subseteq struct(Note, Suffisant)| (|POW struct(Note, Suffisant)| |POW struct(Note, Suffisant)|) Bool)
 (assert (!
     (forall ((s |POW struct(Note, Suffisant)|) (t |POW struct(Note, Suffisant)|))
@@ -37,13 +44,6 @@
       )
     )
     :named |ax.set.subseteq struct(Note, Suffisant)|))
-(declare-const |struct struct(Note, Suffisant)| (-> |? struct(Note, Suffisant)| |POW struct(Note, Suffisant)|))
-(assert (!
-  (forall ((p |? struct(Note, Suffisant)|))
-    (forall ((x |struct(Note, Suffisant)|))
-      (= (|set.in struct(Note, Suffisant)| x (|struct struct(Note, Suffisant)| p))
-         (p x))))
-  :named |ax.struct.definition struct(Note, Suffisant)|))
 (assert (!
   (not
     (|set.subseteq struct(Note, Suffisant)| (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (|'Note| _c0) (|interval| 0 21))(|set.in BOOL| (|'Suffisant| _c0) BOOL)))) (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (|'Note| _c0) (|interval| 0 20))(|set.in BOOL| (|'Suffisant| _c0) BOOL))))))

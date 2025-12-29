@@ -410,7 +410,10 @@ void GetSignatureVisitor::visitIdent(const BType &type,
     auto etype = type.toEnumeratedSetType();
     const std::string name = b.show();
     for (const auto &elem : etype.getContent()) {
-      if (elem == name) return;
+      if (elem == name) {
+        m_signature.m_types.insert(std::make_shared<BType>(type));
+        return;
+      }
     }
   }
   struct Data data{std::make_shared<VarName>(b),

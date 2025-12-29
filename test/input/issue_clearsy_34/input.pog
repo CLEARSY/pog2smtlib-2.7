@@ -66,7 +66,95 @@ Copyright © CLEARSY 2019
     <Define name="inv" hash="0" />
     <Define name="ass" hash="0" />
     <Define name="cst" hash="0" />
-    <Define name="sets" hash="0" />
+    <Define name="sets" hash="0">
+        <Set>
+            <Id value="s0" typref="2" />
+        </Set>
+        <Set>
+            <Id value="s4" typref="4" />
+        </Set>
+        <Set>
+            <Id value="s8" typref="6" />
+        </Set>
+        <Set>
+            <Id value="s12" typref="8" />
+        </Set>
+        <Set>
+            <Id value="s18" typref="10" />
+        </Set>
+        <Set>
+            <Id value="s21" typref="12" />
+        </Set>
+        <Set>
+            <Id value="s26" typref="14" />
+        </Set>
+        <Set>
+            <Id value="s32" typref="16" />
+        </Set>
+        <Set>
+            <Id value="s36" typref="18" />
+        </Set>
+        <Set>
+            <Id value="s39" typref="20" />
+        </Set>
+        <Set>
+            <Id value="s43" typref="22" />
+        </Set>
+        <Set>
+            <Id value="s47" typref="24" />
+        </Set>
+        <Set>
+            <Id value="s51" typref="26" />
+        </Set>
+        <Set>
+            <Id value="s56" typref="28" />
+        </Set>
+        <Set>
+            <Id value="s72" typref="30" />
+        </Set>
+        <Set>
+            <Id value="s105" typref="32" />
+        </Set>
+        <Set>
+            <Id value="s110" typref="34" />
+        </Set>
+        <Set>
+            <Id value="s118" typref="36" />
+        </Set>
+        <Set>
+            <Id value="s123" typref="38" />
+        </Set>
+        <Set>
+            <Id value="s129" typref="40" />
+        </Set>
+        <Set>
+            <Id value="s130" typref="41" />
+        </Set>
+        <Set>
+            <Id value="s131" typref="42" />
+        </Set>
+        <Set>
+            <Id value="s132" typref="41" />
+        </Set>
+        <Set>
+            <Id value="s133" typref="44" />
+        </Set>
+        <Set>
+            <Id value="s151" typref="46" />
+        </Set>
+        <Set>
+            <Id value="s169" typref="48" />
+        </Set>
+        <Set>
+            <Id value="s173" typref="50" />
+        </Set>
+        <Set>
+            <Id value="s176" typref="52" />
+        </Set>
+        <Set>
+            <Id value="s186" typref="54" />
+        </Set>
+    </Define>
     <Proof_Obligation goalHash="17483314500439637960">
         <Tag>s790</Tag>
         <Definition name="B definitions" />

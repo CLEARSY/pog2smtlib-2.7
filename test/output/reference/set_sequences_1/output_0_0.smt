@@ -204,7 +204,6 @@
         (exists ((f |POW (POW Z x Z)|))
           (|set.in POW (POW Z x Z)| f (|bijections POW Z Z| s (|interval| 1 (Value (|card POW Z| s))))))))
   :named |ax.card.definition POW Z|))
-(define-const MAXINT |Z| 2147483647)
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
     (forall ((s |POW Z|) (t |POW Z|))
@@ -214,14 +213,7 @@
       )
     )
     :named |ax.set.subseteq Z|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
-(assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
+(define-const MAXINT |Z| 2147483647)
 (declare-fun |seq POW Z| (|POW POW Z|) |POW POW (Z x POW Z)|)
 (assert (!
   (forall ((E |POW POW Z|) (s |POW (Z x POW Z)|))
@@ -243,10 +235,14 @@
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
-(declare-const NAT1 |POW Z|)
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
-  (forall ((e |Z|)) (= (|set.in Z| e NAT1) (and (<= 1 e) (<= e MAXINT))))
-  :named |ax.set.in.NAT1|))
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (declare-fun |sub-sets Z| (|POW Z|) |POW POW Z|)
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))
@@ -254,6 +250,10 @@
       (|set.in POW Z| s (|sub-sets Z| t))
       (|set.subseteq Z| s t)))
   :named |ax.sub-sets Z|))
+(declare-const NAT1 |POW Z|)
+(assert (!
+  (forall ((e |Z|)) (= (|set.in Z| e NAT1) (and (<= 1 e) (<= e MAXINT))))
+  :named |ax.set.in.NAT1|))
 (assert (!
   (not
     (|set.in POW (Z x POW Z)| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 0)(= _c1 1)(= _c1 2)(= _c1 4)))))))) (|seq POW Z| (|sub-sets Z| NAT1))))

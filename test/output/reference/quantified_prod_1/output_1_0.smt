@@ -81,14 +81,6 @@
       (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
       (|set.subseteq (Z x Z)| s t)))
   :named |ax.sub-sets (Z x Z)|))
-(declare-fun |finite sub-sets (Z x Z)| (|POW (Z x Z)|) |POW POW (Z x Z)|)
-(assert (!
-  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-    (= (|set.in POW (Z x Z)| s (|finite sub-sets (Z x Z)| t))
-       (and
-         (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
-         (not (= (|card (Z x Z)| s) Infinite)))))
-  :named |ax.finite sub-sets (Z x Z)|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -105,6 +97,14 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
+(declare-fun |finite sub-sets (Z x Z)| (|POW (Z x Z)|) |POW POW (Z x Z)|)
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (= (|set.in POW (Z x Z)| s (|finite sub-sets (Z x Z)| t))
+       (and
+         (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
+         (not (= (|card (Z x Z)| s) Infinite)))))
+  :named |ax.finite sub-sets (Z x Z)|))
 (assert (!
   (not
     (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|))     (and

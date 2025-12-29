@@ -204,20 +204,6 @@
         (exists ((f |POW ((Z x POW Z) x Z)|))
           (|set.in POW ((Z x POW Z) x Z)| f (|bijections (Z x POW Z) Z| s (|interval| 1 (Value (|card (Z x POW Z)| s))))))))
   :named |ax.card.definition (Z x POW Z)|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
-(assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
-(declare-fun |rel.range Z POW Z| (|POW (Z x POW Z)|) |POW POW Z|)
-(assert (!
-  (forall ((r |POW (Z x POW Z)|) (e |POW Z|))
-    (= (|set.in POW Z| e (|rel.range Z POW Z| r))
-       (exists ((x |Z|)) (|set.in (Z x POW Z)| (maplet x e) r))))
-  :named |ax:set.in.range (Z x POW Z)|))
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
 (declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
 (assert (!
@@ -226,6 +212,20 @@
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
+(declare-fun |rel.range Z POW Z| (|POW (Z x POW Z)|) |POW POW Z|)
+(assert (!
+  (forall ((r |POW (Z x POW Z)|) (e |POW Z|))
+    (= (|set.in POW Z| e (|rel.range Z POW Z| r))
+       (exists ((x |Z|)) (|set.in (Z x POW Z)| (maplet x e) r))))
+  :named |ax:set.in.range (Z x POW Z)|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (declare-fun |seq POW Z| (|POW POW Z|) |POW POW (Z x POW Z)|)
 (assert (!
   (forall ((E |POW POW Z|) (s |POW (Z x POW Z)|))

@@ -8,6 +8,10 @@
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
+(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
+(assert (!
+  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
+  :named |ax.set.in.empty (Z x Z)|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -24,10 +28,6 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
-(assert (!
-  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
-  :named |ax.set.in.empty (Z x Z)|))
 (declare-fun |rel.subtract.ran Z Z| (|POW (Z x Z)| |POW Z|) |POW (Z x Z)|)
 (assert (!
   (forall ((r |POW (Z x Z)|) (e |POW Z|))

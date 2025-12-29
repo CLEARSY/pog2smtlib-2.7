@@ -238,14 +238,6 @@
       )
     )
     :named |ax.set.subseteq Z|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
-(assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
 (declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
 (assert (!
@@ -254,6 +246,18 @@
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
+(declare-const INTEGER |POW Z|)
+(assert (!
+  (forall ((e |Z|)) (|set.in Z| e INTEGER))
+  :named |ax.set.in.INTEGER|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (declare-fun |iseq POW Z| (|POW POW Z|) |POW POW (Z x POW Z)|)
 (assert (!
   (forall ((E |POW POW Z|)(s |POW (Z x POW Z)|))
@@ -261,10 +265,6 @@
        (and (|set.in POW (Z x POW Z)| s (|seq POW Z| E))
             (|set.in POW (Z x POW Z)| s (|injections Z POW Z| NATURAL1 E)))))
   :named |ax.iseq POW Z|))
-(declare-const INTEGER |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
 (declare-fun |sub-sets Z| (|POW Z|) |POW POW Z|)
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))
