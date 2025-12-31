@@ -44,7 +44,7 @@ namespace Expression {
 std::shared_ptr<Exponentiation> Exponentiation::m_cache;
 
 Exponentiation::Exponentiation(const std::string &script,
-                               set<shared_ptr<Abstract>> &requisites)
+                               const PreRequisites &requisites)
     : Uniform(script, requisites, "**i") {}
 
 };  // namespace Expression
@@ -55,7 +55,7 @@ shared_ptr<Abstract> Factory::Exponentiation() {
   if (!result) {
     const string script = fmt::format(
         SCRIPT, smtSymbol(Expr::BinaryOp::IExponentiation), symbol(BType::INT));
-    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT)};
+    const PreRequisites requisites{Factory::Type(BType::INT)};
     result = make(BConstruct::Expression::Exponentiation::m_cache, script,
                   requisites);
   }

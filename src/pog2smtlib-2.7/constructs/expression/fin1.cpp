@@ -43,7 +43,7 @@ namespace Expression {
 MapUnaryBType<Fin1> Fin1::m_cache;
 
 Fin1::Fin1(const BType& T, const string& script,
-           set<shared_ptr<Abstract>>& requisites)
+           const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "FIN1") {}
 
 };  // namespace Expression
@@ -61,8 +61,8 @@ shared_ptr<Abstract> Factory::Fin1(const BType& T) {
         /*4*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, T),
         /*5*/ symbolInner(T),
         /*6*/ smtSymbol(Expr::UnaryOp::Finite_Subsets, T));
-    set<shared_ptr<Abstract>> requisites = {
-        Factory::EmptySet(T), Factory::Fin(T), Factory::SetMembership(PT)};
+    const PreRequisites requisites = {Factory::EmptySet(T), Factory::Fin(T),
+                                      Factory::SetMembership(PT)};
     result = make(BConstruct::Expression::Fin1::m_cache, T, script, requisites);
   }
   return result;

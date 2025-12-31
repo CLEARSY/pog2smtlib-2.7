@@ -20,9 +20,8 @@ namespace BConstruct::Expression {
 
 class GeneralizedIntersection : public UnaryBType {
  public:
-  explicit GeneralizedIntersection(
-      const BType& T, const std::string& script,
-      std::set<std::shared_ptr<Abstract>>& requisites);
+  explicit GeneralizedIntersection(const BType& T, const std::string& script,
+                                   const PreRequisites& requisites);
   virtual ~GeneralizedIntersection() = default;
 
  private:

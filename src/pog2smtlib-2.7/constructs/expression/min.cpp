@@ -45,7 +45,7 @@ namespace Expression {
 
 std::shared_ptr<Min> Min::m_cache;
 
-Min::Min(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Min::Min(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "min") {}
 
 };  // namespace Expression
@@ -59,7 +59,7 @@ shared_ptr<Abstract> Factory::Min() {
         /*2*/ symbol(BType::POW(BType::INT)),
         /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::INT),
         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
-    set<shared_ptr<Abstract>> requisites{Factory::EmptySet(BType::INT)};
+    const PreRequisites requisites{Factory::EmptySet(BType::INT)};
     result = make(BConstruct::Expression::Min::m_cache, script, requisites);
   }
   return result;

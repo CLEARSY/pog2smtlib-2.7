@@ -40,12 +40,6 @@
         (and (|set.in Z| x1 s1) (|set.in Z| x2 s2)))))
   :named |ax.set.in.product.2 (Z x Z)|))
 (define-const MAXINT |Z| 2147483647)
-(declare-fun |relations Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
-(assert (!
-  (forall ((X |POW Z|) (Y |POW Z|))
-    (= (|relations Z Z| X Y)
-       (|sub-sets (Z x Z)| (|set.product Z Z| X Y))))
-    :named |def.relations (Z x Z)|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -54,6 +48,12 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
+(declare-fun |relations Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
+(assert (!
+  (forall ((X |POW Z|) (Y |POW Z|))
+    (= (|relations Z Z| X Y)
+       (|sub-sets (Z x Z)| (|set.product Z Z| X Y))))
+    :named |def.relations (Z x Z)|))
 (declare-const NAT |POW Z|)
 (assert (!
   (forall ((e |Z|)) (= (|set.in Z| e NAT) (and (<= 0 e) (<= e MAXINT))))

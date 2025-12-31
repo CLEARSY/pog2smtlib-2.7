@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class RMax : public Uniform {
  public:
-  explicit RMax(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit RMax(const std::string &, const PreRequisites &);
   virtual ~RMax() = default;
 
  private:

@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Concatenation : public UnaryBType {
  public:
   explicit Concatenation(const BType &, const std::string &script,
-                         std::set<std::shared_ptr<Abstract>> &requisites);
+                         const PreRequisites &requisites);
   virtual ~Concatenation() = default;
 
  private:

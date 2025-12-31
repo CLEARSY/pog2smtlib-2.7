@@ -46,7 +46,7 @@ MapBinaryBType<Total_Function> Total_Function::m_cache;
 
 Total_Function::Total_Function(const BType &U, const BType &V,
                                const string &script,
-                               set<shared_ptr<Abstract>> &requisites)
+                               const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "-->") {}
 
 };  // namespace Expression
@@ -71,8 +71,8 @@ shared_ptr<Abstract> Factory::Total_Function(const BType &U, const BType &V) {
         /*7*/ symbolInner(V),
         /*8*/ symbolInner(UxV),
         /*9*/ smtSymbol(Expr::BinaryOp::Partial_Functions, U, V));
-    set<shared_ptr<Abstract>> requisites = {Factory::Total_Relation(U, V),
-                                            Factory::Partial_Function(U, V)};
+    const PreRequisites requisites = {Factory::Total_Relation(U, V),
+                                      Factory::Partial_Function(U, V)};
     result = make(BConstruct::Expression::Total_Function::m_cache, U, V, script,
                   requisites);
   }

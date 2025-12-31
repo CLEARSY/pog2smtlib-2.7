@@ -38,7 +38,7 @@ namespace Expression {
 MapUnaryBType<Front> Front::m_cache;
 
 Front::Front(const BType& T, const std::string& script,
-             set<shared_ptr<Abstract>>& requisites)
+             const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "front") {}
 
 };  // namespace Expression
@@ -53,8 +53,8 @@ shared_ptr<Abstract> Factory::Front(const BType& T) {
                     /*1*/ symbol(PZxT),
                     /*2*/ smtSymbol(Expr::BinaryOp::Head_Restriction, T),
                     /*3*/ smtSymbol(Expr::UnaryOp::Size, T));
-    set<shared_ptr<Abstract>> requisites = {Factory::Size(T),
-                                            Factory::Restrict_In_Front(T)};
+    const PreRequisites requisites = {Factory::Size(T),
+                                      Factory::Restrict_In_Front(T)};
     result =
         make(BConstruct::Expression::Front::m_cache, T, script, requisites);
   }

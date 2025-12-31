@@ -44,7 +44,7 @@ namespace Expression {
 MapUnaryBType<Concatenation> Concatenation::m_cache;
 
 Concatenation::Concatenation(const BType& T, const std::string& script,
-                             set<shared_ptr<Abstract>>& requisites)
+                             const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "^") {}
 
 };  // namespace Expression
@@ -62,7 +62,7 @@ shared_ptr<Abstract> Factory::Concatenation(const BType& T) {
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
                     /*4*/ smtSymbol(Expr::UnaryOp::Size, T),
                     /*5*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {
+    const BConstruct::PreRequisites requisites = {
         Factory::SetMembership(T),
         Factory::Size(T),
     };

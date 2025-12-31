@@ -11,14 +11,6 @@
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 (define-sort |POW ((Z x Z) x Z)| () (P |((Z x Z) x Z)|))
 (declare-fun |set.in ((Z x Z) x Z)| (|((Z x Z) x Z)| |POW ((Z x Z) x Z)|) Bool)
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
-(assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
 (declare-fun |prj1 Z Z| (|POW Z| |POW Z|) |POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((E |POW Z|) (F |POW Z|) (t |((Z x Z) x Z)|))
@@ -28,6 +20,14 @@
 				 (|set.in Z| (snd (fst t)) F)
 				 (= (snd t) (fst (fst t))))))
   :named |ax.set.in.prj1 (Z x Z)|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (define-sort |? ((Z x Z) x Z)| () (-> |((Z x Z) x Z)| Bool))
 (declare-const |set.intent ((Z x Z) x Z)| (-> |? ((Z x Z) x Z)| |POW ((Z x Z) x Z)|))
 (assert (!

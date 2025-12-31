@@ -20,8 +20,7 @@ namespace BConstruct::Expression {
 
 class RGeneralizedSum : public Uniform {
  public:
-  explicit RGeneralizedSum(const std::string &,
-                           std::set<std::shared_ptr<Abstract>> &);
+  explicit RGeneralizedSum(const std::string &, const PreRequisites &);
   virtual ~RGeneralizedSum() = default;
 
  private:

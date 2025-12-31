@@ -43,7 +43,7 @@ MapBinaryBType<Transformed_Into_Relation> Transformed_Into_Relation::m_cache;
 
 Transformed_Into_Relation::Transformed_Into_Relation(
     const BType &U, const BType &V, const string &script,
-    set<shared_ptr<Abstract>> &requisites)
+    const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "rel") {}
 
 };  // namespace Expression
@@ -68,9 +68,9 @@ shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType &U,
                     /*6*/ smtSymbol(Pred::ComparisonOp::Membership, UxPV),
                     /*7*/ smtSymbol(Pred::ComparisonOp::Membership, V),
                     /*8*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV),
-                                            Factory::SetMembership(UxPV),
-                                            Factory::SetMembership(V)};
+    const PreRequisites requisites = {Factory::SetMembership(UxV),
+                                      Factory::SetMembership(UxPV),
+                                      Factory::SetMembership(V)};
     result = make(BConstruct::Expression::Transformed_Into_Relation::m_cache, U,
                   V, script, requisites);
   }

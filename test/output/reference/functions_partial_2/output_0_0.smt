@@ -54,6 +54,14 @@
            (=> (and (|set.in (Z x Z)| p1 f) (|set.in (Z x Z)| p2 f) (= (fst p1) (fst p2)))
                (= (snd p1) (snd p2)))))))
 :named |ax:set.in.functions (Z x Z)|))
+(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
+(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
+(assert (!
+  (forall ((p |? (Z x Z)|))
+    (forall ((x |(Z x Z)|))
+      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
+         (p x))))
+  :named |ax:set.in.intent (Z x Z)|))
 (declare-fun |functions.partial Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((e1 |POW Z|) (e2 |POW Z|))
@@ -71,14 +79,6 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (p x))))
   :named |ax:set.in.intent Z|))
-(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
-(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
-(assert (!
-  (forall ((p |? (Z x Z)|))
-    (forall ((x |(Z x Z)|))
-      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
-         (p x))))
-  :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (not
     (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 0 1))(= _c0 (maplet 1 2))(= _c0 (maplet 2 2))))) (|functions.partial Z Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)(= _c0 2)(= _c0 3)))) (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)(= _c0 2)))))))

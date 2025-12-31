@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Struct : public UnaryBType {
  public:
   explicit Struct(const BType &, const std::string &script,
-                  std::set<std::shared_ptr<Abstract>> &requisites);
+                  const PreRequisites &requisites);
   virtual ~Struct() = default;
 
  private:

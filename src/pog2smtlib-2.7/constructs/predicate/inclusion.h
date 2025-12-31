@@ -19,7 +19,7 @@ namespace BConstruct::Predicate {
 class Inclusion : public UnaryBType {
  public:
   explicit Inclusion(const BType& T, const std::string& script,
-                     std::set<std::shared_ptr<Abstract>>& requisites);
+                     const PreRequisites& requisites);
   virtual ~Inclusion() = default;
 
  private:

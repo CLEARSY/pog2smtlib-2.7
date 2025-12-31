@@ -20,8 +20,7 @@ namespace BConstruct::Expression {
 
 class GeneralizedProduct : public Uniform {
  public:
-  explicit GeneralizedProduct(const std::string &,
-                              std::set<std::shared_ptr<Abstract>> &);
+  explicit GeneralizedProduct(const std::string &, const PreRequisites &);
   virtual ~GeneralizedProduct() = default;
 
  private:

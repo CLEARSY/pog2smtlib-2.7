@@ -19,8 +19,7 @@ namespace BConstruct::Type {
 class CartesianProduct : public Uniform {
  public:
   explicit CartesianProduct();
-  explicit CartesianProduct(const std::string &,
-                            std::set<std::shared_ptr<Abstract>> &);
+  explicit CartesianProduct(const std::string &, const PreRequisites &);
   virtual ~CartesianProduct() = default;
 
  private:

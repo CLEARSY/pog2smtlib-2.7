@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Prj2 : public BinaryBType {
  public:
   explicit Prj2(const BType &, const BType &, const std::string &script,
-                std::set<std::shared_ptr<Abstract>> &requisites);
+                const PreRequisites &requisites);
   virtual ~Prj2() = default;
 
  private:

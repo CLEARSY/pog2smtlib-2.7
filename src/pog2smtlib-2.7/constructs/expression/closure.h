@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Closure : public UnaryBType {
  public:
   explicit Closure(const BType& T, const std::string& script,
-                   std::set<std::shared_ptr<Abstract>>& requisites);
+                   const PreRequisites& requisites);
   virtual ~Closure() = default;
 
  private:

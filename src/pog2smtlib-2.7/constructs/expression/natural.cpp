@@ -39,8 +39,7 @@ namespace Expression {
 
 std::shared_ptr<Natural> Natural::m_cache;
 
-Natural::Natural(const std::string &script,
-                 set<shared_ptr<Abstract>> &requisites)
+Natural::Natural(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "NATURAL") {}
 
 };  // namespace Expression
@@ -52,7 +51,7 @@ shared_ptr<Abstract> Factory::Natural() {
         SCRIPT, /*0*/ smtSymbol(Expr::Visitor::EConstant::NATURAL),
         /*1*/ symbol(BType::INT), /*2*/ symbol(BType::POW(BType::INT)),
         /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::INT)};
+    const PreRequisites requisites{Factory::SetMembership(BType::INT)};
     result = make(BConstruct::Expression::Natural::m_cache, script, requisites);
   }
   return result;

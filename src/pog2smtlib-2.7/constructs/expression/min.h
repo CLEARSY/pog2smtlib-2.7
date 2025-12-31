@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Min : public Uniform {
  public:
-  explicit Min(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Min(const std::string &, const PreRequisites &);
   virtual ~Min() = default;
 
  private:

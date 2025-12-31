@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Max : public Uniform {
  public:
-  explicit Max(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Max(const std::string &, const PreRequisites &);
   virtual ~Max() = default;
 
  private:

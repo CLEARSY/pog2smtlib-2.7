@@ -7,6 +7,7 @@
 (define-sort |POW POW Z| () (P |POW Z|))
 (declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
 (declare-const vconst |POW Z|)
+(declare-const vset |POW POW Z|)
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
@@ -19,7 +20,6 @@
       (= s t)
       (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
   :named |ax.set.eq Z|))
-(declare-const vset |POW POW Z|)
 (define-sort |? POW Z| () (-> |POW Z| Bool))
 (declare-const |set.intent POW Z| (-> |? POW Z| |POW POW Z|))
 (assert (!

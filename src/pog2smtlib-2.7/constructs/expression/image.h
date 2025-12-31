@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Image : public BinaryBType {
  public:
   explicit Image(const BType &U, const BType &V, const std::string &,
-                 std::set<std::shared_ptr<Abstract>> &);
+                 const PreRequisites &);
   virtual ~Image() = default;
 
  private:

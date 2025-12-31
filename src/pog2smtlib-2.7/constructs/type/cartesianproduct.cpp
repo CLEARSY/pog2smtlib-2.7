@@ -28,7 +28,7 @@ namespace Type {
 shared_ptr<CartesianProduct> CartesianProduct::m_cache;
 
 CartesianProduct::CartesianProduct(const string& script,
-                                   set<shared_ptr<Abstract>>& requisites)
+                                   const PreRequisites& requisites)
     : Uniform(script, requisites, "*") {}
 
 CartesianProduct::CartesianProduct() {
@@ -46,7 +46,7 @@ shared_ptr<Abstract> Factory::CartesianProduct() {
   if (!result) {
     const string script =
         "(declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))\n";
-    set<shared_ptr<Abstract>> requisites{};
+    const PreRequisites requisites{};
     result =
         make(BConstruct::Type::CartesianProduct::m_cache, script, requisites);
   }

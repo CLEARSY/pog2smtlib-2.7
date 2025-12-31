@@ -45,7 +45,7 @@ namespace Expression {
 
 std::shared_ptr<Max> Max::m_cache;
 
-Max::Max(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Max::Max(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "max") {}
 
 };  // namespace Expression
@@ -59,7 +59,7 @@ shared_ptr<Abstract> Factory::Max() {
         /*2*/ symbol(BType::POW(BType::INT)),
         /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::INT),
         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
-    set<shared_ptr<Abstract>> requisites{Factory::EmptySet(BType::INT)};
+    const PreRequisites requisites{Factory::EmptySet(BType::INT)};
     result = make(BConstruct::Expression::Max::m_cache, script, requisites);
   }
   return result;

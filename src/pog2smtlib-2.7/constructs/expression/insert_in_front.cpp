@@ -43,7 +43,7 @@ namespace Expression {
 MapUnaryBType<Insert_In_Front> Insert_In_Front::m_cache;
 
 Insert_In_Front::Insert_In_Front(const BType& T, const std::string& script,
-                                 set<shared_ptr<Abstract>>& requisites)
+                                 const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "→") {}
 
 };  // namespace Expression
@@ -61,7 +61,7 @@ shared_ptr<Abstract> Factory::Insert_In_Front(const BType& T) {
                     /*3*/ symbol(ZxT),
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
                     /*5*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {
+    const PreRequisites requisites = {
         Factory::SetMembership(ZxT),
     };
     result = make(BConstruct::Expression::Insert_In_Front::m_cache, T, script,

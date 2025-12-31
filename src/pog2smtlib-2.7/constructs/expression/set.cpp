@@ -44,8 +44,7 @@ namespace Expression {
 
 MapUnaryBType<Set> Set::m_cache;
 
-Set::Set(const BType& T, const string& script,
-         set<shared_ptr<Abstract>>& requisites)
+Set::Set(const BType& T, const string& script, const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "_set") {}
 
 };  // namespace Expression
@@ -61,7 +60,7 @@ std::shared_ptr<Abstract> Factory::Set(const BType& T) {
                     /*2*/ smtSymbol(Expr::NaryOp::Set, T),
                     /*3*/ symbol(PT),
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(T)};
+    const PreRequisites requisites{Factory::SetMembership(T)};
     result = make(BConstruct::Expression::Set::m_cache, T, script, requisites);
   }
   return result;

@@ -20,8 +20,7 @@ namespace BConstruct::Expression {
 
 class Predecessor : public Uniform {
  public:
-  explicit Predecessor(const std::string &,
-                       std::set<std::shared_ptr<Abstract>> &);
+  explicit Predecessor(const std::string &, const PreRequisites &);
   virtual ~Predecessor() = default;
 
  private:

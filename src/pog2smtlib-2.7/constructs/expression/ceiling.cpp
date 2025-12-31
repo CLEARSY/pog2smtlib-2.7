@@ -37,8 +37,7 @@ namespace Expression {
 
 std::shared_ptr<Ceiling> Ceiling::m_cache;
 
-Ceiling::Ceiling(const std::string &script,
-                 set<shared_ptr<Abstract>> &requisites)
+Ceiling::Ceiling(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "ceiling") {}
 
 };  // namespace Expression
@@ -48,8 +47,8 @@ shared_ptr<Abstract> Factory::Ceiling() {
   if (!result) {
     const string script = fmt::format(SCRIPT, smtSymbol(Expr::UnaryOp::Ceiling),
                                       symbol(BType::REAL), symbol(BType::INT));
-    set<shared_ptr<Abstract>> requisites{};
-    result = make(BConstruct::Expression::Ceiling::m_cache, script, requisites);
+    result = make(BConstruct::Expression::Ceiling::m_cache, script,
+                  BConstruct::Abstract::NoPrerequisites);
   }
   return result;
 }

@@ -20,8 +20,7 @@ namespace BConstruct::Expression {
 
 class RExponentiation : public Uniform {
  public:
-  explicit RExponentiation(const std::string &,
-                           std::set<std::shared_ptr<Abstract>> &);
+  explicit RExponentiation(const std::string &, const PreRequisites &);
   virtual ~RExponentiation() = default;
 
  private:

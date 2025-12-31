@@ -43,7 +43,7 @@ namespace Expression {
 MapUnaryBType<Restrict_At_Tail> Restrict_At_Tail::m_cache;
 
 Restrict_At_Tail::Restrict_At_Tail(const BType& T, const std::string& script,
-                                   set<shared_ptr<Abstract>>& requisites)
+                                   const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "↓") {}
 
 };  // namespace Expression
@@ -64,9 +64,9 @@ shared_ptr<Abstract> Factory::Restrict_At_Tail(const BType& T) {
         /*6*/ smtSymbol(Expr::BinaryOp::Interval),
         /*7*/ smtSymbol(Expr::UnaryOp::Size, T),
         /*8*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {
-        Factory::SetMembership(ZxT), Factory::SetMembership(BType::INT),
-        Factory::Interval(), Factory::Size(T)};
+    const PreRequisites requisites = {Factory::SetMembership(ZxT),
+                                      Factory::SetMembership(BType::INT),
+                                      Factory::Interval(), Factory::Size(T)};
     result = make(BConstruct::Expression::Restrict_At_Tail::m_cache, T, script,
                   requisites);
   }

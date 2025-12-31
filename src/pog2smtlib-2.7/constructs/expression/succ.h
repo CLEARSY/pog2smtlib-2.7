@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Succ : public Uniform {
  public:
-  explicit Succ(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Succ(const std::string &, const PreRequisites &);
   virtual ~Succ() = default;
 
  private:

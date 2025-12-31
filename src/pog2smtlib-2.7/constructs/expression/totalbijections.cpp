@@ -45,7 +45,7 @@ MapBinaryBType<Total_Bijection> Total_Bijection::m_cache;
 
 Total_Bijection::Total_Bijection(const BType &U, const BType &V,
                                  const string &script,
-                                 set<shared_ptr<Abstract>> &requisites)
+                                 const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, ">->>") {}
 
 };  // namespace Expression
@@ -70,8 +70,8 @@ shared_ptr<Abstract> Factory::Total_Bijection(const BType &U, const BType &V) {
         /*7*/ symbolInner(V),
         /*8*/ symbolInner(UxV),
         /*9*/ smtSymbol(Expr::BinaryOp::Total_Functions, U, V));
-    set<shared_ptr<Abstract>> requisites = {Factory::Total_Function(U, V),
-                                            Factory::Bijection(U, V)};
+    const PreRequisites requisites = {Factory::Total_Function(U, V),
+                                      Factory::Bijection(U, V)};
     result = make(BConstruct::Expression::Total_Bijection::m_cache, U, V,
                   script, requisites);
   }

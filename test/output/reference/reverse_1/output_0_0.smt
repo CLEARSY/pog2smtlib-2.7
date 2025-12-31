@@ -29,14 +29,6 @@
          (lambda ((x |(POW Z x Z)|))
            (|set.in (Z x POW Z)| (maplet (snd x) (fst x)) R)))))
   :named |def.reverse (Z x POW Z)|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
-(assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
 (declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
 (assert (!
@@ -45,6 +37,14 @@
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (declare-const |set.empty (POW Z x Z)| |POW (POW Z x Z)|)
 (assert (!
   (forall ((e |(POW Z x Z)|)) (not (|set.in (POW Z x Z)| e |set.empty (POW Z x Z)|)))

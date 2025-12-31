@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Domain : public BinaryBType {
  public:
   explicit Domain(const BType &U, const BType &V, const std::string &,
-                  std::set<std::shared_ptr<Abstract>> &);
+                  const PreRequisites &);
   virtual ~Domain() = default;
 
  private:

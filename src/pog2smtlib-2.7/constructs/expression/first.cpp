@@ -41,7 +41,7 @@ namespace Expression {
 MapUnaryBType<First> First::m_cache;
 
 First::First(const BType& T, const std::string& script,
-             set<shared_ptr<Abstract>>& requisites)
+             const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "first") {}
 
 };  // namespace Expression
@@ -57,7 +57,7 @@ shared_ptr<Abstract> Factory::First(const BType& T) {
                     /*2*/ symbol(T),
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
                     /*4*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(ZxT)};
+    const PreRequisites requisites = {Factory::SetMembership(ZxT)};
     result =
         make(BConstruct::Expression::First::m_cache, T, script, requisites);
   }

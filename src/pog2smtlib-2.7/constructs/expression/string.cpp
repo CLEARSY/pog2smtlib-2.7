@@ -28,7 +28,7 @@ namespace Expression {
 
 std::shared_ptr<String> String::m_cache;
 
-String::String(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+String::String(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "STRING") {}
 
 };  // namespace Expression
@@ -37,7 +37,7 @@ shared_ptr<Abstract> Factory::String() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::String::m_cache);
   if (!result) {
     const string script = Expression::universeScript("STRING", BType::STRING);
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::STRING)};
+    const PreRequisites requisites{Factory::SetMembership(BType::STRING)};
     result = make(BConstruct::Expression::String::m_cache, script, requisites);
   }
   return result;

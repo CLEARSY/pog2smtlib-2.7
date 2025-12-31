@@ -46,7 +46,7 @@ namespace Expression {
 MapBinaryBType<Function> Function::m_cache;
 
 Function::Function(const BType &U, const BType &V, const string &script,
-                   set<shared_ptr<Abstract>> &requisites)
+                   const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "_func") {}
 
 };  // namespace Expression
@@ -71,9 +71,9 @@ shared_ptr<Abstract> Factory::Function(const BType &U, const BType &V) {
                     /*7*/ symbol(UxV),
                     /*8*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
                     /*9*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(PUxV),
-                                            Factory::Equality(U),
-                                            Factory::Equality(V)};
+    const PreRequisites requisites = {Factory::SetMembership(PUxV),
+                                      Factory::Equality(U),
+                                      Factory::Equality(V)};
     result = make(BConstruct::Expression::Function::m_cache, U, V, script,
                   requisites);
   }

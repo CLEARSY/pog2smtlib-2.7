@@ -44,7 +44,7 @@ MapBinaryBType<Quantified_Union> Quantified_Union::m_cache;
 
 Quantified_Union::Quantified_Union(const BType& U, const BType& V,
                                    const string& script,
-                                   set<shared_ptr<Abstract>>& requisites)
+                                   const PreRequisites& requisites)
     : BinaryBType(U, V, script, requisites, "UNION") {}
 
 };  // namespace Expression
@@ -64,8 +64,7 @@ std::shared_ptr<Abstract> Factory::Quantified_Union(const BType& U,
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, V),
                     /*5*/ symbol(V),
                     /*6*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(V),
-                                         Factory::Set(U)};
+    const PreRequisites requisites{Factory::SetMembership(V), Factory::Set(U)};
     result = make(BConstruct::Expression::Quantified_Union::m_cache, U, V,
                   script, requisites);
   }

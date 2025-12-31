@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Size : public UnaryBType {
  public:
   explicit Size(const BType &, const std::string &script,
-                std::set<std::shared_ptr<Abstract>> &requisites);
+                const PreRequisites &requisites);
   virtual ~Size() = default;
 
  private:

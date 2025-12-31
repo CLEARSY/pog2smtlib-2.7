@@ -43,7 +43,7 @@ namespace Expression {
 MapUnaryBType<Insert_At_Tail> Insert_At_Tail::m_cache;
 
 Insert_At_Tail::Insert_At_Tail(const BType& T, const std::string& script,
-                               set<shared_ptr<Abstract>>& requisites)
+                               const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "←") {}
 
 };  // namespace Expression
@@ -62,7 +62,7 @@ shared_ptr<Abstract> Factory::Insert_At_Tail(const BType& T) {
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
                     /*5*/ smtSymbol(Expr::UnaryOp::Size, T),
                     /*6*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {
+    const PreRequisites requisites = {
         Factory::SetMembership(ZxT),
         Factory::Size(T),
     };

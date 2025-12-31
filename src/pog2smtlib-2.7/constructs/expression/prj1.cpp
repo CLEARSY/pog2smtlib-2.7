@@ -45,7 +45,7 @@ namespace Expression {
 MapBinaryBType<Prj1> Prj1::m_cache;
 
 Prj1::Prj1(const BType &U, const BType &V, const string &script,
-           set<shared_ptr<Abstract>> &requisites)
+           const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "prj1") {}
 
 };  // namespace Expression
@@ -69,7 +69,7 @@ shared_ptr<Abstract> Factory::Prj1(const BType &U, const BType &V) {
         /*6*/ smtSymbol(Pred::ComparisonOp::Membership, U),
         /*7*/ smtSymbol(Pred::ComparisonOp::Membership, V),
         /*8*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxVxU)};
+    const PreRequisites requisites = {Factory::SetMembership(UxVxU)};
     result =
         make(BConstruct::Expression::Prj1::m_cache, U, V, script, requisites);
   }

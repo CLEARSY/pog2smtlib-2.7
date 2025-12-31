@@ -45,7 +45,7 @@ namespace Predicate {
 MapUnaryBType<Inclusion> Inclusion::m_cache;
 
 Inclusion::Inclusion(const BType& T, const std::string& script,
-                     set<shared_ptr<Abstract>>& requisites)
+                     const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "<:") {}
 
 };  // namespace Predicate
@@ -59,7 +59,7 @@ shared_ptr<Abstract> Factory::Inclusion(const BType& T) {
     const string script = fmt::format(
         SCRIPT, smtSymbol(Pred::ComparisonOp::Subset, T), symbol(PT),
         symbolInner(T), smtSymbol(Pred::ComparisonOp::Membership, T));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(T)};
+    const PreRequisites requisites = {Factory::SetMembership(T)};
     result =
         make(BConstruct::Predicate::Inclusion::m_cache, T, script, requisites);
   }

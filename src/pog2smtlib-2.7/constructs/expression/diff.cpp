@@ -42,7 +42,7 @@ namespace Expression {
 MapUnaryBType<Difference> Difference::m_cache;
 
 Difference::Difference(const BType& T, const string& script,
-                       set<shared_ptr<Abstract>>& requisites)
+                       const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "-") {}
 
 };  // namespace Expression
@@ -57,7 +57,7 @@ std::shared_ptr<Abstract> Factory::Difference(const BType& T) {
                     /*1*/ symbol(PT),
                     /*2*/ smtSymbol(Pred::ComparisonOp::Membership, T),
                     /*3*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(T)};
+    const BConstruct::PreRequisites requisites{Factory::SetMembership(T)};
     result = make(BConstruct::Expression::Difference::m_cache, T, script,
                   requisites);
   }

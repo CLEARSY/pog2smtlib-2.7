@@ -41,7 +41,7 @@ namespace Expression {
 MapUnaryBType<Size> Size::m_cache;
 
 Size::Size(const BType& T, const std::string& script,
-           set<shared_ptr<Abstract>>& requisites)
+           const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "size") {}
 
 };  // namespace Expression
@@ -57,7 +57,7 @@ shared_ptr<Abstract> Factory::Size(const BType& T) {
                     /*2*/ symbol(BType::INT),
                     /*3*/ smtSymbol(Expr::UnaryOp::Cardinality, ZxT),
                     /*4*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {Factory::Card(ZxT)};
+    const PreRequisites requisites = {Factory::Card(ZxT)};
     result = make(BConstruct::Expression::Size::m_cache, T, script, requisites);
   }
   return result;

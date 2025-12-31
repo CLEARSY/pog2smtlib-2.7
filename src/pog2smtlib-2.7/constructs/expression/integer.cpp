@@ -28,8 +28,7 @@ namespace Expression {
 
 std::shared_ptr<Integer> Integer::m_cache;
 
-Integer::Integer(const std::string &script,
-                 set<shared_ptr<Abstract>> &requisites)
+Integer::Integer(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "INTEGER") {}
 
 };  // namespace Expression
@@ -38,7 +37,7 @@ shared_ptr<Abstract> Factory::Integer() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Integer::m_cache);
   if (!result) {
     const string script = Expression::universeScript("INTEGER", BType::INT);
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::INT)};
+    const PreRequisites requisites{Factory::SetMembership(BType::INT)};
     result = make(BConstruct::Expression::Integer::m_cache, script, requisites);
   }
   return result;

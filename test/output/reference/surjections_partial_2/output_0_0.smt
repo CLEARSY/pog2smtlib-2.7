@@ -39,18 +39,18 @@
       (= (|set.in (Z x Z)| (maplet x1 x2) (|set.product Z Z| s1 s2))
         (and (|set.in Z| x1 s1) (|set.in Z| x2 s2)))))
   :named |ax.set.in.product.2 (Z x Z)|))
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (=
-      (= s t)
-      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
-  :named |ax.set.eq Z|))
 (declare-fun |rel.range Z Z| (|POW (Z x Z)|) |POW Z|)
 (assert (!
   (forall ((r |POW (Z x Z)|) (e |Z|))
     (= (|set.in Z| e (|rel.range Z Z| r))
        (exists ((x |Z|)) (|set.in (Z x Z)| (maplet x e) r))))
   :named |ax:set.in.range (Z x Z)|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
+  :named |ax.set.eq Z|))
 (declare-fun |relations Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((X |POW Z|) (Y |POW Z|))
@@ -83,22 +83,6 @@
               (|set.in POW (Z x Z)| f (|functions Z Z| e1 e2))))))
   :named |ax:def.pfun (Z x Z)|)
 )
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
-(assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
-(declare-fun |surjections.partial Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
-(assert (!
-  (forall ((e1 |POW Z|) (e2 |POW Z|))
-    (forall ((f |POW (Z x Z)|))
-      (= (|set.in POW (Z x Z)| f (|surjections.partial Z Z| e1 e2))
-         (and (|set.in POW (Z x Z)| f (|functions.partial Z Z| e1 e2))
-              (|set.in POW (Z x Z)| f (|surjections Z Z| e1 e2))))))
-  :named |ax:def.psurj (Z x Z)|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!
@@ -107,6 +91,22 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
+(declare-fun |surjections.partial Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
+(assert (!
+  (forall ((e1 |POW Z|) (e2 |POW Z|))
+    (forall ((f |POW (Z x Z)|))
+      (= (|set.in POW (Z x Z)| f (|surjections.partial Z Z| e1 e2))
+         (and (|set.in POW (Z x Z)| f (|functions.partial Z Z| e1 e2))
+              (|set.in POW (Z x Z)| f (|surjections Z Z| e1 e2))))))
+  :named |ax:def.psurj (Z x Z)|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (assert (!
   (not
     (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 0 1))(= _c0 (maplet 1 2))(= _c0 (maplet 2 2))(= _c0 (maplet 3 0))))) (|surjections.partial Z Z| (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)(= _c0 2)(= _c0 3)(= _c0 4)(= _c0 5)))) (|set.intent Z| (lambda ((_c0 |Z|)) (or (= _c0 0)(= _c0 1)(= _c0 2)))))))

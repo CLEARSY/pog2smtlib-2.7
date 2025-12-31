@@ -37,7 +37,7 @@ namespace Expression {
 
 shared_ptr<Maxint> Maxint::m_cache;
 
-Maxint::Maxint(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Maxint::Maxint(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "MAXINT") {}
 
 };  // namespace Expression
@@ -48,7 +48,7 @@ shared_ptr<Abstract> Factory::Maxint() {
     const string script =
         fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::Visitor::EConstant::MaxInt),
                     /*1*/ symbol(BType::INT), /*2*/ Parameters::MAXINT);
-    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT)};
+    const PreRequisites requisites{Factory::Type(BType::INT)};
     result = make(BConstruct::Expression::Maxint::m_cache, script, requisites);
   }
   return result;

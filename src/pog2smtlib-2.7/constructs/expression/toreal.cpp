@@ -37,7 +37,7 @@ namespace Expression {
 
 std::shared_ptr<ToReal> ToReal::m_cache;
 
-ToReal::ToReal(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+ToReal::ToReal(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "to_real") {}
 
 };  // namespace Expression
@@ -47,7 +47,7 @@ shared_ptr<Abstract> Factory::ToReal() {
   if (!result) {
     const string script = fmt::format(SCRIPT, smtSymbol(Expr::UnaryOp::Real),
                                       symbol(BType::INT), symbol(BType::REAL));
-    set<shared_ptr<Abstract>> requisites{};
+    const PreRequisites requisites{};
     result = make(BConstruct::Expression::ToReal::m_cache, script, requisites);
   }
   return result;

@@ -41,7 +41,7 @@ namespace Expression {
 MapBinaryBType<Evaluation> Evaluation::m_cache;
 
 Evaluation::Evaluation(const BType &U, const BType &V, const string &script,
-                       set<shared_ptr<Abstract>> &requisites)
+                       const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "_eval") {}
 
 };  // namespace Expression
@@ -59,7 +59,7 @@ shared_ptr<Abstract> Factory::Evaluation(const BType &U, const BType &V) {
                     /*3*/ symbol(V),
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
                     /*5*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV)};
+    const PreRequisites requisites = {Factory::SetMembership(UxV)};
     result = make(BConstruct::Expression::Evaluation::m_cache, U, V, script,
                   requisites);
   }

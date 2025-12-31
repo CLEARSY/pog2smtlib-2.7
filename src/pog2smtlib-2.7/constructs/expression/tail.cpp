@@ -38,7 +38,7 @@ namespace Expression {
 MapUnaryBType<Tail> Tail::m_cache;
 
 Tail::Tail(const BType& T, const std::string& script,
-           set<shared_ptr<Abstract>>& requisites)
+           const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "tail") {}
 
 };  // namespace Expression
@@ -52,7 +52,7 @@ shared_ptr<Abstract> Factory::Tail(const BType& T) {
         fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Tail, T),
                     /*1*/ symbol(PZxT),
                     /*2*/ smtSymbol(Expr::BinaryOp::Tail_Restriction, T));
-    set<shared_ptr<Abstract>> requisites = {Factory::Restrict_At_Tail(T)};
+    const PreRequisites requisites = {Factory::Restrict_At_Tail(T)};
     result = make(BConstruct::Expression::Tail::m_cache, T, script, requisites);
   }
   return result;

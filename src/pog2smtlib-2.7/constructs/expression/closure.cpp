@@ -43,7 +43,7 @@ namespace Expression {
 MapUnaryBType<Closure> Closure::m_cache;
 
 Closure::Closure(const BType& T, const string& script,
-                 set<shared_ptr<Abstract>>& requisites)
+                 const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "closure") {}
 
 };  // namespace Expression
@@ -61,7 +61,7 @@ std::shared_ptr<Abstract> Factory::Closure(const BType& T) {
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, TxT),
                     /*4*/ symbolInner(T),
                     /*5*/ smtSymbol(Expr::UnaryOp::Transitive_Closure, T));
-    set<shared_ptr<Abstract>> requisites{Factory::Closure1(T)};
+    const BConstruct::PreRequisites requisites{Factory::Closure1(T)};
     result =
         make(BConstruct::Expression::Closure::m_cache, T, script, requisites);
   }

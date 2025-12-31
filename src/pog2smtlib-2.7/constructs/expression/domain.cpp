@@ -42,7 +42,7 @@ namespace Expression {
 MapBinaryBType<Domain> Domain::m_cache;
 
 Domain::Domain(const BType &U, const BType &V, const std::string &script,
-               std::set<std::shared_ptr<Abstract>> &requisites)
+               const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "dom") {}
 };  // namespace Expression
 
@@ -63,8 +63,8 @@ shared_ptr<Abstract> Factory::Domain(const BType &U, const BType &V) {
                     /*5*/ symbolInner(UxV),
                     /*6*/ symbolInner(U),
                     /*7*/ symbolInner(V));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(UxV),
-                                         Factory::SetMembership(U)};
+    const BConstruct::PreRequisites requisites{Factory::SetMembership(UxV),
+                                               Factory::SetMembership(U)};
     result =
         make(BConstruct::Expression::Domain::m_cache, U, V, script, requisites);
   }

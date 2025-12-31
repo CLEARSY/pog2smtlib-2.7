@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Maxint : public Uniform {
  public:
-  explicit Maxint(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Maxint(const std::string &, const PreRequisites &);
   virtual ~Maxint() = default;
 
  private:

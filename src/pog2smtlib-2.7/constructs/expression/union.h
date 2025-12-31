@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Union : public UnaryBType {
  public:
   explicit Union(const BType& T, const std::string& script,
-                 std::set<std::shared_ptr<Abstract>>& requisites);
+                 const PreRequisites& requisites);
   virtual ~Union() = default;
 
  private:

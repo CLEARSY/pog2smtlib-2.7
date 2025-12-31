@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class EmptySet : public UnaryBType {
  public:
   explicit EmptySet(const BType& T, const std::string& script,
-                    std::set<std::shared_ptr<Abstract>>& requisites);
+                    const PreRequisites& requisites);
   virtual ~EmptySet() = default;
 
  private:

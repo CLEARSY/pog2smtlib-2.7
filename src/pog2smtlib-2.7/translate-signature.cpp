@@ -17,11 +17,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 #include "translate-signature.h"
 
+#include <map>
 #include <queue>
 #include <stack>
+#include <stdexcept>
 #include <vector>
 
-#include "bconstruct-utils.h"
 #include "bconstruct.h"
 #include "cc-compatibility.h"
 #include "pog-translation.h"
@@ -29,14 +30,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "symbols.h"
 
 using std::make_shared;
+using std::map;
 using std::queue;
+using std::set;
 using std::shared_ptr;
 using std::stack;
-using std::unordered_set;
 using std::vector;
 
 using BConstructPtr = shared_ptr<BConstruct::Abstract>;
 
+/**
+ * @brief Collect and topologically sort constructs and their prerequisites.
+ *
+ * Given an initial stack of constructs to process and a set of already
+ * translated constructs (context), this function walks the graph of
+ * prerequisites reachable from the initial stack, excluding any construct
+ * present in @p context, and returns a new stack containing all discovered
+ * constructs in an order such that prerequisites appear before constructs
+ * that depend on them.
+ *
+ * The function mutates the input stack (@p todo) while exploring it.
+ *
+ * @param[in,out] todo  A stack of constructs to explore. Elements are popped
+ *                     during traversal; after the call the input stack may be
+ *                     partially or fully consumed.
+ * @param[in]     context  Set of constructs already translated; these are
+ *                         ignored and not included in the result.
+ * @return A stack of constructs ordered so that popping and emitting each
+ *         construct's script will ensure prerequisites are emitted first.
+ *
+ * @note The function uses Kahn's algorithm (in-degree queue) to produce a
+ *       topological order. If there are cycles in the reachable graph, this
+ *       implementation detects them and throws a std::runtime_error listing
+ *       the constructs involved. The detection preserves the overall
+ *       complexity of the algorithm.
+ *
+ * @complexity O(N + E) time and O(N + E) extra space where N is the number of
+ *             discovered constructs and E the number of prerequisite edges.
+ */
 static stack<BConstructPtr> sortConstructsAndPrerequisites(
     stack<BConstructPtr> &todo, const BConstruct::Context &context);
 
@@ -137,11 +168,9 @@ std::string translate(const Signature &signature,
 
 static stack<BConstructPtr> sortConstructsAndPrerequisites(
     stack<BConstructPtr> &init, const BConstruct::Context &context) {
-  std::set<BConstructPtr, BConstruct::PtrCompare> all;
+  set<BConstructPtr, BConstruct::PtrCompare> all;
   std::function<void()> sortConstructsRec;
-  std::unordered_map<BConstructPtr, int, BConstruct::PtrHash,
-                     BConstruct::PtrEqual>
-      in_degree;
+  map<BConstructPtr, int, BConstruct::PtrCompare> in_degree;
 
   sortConstructsRec = [&]() {
     if (init.empty()) return;
@@ -166,11 +195,13 @@ static stack<BConstructPtr> sortConstructsAndPrerequisites(
 
   for (const auto &construct : all) {
     for (const auto &pre : construct->prerequisites()) {
-      in_degree[pre]++;
+      if (all.find(pre) != all.end()) {
+        in_degree[pre]++;
+      }
     }
   }
 
-  std::queue<BConstructPtr> q;
+  queue<BConstructPtr> q;
   for (const auto &[construct, degree] : in_degree) {
     if (degree == 0) {
       q.push(construct);
@@ -183,11 +214,33 @@ static stack<BConstructPtr> sortConstructsAndPrerequisites(
     sorted.push(current);
 
     for (const auto &pre : current->prerequisites()) {
-      --in_degree[pre];
-      if (in_degree[pre] == 0) {
+      auto it = in_degree.find(pre);
+      if (it == in_degree.end()) continue;
+      if (--(it->second) == 0) {
         q.push(pre);
       }
     }
+  }
+
+  // If not all discovered nodes were processed then there is at least one
+  // cycle in the reachable subgraph. Collect nodes still having positive
+  // in-degree and report them.
+  if (sorted.size() != in_degree.size()) {
+    vector<string> cycle_nodes;
+    for (const auto &kv : in_degree) {
+      if (kv.second > 0) {
+        cycle_nodes.push_back(kv.first->to_string());
+      }
+    }
+    std::string joined;
+    if (cycle_nodes.empty()) {
+      joined = "<unknown>";
+    } else {
+      joined = fmt::format("{}", fmt::join(cycle_nodes, ", "));
+    }
+    std::string msg =
+        fmt::format("Cycle detected in construct prerequisites: {}", joined);
+    throw std::runtime_error(msg);
   }
 
   return sorted;

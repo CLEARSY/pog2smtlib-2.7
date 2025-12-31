@@ -45,13 +45,13 @@
               (= (fst p1) (fst p2))))))
   :named |ax:set.in.injections ((REAL x REAL) x Z)|))
 (define-sort |POW POW (REAL x REAL)| () (P |POW (REAL x REAL)|))
+(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
-(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |bijections (REAL x REAL) Z| (|POW (REAL x REAL)| |POW Z|) |POW POW ((REAL x REAL) x Z)|)
 (assert (!
   (forall ((X |POW (REAL x REAL)|) (Y |POW Z|))
@@ -92,14 +92,6 @@
       (= (|set.in (REAL x REAL)| x (|set.intent (REAL x REAL)| p))
          (p x))))
   :named |ax:set.in.intent (REAL x REAL)|))
-(define-sort |? REAL| () (-> |REAL| Bool))
-(declare-const |set.intent REAL| (-> |? REAL| |POW REAL|))
-(assert (!
-  (forall ((p |? REAL|))
-    (forall ((x |REAL|))
-      (= (|set.in REAL| x (|set.intent REAL| p))
-         (p x))))
-  :named |ax:set.in.intent REAL|))
 (declare-fun |finite sub-sets (REAL x REAL)| (|POW (REAL x REAL)|) |POW POW (REAL x REAL)|)
 (assert (!
   (forall ((s |POW (REAL x REAL)|) (t |POW (REAL x REAL)|))
@@ -108,6 +100,14 @@
          (|set.in POW (REAL x REAL)| s (|sub-sets (REAL x REAL)| t))
          (not (= (|card (REAL x REAL)| s) Infinite)))))
   :named |ax.finite sub-sets (REAL x REAL)|))
+(define-sort |? REAL| () (-> |REAL| Bool))
+(declare-const |set.intent REAL| (-> |? REAL| |POW REAL|))
+(assert (!
+  (forall ((p |? REAL|))
+    (forall ((x |REAL|))
+      (= (|set.in REAL| x (|set.intent REAL| p))
+         (p x))))
+  :named |ax:set.in.intent REAL|))
 (assert (!
   (not
     (|set.in POW (REAL x REAL)| (|set.intent (REAL x REAL)| (lambda ((_c0 |(REAL x REAL)|))     (and

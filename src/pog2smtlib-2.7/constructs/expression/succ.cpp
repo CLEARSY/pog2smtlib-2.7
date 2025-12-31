@@ -44,7 +44,7 @@ namespace Expression {
 
 std::shared_ptr<Succ> Succ::m_cache;
 
-Succ::Succ(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Succ::Succ(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "succ") {}
 
 };  // namespace Expression
@@ -59,7 +59,7 @@ shared_ptr<Abstract> Factory::Succ() {
         /*2*/
         smtSymbol(Pred::ComparisonOp::Membership, xZZ),
         /*3*/ symbol(xZZ));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(xZZ)};
+    const PreRequisites requisites{Factory::SetMembership(xZZ)};
     result = make(BConstruct::Expression::Succ::m_cache, script, requisites);
   }
   return result;

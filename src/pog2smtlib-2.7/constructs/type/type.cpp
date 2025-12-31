@@ -40,7 +40,7 @@ namespace Type {
 MapUnaryBType<Type> Type::m_cache;
 
 Type::Type(const BType &T, const std::string &script,
-           std::set<std::shared_ptr<Abstract>> &requisites)
+           const PreRequisites &requisites)
     : UnaryBType(T, script, requisites, "_type") {}
 };  // namespace Type
 
@@ -48,7 +48,7 @@ shared_ptr<Abstract> Factory::Type(const BType &T) {
   shared_ptr<Abstract> result = find(BConstruct::Type::Type::m_cache, T);
   if (!result) {
     std::string script = "";
-    set<shared_ptr<Abstract>> requisites = {};
+    PreRequisites requisites = {};
 
     auto enumeratedValues = [](const std::vector<std::string> &values) {
       std::string result;

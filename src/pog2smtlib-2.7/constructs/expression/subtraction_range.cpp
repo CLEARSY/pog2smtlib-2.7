@@ -44,7 +44,7 @@ MapBinaryBType<Subtraction_Range> Subtraction_Range::m_cache;
 
 Subtraction_Range::Subtraction_Range(const BType &U, const BType &V,
                                      const string &script,
-                                     set<shared_ptr<Abstract>> &requisites)
+                                     const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "|>>") {}
 
 };  // namespace Expression
@@ -65,7 +65,7 @@ shared_ptr<Abstract> Factory::Subtraction_Range(const BType &U,
         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
         /*5*/ smtSymbol(Pred::ComparisonOp::Membership, V),
         /*6*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV)};
+    const PreRequisites requisites = {Factory::SetMembership(UxV)};
     result = make(BConstruct::Expression::Subtraction_Range::m_cache, U, V,
                   script, requisites);
   }

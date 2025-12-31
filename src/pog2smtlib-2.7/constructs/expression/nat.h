@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Nat : public Uniform {
  public:
-  explicit Nat(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Nat(const std::string &, const PreRequisites &);
   virtual ~Nat() = default;
 
  private:

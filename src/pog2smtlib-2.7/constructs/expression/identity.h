@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Identity : public UnaryBType {
  public:
   explicit Identity(const BType& T, const std::string& script,
-                    std::set<std::shared_ptr<Abstract>>& requisites);
+                    const PreRequisites& requisites);
   virtual ~Identity() = default;
 
  private:

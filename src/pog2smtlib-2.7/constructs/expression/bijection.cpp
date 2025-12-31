@@ -45,7 +45,7 @@ namespace Expression {
 MapBinaryBType<Bijection> Bijection::m_cache;
 
 Bijection::Bijection(const BType &U, const BType &V, const string &script,
-                     set<shared_ptr<Abstract>> &requisites)
+                     const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "_bij") {}
 
 };  // namespace Expression
@@ -68,9 +68,9 @@ shared_ptr<Abstract> Factory::Bijection(const BType &U, const BType &V) {
                     /*5*/ symbol(PUxV),
                     /*6*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
                     /*7*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(PUxV),
-                                            Factory::Injection(U, V),
-                                            Factory::Surjection(U, V)};
+    const BConstruct::PreRequisites requisites = {Factory::SetMembership(PUxV),
+                                                  Factory::Injection(U, V),
+                                                  Factory::Surjection(U, V)};
     result = make(BConstruct::Expression::Bijection::m_cache, U, V, script,
                   requisites);
   }

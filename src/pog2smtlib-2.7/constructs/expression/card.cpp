@@ -43,7 +43,7 @@ namespace Expression {
 MapUnaryBType<Card> Card::m_cache;
 
 Card::Card(const BType& T, const string& script,
-           set<shared_ptr<Abstract>>& requisites)
+           const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "card") {}
 
 };  // namespace Expression
@@ -64,7 +64,7 @@ std::shared_ptr<Abstract> Factory::Card(const BType& T) {
                     /*4*/ symbolInner(T),
                     /*5*/ symbolInner(BType::INT),
                     /*6*/ smtSymbol(Expr::BinaryOp::Interval));
-    set<shared_ptr<Abstract>> requisites{
+    const BConstruct::PreRequisites requisites{
         Factory::SetMembership(TxZ), Factory::Bijection(T, BType::INT),
         Factory::Interval(), Factory::Cardinals()};
     result = make(BConstruct::Expression::Card::m_cache, T, script, requisites);

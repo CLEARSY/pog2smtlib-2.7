@@ -145,13 +145,13 @@
          (and (|set.in POW (Z x Z)| f (|injections Z Z| X Y))
               (|set.in POW (Z x Z)| f (|surjections Z Z| X Y))))))
   :named |ax:set.in.bijections (Z x Z)|))
+(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
-(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |bijections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|))
@@ -191,14 +191,6 @@
         (exists ((f |POW ((Z x Z) x Z)|))
           (|set.in POW ((Z x Z) x Z)| f (|bijections (Z x Z) Z| s (|interval| 1 (Value (|card (Z x Z)| s))))))))
   :named |ax.card.definition (Z x Z)|))
-(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
-(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
-(assert (!
-  (forall ((p |? (Z x Z)|))
-    (forall ((x |(Z x Z)|))
-      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
-         (p x))))
-  :named |ax:set.in.intent (Z x Z)|))
 (declare-fun |seq Z| (|POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((E |POW Z|) (s |POW (Z x Z)|))
@@ -212,6 +204,14 @@
       (|seq Z| E)
       (|functions.total Z Z| (|interval| 1 (Value (|card Z| E))) E)))
   :named |ax.seq.is.total.fun Z|))
+(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
+(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
+(assert (!
+  (forall ((p |? (Z x Z)|))
+    (forall ((x |(Z x Z)|))
+      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
+         (p x))))
+  :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (not
     (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4))))) (|seq Z| (|rel.range Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4)))))))))

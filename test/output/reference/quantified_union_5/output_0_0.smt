@@ -20,6 +20,12 @@
       (= (|set.in (Z x POW POW Z)| x (|set.intent (Z x POW POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW POW Z)|))
+(declare-fun |UNION (Z x POW POW Z) POW Z| (|? (Z x POW POW Z)| (-> |(Z x POW POW Z)| |POW POW Z|)) |POW POW Z|)
+(assert (!
+  (forall ((P |? (Z x POW POW Z)|)(E (-> |(Z x POW POW Z)| |POW POW Z|))(x |POW Z|))
+    (= (|set.in POW Z| x (|UNION (Z x POW POW Z) POW Z| P E))
+       (exists ((e |(Z x POW POW Z)|)) (and (P e) (|set.in POW Z| x (E e))))))
+  :named |ax.set.in.quantified.union ((Z x POW POW Z) x POW Z)|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -42,12 +48,6 @@
       (= (|set.in POW Z| x (|set.intent POW Z| p))
          (p x))))
   :named |ax:set.in.intent POW Z|))
-(declare-fun |UNION (Z x POW POW Z) POW Z| (|? (Z x POW POW Z)| (-> |(Z x POW POW Z)| |POW POW Z|)) |POW POW Z|)
-(assert (!
-  (forall ((P |? (Z x POW POW Z)|)(E (-> |(Z x POW POW Z)| |POW POW Z|))(x |POW Z|))
-    (= (|set.in POW Z| x (|UNION (Z x POW POW Z) POW Z| P E))
-       (exists ((e |(Z x POW POW Z)|)) (and (P e) (|set.in POW Z| x (E e))))))
-  :named |ax.set.in.quantified.union ((Z x POW POW Z) x POW Z)|))
 (assert (!
   (not
     (= (|UNION (Z x POW POW Z) POW Z| (lambda ((_c0 |(Z x POW POW Z)|))     (and

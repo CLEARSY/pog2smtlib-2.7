@@ -42,7 +42,7 @@ namespace Expression {
 MapUnaryBType<Injective_Seq1> Injective_Seq1::m_cache;
 
 Injective_Seq1::Injective_Seq1(const BType& T, const std::string& script,
-                               set<shared_ptr<Abstract>>& requisites)
+                               const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "iseq1") {}
 
 };  // namespace Expression
@@ -64,9 +64,9 @@ shared_ptr<Abstract> Factory::Injective_Seq1(const BType& T) {
         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, PZxT),
         /*5*/ smtSymbol(Expr::UnaryOp::Injective_Sequences, T),
         /*6*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {Factory::Injective_Seq(T),
-                                            Factory::SetMembership(PZxT),
-                                            Factory::EmptySeq(T)};
+    const PreRequisites requisites = {Factory::Injective_Seq(T),
+                                      Factory::SetMembership(PZxT),
+                                      Factory::EmptySeq(T)};
 
     result = make(BConstruct::Expression::Injective_Seq1::m_cache, T, script,
                   requisites);

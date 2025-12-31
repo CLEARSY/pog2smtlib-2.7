@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Natural : public Uniform {
  public:
-  explicit Natural(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Natural(const std::string &, const PreRequisites &);
   virtual ~Natural() = default;
 
  private:

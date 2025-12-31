@@ -45,7 +45,7 @@ namespace Expression {
 MapBinaryBType<Surjection> Surjection::m_cache;
 
 Surjection::Surjection(const BType &U, const BType &V, const string &script,
-                       set<shared_ptr<Abstract>> &requisites)
+                       const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "_surj") {}
 
 };  // namespace Expression
@@ -70,9 +70,9 @@ shared_ptr<Abstract> Factory::Surjection(const BType &U, const BType &V) {
                     /*6*/ smtSymbol(Pred::ComparisonOp::Membership, PxUV),
                     /*7*/ smtSymbol(Expr::UnaryOp::Range, U, V),
                     /*8*/ symbolInner(xUV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(PxUV),
-                                            Factory::Equality(PU),
-                                            Factory::Range(U, V)};
+    const PreRequisites requisites = {Factory::SetMembership(PxUV),
+                                      Factory::Equality(PU),
+                                      Factory::Range(U, V)};
     result = make(BConstruct::Expression::Surjection::m_cache, U, V, script,
                   requisites);
   }

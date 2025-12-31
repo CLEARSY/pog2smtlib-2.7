@@ -14,12 +14,6 @@
     (= (|set.in Z| x (|rel.image Z Z| r s))
        (exists ((y |Z|)) (and (|set.in Z| y s) (|set.in (Z x Z)| (maplet y x) r)))))
   :named |ax:set.in.image (Z x POW (Z x Z))|))
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (=
-      (= s t)
-      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
-  :named |ax.set.eq Z|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -36,6 +30,12 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
+  :named |ax.set.eq Z|))
 (assert (!
   (not
     (= (|rel.image Z Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 0 1))(= _c0 (maplet 1 1))(= _c0 (maplet 1 6))(= _c0 (maplet 4 1))))) (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 1)))) (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 1)))))

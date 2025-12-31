@@ -38,7 +38,7 @@ namespace Expression {
 MapData Data::m_cache;
 
 Data::Data(const struct ::Data &data, const string &script,
-           set<shared_ptr<Abstract>> &requisites)
+           const PreRequisites &requisites)
     : enable_shared_from_this<Data>(),
       BConstruct::Uniform(script, requisites,
                           fmt::format("_data<{}>", data.to_string())),
@@ -63,7 +63,7 @@ shared_ptr<Abstract> Factory::Data(const struct Data &data) {
   }
   const BType &type{data.type()};
   const string script = fmt::format(SCRIPT, data.to_string(), symbol(type));
-  set<shared_ptr<Abstract>> requisites{Factory::Type(type)};
+  const BConstruct::PreRequisites requisites{Factory::Type(type)};
   auto construct =
       make_shared<BConstruct::Expression::Data>(data, script, requisites);
   BConstruct::Expression::Data::m_cache[pt] = construct;

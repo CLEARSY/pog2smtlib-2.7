@@ -10,8 +10,14 @@
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (define-sort |POW ((Z x Z) x Z)| () (P |((Z x Z) x Z)|))
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
-(define-sort |POW POW ((Z x Z) x Z)| () (P |POW ((Z x Z) x Z)|))
 (declare-fun |set.in ((Z x Z) x Z)| (|((Z x Z) x Z)| |POW ((Z x Z) x Z)|) Bool)
+(define-sort |POW POW ((Z x Z) x Z)| () (P |POW ((Z x Z) x Z)|))
+(declare-fun |rel.range (Z x Z) Z| (|POW ((Z x Z) x Z)|) |POW Z|)
+(assert (!
+  (forall ((r |POW ((Z x Z) x Z)|) (e |Z|))
+    (= (|set.in Z| e (|rel.range (Z x Z) Z| r))
+       (exists ((x |(Z x Z)|)) (|set.in ((Z x Z) x Z)| (maplet x e) r))))
+  :named |ax:set.in.range ((Z x Z) x Z)|))
 (assert (!
   (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
     (=
@@ -19,12 +25,6 @@
       (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))))
   :named |ax.set.eq (Z x Z)|))
 (declare-fun |set.in POW ((Z x Z) x Z)| (|POW ((Z x Z) x Z)| |POW POW ((Z x Z) x Z)|) Bool)
-(declare-fun |rel.range (Z x Z) Z| (|POW ((Z x Z) x Z)|) |POW Z|)
-(assert (!
-  (forall ((r |POW ((Z x Z) x Z)|) (e |Z|))
-    (= (|set.in Z| e (|rel.range (Z x Z) Z| r))
-       (exists ((x |(Z x Z)|)) (|set.in ((Z x Z) x Z)| (maplet x e) r))))
-  :named |ax:set.in.range ((Z x Z) x Z)|))
 (declare-fun |surjections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|))
@@ -42,13 +42,13 @@
               (= (fst p1) (fst p2))))))
   :named |ax:set.in.injections ((Z x Z) x Z)|))
 (define-sort |POW POW (Z x Z)| () (P |POW (Z x Z)|))
+(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
-(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |bijections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|))
@@ -89,14 +89,6 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x Z)|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
-(assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
 (declare-fun |finite sub-sets (Z x Z)| (|POW (Z x Z)|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
@@ -105,6 +97,14 @@
          (|set.in POW (Z x Z)| s (|sub-sets (Z x Z)| t))
          (not (= (|card (Z x Z)| s) Infinite)))))
   :named |ax.finite sub-sets (Z x Z)|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (assert (!
   (not
     (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|))     (and

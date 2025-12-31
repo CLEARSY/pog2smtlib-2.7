@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Reverse : public BinaryBType {
  public:
   explicit Reverse(const BType &, const BType &, const std::string &script,
-                   std::set<std::shared_ptr<Abstract>> &requisites);
+                   const PreRequisites &requisites);
   virtual ~Reverse() = default;
 
  private:

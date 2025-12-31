@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class ToReal : public Uniform {
  public:
-  explicit ToReal(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit ToReal(const std::string &, const PreRequisites &);
   virtual ~ToReal() = default;
 
  private:

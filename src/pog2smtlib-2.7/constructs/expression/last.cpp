@@ -41,7 +41,7 @@ namespace Expression {
 MapUnaryBType<Last> Last::m_cache;
 
 Last::Last(const BType& T, const std::string& script,
-           set<shared_ptr<Abstract>>& requisites)
+           const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "last") {}
 
 };  // namespace Expression
@@ -58,8 +58,8 @@ shared_ptr<Abstract> Factory::Last(const BType& T) {
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
                     /*4*/ smtSymbol(Expr::UnaryOp::Size, T),
                     /*5*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(ZxT),
-                                            Factory::Size(T)};
+    const PreRequisites requisites = {Factory::SetMembership(ZxT),
+                                      Factory::Size(T)};
     result = make(BConstruct::Expression::Last::m_cache, T, script, requisites);
   }
   return result;

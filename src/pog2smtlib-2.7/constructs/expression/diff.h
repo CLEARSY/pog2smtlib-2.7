@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Difference : public UnaryBType {
  public:
   explicit Difference(const BType& T, const std::string& script,
-                      std::set<std::shared_ptr<Abstract>>& requisites);
+                      const PreRequisites& requisites);
   virtual ~Difference() = default;
 
  private:

@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class String : public Uniform {
  public:
-  explicit String(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit String(const std::string &, const PreRequisites &);
   virtual ~String() = default;
 
  private:

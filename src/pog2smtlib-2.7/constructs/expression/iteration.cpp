@@ -44,7 +44,7 @@ namespace Expression {
 MapUnaryBType<Iteration> Iteration::m_cache;
 
 Iteration::Iteration(const BType& T, const string& script,
-                     set<shared_ptr<Abstract>>& requisites)
+                     const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "iterate") {}
 
 };  // namespace Expression
@@ -62,7 +62,7 @@ std::shared_ptr<Abstract> Factory::Iteration(const BType& T) {
                     /*2*/ symbol(BType::INT),
                     /*3*/ smtSymbol(Expr::BinaryOp::Composition, T, T, T),
                     /*4*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites{Factory::Composition(T, T, T)};
+    const PreRequisites requisites{Factory::Composition(T, T, T)};
     result =
         make(BConstruct::Expression::Iteration::m_cache, T, script, requisites);
   }

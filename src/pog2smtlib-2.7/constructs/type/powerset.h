@@ -19,7 +19,7 @@ namespace BConstruct::Type {
 class PowerSet : public Uniform {
  public:
   explicit PowerSet();
-  explicit PowerSet(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit PowerSet(const std::string &, const PreRequisites &);
   virtual ~PowerSet() = default;
 
  private:

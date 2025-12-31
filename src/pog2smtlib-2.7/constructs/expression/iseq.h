@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Injective_Seq : public UnaryBType {
  public:
   explicit Injective_Seq(const BType &, const std::string &script,
-                         std::set<std::shared_ptr<Abstract>> &requisites);
+                         const PreRequisites &requisites);
   virtual ~Injective_Seq() = default;
 
  private:

@@ -50,7 +50,7 @@ MapBinaryBType<CartesianProduct> CartesianProduct::m_cache;
 
 CartesianProduct::CartesianProduct(const BType &U, const BType &V,
                                    const string &script,
-                                   set<shared_ptr<Abstract>> &requisites)
+                                   const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "*") {}
 
 };  // namespace Expression
@@ -76,7 +76,7 @@ shared_ptr<Abstract> Factory::ExpressionCartesianProduct(const BType &U,
         /*8*/ symbolInner(UxV),
         /*9*/ symbol(U),
         /*10*/ symbol(V));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV)};
+    const BConstruct::PreRequisites requisites = {Factory::SetMembership(UxV)};
     result = make(BConstruct::Expression::CartesianProduct::m_cache, U, V,
                   script, requisites);
   }

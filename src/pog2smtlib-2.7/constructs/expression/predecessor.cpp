@@ -45,7 +45,7 @@ namespace Expression {
 std::shared_ptr<Predecessor> Predecessor::m_cache;
 
 Predecessor::Predecessor(const std::string &script,
-                         set<shared_ptr<Abstract>> &requisites)
+                         const PreRequisites &requisites)
     : Uniform(script, requisites, "pred") {}
 
 };  // namespace Expression
@@ -61,7 +61,7 @@ shared_ptr<Abstract> Factory::Predecessor() {
         /*2*/
         smtSymbol(Pred::ComparisonOp::Membership, xZZ),
         /*3*/ symbol(xZZ));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(xZZ)};
+    const PreRequisites requisites{Factory::SetMembership(xZZ)};
     result =
         make(BConstruct::Expression::Predecessor::m_cache, script, requisites);
   }

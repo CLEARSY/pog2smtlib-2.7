@@ -73,18 +73,18 @@
       (forall ((e |(Z x POW (Z x POW Z))|)) (= (|set.in (Z x POW (Z x POW Z))| e s) (|set.in (Z x POW (Z x POW Z))| e t)))))
   :named |ax.set.eq (Z x POW (Z x POW Z))|))
 (declare-fun |set.in POW ((Z x POW (Z x POW Z)) x Z)| (|POW ((Z x POW (Z x POW Z)) x Z)| |POW POW ((Z x POW (Z x POW Z)) x Z)|) Bool)
-(assert (!
-  (forall ((s |POW POW (Z x POW Z)|) (t |POW POW (Z x POW Z)|))
-    (=
-      (= s t)
-      (forall ((e |POW (Z x POW Z)|)) (= (|set.in POW (Z x POW Z)| e s) (|set.in POW (Z x POW Z)| e t)))))
-  :named |ax.set.eq POW (Z x POW Z)|))
 (declare-fun |rel.range POW (Z x POW Z) Z| (|POW (POW (Z x POW Z) x Z)|) |POW Z|)
 (assert (!
   (forall ((r |POW (POW (Z x POW Z) x Z)|) (e |Z|))
     (= (|set.in Z| e (|rel.range POW (Z x POW Z) Z| r))
        (exists ((x |POW (Z x POW Z)|)) (|set.in (POW (Z x POW Z) x Z)| (maplet x e) r))))
   :named |ax:set.in.range (POW (Z x POW Z) x Z)|))
+(assert (!
+  (forall ((s |POW POW (Z x POW Z)|) (t |POW POW (Z x POW Z)|))
+    (=
+      (= s t)
+      (forall ((e |POW (Z x POW Z)|)) (= (|set.in POW (Z x POW Z)| e s) (|set.in POW (Z x POW Z)| e t)))))
+  :named |ax.set.eq POW (Z x POW Z)|))
 (declare-fun |set.in POW (POW (Z x POW Z) x Z)| (|POW (POW (Z x POW Z) x Z)| |POW POW (POW (Z x POW Z) x Z)|) Bool)
 (declare-fun |relations Z POW (Z x POW Z)| (|POW Z| |POW POW (Z x POW Z)|) |POW POW (Z x POW (Z x POW Z))|)
 (assert (!
@@ -163,13 +163,13 @@
          (and (|set.in POW ((Z x POW (Z x POW Z)) x Z)| f (|injections (Z x POW (Z x POW Z)) Z| X Y))
               (|set.in POW ((Z x POW (Z x POW Z)) x Z)| f (|surjections (Z x POW (Z x POW Z)) Z| X Y))))))
   :named |ax:set.in.bijections ((Z x POW (Z x POW Z)) x Z)|))
+(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
-(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |bijections POW (Z x POW Z) Z| (|POW POW (Z x POW Z)| |POW Z|) |POW POW (POW (Z x POW Z) x Z)|)
 (assert (!
   (forall ((X |POW POW (Z x POW Z)|) (Y |POW Z|))
@@ -209,14 +209,19 @@
         (exists ((f |POW (POW (Z x POW Z) x Z)|))
           (|set.in POW (POW (Z x POW Z) x Z)| f (|bijections POW (Z x POW Z) Z| s (|interval| 1 (Value (|card POW (Z x POW Z)| s))))))))
   :named |ax.card.definition POW (Z x POW Z)|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(declare-fun |seq POW (Z x POW Z)| (|POW POW (Z x POW Z)|) |POW POW (Z x POW (Z x POW Z))|)
 (assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
+  (forall ((E |POW POW (Z x POW Z)|) (s |POW (Z x POW (Z x POW Z))|))
+    (=>
+      (|set.in POW (Z x POW (Z x POW Z))| s (|seq POW (Z x POW Z)| E))
+      ((_ is Finite) (|card (Z x POW (Z x POW Z))| s))))
+  :named |ax.seq.is.finite POW (Z x POW Z)|))
+(assert (!
+  (forall ((E |POW POW (Z x POW Z)|))
+    (|set.subseteq POW (Z x POW (Z x POW Z))|
+      (|seq POW (Z x POW Z)| E)
+      (|functions.total Z POW (Z x POW Z)| (|interval| 1 (Value (|card POW (Z x POW Z)| E))) E)))
+  :named |ax.seq.is.total.fun POW (Z x POW Z)|))
 (declare-fun |rel.range Z POW (Z x POW Z)| (|POW (Z x POW (Z x POW Z))|) |POW POW (Z x POW Z)|)
 (assert (!
   (forall ((r |POW (Z x POW (Z x POW Z))|) (e |POW (Z x POW Z)|))
@@ -235,23 +240,18 @@
 (assert (!
   (forall ((e |(Z x POW Z)|)) (not (|set.in (Z x POW Z)| e |set.empty (Z x POW Z)|)))
   :named |ax.set.in.empty (Z x POW Z)|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
 (declare-const |set.empty Z| |POW Z|)
 (assert (!
   (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
   :named |ax.set.in.empty Z|))
-(declare-fun |seq POW (Z x POW Z)| (|POW POW (Z x POW Z)|) |POW POW (Z x POW (Z x POW Z))|)
-(assert (!
-  (forall ((E |POW POW (Z x POW Z)|) (s |POW (Z x POW (Z x POW Z))|))
-    (=>
-      (|set.in POW (Z x POW (Z x POW Z))| s (|seq POW (Z x POW Z)| E))
-      ((_ is Finite) (|card (Z x POW (Z x POW Z))| s))))
-  :named |ax.seq.is.finite POW (Z x POW Z)|))
-(assert (!
-  (forall ((E |POW POW (Z x POW Z)|))
-    (|set.subseteq POW (Z x POW (Z x POW Z))|
-      (|seq POW (Z x POW Z)| E)
-      (|functions.total Z POW (Z x POW Z)| (|interval| 1 (Value (|card POW (Z x POW Z)| E))) E)))
-  :named |ax.seq.is.total.fun POW (Z x POW Z)|))
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
 (declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
 (assert (!

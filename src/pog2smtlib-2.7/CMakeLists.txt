@@ -15,8 +15,8 @@ add_subdirectory(constructs/predicate)
 
 set(POG2SMTLIB27_HEADERS
     bconstruct.h
-    bconstruct-utils.h
     btype-symbols.h
+    btype-utils.h
     cc-compatibility.h
     parameters.h
     pog-signatures.h

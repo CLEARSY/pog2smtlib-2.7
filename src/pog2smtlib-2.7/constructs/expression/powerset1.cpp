@@ -43,7 +43,7 @@ namespace Expression {
 MapUnaryBType<PowerSet1> PowerSet1::m_cache;
 
 PowerSet1::PowerSet1(const BType& T, const string& script,
-                     set<shared_ptr<Abstract>>& requisites)
+                     const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "POW1") {}
 
 };  // namespace Expression
@@ -63,7 +63,7 @@ shared_ptr<Abstract> Factory::PowerSet1(const BType& T) {
                     /*4*/ smtSymbol(Expr::UnaryOp::Subsets, T),
                     /*5*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, T),
                     /*6*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {
+    const PreRequisites requisites = {
         Factory::EmptySet(T), Factory::SetMembership(PT), Factory::PowerSet(T)};
     result =
         make(BConstruct::Expression::PowerSet1::m_cache, T, script, requisites);

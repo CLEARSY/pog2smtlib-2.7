@@ -42,7 +42,7 @@ namespace Expression {
 MapBinaryBType<Relation> Relation::m_cache;
 
 Relation::Relation(const BType &U, const BType &V, const string &script,
-                   set<shared_ptr<Abstract>> &requisites)
+                   const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "<->") {}
 
 };  // namespace Expression
@@ -64,8 +64,8 @@ shared_ptr<Abstract> Factory::Relation(const BType &U, const BType &V) {
                     /*4*/ symbol(PPUxV),
                     /*5*/ smtSymbol(Expr::BinaryOp::Cartesian_Product, U, V),
                     /*6*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {
-        Factory::ExpressionCartesianProduct(U, V), Factory::PowerSet(UxV)};
+    const PreRequisites requisites = {Factory::ExpressionCartesianProduct(U, V),
+                                      Factory::PowerSet(UxV)};
     result = make(BConstruct::Expression::Relation::m_cache, U, V, script,
                   requisites);
   }

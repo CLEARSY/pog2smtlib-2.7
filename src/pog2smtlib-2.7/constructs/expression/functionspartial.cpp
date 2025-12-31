@@ -46,7 +46,7 @@ MapBinaryBType<Partial_Function> Partial_Function::m_cache;
 
 Partial_Function::Partial_Function(const BType &U, const BType &V,
                                    const string &script,
-                                   set<shared_ptr<Abstract>> &requisites)
+                                   const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "+->") {}
 
 };  // namespace Expression
@@ -70,8 +70,8 @@ shared_ptr<Abstract> Factory::Partial_Function(const BType &U, const BType &V) {
         /*6*/ symbolInner(U),
         /*7*/ symbolInner(V),
         /*8*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::Function(U, V),
-                                            Factory::Relation(U, V)};
+    const PreRequisites requisites = {Factory::Function(U, V),
+                                      Factory::Relation(U, V)};
     result = make(BConstruct::Expression::Partial_Function::m_cache, U, V,
                   script, requisites);
   }

@@ -22,7 +22,7 @@ class Subtraction_Domain : public BinaryBType {
  public:
   explicit Subtraction_Domain(const BType &, const BType &,
                               const std::string &script,
-                              std::set<std::shared_ptr<Abstract>> &requisites);
+                              const PreRequisites &requisites);
   virtual ~Subtraction_Domain() = default;
 
  private:

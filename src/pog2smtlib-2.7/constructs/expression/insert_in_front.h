@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Insert_In_Front : public UnaryBType {
  public:
   explicit Insert_In_Front(const BType &, const std::string &script,
-                           std::set<std::shared_ptr<Abstract>> &requisites);
+                           const PreRequisites &requisites);
   virtual ~Insert_In_Front() = default;
 
  private:

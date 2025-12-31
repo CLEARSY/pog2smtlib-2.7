@@ -4,8 +4,8 @@
 (declare-sort P 1)
 (define-sort |POW Z| () (P |Z|))
 (declare-const elt |Z|)
-(declare-const vset1 |POW Z|)
 (declare-const vset2 |POW Z|)
+(declare-const vset1 |POW Z|)
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-fun |set.inter Z| (|POW Z| |POW Z|) |POW Z|)
 (assert (!

@@ -44,7 +44,7 @@ namespace Expression {
 MapUnaryBType<Struct> Struct::m_cache;
 
 Struct::Struct(const BType& T, const string& script,
-               set<shared_ptr<Abstract>>& requisites)
+               const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "struct") {}
 
 };  // namespace Expression
@@ -60,7 +60,7 @@ std::shared_ptr<Abstract> Factory::Struct(const BType& T) {
                     /*2*/ symbol(PT),
                     /*3*/ symbol(T),
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T));
-    set<shared_ptr<Abstract>> requisites{Factory::Set(T)};
+    const PreRequisites requisites{Factory::Set(T)};
     result =
         make(BConstruct::Expression::Struct::m_cache, T, script, requisites);
   }

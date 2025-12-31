@@ -22,7 +22,7 @@ class Quantified_Union : public BinaryBType {
  public:
   explicit Quantified_Union(const BType& U, const BType& V,
                             const std::string& script,
-                            std::set<std::shared_ptr<Abstract>>& requisites);
+                            const PreRequisites& requisites);
   virtual ~Quantified_Union() = default;
 
  private:

@@ -42,7 +42,7 @@ namespace Expression {
 MapBinaryBType<Range> Range::m_cache;
 
 Range::Range(const BType &U, const BType &V, const string &script,
-             set<shared_ptr<Abstract>> &requisites)
+             const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "ran") {}
 
 };  // namespace Expression
@@ -64,7 +64,7 @@ shared_ptr<Abstract> Factory::Range(const BType &U, const BType &V) {
                     /*5*/ symbolInner(UxV),
                     /*6*/ symbolInner(V),
                     /*7*/ symbolInner(U));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV)};
+    const PreRequisites requisites = {Factory::SetMembership(UxV)};
     result =
         make(BConstruct::Expression::Range::m_cache, U, V, script, requisites);
   }

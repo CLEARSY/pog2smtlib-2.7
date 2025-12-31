@@ -19,7 +19,7 @@ namespace BConstruct::Type {
 class Type : public UnaryBType {
  public:
   explicit Type(const BType& T, const std::string& script,
-                std::set<std::shared_ptr<Abstract>>& requisites);
+                const PreRequisites& requisites);
   virtual ~Type() = default;
 
  private:

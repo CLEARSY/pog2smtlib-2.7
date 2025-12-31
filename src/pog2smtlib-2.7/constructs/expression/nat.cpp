@@ -39,7 +39,7 @@ namespace Expression {
 
 std::shared_ptr<Nat> Nat::m_cache;
 
-Nat::Nat(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Nat::Nat(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "NAT") {}
 
 };  // namespace Expression
@@ -54,8 +54,8 @@ shared_ptr<Abstract> Factory::Nat() {
                     /*2*/ symbol(BType::POW(BType::INT)),
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT),
                     /*4*/ smtSymbol(Expr::Visitor::EConstant::MaxInt));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::INT),
-                                         Factory::Maxint()};
+    const PreRequisites requisites{Factory::SetMembership(BType::INT),
+                                   Factory::Maxint()};
     result = make(BConstruct::Expression::Nat::m_cache, script, requisites);
   }
   return result;

@@ -27,7 +27,7 @@ namespace Type {
 
 shared_ptr<PowerSet> PowerSet::m_cache;
 
-PowerSet::PowerSet(const string& script, set<shared_ptr<Abstract>>& requisites)
+PowerSet::PowerSet(const string& script, const PreRequisites& requisites)
     : Uniform(script, requisites, "POW") {}
 
 PowerSet::PowerSet() {
@@ -43,7 +43,7 @@ shared_ptr<Abstract> Factory::PowerSet() {
   std::shared_ptr<Abstract> result = find(BConstruct::Type::PowerSet::m_cache);
   if (!result) {
     const string script = "(declare-sort P 1)\n";
-    set<shared_ptr<Abstract>> requisites{};
+    const PreRequisites requisites{};
     result = make(BConstruct::Type::PowerSet::m_cache, script, requisites);
   }
   return result;

@@ -10,12 +10,6 @@
     (= (|set.in Z| e (|set.diff Z| s t))
        (and (|set.in Z| e s) (not (|set.in Z| e t)))))
   :named |ax.set.in.diff Z|))
-(assert (!
-  (forall ((s |POW Z|) (t |POW Z|))
-    (=
-      (= s t)
-      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
-  :named |ax.set.eq Z|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -28,6 +22,12 @@
 (assert (!
   (forall ((e |Z|)) (|set.in Z| e INTEGER))
   :named |ax.set.in.INTEGER|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=
+      (= s t)
+      (forall ((e |Z|)) (= (|set.in Z| e s) (|set.in Z| e t)))))
+  :named |ax.set.eq Z|))
 (assert (!
   (not
     (= (|set.diff Z| INTEGER (|set.intent Z| (lambda ((_c0 |Z|)) (= _c0 0)))) INTEGER))

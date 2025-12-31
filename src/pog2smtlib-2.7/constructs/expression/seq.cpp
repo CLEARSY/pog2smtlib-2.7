@@ -48,8 +48,7 @@ namespace Expression {
 
 MapUnaryBType<Seq> Seq::m_cache;
 
-Seq::Seq(const BType& T, const string& script,
-         set<shared_ptr<Abstract>>& requisites)
+Seq::Seq(const BType& T, const string& script, const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "seq") {}
 
 };  // namespace Expression
@@ -74,7 +73,7 @@ shared_ptr<Abstract> Factory::Seq(const BType& T) {
         /*8*/ smtSymbol(Expr::BinaryOp::Interval),
         /*9*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
         /*10*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {
+    const PreRequisites requisites = {
         Factory::Interval(), Factory::Card(T), Factory::Card(ZxT),
         Factory::Total_Function(BType::INT, T), Factory::Inclusion(PZxT)};
     result = make(BConstruct::Expression::Seq::m_cache, T, script, requisites);

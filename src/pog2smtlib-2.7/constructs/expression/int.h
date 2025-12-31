@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Int : public Uniform {
  public:
-  explicit Int(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Int(const std::string &, const PreRequisites &);
   virtual ~Int() = default;
 
  private:

@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Seq : public UnaryBType {
  public:
   explicit Seq(const BType &, const std::string &script,
-               std::set<std::shared_ptr<Abstract>> &requisites);
+               const PreRequisites &requisites);
   virtual ~Seq() = default;
 
  private:

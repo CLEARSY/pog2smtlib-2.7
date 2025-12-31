@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Card : public UnaryBType {
  public:
   explicit Card(const BType& T, const std::string& script,
-                std::set<std::shared_ptr<Abstract>>& requisites);
+                const PreRequisites& requisites);
   virtual ~Card() = default;
 
  private:

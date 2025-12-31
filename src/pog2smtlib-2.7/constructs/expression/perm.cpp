@@ -43,7 +43,7 @@ namespace Expression {
 MapUnaryBType<Perm> Perm::m_cache;
 
 Perm::Perm(const BType& T, const std::string& script,
-           set<shared_ptr<Abstract>>& requisites)
+           const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "perm") {}
 
 };  // namespace Expression
@@ -66,7 +66,7 @@ shared_ptr<Abstract> Factory::Perm(const BType& T) {
                     /*6*/ symbolInner(BType::INT),
                     /*7*/ symbolInner(T),
                     /*8*/ smtSymbol(Expr::Visitor::EConstant::NATURAL1));
-    set<shared_ptr<Abstract>> requisites = {
+    const PreRequisites requisites = {
         Factory::Injective_Seq(T), Factory::SetMembership(PZxT),
         Factory::Natural1(), Factory::Surjection(BType::INT, T)};
     result = make(BConstruct::Expression::Perm::m_cache, T, script, requisites);

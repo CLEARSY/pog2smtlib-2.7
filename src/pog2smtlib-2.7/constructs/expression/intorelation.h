@@ -20,9 +20,9 @@ namespace BConstruct::Expression {
 
 class Transformed_Into_Relation : public BinaryBType {
  public:
-  explicit Transformed_Into_Relation(
-      const BType &, const BType &, const std::string &script,
-      std::set<std::shared_ptr<Abstract>> &requisites);
+  explicit Transformed_Into_Relation(const BType &, const BType &,
+                                     const std::string &script,
+                                     const PreRequisites &requisites);
   virtual ~Transformed_Into_Relation() = default;
 
  private:

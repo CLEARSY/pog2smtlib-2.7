@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Bool : public Uniform {
  public:
-  explicit Bool(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Bool(const std::string &, const PreRequisites &);
   virtual ~Bool() = default;
 
  private:

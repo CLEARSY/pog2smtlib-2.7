@@ -20,9 +20,9 @@ namespace BConstruct::Expression {
 
 class Quantified_Intersection : public BinaryBType {
  public:
-  explicit Quantified_Intersection(
-      const BType& U, const BType& V, const std::string& script,
-      std::set<std::shared_ptr<Abstract>>& requisites);
+  explicit Quantified_Intersection(const BType& U, const BType& V,
+                                   const std::string& script,
+                                   const PreRequisites& requisites);
   virtual ~Quantified_Intersection() = default;
 
  private:

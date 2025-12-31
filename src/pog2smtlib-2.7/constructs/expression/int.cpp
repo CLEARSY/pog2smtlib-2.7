@@ -39,7 +39,7 @@ namespace Expression {
 
 shared_ptr<Int> Int::m_cache;
 
-Int::Int(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Int::Int(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "INT") {}
 
 };  // namespace Expression
@@ -55,8 +55,8 @@ shared_ptr<Abstract> Factory::Int() {
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT),
                     /*4*/ smtSymbol(Expr::Visitor::EConstant::MinInt),
                     /*5*/ smtSymbol(Expr::Visitor::EConstant::MaxInt));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::INT),
-                                         Factory::Maxint(), Factory::Minint()};
+    const PreRequisites requisites{Factory::SetMembership(BType::INT),
+                                   Factory::Maxint(), Factory::Minint()};
     result = make(BConstruct::Expression::Int::m_cache, script, requisites);
   }
   return result;

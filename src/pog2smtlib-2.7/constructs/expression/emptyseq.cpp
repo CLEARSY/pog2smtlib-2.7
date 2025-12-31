@@ -41,7 +41,7 @@ namespace Expression {
 MapUnaryBType<EmptySeq> EmptySeq::m_cache;
 
 EmptySeq::EmptySeq(const BType& T, const std::string& script,
-                   set<shared_ptr<Abstract>>& requisites)
+                   const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "[]") {}
 
 };  // namespace Expression
@@ -58,7 +58,7 @@ shared_ptr<Abstract> Factory::EmptySeq(const BType& T) {
                     /*0*/ symbolInner(T),
                     /*1*/ symbol(PZxT),
                     /*2*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, ZxT));
-    set<shared_ptr<Abstract>> requisites = {Factory::EmptySet(ZxT)};
+    const BConstruct::PreRequisites requisites = {Factory::EmptySet(ZxT)};
 
     result =
         make(BConstruct::Expression::EmptySeq::m_cache, T, script, requisites);

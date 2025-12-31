@@ -25,14 +25,6 @@
   (forall ((R |POW (Z x Z)|)(n |Z|))
     (= (|iterate Z| R (+ n 1)) (|relcomp Z Z Z| R (|iterate Z| R n))))
   :named |ax.set.iterate.n+1 Z|))
-(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
-(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
-(assert (!
-  (forall ((p |? (Z x Z)|))
-    (forall ((x |(Z x Z)|))
-      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
-         (p x))))
-  :named |ax:set.in.intent (Z x Z)|))
 (declare-fun |closure1 Z| (|POW (Z x Z)|) |POW (Z x Z)|)
 (assert (!
   (forall ((R |POW (Z x Z)|)(p |(Z x Z)|))
@@ -41,6 +33,14 @@
          (and (<= 1 n)
               (|set.in (Z x Z)| p (|iterate Z| R n))))))
   :named |ax.closure1 Z|))
+(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
+(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
+(assert (!
+  (forall ((p |? (Z x Z)|))
+    (forall ((x |(Z x Z)|))
+      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
+         (p x))))
+  :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
     (=

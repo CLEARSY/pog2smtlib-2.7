@@ -46,7 +46,7 @@ namespace Expression {
 MapUnaryBType<EmptySet> EmptySet::m_cache;
 
 EmptySet::EmptySet(const BType& T, const string& script,
-                   set<shared_ptr<Abstract>>& requisites)
+                   const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "{}") {}
 
 };  // namespace Expression
@@ -59,8 +59,8 @@ std::shared_ptr<Abstract> Factory::EmptySet(const BType& T) {
     const string script =
         fmt::format(SCRIPT, emptySetOperatorStr, isElementOfOperatorStr,
                     symbol(PT), symbol(T), symbolInner(T));
-    set<shared_ptr<Abstract>> requisites{Factory::Type(PT),
-                                         Factory::SetMembership(T)};
+    const PreRequisites requisites{Factory::Type(PT),
+                                   Factory::SetMembership(T)};
     result =
         make(BConstruct::Expression::EmptySet::m_cache, T, script, requisites);
   }

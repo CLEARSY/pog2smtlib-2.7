@@ -22,7 +22,7 @@ class Total_Function : public BinaryBType {
  public:
   explicit Total_Function(const BType &, const BType &,
                           const std::string &script,
-                          std::set<std::shared_ptr<Abstract>> &requisites);
+                          const PreRequisites &requisites);
   virtual ~Total_Function() = default;
 
  private:

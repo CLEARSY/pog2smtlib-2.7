@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class GeneralizedUnion : public UnaryBType {
  public:
   explicit GeneralizedUnion(const BType& T, const std::string& script,
-                            std::set<std::shared_ptr<Abstract>>& requisites);
+                            const PreRequisites& requisites);
   virtual ~GeneralizedUnion() = default;
 
  private:

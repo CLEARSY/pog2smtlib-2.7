@@ -48,6 +48,29 @@
 (assert (!
   (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))
   :named |ax.set.in.empty Z|))
+(declare-const vset |POW POW Z|)
+(define-sort |? POW Z| () (-> |POW Z| Bool))
+(declare-const |set.intent POW Z| (-> |? POW Z| |POW POW Z|))
+(assert (!
+  (forall ((p |? POW Z|))
+    (forall ((x |POW Z|))
+      (= (|set.in POW Z| x (|set.intent POW Z| p))
+         (p x))))
+  :named |ax:set.in.intent POW Z|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (p x))))
+  :named |ax:set.in.intent Z|))
+(assert (!
+  (forall ((s |POW POW Z|) (t |POW POW Z|))
+    (=
+      (= s t)
+      (forall ((e |POW Z|)) (= (|set.in POW Z| e s) (|set.in POW Z| e t)))))
+  :named |ax.set.eq POW Z|))
 (declare-fun |non empty sub-sets POW Z| (|POW POW Z|) |POW POW POW Z|)
 (assert (!
   (forall ((s |POW POW Z|) (t |POW POW Z|))
@@ -62,29 +85,6 @@
        (and (|set.in POW Z| s (|sub-sets Z| t))
             (not (= s |set.empty Z|)))))
   :named |ax.non empty sub-sets Z|))
-(assert (!
-  (forall ((s |POW POW Z|) (t |POW POW Z|))
-    (=
-      (= s t)
-      (forall ((e |POW Z|)) (= (|set.in POW Z| e s) (|set.in POW Z| e t)))))
-  :named |ax.set.eq POW Z|))
-(define-sort |? Z| () (-> |Z| Bool))
-(declare-const |set.intent Z| (-> |? Z| |POW Z|))
-(assert (!
-  (forall ((p |? Z|))
-    (forall ((x |Z|))
-      (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
-  :named |ax:set.in.intent Z|))
-(define-sort |? POW Z| () (-> |POW Z| Bool))
-(declare-const |set.intent POW Z| (-> |? POW Z| |POW POW Z|))
-(assert (!
-  (forall ((p |? POW Z|))
-    (forall ((x |POW Z|))
-      (= (|set.in POW Z| x (|set.intent POW Z| p))
-         (p x))))
-  :named |ax:set.in.intent POW Z|))
-(declare-const vset |POW POW Z|)
 (declare-const INTEGER |POW Z|)
 (assert (!
   (forall ((e |Z|)) (|set.in Z| e INTEGER))

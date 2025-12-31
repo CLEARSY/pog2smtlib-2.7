@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Ceiling : public Uniform {
  public:
-  explicit Ceiling(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Ceiling(const std::string &, const PreRequisites &);
   virtual ~Ceiling() = default;
 
  private:

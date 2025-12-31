@@ -38,7 +38,7 @@ namespace Predicate {
 MapUnaryBType<SetMembership> SetMembership::m_cache;
 
 SetMembership::SetMembership(const BType& T, const std::string& script,
-                             set<shared_ptr<Abstract>>& requisites)
+                             const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, ":") {}
 
 };  // namespace Predicate
@@ -50,7 +50,7 @@ shared_ptr<Abstract> Factory::SetMembership(const BType& T) {
     const BType PT = BType::POW(T);
     const std::string op = smtSymbol(Pred::ComparisonOp::Membership, T);
     const string script = fmt::format(SCRIPT, op, symbol(T), symbol(PT));
-    set<shared_ptr<Abstract>> requisites = {Factory::Type(PT)};
+    PreRequisites requisites = {Factory::Type(PT)};
     switch (T.getKind()) {
       case BType::Kind::PowerType:
         requisites.insert({Factory::SetMembership(T.toPowerType().content)});

@@ -22,7 +22,7 @@ class Total_Relation : public BinaryBType {
  public:
   explicit Total_Relation(const BType &, const BType &,
                           const std::string &script,
-                          std::set<std::shared_ptr<Abstract>> &requisites);
+                          const PreRequisites &requisites);
   virtual ~Total_Relation() = default;
 
  private:

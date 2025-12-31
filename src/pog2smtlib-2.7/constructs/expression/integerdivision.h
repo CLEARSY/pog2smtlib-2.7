@@ -20,8 +20,7 @@ namespace BConstruct::Expression {
 
 class IntegerDivision : public Uniform {
  public:
-  explicit IntegerDivision(const std::string &,
-                           std::set<std::shared_ptr<Abstract>> &);
+  explicit IntegerDivision(const std::string &, const PreRequisites &);
   virtual ~IntegerDivision() = default;
 
  private:

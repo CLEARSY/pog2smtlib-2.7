@@ -20,9 +20,9 @@ namespace BConstruct::Expression {
 
 class Transformed_Into_Function : public BinaryBType {
  public:
-  explicit Transformed_Into_Function(
-      const BType &, const BType &, const std::string &script,
-      std::set<std::shared_ptr<Abstract>> &requisites);
+  explicit Transformed_Into_Function(const BType &, const BType &,
+                                     const std::string &script,
+                                     const PreRequisites &requisites);
   virtual ~Transformed_Into_Function() = default;
 
  private:

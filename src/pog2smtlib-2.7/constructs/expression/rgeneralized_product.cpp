@@ -52,7 +52,7 @@ namespace Expression {
 shared_ptr<RGeneralizedProduct> RGeneralizedProduct::m_cache;
 
 RGeneralizedProduct::RGeneralizedProduct(const std::string &script,
-                                         set<shared_ptr<Abstract>> &requisites)
+                                         const PreRequisites &requisites)
     : Uniform(script, requisites, "rΠ") {}
 
 };  // namespace Expression
@@ -69,8 +69,8 @@ shared_ptr<Abstract> Factory::RGeneralizedProduct() {
         /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::REAL),
         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, BType::REAL),
         /*5*/ smtSymbol(Expr::NaryOp::Set, BType::REAL));
-    set<shared_ptr<Abstract>> requisites{Factory::Set(BType::REAL),
-                                         Factory::EmptySet(BType::REAL)};
+    const PreRequisites requisites{Factory::Set(BType::REAL),
+                                   Factory::EmptySet(BType::REAL)};
     result = make(BConstruct::Expression::RGeneralizedProduct::m_cache, script,
                   requisites);
   }

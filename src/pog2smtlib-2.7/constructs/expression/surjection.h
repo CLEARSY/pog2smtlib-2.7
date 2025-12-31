@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Surjection : public BinaryBType {
  public:
   explicit Surjection(const BType &, const BType &, const std::string &script,
-                      std::set<std::shared_ptr<Abstract>> &requisites);
+                      const PreRequisites &requisites);
   virtual ~Surjection() = default;
 
  private:

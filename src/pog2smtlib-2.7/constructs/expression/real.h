@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Real : public Uniform {
  public:
-  explicit Real(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Real(const std::string &, const PreRequisites &);
   virtual ~Real() = default;
 
  private:

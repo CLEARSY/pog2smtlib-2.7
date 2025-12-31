@@ -37,7 +37,7 @@ namespace Expression {
 
 std::shared_ptr<Floor> Floor::m_cache;
 
-Floor::Floor(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Floor::Floor(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "floor") {}
 
 };  // namespace Expression
@@ -47,7 +47,7 @@ shared_ptr<Abstract> Factory::Floor() {
   if (!result) {
     const string script = fmt::format(SCRIPT, smtSymbol(Expr::UnaryOp::Floor),
                                       symbol(BType::REAL), symbol(BType::INT));
-    set<shared_ptr<Abstract>> requisites{};
+    const PreRequisites requisites{};
     result = make(BConstruct::Expression::Floor::m_cache, script, requisites);
   }
   return result;

@@ -20,20 +20,12 @@
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
 (define-sort |((Z x Z) x (BOOL x Z))| () (C |(Z x Z)| |(BOOL x Z)|))
+(define-sort |POW (Z x BOOL)| () (P |(Z x BOOL)|))
 (declare-fun |set.in (BOOL x Z)| (|(BOOL x Z)| |POW (BOOL x Z)|) Bool)
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 (define-sort |POW ((Z x Z) x (BOOL x Z))| () (P |((Z x Z) x (BOOL x Z))|))
-(define-sort |POW (Z x BOOL)| () (P |(Z x BOOL)|))
-(declare-fun |set.in ((Z x Z) x (BOOL x Z))| (|((Z x Z) x (BOOL x Z))| |POW ((Z x Z) x (BOOL x Z))|) Bool)
 (declare-fun |set.in (Z x BOOL)| (|(Z x BOOL)| |POW (Z x BOOL)|) Bool)
-(define-sort |? ((Z x Z) x (BOOL x Z))| () (-> |((Z x Z) x (BOOL x Z))| Bool))
-(declare-const |set.intent ((Z x Z) x (BOOL x Z))| (-> |? ((Z x Z) x (BOOL x Z))| |POW ((Z x Z) x (BOOL x Z))|))
-(assert (!
-  (forall ((p |? ((Z x Z) x (BOOL x Z))|))
-    (forall ((x |((Z x Z) x (BOOL x Z))|))
-      (= (|set.in ((Z x Z) x (BOOL x Z))| x (|set.intent ((Z x Z) x (BOOL x Z))| p))
-         (p x))))
-  :named |ax:set.in.intent ((Z x Z) x (BOOL x Z))|))
+(declare-fun |set.in ((Z x Z) x (BOOL x Z))| (|((Z x Z) x (BOOL x Z))| |POW ((Z x Z) x (BOOL x Z))|) Bool)
 (declare-fun |parallelproduct Z BOOL Z Z| (|POW (Z x BOOL)| |POW (Z x Z)|) |POW ((Z x Z) x (BOOL x Z))|)
 (assert (!
   (forall ((R1 |POW (Z x BOOL)|) (R2 |POW (Z x Z)|) (p |((Z x Z) x (BOOL x Z))|))
@@ -61,6 +53,14 @@
       (= (|set.in (Z x BOOL)| x (|set.intent (Z x BOOL)| p))
          (p x))))
   :named |ax:set.in.intent (Z x BOOL)|))
+(define-sort |? ((Z x Z) x (BOOL x Z))| () (-> |((Z x Z) x (BOOL x Z))| Bool))
+(declare-const |set.intent ((Z x Z) x (BOOL x Z))| (-> |? ((Z x Z) x (BOOL x Z))| |POW ((Z x Z) x (BOOL x Z))|))
+(assert (!
+  (forall ((p |? ((Z x Z) x (BOOL x Z))|))
+    (forall ((x |((Z x Z) x (BOOL x Z))|))
+      (= (|set.in ((Z x Z) x (BOOL x Z))| x (|set.intent ((Z x Z) x (BOOL x Z))| p))
+         (p x))))
+  :named |ax:set.in.intent ((Z x Z) x (BOOL x Z))|))
 (assert (!
   (forall ((s |POW ((Z x Z) x (BOOL x Z))|) (t |POW ((Z x Z) x (BOOL x Z))|))
     (=

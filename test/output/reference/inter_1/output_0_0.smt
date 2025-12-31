@@ -6,8 +6,8 @@
 (define-sort |POW POW Z| () (P |POW Z|))
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-const elt |Z|)
-(declare-const vset1 |POW POW Z|)
 (declare-const vset2 |POW Z|)
+(declare-const vset1 |POW POW Z|)
 (declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
 (declare-fun |inter Z| (|POW POW Z|) |POW Z|)
 (assert (!

@@ -41,8 +41,7 @@ namespace Expression {
 
 shared_ptr<Interval> Interval::m_cache;
 
-Interval::Interval(const std::string& script,
-                   set<shared_ptr<Abstract>>& requisites)
+Interval::Interval(const std::string& script, const PreRequisites& requisites)
     : Uniform(script, requisites, "..") {}
 
 };  // namespace Expression
@@ -56,7 +55,7 @@ shared_ptr<Abstract> Factory::Interval() {
         /*1*/ symbol(BType::INT),
         /*2*/ symbol(PZ),
         /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::INT)};
+    const PreRequisites requisites{Factory::SetMembership(BType::INT)};
     result =
         make(BConstruct::Expression::Interval::m_cache, script, requisites);
   }

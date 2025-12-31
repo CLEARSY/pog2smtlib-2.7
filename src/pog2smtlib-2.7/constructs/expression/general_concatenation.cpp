@@ -47,9 +47,9 @@ namespace Expression {
 
 MapUnaryBType<General_Concatenation> General_Concatenation::m_cache;
 
-General_Concatenation::General_Concatenation(
-    const BType& T, const std::string& script,
-    set<shared_ptr<Abstract>>& requisites)
+General_Concatenation::General_Concatenation(const BType& T,
+                                             const std::string& script,
+                                             const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "conc") {}
 
 };  // namespace Expression
@@ -71,7 +71,7 @@ shared_ptr<Abstract> Factory::General_Concatenation(const BType& T) {
                     /*4*/ smtSymbol(Expr::BinaryOp::Head_Insertion, PZxT),
                     /*5*/ smtSymbol(Expr::BinaryOp::Concatenation, T),
                     /*6*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {
+    const PreRequisites requisites = {
         Factory::Insert_In_Front(PZxT),
         Factory::Concatenation(T),
         Factory::EmptySeq(PZxT),

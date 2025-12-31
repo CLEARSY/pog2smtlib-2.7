@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Maplet : public Uniform {
  public:
-  explicit Maplet(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Maplet(const std::string &, const PreRequisites &);
   virtual ~Maplet() = default;
 
  private:

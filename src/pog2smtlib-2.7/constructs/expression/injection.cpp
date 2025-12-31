@@ -45,7 +45,7 @@ namespace Expression {
 MapBinaryBType<Injection> Injection::m_cache;
 
 Injection::Injection(const BType &U, const BType &V, const string &script,
-                     set<shared_ptr<Abstract>> &requisites)
+                     const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "_inj") {}
 
 };  // namespace Expression
@@ -70,9 +70,8 @@ shared_ptr<Abstract> Factory::Injection(const BType &U, const BType &V) {
                     /*7*/ symbol(UxV),
                     /*8*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
                     /*9*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(PUxV),
-                                            Factory::Equality(U),
-                                            Factory::Equality(V)};
+    PreRequisites requisites = {Factory::SetMembership(PUxV),
+                                Factory::Equality(U), Factory::Equality(V)};
     result = make(BConstruct::Expression::Injection::m_cache, U, V, script,
                   requisites);
   }

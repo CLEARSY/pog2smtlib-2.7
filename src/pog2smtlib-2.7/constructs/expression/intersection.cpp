@@ -42,7 +42,7 @@ namespace Expression {
 MapUnaryBType<Intersection> Intersection::m_cache;
 
 Intersection::Intersection(const BType& T, const string& script,
-                           set<shared_ptr<Abstract>>& requisites)
+                           const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "/\\") {}
 
 };  // namespace Expression
@@ -57,7 +57,7 @@ std::shared_ptr<Abstract> Factory::Intersection(const BType& T) {
                     /*1*/ symbol(PT),
                     /*2*/ smtSymbol(Pred::ComparisonOp::Membership, T),
                     /*3*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(T)};
+    const PreRequisites requisites{Factory::SetMembership(T)};
     result = make(BConstruct::Expression::Intersection::m_cache, T, script,
                   requisites);
   }

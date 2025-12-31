@@ -22,7 +22,7 @@ class Parallel_Product : public QuaternaryBType {
  public:
   explicit Parallel_Product(const BType &, const BType &, const BType &,
                             const BType &, const std::string &script,
-                            std::set<std::shared_ptr<Abstract>> &requisites);
+                            const PreRequisites &requisites);
   explicit Parallel_Product(const BType &, const BType &, const BType &,
                             const BType &);
   virtual ~Parallel_Product() = default;

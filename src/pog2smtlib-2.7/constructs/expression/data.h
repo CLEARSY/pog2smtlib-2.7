@@ -49,7 +49,7 @@ namespace BConstruct::Expression {
 class Data : public std::enable_shared_from_this<Data>, public Uniform {
  public:
   explicit Data(const struct ::Data &dt, const std::string &,
-                std::set<std::shared_ptr<Abstract>> &);
+                const PreRequisites &);
   virtual ~Data() = default;
 
   Data &operator=(const Data &) = delete;

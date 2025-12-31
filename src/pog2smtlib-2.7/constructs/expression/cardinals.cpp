@@ -37,8 +37,7 @@ namespace Expression {
 
 std::shared_ptr<Cardinals> Cardinals::m_cache;
 
-Cardinals::Cardinals(const std::string &script,
-                     set<shared_ptr<Abstract>> &requisites)
+Cardinals::Cardinals(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "cardinals") {}
 
 };  // namespace Expression
@@ -48,9 +47,8 @@ shared_ptr<Abstract> Factory::Cardinals() {
       find(BConstruct::Expression::Cardinals::m_cache);
   if (!result) {
     const string script = fmt::format(SCRIPT);
-    set<shared_ptr<Abstract>> requisites{};
-    result =
-        make(BConstruct::Expression::Cardinals::m_cache, script, requisites);
+    result = make(BConstruct::Expression::Cardinals::m_cache, script,
+                  BConstruct::Abstract::NoPrerequisites);
   }
   return result;
 }

@@ -45,7 +45,7 @@ namespace Expression {
 MapBinaryBType<Lambda> Lambda::m_cache;
 
 Lambda::Lambda(const BType &U, const BType &V, const string &script,
-               set<shared_ptr<Abstract>> &requisites)
+               const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "λ") {}
 
 };  // namespace Expression
@@ -62,8 +62,8 @@ shared_ptr<Abstract> Factory::Lambda(const BType &U, const BType &V) {
                     /*2*/ symbolInner(V),
                     /*3*/ symbol(PUxV),
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV));
-    set<shared_ptr<Abstract>> requisites = {
-        Factory::SetMembership(UxV), Factory::Set(U), Factory::Equality(V)};
+    const PreRequisites requisites = {Factory::SetMembership(UxV),
+                                      Factory::Set(U), Factory::Equality(V)};
     result =
         make(BConstruct::Expression::Lambda::m_cache, U, V, script, requisites);
   }

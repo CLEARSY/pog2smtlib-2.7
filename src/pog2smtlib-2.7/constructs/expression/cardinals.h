@@ -20,8 +20,7 @@ namespace BConstruct::Expression {
 
 class Cardinals : public Uniform {
  public:
-  explicit Cardinals(const std::string &,
-                     std::set<std::shared_ptr<Abstract>> &);
+  explicit Cardinals(const std::string &, const PreRequisites &);
   virtual ~Cardinals() = default;
 
  private:

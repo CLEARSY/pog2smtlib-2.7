@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Floor : public Uniform {
  public:
-  explicit Floor(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Floor(const std::string &, const PreRequisites &);
   virtual ~Floor() = default;
 
  private:

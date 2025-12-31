@@ -43,7 +43,7 @@ namespace Expression {
 MapUnaryBType<Restrict_In_Front> Restrict_In_Front::m_cache;
 
 Restrict_In_Front::Restrict_In_Front(const BType& T, const std::string& script,
-                                     set<shared_ptr<Abstract>>& requisites)
+                                     const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "↑") {}
 
 };  // namespace Expression
@@ -63,7 +63,7 @@ shared_ptr<Abstract> Factory::Restrict_In_Front(const BType& T) {
         /*5*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT),
         /*6*/ smtSymbol(Expr::BinaryOp::Interval),
         /*7*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {
+    const PreRequisites requisites = {
         Factory::SetMembership(ZxT),
         Factory::SetMembership(BType::INT),
         Factory::Interval(),

@@ -46,7 +46,7 @@ MapBinaryBType<Transformed_Into_Function> Transformed_Into_Function::m_cache;
 
 Transformed_Into_Function::Transformed_Into_Function(
     const BType &U, const BType &V, const string &script,
-    set<shared_ptr<Abstract>> &requisites)
+    const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "fnc") {}
 
 };  // namespace Expression
@@ -71,9 +71,9 @@ shared_ptr<Abstract> Factory::Transformed_Into_Function(const BType &U,
                     /*6*/ smtSymbol(Pred::ComparisonOp::Membership, V),
                     /*7*/ symbolInner(UxV),
                     /*8*/ smtSymbol(Pred::ComparisonOp::Membership, UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxPV),
-                                            Factory::SetMembership(V),
-                                            Factory::SetMembership(UxV)};
+    const PreRequisites requisites = {Factory::SetMembership(UxPV),
+                                      Factory::SetMembership(V),
+                                      Factory::SetMembership(UxV)};
     result = make(BConstruct::Expression::Transformed_Into_Function::m_cache, U,
                   V, script, requisites);
   }

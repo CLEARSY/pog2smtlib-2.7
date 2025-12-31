@@ -44,7 +44,7 @@ namespace Expression {
 MapBinaryBType<Reverse> Reverse::m_cache;
 
 Reverse::Reverse(const BType &U, const BType &V, const string &script,
-                 set<shared_ptr<Abstract>> &requisites)
+                 const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "~") {}
 
 };  // namespace Expression
@@ -65,8 +65,8 @@ shared_ptr<Abstract> Factory::Reverse(const BType &U, const BType &V) {
                     /*4*/ symbolInner(VxU),
                     /*5*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
                     /*6*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::Set(VxU),
-                                            Factory::SetMembership(UxV)};
+    const PreRequisites requisites = {Factory::Set(VxU),
+                                      Factory::SetMembership(UxV)};
     result = make(BConstruct::Expression::Reverse::m_cache, U, V, script,
                   requisites);
   }

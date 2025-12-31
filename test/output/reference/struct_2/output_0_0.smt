@@ -5,11 +5,9 @@
 (declare-sort P 1)
 (declare-datatype |struct(Note, Suffisant)| ((|rec(Note, Suffisant)| (|'Note| |Z|)(|'Suffisant| |BOOL|))))
 (define-sort |POW struct(Note, Suffisant)| () (P |struct(Note, Suffisant)|))
-(define-sort |POW Z| () (P |Z|))
-(define-sort |POW BOOL| () (P |BOOL|))
 (declare-fun |set.in struct(Note, Suffisant)| (|struct(Note, Suffisant)| |POW struct(Note, Suffisant)|) Bool)
-(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
-(declare-fun |set.in BOOL| (|BOOL| |POW BOOL|) Bool)
+(define-sort |POW BOOL| () (P |BOOL|))
+(define-sort |POW Z| () (P |Z|))
 (define-sort |? struct(Note, Suffisant)| () (-> |struct(Note, Suffisant)| Bool))
 (declare-const |set.intent struct(Note, Suffisant)| (-> |? struct(Note, Suffisant)| |POW struct(Note, Suffisant)|))
 (assert (!
@@ -18,16 +16,8 @@
       (= (|set.in struct(Note, Suffisant)| x (|set.intent struct(Note, Suffisant)| p))
          (p x))))
   :named |ax:set.in.intent struct(Note, Suffisant)|))
-(declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
-(declare-const BOOL |POW BOOL|)
-(assert (!
-  (forall ((e |BOOL|)) (|set.in BOOL| e BOOL))
-  :named |ax.set.in.BOOL|))
+(declare-fun |set.in BOOL| (|BOOL| |POW BOOL|) Bool)
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (declare-const |struct struct(Note, Suffisant)| (-> |? struct(Note, Suffisant)| |POW struct(Note, Suffisant)|))
 (assert (!
   (forall ((p |? struct(Note, Suffisant)|))
@@ -35,6 +25,16 @@
       (= (|set.in struct(Note, Suffisant)| x (|struct struct(Note, Suffisant)| p))
          (p x))))
   :named |ax.struct.definition struct(Note, Suffisant)|))
+(declare-const BOOL |POW BOOL|)
+(assert (!
+  (forall ((e |BOOL|)) (|set.in BOOL| e BOOL))
+  :named |ax.set.in.BOOL|))
+(declare-fun |interval| (|Z| |Z|) |POW Z|)
+ (assert (!
+    (forall ((l |Z|) (u |Z|) (e |Z|))
+        (= (|set.in Z| e (|interval| l u))
+            (and (<= l e) (<= e u))))
+    :named |ax.set.in.interval|))
 (assert (!
   (not
     (|set.in struct(Note, Suffisant)| (|rec(Note, Suffisant)|12 true) (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (|'Note| _c0) (|interval| 0 20))(|set.in BOOL| (|'Suffisant| _c0) BOOL))))))

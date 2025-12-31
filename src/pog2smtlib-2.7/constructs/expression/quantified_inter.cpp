@@ -44,7 +44,7 @@ MapBinaryBType<Quantified_Intersection> Quantified_Intersection::m_cache;
 
 Quantified_Intersection::Quantified_Intersection(
     const BType& U, const BType& V, const string& script,
-    set<shared_ptr<Abstract>>& requisites)
+    const PreRequisites& requisites)
     : BinaryBType(U, V, script, requisites, "INTER") {}
 
 };  // namespace Expression
@@ -64,8 +64,8 @@ shared_ptr<Abstract> Factory::Quantified_Intersection(const BType& U,
         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, V),
         /*5*/ symbol(V),
         /*6*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(V),
-                                            Factory::Set(U)};
+    const PreRequisites requisites = {Factory::SetMembership(V),
+                                      Factory::Set(U)};
     result = make(BConstruct::Expression::Quantified_Intersection::m_cache, U,
                   V, script, requisites);
   }

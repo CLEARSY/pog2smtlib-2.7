@@ -21,70 +21,65 @@
 #include <string>
 #include <variant>
 
+#include "btype-utils.h"
 #include "btype.h"
 #include "signature.h"
 
-struct BTypeHash {
-  size_t operator()(const std::shared_ptr<const BType> &t) const {
-    size_t result = t->hash_combine(0);
-    return result;
-  }
-};
-struct BTypeEqual {
-  bool operator()(const std::shared_ptr<const BType> &lhs,
-                  const std::shared_ptr<const BType> &rhs) const {
+/**
+ * @details
+ * Polymorphic B constructs need to be monomorphized, i.e., sort parameters are
+ * instantiated. For instance, Cartesian product operator has two sort
+ * parameters: the sort of the domain and the sort of the range. The number of
+ * sort parameters are 0, 1, 2, 3, 4.
+ */
+namespace BConstruct {
+class Uniform; /** @brief abstract class for operators with 0 sort parameters */
+class UnaryBType; /** @brief abstract class for operators with 1 sort parameters
+                   */
+class BinaryBType;     /** @brief abstract class for operators with 2 sort
+                          parameters */
+class TernaryBType;    /** @brief abstract class for operators with 3 sort
+                          parameters */
+class QuaternaryBType; /** @brief abstract class for operators with 4 sort
+                          parameters */
+}  // namespace BConstruct
 
-    int result = (*lhs == *rhs);
-    return result;
-  }
-};
+/**
+ * @brief BinaryBType is an alias of a pair of B types.
+ * @details Useful to index B operators with two sort parameters.
+ */
 using BinaryBType =
     std::pair<std::shared_ptr<const BType>, std::shared_ptr<const BType>>;
 
 struct BinaryBTypeHash {
-  size_t operator()(const BinaryBType &p) const {
-    return p.second->hash_combine(p.first->hash_combine(0));
-  }
+  size_t operator()(const BinaryBType &p) const;
 };
-
 struct BinaryBTypeEqual {
-  bool operator()(const BinaryBType &lhs, const BinaryBType &rhs) const {
-    return BTypeEqual()(lhs.first, rhs.first) &&
-           BTypeEqual()(lhs.second, rhs.second);
-  }
+  bool operator()(const BinaryBType &lhs, const BinaryBType &rhs) const;
 };
 
+/**
+ * @brief TernaryBType is an alias of a triplet of B types.
+ * @details Useful to index B operators with three sort parameters.
+ */
 using TernaryBType = std::array<std::shared_ptr<const BType>, 3>;
-
 struct TernaryBTypeHash {
-  size_t operator()(const TernaryBType &p) const {
-    return p.at(2)->hash_combine(
-        p.at(1)->hash_combine(p.at(0)->hash_combine(0)));
-  }
+  size_t operator()(const TernaryBType &p) const;
 };
 struct TernaryBTypeEqual {
-  bool operator()(const TernaryBType &lhs, const TernaryBType &rhs) const {
-    return BTypeEqual()(lhs.at(0), rhs.at(0)) &&
-           BTypeEqual()(lhs.at(1), rhs.at(1)) &&
-           BTypeEqual()(lhs.at(2), rhs.at(2));
-  }
+  bool operator()(const TernaryBType &lhs, const TernaryBType &rhs) const;
 };
 
+/**
+ * @brief QuadrupleBType is an alias of a quadruplet of B types.
+ * @details Useful to index B operators with four sort parameters.
+ */
 using QuadrupleBType = std::array<std::shared_ptr<const BType>, 4>;
-
 struct QuadrupleBTypeHash {
-  size_t operator()(const QuadrupleBType &p) const {
-    return p.at(3)->hash_combine(
-        p.at(2)->hash_combine(p.at(1)->hash_combine(p.at(0)->hash_combine(0))));
-  }
+  size_t operator()(const QuadrupleBType &p) const;
 };
 struct QuadrupleBTypeEqual {
-  bool operator()(const QuadrupleBType &lhs, const QuadrupleBType &rhs) const {
-    return BTypeEqual()(lhs.at(0), rhs.at(0)) &&
-           BTypeEqual()(lhs.at(1), rhs.at(1)) &&
-           BTypeEqual()(lhs.at(2), rhs.at(2)) &&
-           BTypeEqual()(lhs.at(3), rhs.at(3));
-  }
+  bool operator()(const QuadrupleBType &lhs, const QuadrupleBType &rhs) const;
 };
 
 template <typename Construct>
@@ -110,6 +105,22 @@ using MapQuadrupleBType =
 namespace BConstruct {
 
 class Abstract;
+
+struct PtrHash {
+  std::size_t operator()(const std::shared_ptr<BConstruct::Abstract> &t) const;
+};
+
+struct PtrCompare {
+  bool operator()(const std::shared_ptr<BConstruct::Abstract> &a,
+                  const std::shared_ptr<BConstruct::Abstract> &b) const;
+};
+
+struct PtrEqual {
+  bool operator()(const std::shared_ptr<BConstruct::Abstract> &a,
+                  const std::shared_ptr<BConstruct::Abstract> &b) const;
+};
+
+using PreRequisites = std::set<std::shared_ptr<Abstract>, PtrCompare>;
 
 namespace Type {
 class Type;
@@ -488,9 +499,9 @@ class Factory {
     return m;
   }
   template <typename T>
-  std::shared_ptr<Abstract> make(
-      std::shared_ptr<T> &m, const std::string &script,
-      std::set<std::shared_ptr<Abstract>> &requisites) {
+  std::shared_ptr<Abstract> make(std::shared_ptr<T> &m,
+                                 const std::string &script,
+                                 const PreRequisites &requisites) {
     if (m != nullptr) {
       return m;
     }
@@ -510,9 +521,9 @@ class Factory {
   }
 
   template <typename T>
-  std::shared_ptr<Abstract> make(
-      MapUnaryBType<T> &m, const BType &t, const std::string &script,
-      std::set<std::shared_ptr<Abstract>> &requisites) {
+  std::shared_ptr<Abstract> make(MapUnaryBType<T> &m, const BType &t,
+                                 const std::string &script,
+                                 const PreRequisites &requisites) {
     std::shared_ptr<const BType> pt = std::make_shared<const BType>(t);
     auto it = m.find(pt);
     if (it != m.end()) {
@@ -537,10 +548,9 @@ class Factory {
   }
 
   template <typename T>
-  std::shared_ptr<Abstract> make(
-      MapBinaryBType<T> &m, const BType &U, const BType &V,
-      const std::string &script,
-      std::set<std::shared_ptr<Abstract>> &requisites) {
+  std::shared_ptr<Abstract> make(MapBinaryBType<T> &m, const BType &U,
+                                 const BType &V, const std::string &script,
+                                 const PreRequisites &requisites) {
     ::BinaryBType UxV = std::make_pair(std::make_shared<const BType>(U),
                                        std::make_shared<const BType>(V));
     auto it = m.find(UxV);
@@ -567,10 +577,10 @@ class Factory {
   }
 
   template <typename T>
-  std::shared_ptr<Abstract> make(
-      MapTernaryBType<T> &m, const BType &fst, const BType &snd,
-      const BType &thd, const std::string &script,
-      std::set<std::shared_ptr<Abstract>> &requisites) {
+  std::shared_ptr<Abstract> make(MapTernaryBType<T> &m, const BType &fst,
+                                 const BType &snd, const BType &thd,
+                                 const std::string &script,
+                                 const PreRequisites &requisites) {
     ::TernaryBType pt = {std::make_shared<const BType>(fst),
                          std::make_shared<const BType>(snd),
                          std::make_shared<const BType>(thd)};
@@ -599,10 +609,10 @@ class Factory {
   }
 
   template <typename T>
-  std::shared_ptr<Abstract> make(
-      MapQuadrupleBType<T> &m, const BType &U, const BType &V, const BType &W,
-      const BType &Z, const std::string &script,
-      std::set<std::shared_ptr<Abstract>> &requisites) {
+  std::shared_ptr<Abstract> make(MapQuadrupleBType<T> &m, const BType &U,
+                                 const BType &V, const BType &W, const BType &Z,
+                                 const std::string &script,
+                                 const PreRequisites &requisites) {
     ::QuadrupleBType pt = {
         std::make_shared<const BType>(U), std::make_shared<const BType>(V),
         std::make_shared<const BType>(W), std::make_shared<const BType>(Z)};
@@ -627,10 +637,34 @@ class Abstract : public std::enable_shared_from_this<Abstract> {
   Abstract(const Abstract &) = delete;
   Abstract(Abstract &&) = delete;
 
+  // Custom equality function
+  struct PtrHash {
+    std::size_t operator()(const std::shared_ptr<Abstract> &key) const {
+      static constexpr bool debug_me = false;
+      std::size_t result = std::hash<uint64_t>()(key.get()->index());
+      if (debug_me) {
+        std::cerr << fmt::format("hash({}) = {}\n", key->to_string(), result);
+      }
+      return result;
+    }
+  };
+
+  // Custom equality function
+  struct PtrEqual {
+    bool operator()(const std::shared_ptr<Abstract> &lhs,
+                    const std::shared_ptr<Abstract> &rhs) const {
+      static constexpr bool debug_me = false;
+      bool result = (*lhs.get() == *rhs.get());
+      if (debug_me) {
+        std::cerr << fmt::format("({} == {}) = {}\n", lhs->to_string(),
+                                 rhs->to_string(), result);
+      }
+      return result;
+    }
+  };
+
   virtual std::string script() const { return m_script; }
-  virtual std::set<std::shared_ptr<Abstract>> prerequisites() const {
-    return m_prerequisites;
-  }
+  virtual PreRequisites prerequisites() const { return m_prerequisites; }
 
   static int compare(const Abstract &v1, const Abstract &v2) {
     size_t hash1 = v1.hash_combine(0);
@@ -680,16 +714,26 @@ class Abstract : public std::enable_shared_from_this<Abstract> {
  protected:
   std::uint64_t m_index;
   std::string m_script;
-  std::set<std::shared_ptr<Abstract>> m_prerequisites;
+  PreRequisites m_prerequisites;
   std::string m_label;
   std::string m_debug_string = "B Construct";
 
  protected:
   static const std::string NoScript;
-  static const std::set<std::shared_ptr<Abstract>> NoPrerequisites;
+  static const PreRequisites NoPrerequisites;
 
   Abstract(const std::string script,
            std::set<std::shared_ptr<Abstract>> &requisites,
+           const std::string &label, const std::string &debug_string)
+      : m_index(0ul),
+        m_script(script),
+        m_prerequisites(),
+        m_label(label),
+        m_debug_string(debug_string) {
+    m_prerequisites.insert(requisites.begin(), requisites.end());
+  }
+
+  Abstract(const std::string script, const PreRequisites &requisites,
            const std::string &label, const std::string &debug_string)
       : m_index(0ul),
         m_script(script),
@@ -706,8 +750,7 @@ class Uniform : public Abstract {
 
  protected:
   Uniform() = default;
-  Uniform(const std::string script,
-          std::set<std::shared_ptr<Abstract>> &requisites,
+  Uniform(const std::string script, const PreRequisites &requisites,
           const std::string &label)
       : Abstract(script, requisites, label, label) {}
   size_t hash_special() const override;
@@ -716,8 +759,7 @@ class Uniform : public Abstract {
 class UnaryBType : public Abstract {
  public:
   UnaryBType(const BType &T, const std::string script,
-             std::set<std::shared_ptr<Abstract>> &requisites,
-             const std::string &label)
+             const PreRequisites &requisites, const std::string &label)
       : Abstract(script, requisites,
                  fmt::format("{}_<{}>", label, T.to_string()),
                  fmt::format("{}_<{}>", label, T.to_string())),
@@ -734,8 +776,7 @@ class UnaryBType : public Abstract {
 class BinaryBType : public Abstract {
  public:
   BinaryBType(const BType &U, const BType &V, const std::string script,
-              std::set<std::shared_ptr<Abstract>> &requisites,
-              const std::string &label)
+              const PreRequisites &requisites, const std::string &label)
       : Abstract(
             script, requisites, label,
             fmt::format("{}_<{},{}>", label, U.to_string(), V.to_string())),
@@ -757,8 +798,7 @@ class BinaryBType : public Abstract {
 class TernaryBType : public Abstract {
  public:
   TernaryBType(const BType &T, const BType &U, const BType &V,
-               const std::string script,
-               std::set<std::shared_ptr<Abstract>> &requisites,
+               const std::string script, const PreRequisites &requisites,
                const std::string &label)
       : Abstract(script, requisites, label,
                  fmt::format("{}_<{},{},{}>", label, T.to_string(),
@@ -785,8 +825,7 @@ class QuaternaryBType : public Abstract {
  public:
   QuaternaryBType(const BType &t1, const BType &t2, const BType &t3,
                   const BType &t4, const std::string script,
-                  std::set<std::shared_ptr<Abstract>> &requisites,
-                  const std::string &label)
+                  const PreRequisites &requisites, const std::string &label)
       : Abstract(script, requisites, label,
                  fmt::format("{}_<{},{},{},{}>", label, t1.to_string(),
                              t2.to_string(), t3.to_string(), t4.to_string())),
@@ -858,7 +897,9 @@ class Multiplication : public Uniform {
 
 };  // namespace Expression
 
-// Custom hash function
+class Abstract;
+
+// Custom equality function
 struct BConstructPtrHash {
   std::size_t operator()(const std::shared_ptr<Abstract> &key) const {
     static constexpr bool debug_me = false;
@@ -884,8 +925,8 @@ struct BConstructPtrEqual {
   }
 };
 
-using Context = std::unordered_set<std::shared_ptr<Abstract>, BConstructPtrHash,
-                                   BConstructPtrEqual>;
+using Context = std::unordered_set<std::shared_ptr<Abstract>, Abstract::PtrHash,
+                                   Abstract::PtrEqual>;
 };  // namespace BConstruct
 
 extern std::string toString(const BConstruct::Context &context);

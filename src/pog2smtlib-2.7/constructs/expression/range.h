@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Range : public BinaryBType {
  public:
   explicit Range(const BType &U, const BType &V, const std::string &,
-                 std::set<std::shared_ptr<Abstract>> &);
+                 const PreRequisites &);
   virtual ~Range() = default;
 
  private:

@@ -145,13 +145,13 @@
          (and (|set.in POW ((Z x Z) x Z)| f (|injections (Z x Z) Z| X Y))
               (|set.in POW ((Z x Z) x Z)| f (|surjections (Z x Z) Z| X Y))))))
   :named |ax:set.in.bijections ((Z x Z) x Z)|))
+(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
  (assert (!
     (forall ((l |Z|) (u |Z|) (e |Z|))
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
-(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |bijections Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((X |POW Z|) (Y |POW Z|))
@@ -195,6 +195,10 @@
 (assert (!
   (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
   :named |ax.set.in.empty (Z x Z)|))
+(declare-const NATURAL1 |POW Z|)
+(assert (!
+  (forall ((e |Z|)) (= (|set.in Z| e NATURAL1) (<= 1 e)))
+  :named |ax.set.in.NATURAL1|))
 (declare-fun |seq Z| (|POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((E |POW Z|) (s |POW (Z x Z)|))
@@ -208,10 +212,6 @@
       (|seq Z| E)
       (|functions.total Z Z| (|interval| 1 (Value (|card Z| E))) E)))
   :named |ax.seq.is.total.fun Z|))
-(declare-const NATURAL1 |POW Z|)
-(assert (!
-  (forall ((e |Z|)) (= (|set.in Z| e NATURAL1) (<= 1 e)))
-  :named |ax.set.in.NATURAL1|))
 (declare-const |seq.empty Z| |POW (Z x Z)|)
 (assert (!
   (= |seq.empty Z| |set.empty (Z x Z)|)

@@ -41,6 +41,7 @@
           (=> (and (|set.in ((Z x Z) x Z)| p1 f) (|set.in ((Z x Z) x Z)| p2 f) (= (snd p1) (snd p2)))
               (= (fst p1) (fst p2))))))
   :named |ax:set.in.injections ((Z x Z) x Z)|))
+(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |bijections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|))
@@ -55,7 +56,6 @@
         (= (|set.in Z| e (|interval| l u))
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
-(declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |card (Z x Z)| (|POW (Z x Z)|) Cardinals)
 (assert (!
   (forall ((s |POW (Z x Z)|))

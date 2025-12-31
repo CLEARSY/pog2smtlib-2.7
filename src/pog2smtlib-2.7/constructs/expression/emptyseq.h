@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class EmptySeq : public UnaryBType {
  public:
   explicit EmptySeq(const BType &, const std::string &script,
-                    std::set<std::shared_ptr<Abstract>> &requisites);
+                    const PreRequisites &requisites);
   virtual ~EmptySeq() = default;
 
  private:

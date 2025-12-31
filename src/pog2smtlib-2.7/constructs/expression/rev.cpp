@@ -42,7 +42,7 @@ namespace Expression {
 MapUnaryBType<Rev> Rev::m_cache;
 
 Rev::Rev(const BType& T, const std::string& script,
-         set<shared_ptr<Abstract>>& requisites)
+         const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "rev") {}
 
 };  // namespace Expression
@@ -59,8 +59,8 @@ shared_ptr<Abstract> Factory::Rev(const BType& T) {
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
                     /*4*/ smtSymbol(Expr::UnaryOp::Size, T),
                     /*5*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(ZxT),
-                                            Factory::Size(T)};
+    const PreRequisites requisites = {Factory::SetMembership(ZxT),
+                                      Factory::Size(T)};
     result = make(BConstruct::Expression::Rev::m_cache, T, script, requisites);
   }
   return result;

@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Injection : public BinaryBType {
  public:
   explicit Injection(const BType &, const BType &, const std::string &script,
-                     std::set<std::shared_ptr<Abstract>> &requisites);
+                     const PreRequisites &requisites);
   virtual ~Injection() = default;
 
  private:

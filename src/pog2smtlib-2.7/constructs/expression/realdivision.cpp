@@ -49,7 +49,7 @@ namespace Expression {
 std::shared_ptr<RealDivision> RealDivision::m_cache;
 
 RealDivision::RealDivision(const std::string &script,
-                           set<shared_ptr<Abstract>> &requisites)
+                           const PreRequisites &requisites)
     : Uniform(script, requisites, "/r") {}
 
 };  // namespace Expression
@@ -60,7 +60,7 @@ shared_ptr<Abstract> Factory::RealDivision() {
   if (!result) {
     const string script = fmt::format(
         SCRIPT, smtSymbol(Expr::BinaryOp::RDivision), symbol(BType::REAL));
-    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::REAL)};
+    const PreRequisites requisites{Factory::Type(BType::REAL)};
     result =
         make(BConstruct::Expression::RealDivision::m_cache, script, requisites);
   }

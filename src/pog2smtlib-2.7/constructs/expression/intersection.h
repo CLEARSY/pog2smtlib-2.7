@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Intersection : public UnaryBType {
  public:
   explicit Intersection(const BType& T, const std::string& script,
-                        std::set<std::shared_ptr<Abstract>>& requisites);
+                        const PreRequisites& requisites);
   virtual ~Intersection() = default;
 
  private:

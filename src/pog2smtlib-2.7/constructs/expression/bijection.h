@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Bijection : public BinaryBType {
  public:
   explicit Bijection(const BType &, const BType &, const std::string &script,
-                     std::set<std::shared_ptr<Abstract>> &requisites);
+                     const PreRequisites &requisites);
   explicit Bijection(const BType &, const BType &);
   virtual ~Bijection() = default;
 

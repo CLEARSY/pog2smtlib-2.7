@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class First : public UnaryBType {
  public:
   explicit First(const BType &, const std::string &script,
-                 std::set<std::shared_ptr<Abstract>> &requisites);
+                 const PreRequisites &requisites);
   virtual ~First() = default;
 
  private:

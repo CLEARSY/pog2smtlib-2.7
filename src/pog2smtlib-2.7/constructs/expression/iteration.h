@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Iteration : public UnaryBType {
  public:
   explicit Iteration(const BType& T, const std::string& script,
-                     std::set<std::shared_ptr<Abstract>>& requisites);
+                     const PreRequisites& requisites);
   virtual ~Iteration() = default;
 
  private:

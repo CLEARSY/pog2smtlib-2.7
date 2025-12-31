@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Tail : public UnaryBType {
  public:
   explicit Tail(const BType &, const std::string &script,
-                std::set<std::shared_ptr<Abstract>> &requisites);
+                const PreRequisites &requisites);
   virtual ~Tail() = default;
 
  private:

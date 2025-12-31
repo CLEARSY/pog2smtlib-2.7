@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class PowerSet1 : public UnaryBType {
  public:
   explicit PowerSet1(const BType &, const std::string &script,
-                     std::set<std::shared_ptr<Abstract>> &requisites);
+                     const PreRequisites &requisites);
   virtual ~PowerSet1() = default;
 
  private:

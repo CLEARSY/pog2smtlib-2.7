@@ -50,7 +50,7 @@ namespace Expression {
 shared_ptr<RGeneralizedSum> RGeneralizedSum::m_cache;
 
 RGeneralizedSum::RGeneralizedSum(const std::string &script,
-                                 set<shared_ptr<Abstract>> &requisites)
+                                 const PreRequisites &requisites)
     : Uniform(script, requisites, "rΣ") {}
 
 };  // namespace Expression
@@ -67,8 +67,8 @@ shared_ptr<Abstract> Factory::RGeneralizedSum() {
         /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::REAL),
         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, BType::REAL),
         /*5*/ smtSymbol(Expr::NaryOp::Set, BType::REAL));
-    set<shared_ptr<Abstract>> requisites{Factory::Set(BType::REAL),
-                                         Factory::EmptySet(BType::REAL)};
+    const PreRequisites requisites{Factory::Set(BType::REAL),
+                                   Factory::EmptySet(BType::REAL)};
     result = make(BConstruct::Expression::RGeneralizedSum::m_cache, script,
                   requisites);
   }

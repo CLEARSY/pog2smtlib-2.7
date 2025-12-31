@@ -48,7 +48,7 @@ MapTernaryBType<Direct_Product> Direct_Product::m_cache;
 
 Direct_Product::Direct_Product(const BType &T, const BType &U, const BType &V,
                                const string &script,
-                               set<shared_ptr<Abstract>> &requisites)
+                               const PreRequisites &requisites)
     : TernaryBType(T, U, V, script, requisites, "⊗") {}
 
 };  // namespace Expression
@@ -76,9 +76,9 @@ shared_ptr<Abstract> Factory::Direct_Product(const BType &T, const BType &U,
         /*6*/ smtSymbol(Pred::ComparisonOp::Membership, xTU),
         /*7*/ smtSymbol(Pred::ComparisonOp::Membership, xTV),
         /*8*/ symbolInner(xxTUV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(xTxUV),
-                                            Factory::SetMembership(xTU),
-                                            Factory::SetMembership(xTV)};
+    const PreRequisites requisites = {Factory::SetMembership(xTxUV),
+                                      Factory::SetMembership(xTU),
+                                      Factory::SetMembership(xTV)};
     result = make(BConstruct::Expression::Direct_Product::m_cache, T, U, V,
                   script, requisites);
   }

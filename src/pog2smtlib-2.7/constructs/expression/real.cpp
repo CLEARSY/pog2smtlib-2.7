@@ -28,7 +28,7 @@ namespace Expression {
 
 std::shared_ptr<Real> Real::m_cache;
 
-Real::Real(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Real::Real(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "REAL") {}
 
 };  // namespace Expression
@@ -37,7 +37,7 @@ shared_ptr<Abstract> Factory::Real() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Real::m_cache);
   if (!result) {
     const string script = Expression::universeScript("REAL", BType::REAL);
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::REAL)};
+    const PreRequisites requisites{Factory::SetMembership(BType::REAL)};
     result = make(BConstruct::Expression::Real::m_cache, script, requisites);
   }
   return result;

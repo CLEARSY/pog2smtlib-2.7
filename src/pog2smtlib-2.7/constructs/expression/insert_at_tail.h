@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Insert_At_Tail : public UnaryBType {
  public:
   explicit Insert_At_Tail(const BType &, const std::string &script,
-                          std::set<std::shared_ptr<Abstract>> &requisites);
+                          const PreRequisites &requisites);
   virtual ~Insert_At_Tail() = default;
 
  private:

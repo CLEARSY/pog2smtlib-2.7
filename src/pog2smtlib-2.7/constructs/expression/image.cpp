@@ -42,7 +42,7 @@ namespace Expression {
 MapBinaryBType<Image> Image::m_cache;
 
 Image::Image(const BType &U, const BType &V, const string &script,
-             set<shared_ptr<Abstract>> &requisites)
+             const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "_image") {}
 
 };  // namespace Expression
@@ -67,7 +67,7 @@ shared_ptr<Abstract> Factory::Image(const BType &U, const BType &V) {
                     /*7*/ smtSymbol(Pred::ComparisonOp::Membership, U),
                     /*8*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
                     /*9*/ symbolInner(UxPUxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV)};
+    const PreRequisites requisites = {Factory::SetMembership(UxV)};
     result =
         make(BConstruct::Expression::Image::m_cache, U, V, script, requisites);
   }

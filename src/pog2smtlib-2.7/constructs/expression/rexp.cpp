@@ -44,7 +44,7 @@ namespace Expression {
 std::shared_ptr<RExponentiation> RExponentiation::m_cache;
 
 RExponentiation::RExponentiation(const std::string &script,
-                                 set<shared_ptr<Abstract>> &requisites)
+                                 const PreRequisites &requisites)
     : Uniform(script, requisites, "**r") {}
 
 };  // namespace Expression
@@ -56,9 +56,9 @@ shared_ptr<Abstract> Factory::RExponentiation() {
     const string script =
         fmt::format(SCRIPT, smtSymbol(Expr::BinaryOp::RExponentiation),
                     symbol(BType::REAL), symbol(BType::INT));
-    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT),
-                                         Factory::Type(BType::INT),
-                                         Factory::Type(BType::REAL)};
+    const PreRequisites requisites{Factory::Type(BType::INT),
+                                   Factory::Type(BType::INT),
+                                   Factory::Type(BType::REAL)};
     result = make(BConstruct::Expression::RExponentiation::m_cache, script,
                   requisites);
   }

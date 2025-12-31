@@ -57,7 +57,7 @@ MapQuadrupleBType<Parallel_Product> Parallel_Product::m_cache;
 Parallel_Product::Parallel_Product(const BType &T, const BType &U,
                                    const BType &V, const BType &W,
                                    const string &script,
-                                   set<shared_ptr<Abstract>> &requisites)
+                                   const PreRequisites &requisites)
     : QuaternaryBType(T, U, V, W, script, requisites, "∥") {}
 
 };  // namespace Expression
@@ -98,7 +98,7 @@ shared_ptr<Abstract> Factory::Parallel_Product(const BType &T, const BType &U,
         /*9*/ symbolInner(U),
         /*10*/ symbolInner(V),
         /*11*/ symbolInner(W));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(xxTVxUW),
+    BConstruct::PreRequisites requisites = {Factory::SetMembership(xxTVxUW),
                                             Factory::SetMembership(xTU),
                                             Factory::SetMembership(xVW)};
     result = make(BConstruct::Expression::Parallel_Product::m_cache, T, U, V, W,

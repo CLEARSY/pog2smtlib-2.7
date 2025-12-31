@@ -42,7 +42,7 @@ namespace Expression {
 MapUnaryBType<GeneralizedUnion> GeneralizedUnion::m_cache;
 
 GeneralizedUnion::GeneralizedUnion(const BType& T, const string& script,
-                                   set<shared_ptr<Abstract>>& requisites)
+                                   const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "union") {}
 
 };  // namespace Expression
@@ -61,7 +61,7 @@ std::shared_ptr<Abstract> Factory::GeneralizedUnion(const BType& T) {
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T),
                     /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
                     /*6*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(PT)};
+    const PreRequisites requisites{Factory::SetMembership(PT)};
     result = make(BConstruct::Expression::GeneralizedUnion::m_cache, T, script,
                   requisites);
   }

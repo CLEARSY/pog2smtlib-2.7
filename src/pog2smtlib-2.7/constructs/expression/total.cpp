@@ -45,7 +45,7 @@ MapBinaryBType<Total_Relation> Total_Relation::m_cache;
 
 Total_Relation::Total_Relation(const BType &U, const BType &V,
                                const string &script,
-                               set<shared_ptr<Abstract>> &requisites)
+                               const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "_total") {}
 
 };  // namespace Expression
@@ -69,8 +69,8 @@ shared_ptr<Abstract> Factory::Total_Relation(const BType &U, const BType &V) {
                     /*6*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
                     /*7*/ smtSymbol(Expr::UnaryOp::Domain, U, V),
                     /*8*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(PUxV),
-                                            Factory::Domain(U, V)};
+    const PreRequisites requisites = {Factory::SetMembership(PUxV),
+                                      Factory::Domain(U, V)};
     result = make(BConstruct::Expression::Total_Relation::m_cache, U, V, script,
                   requisites);
   };

@@ -20,8 +20,7 @@ namespace BConstruct::Expression {
 
 class RealDivision : public Uniform {
  public:
-  explicit RealDivision(const std::string &,
-                        std::set<std::shared_ptr<Abstract>> &);
+  explicit RealDivision(const std::string &, const PreRequisites &);
   virtual ~RealDivision() = default;
 
  private:

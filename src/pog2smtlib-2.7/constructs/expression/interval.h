@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class Interval : public Uniform {
  public:
-  explicit Interval(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit Interval(const std::string &, const PreRequisites &);
   virtual ~Interval() = default;
 
  private:

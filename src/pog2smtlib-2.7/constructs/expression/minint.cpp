@@ -37,7 +37,7 @@ namespace Expression {
 
 shared_ptr<Minint> Minint::m_cache;
 
-Minint::Minint(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Minint::Minint(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "MININT") {}
 
 };  // namespace Expression
@@ -57,7 +57,7 @@ shared_ptr<Abstract> Factory::Minint() {
                     /*0*/ smtSymbol(Expr::Visitor::EConstant::MinInt),
                     /*1*/ symbol(BType::INT),
                     /*2*/ smtLiteral);
-    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT)};
+    const PreRequisites requisites{Factory::Type(BType::INT)};
     result = make(BConstruct::Expression::Minint::m_cache, script, requisites);
   }
   return result;

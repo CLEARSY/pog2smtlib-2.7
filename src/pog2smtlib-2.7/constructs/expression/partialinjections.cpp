@@ -45,7 +45,7 @@ MapBinaryBType<Partial_Injection> Partial_Injection::m_cache;
 
 Partial_Injection::Partial_Injection(const BType &U, const BType &V,
                                      const string &script,
-                                     set<shared_ptr<Abstract>> &requisites)
+                                     const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, ">+>") {}
 
 };  // namespace Expression
@@ -71,9 +71,9 @@ shared_ptr<Abstract> Factory::Partial_Injection(const BType &U,
         /*7*/ symbolInner(V),
         /*8*/ symbolInner(UxV),
         /*9*/ smtSymbol(Expr::BinaryOp::Partial_Functions, U, V));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(PUxV),
-                                            Factory::Partial_Function(U, V),
-                                            Factory::Injection(U, V)};
+    const PreRequisites requisites = {Factory::SetMembership(PUxV),
+                                      Factory::Partial_Function(U, V),
+                                      Factory::Injection(U, V)};
     result = make(BConstruct::Expression::Partial_Injection::m_cache, U, V,
                   script, requisites);
   }

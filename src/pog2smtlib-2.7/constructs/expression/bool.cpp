@@ -27,7 +27,7 @@ namespace Expression {
 
 std::shared_ptr<Bool> Bool::m_cache;
 
-Bool::Bool(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Bool::Bool(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "BOOL") {}
 
 };  // namespace Expression
@@ -36,7 +36,8 @@ shared_ptr<Abstract> Factory::Bool() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Bool::m_cache);
   if (!result) {
     const string script = Expression::universeScript("BOOL", BType::BOOL);
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(BType::BOOL)};
+    const BConstruct::PreRequisites requisites{
+        Factory::SetMembership(BType::BOOL)};
     result = make(BConstruct::Expression::Bool::m_cache, script, requisites);
   }
   return result;

@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Perm : public UnaryBType {
  public:
   explicit Perm(const BType &, const std::string &script,
-                std::set<std::shared_ptr<Abstract>> &requisites);
+                const PreRequisites &requisites);
   virtual ~Perm() = default;
 
  private:

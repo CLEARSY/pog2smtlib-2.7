@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Fin1 : public UnaryBType {
  public:
   explicit Fin1(const BType& T, const std::string& script,
-                std::set<std::shared_ptr<Abstract>>& requisites);
+                const PreRequisites& requisites);
   virtual ~Fin1() = default;
 
  private:

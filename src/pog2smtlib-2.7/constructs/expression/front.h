@@ -21,7 +21,7 @@ namespace BConstruct::Expression {
 class Front : public UnaryBType {
  public:
   explicit Front(const BType &, const std::string &script,
-                 std::set<std::shared_ptr<Abstract>> &requisites);
+                 const PreRequisites &requisites);
   virtual ~Front() = default;
 
  private:

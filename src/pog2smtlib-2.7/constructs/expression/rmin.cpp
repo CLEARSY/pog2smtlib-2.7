@@ -45,7 +45,7 @@ namespace Expression {
 
 std::shared_ptr<RMin> RMin::m_cache;
 
-RMin::RMin(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+RMin::RMin(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "rmin") {}
 
 };  // namespace Expression
@@ -59,7 +59,7 @@ shared_ptr<Abstract> Factory::RMin() {
         /*2*/ symbol(BType::POW(BType::REAL)),
         /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::REAL),
         /*4*/ smtSymbol(Pred::ComparisonOp::Membership, BType::REAL));
-    set<shared_ptr<Abstract>> requisites{Factory::EmptySet(BType::REAL)};
+    const PreRequisites requisites{Factory::EmptySet(BType::REAL)};
     result = make(BConstruct::Expression::RMin::m_cache, script, requisites);
   }
   return result;

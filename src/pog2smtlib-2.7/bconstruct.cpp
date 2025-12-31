@@ -25,13 +25,49 @@
 #include "pred.h"
 #include "signature.h"
 
-std::string toString(const BConstruct::Context& context) {
+std::string toString(const BConstruct::Context &context) {
   std::vector<std::string> args;
-  for (const auto& c : context) {
+  for (const auto &c : context) {
     args.push_back(c->to_string());
   }
   return fmt::format("[{}]", fmt::join(args, " "));
 }
+
+size_t BinaryBTypeHash::operator()(const BinaryBType &p) const {
+  return p.second->hash_combine(p.first->hash_combine(0));
+}
+
+bool BinaryBTypeEqual::operator()(const BinaryBType &lhs,
+                                  const BinaryBType &rhs) const {
+  return BTypeEqual()(lhs.first, rhs.first) &&
+         BTypeEqual()(lhs.second, rhs.second);
+}
+
+size_t TernaryBTypeHash::operator()(const TernaryBType &p) const {
+  return p.at(2)->hash_combine(p.at(1)->hash_combine(p.at(0)->hash_combine(0)));
+}
+
+bool TernaryBTypeEqual::operator()(const TernaryBType &lhs,
+                                   const TernaryBType &rhs) const {
+  return BTypeEqual()(lhs.at(0), rhs.at(0)) &&
+         BTypeEqual()(lhs.at(1), rhs.at(1)) &&
+         BTypeEqual()(lhs.at(2), rhs.at(2));
+}
+
+size_t QuadrupleBTypeHash::operator()(const QuadrupleBType &p) const {
+    {return p.at(3) -> hash_combine(p.at(2)->hash_combine(
+        p.at(1)->hash_combine(p.at(0)->hash_combine(0))));
+}
+}
+;
+bool QuadrupleBTypeEqual::operator()(const QuadrupleBType &lhs,
+                                     const QuadrupleBType &rhs) const {
+  return BTypeEqual()(lhs.at(0), rhs.at(0)) &&
+         BTypeEqual()(lhs.at(1), rhs.at(1)) &&
+         BTypeEqual()(lhs.at(2), rhs.at(2)) &&
+         BTypeEqual()(lhs.at(3), rhs.at(3));
+}
+
 namespace BConstruct {
 
 using std::make_pair;
@@ -41,6 +77,23 @@ using std::shared_ptr;
 using std::string;
 using std::unordered_map;
 using std::vector;
+
+std::size_t PtrHash::operator()(
+    const std::shared_ptr<BConstruct::Abstract> &t) const {
+  return std::hash<uint64_t>()(t.get()->index());
+}
+
+bool PtrCompare::operator()(
+    const std::shared_ptr<BConstruct::Abstract> &a,
+    const std::shared_ptr<BConstruct::Abstract> &b) const {
+  return a.get()->index() < b.get()->index();
+}
+
+bool PtrEqual::operator()(
+    const std::shared_ptr<BConstruct::Abstract> &a,
+    const std::shared_ptr<BConstruct::Abstract> &b) const {
+  return a.get()->index() == b.get()->index();
+}
 
 void Factory::index(shared_ptr<Abstract> construct) {
   static constexpr bool debug_me = false;
@@ -52,7 +105,7 @@ void Factory::index(shared_ptr<Abstract> construct) {
   m_index.push_back(construct);
 }
 
-template <typename T> shared_ptr<Abstract> Factory::get(shared_ptr<T>& m) {
+template <typename T> shared_ptr<Abstract> Factory::get(shared_ptr<T> &m) {
   if (m != nullptr) {
     return m;
   }
@@ -100,7 +153,7 @@ size_t Abstract::hash_combine(size_t seed) const {
 }
 
 const std::string Abstract::NoScript{};
-const std::set<std::shared_ptr<Abstract>> Abstract::NoPrerequisites;
+const PreRequisites Abstract::NoPrerequisites;
 
 size_t Uniform::hash_special() const {
   return std::hash<std::string>{}(std::string(m_label));

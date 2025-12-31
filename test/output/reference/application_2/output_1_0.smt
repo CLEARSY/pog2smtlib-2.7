@@ -10,6 +10,12 @@
 (declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
 (define-sort |POW (Z x POW Z)| () (P |(Z x POW Z)|))
 (declare-fun |set.in (Z x POW Z)| (|(Z x POW Z)| |POW (Z x POW Z)|) Bool)
+(declare-fun |rel.domain Z POW Z| (|POW (Z x POW Z)|) |POW Z|)
+(assert (!
+  (forall ((r |POW (Z x POW Z)|) (e |Z|))
+    (= (|set.in Z| e (|rel.domain Z POW Z| r))
+       (exists ((y |POW Z|)) (|set.in (Z x POW Z)| (maplet e y) r))))
+  :named |ax:set.in.domain (Z x POW Z)|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!
@@ -26,12 +32,6 @@
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
          (p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
-(declare-fun |rel.domain Z POW Z| (|POW (Z x POW Z)|) |POW Z|)
-(assert (!
-  (forall ((r |POW (Z x POW Z)|) (e |Z|))
-    (= (|set.in Z| e (|rel.domain Z POW Z| r))
-       (exists ((y |POW Z|)) (|set.in (Z x POW Z)| (maplet e y) r))))
-  :named |ax:set.in.domain (Z x POW Z)|))
 (assert (!
   (not
     (|set.in Z| 3 (|rel.domain Z POW Z| (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 3)(= _c1 4))))))(= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 3)(= _c1 5))))))(= _c0 (maplet 3 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 6)(= _c1 4))))))(= _c0 (maplet 4 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 1)(= _c1 4))))))))))))

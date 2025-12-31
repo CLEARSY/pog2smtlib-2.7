@@ -42,7 +42,7 @@ namespace Predicate {
 MapUnaryBType<Equality> Equality::m_cache;
 
 Equality::Equality(const BType &T, const std::string &script,
-                   set<shared_ptr<Abstract>> &requisites)
+                   const PreRequisites &requisites)
     : UnaryBType(T, script, requisites, "=") {}
 
 };  // namespace Predicate
@@ -53,7 +53,7 @@ shared_ptr<Abstract> Factory::Equality(const BType &T) {
       find(BConstruct::Predicate::Equality::m_cache, T);
   if (!result) {
     string script{};
-    set<shared_ptr<Abstract>> requisites{};
+    PreRequisites requisites{};
     if (T.getKind() == BType::Kind::PowerType) {
       const BType &U = T.toPowerType().content;
       script = fmt::format(SCRIPT, symbolInner(U), symbol(T));

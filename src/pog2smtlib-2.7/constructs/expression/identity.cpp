@@ -44,7 +44,7 @@ namespace Expression {
 MapUnaryBType<Identity> Identity::m_cache;
 
 Identity::Identity(const BType& T, const string& script,
-                   set<shared_ptr<Abstract>>& requisites)
+                   const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "id") {}
 
 };  // namespace Expression
@@ -64,8 +64,8 @@ std::shared_ptr<Abstract> Factory::Identity(const BType& T) {
                     /*4*/ symbolInner(T),
                     /*5*/ smtSymbol(Pred::ComparisonOp::Membership, T),
                     /*6*/ symbol(TxT));
-    set<shared_ptr<Abstract>> requisites{Factory::SetMembership(T),
-                                         Factory::Set(TxT)};
+    const PreRequisites requisites{Factory::SetMembership(T),
+                                   Factory::Set(TxT)};
     result =
         make(BConstruct::Expression::Identity::m_cache, T, script, requisites);
   }

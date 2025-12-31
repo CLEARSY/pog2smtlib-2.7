@@ -45,8 +45,7 @@ namespace Expression {
 MapTernaryBType<Composition> Composition::m_cache;
 
 Composition::Composition(const BType &T, const BType &U, const BType &V,
-                         const string &script,
-                         set<shared_ptr<Abstract>> &requisites)
+                         const string &script, const PreRequisites &requisites)
     : TernaryBType(T, U, V, script, requisites, ";") {}
 
 };  // namespace Expression
@@ -77,9 +76,9 @@ shared_ptr<Abstract> Factory::Composition(const BType &T, const BType &U,
         /*7*/ smtSymbol(Pred::ComparisonOp::Membership, TxU),
         /*8*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
         /*9*/ symbolInner(TxUxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(TxU),
-                                            Factory::SetMembership(TxV),
-                                            Factory::SetMembership(UxV)};
+    const PreRequisites requisites = {Factory::SetMembership(TxU),
+                                      Factory::SetMembership(TxV),
+                                      Factory::SetMembership(UxV)};
     result = make(BConstruct::Expression::Composition::m_cache, T, U, V, script,
                   requisites);
   }

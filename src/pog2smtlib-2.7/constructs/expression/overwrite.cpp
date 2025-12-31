@@ -45,7 +45,7 @@ namespace Expression {
 MapBinaryBType<Overwrite> Overwrite::m_cache;
 
 Overwrite::Overwrite(const BType &U, const BType &V, const string &script,
-                     set<shared_ptr<Abstract>> &requisites)
+                     const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "<+") {}
 
 };  // namespace Expression
@@ -64,9 +64,9 @@ shared_ptr<Abstract> Factory::Overwrite(const BType &U, const BType &V) {
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, U),
                     /*5*/ smtSymbol(Expr::UnaryOp::Domain, U, V),
                     /*6*/ symbolInner(UxV));
-    set<shared_ptr<Abstract>> requisites = {Factory::SetMembership(UxV),
-                                            Factory::SetMembership(U),
-                                            Factory::Domain(U, V)};
+    const PreRequisites requisites = {Factory::SetMembership(UxV),
+                                      Factory::SetMembership(U),
+                                      Factory::Domain(U, V)};
     result = make(BConstruct::Expression::Overwrite::m_cache, U, V, script,
                   requisites);
   }

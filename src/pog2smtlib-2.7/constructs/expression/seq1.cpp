@@ -42,7 +42,7 @@ namespace Expression {
 MapUnaryBType<Seq1> Seq1::m_cache;
 
 Seq1::Seq1(const BType& T, const string& script,
-           set<shared_ptr<Abstract>>& requisites)
+           const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "seq1") {}
 
 };  // namespace Expression
@@ -65,7 +65,7 @@ std::shared_ptr<Abstract> Factory::Seq1(const BType& T) {
                     /*4*/ smtSymbol(Pred::ComparisonOp::Membership, PZxT),
                     /*5*/ smtSymbol(Expr::UnaryOp::Sequences, T),
                     /*6*/ symbolInner(T));
-    set<shared_ptr<Abstract>> requisites = {
+    const PreRequisites requisites = {
         Factory::Seq(T), Factory::SetMembership(PZxT), Factory::EmptySeq(T)};
     result = make(BConstruct::Expression::Seq1::m_cache, T, script, requisites);
   }

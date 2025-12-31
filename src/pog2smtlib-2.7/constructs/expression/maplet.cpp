@@ -36,7 +36,7 @@ namespace Expression {
 
 shared_ptr<Maplet> Maplet::m_cache;
 
-Maplet::Maplet(const std::string &script, set<shared_ptr<Abstract>> &requisites)
+Maplet::Maplet(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "|->") {}
 
 };  // namespace Expression
@@ -45,7 +45,7 @@ shared_ptr<Abstract> Factory::Maplet() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Maplet::m_cache);
   if (!result) {
     const string script = fmt::format(SCRIPT);
-    set<shared_ptr<Abstract>> requisites{Factory::CartesianProduct()};
+    const PreRequisites requisites{Factory::CartesianProduct()};
     result = make(BConstruct::Expression::Maplet::m_cache, script, requisites);
   }
   return result;

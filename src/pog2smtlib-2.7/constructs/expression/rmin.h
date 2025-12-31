@@ -20,7 +20,7 @@ namespace BConstruct::Expression {
 
 class RMin : public Uniform {
  public:
-  explicit RMin(const std::string &, std::set<std::shared_ptr<Abstract>> &);
+  explicit RMin(const std::string &, const PreRequisites &);
   virtual ~RMin() = default;
 
  private:

@@ -50,7 +50,7 @@ namespace Expression {
 std::shared_ptr<IntegerDivision> IntegerDivision::m_cache;
 
 IntegerDivision::IntegerDivision(const std::string &script,
-                                 set<shared_ptr<Abstract>> &requisites)
+                                 const PreRequisites &requisites)
     : Uniform(script, requisites, "/i") {}
 
 };  // namespace Expression
@@ -61,7 +61,7 @@ shared_ptr<Abstract> Factory::IntegerDivision() {
   if (!result) {
     const string script = fmt::format(
         SCRIPT, smtSymbol(Expr::BinaryOp::IDivision), symbol(BType::INT));
-    set<shared_ptr<Abstract>> requisites{Factory::Type(BType::INT)};
+    const PreRequisites requisites{Factory::Type(BType::INT)};
     result = make(BConstruct::Expression::IntegerDivision::m_cache, script,
                   requisites);
   }
