@@ -385,7 +385,7 @@ string POGTranslations::ofGoal(const goal_t &goal) {
     if (!(0 < localHypRef))
       throw std::runtime_error(
           "local hypothesis reference should be strictly positive");
-    localHypSignature += m_pogSignatures.ofLocalHyp(group, localHypRef - 1);
+    localHypSignature += m_pogSignatures.ofLocalHyp(group, localHypRef);
   }
 
   const Signature goalSignature = m_pogSignatures.ofGoal(goal);

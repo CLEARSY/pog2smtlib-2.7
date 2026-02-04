@@ -92,17 +92,10 @@ insert:
 void POGSignatures::initGroupSignatures(size_t group) {
   const pog::POGroup &pogroup = m_pog.pos.at(group);
   if (m_groups.at(group) == std::nullopt) {
-    POGroupSignatures groupSignatures;
-    Signature commonSignature;
-    for (auto defName : pogroup.definitions) {
-      commonSignature += getDefineSignature(defName);
-    }
-    for (const auto &hyp : pogroup.hyps) {
-      commonSignature += predicateSignature(hyp);
-    }
-    groupSignatures.common = commonSignature;
-    groupSignatures.localHyps.resize(pogroup.localHyps.size(), std::nullopt);
-    m_groups.at(group) = groupSignatures;
+    POGroupSignatures signatures;
+    signatures.common = std::nullopt;
+    signatures.localHyps.resize(pogroup.localHyps.size(), std::nullopt);
+    m_groups.at(group) = signatures;
   }
 }
 
@@ -117,12 +110,17 @@ const Signature &POGSignatures::ofHypothesis(size_t group, size_t hypothesis) {
 }
 
 const Signature &POGSignatures::ofLocalHyp(size_t group, size_t localHyp) {
-  initGroupSignatures(group);
-  if (m_groups.at(group)->localHyps.at(localHyp) == std::nullopt) {
-    m_groups.at(group)->localHyps.at(localHyp) =
-        predicateSignature(m_pog.pos.at(group).localHyps.at(localHyp));
+  if (0 == localHyp) {
+    throw std::runtime_error(
+        "Null local hypothesis reference, it should be strictly positive");
   }
-  const Signature &result = m_groups.at(group)->localHyps.at(localHyp).value();
+  const size_t index = localHyp - 1;
+  initGroupSignatures(group);
+  if (m_groups.at(group)->localHyps.at(index) == std::nullopt) {
+    m_groups.at(group)->localHyps.at(index) =
+        predicateSignature(m_pog.pos.at(group).localHyps.at(index));
+  }
+  const Signature &result = m_groups.at(group)->localHyps.at(index).value();
   return result;
 }
 
@@ -132,14 +130,13 @@ const Signature POGSignatures::ofGoal(const goal_t &goal) {
   Signature result;
 
   initGroupSignatures(group);
-  const POGroupSignatures &groupSignatures = m_groups.at(group).value();
-  result += groupSignatures.common.value();
+  result += POGSignatures::ofGroup(group);
   for (const auto lhypRef :
        m_pog.pos.at(group).simpleGoals.at(sgoal).localHypsRef) {
     if (!(0 < lhypRef))
       throw std::runtime_error(
           "local hypothesis reference should be strictly positive");
-    result += ofLocalHyp(group, lhypRef - 1);
+    result += ofLocalHyp(group, lhypRef);
   }
   Signature goalSig =
       predicateSignature(m_pog.pos.at(group).simpleGoals.at(sgoal).goal);
@@ -149,6 +146,18 @@ const Signature POGSignatures::ofGoal(const goal_t &goal) {
 
 const Signature &POGSignatures::ofGroup(size_t group) {
   initGroupSignatures(group);
+  if (m_groups.at(group)->common == std::nullopt) {
+    const pog::POGroup &pogroup = m_pog.pos.at(group);
+    POGroupSignatures groupSignatures;
+    Signature signature;
+    for (auto defName : pogroup.definitions) {
+      signature += getDefineSignature(defName);
+    }
+    for (const auto &hyp : pogroup.hyps) {
+      signature += predicateSignature(hyp);
+    }
+    m_groups.at(group)->common = signature;
+  }
   return m_groups.at(group)->common.value();
 }
 
