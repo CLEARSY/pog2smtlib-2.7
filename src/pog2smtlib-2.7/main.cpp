@@ -50,6 +50,12 @@ static void display_help() {
             << "\t\t\tproduces model" << std::endl
             << "\t\t-u" << std::endl
             << "\t\t\tproduces unsat core" << std::endl
+            << "\t\t--reduce-po N" << std::endl
+            << "\t\t\tinclude only predicates in Lasso(N) (N >= 0)" << std::endl
+            << "\t\t--direct-deduction" << std::endl
+            << "\t\t\tGoal contains only the predicate within the Goal "
+               "element (requires --reduce-po)"
+            << std::endl
             << "\t\t-h" << std::endl
             << "\t\t\tprints help" << std::endl;
 }
@@ -126,6 +132,19 @@ int main(int argc, char **argv) {
     } else if (strcmp(argv[arg], "-u") == 0) {
       smt_options.produce_unsat_core = true;
       arg += 1;
+    } else if (strcmp(argv[arg], "--reduce-po") == 0) {
+      if (arg + 1 < argc) {
+        const size_t n = argtoul(argv[arg + 1]);
+        smt_options.reduce_po_set = true;
+        smt_options.reduce_po = n;
+        arg += 2;
+      } else {
+        display_help();
+        return EXIT_FAILURE;
+      }
+    } else if (strcmp(argv[arg], "--direct-deduction") == 0) {
+      smt_options.direct_deduction = true;
+      arg += 1;
     } else {
       display_help();
       return EXIT_FAILURE;
@@ -134,6 +153,12 @@ int main(int argc, char **argv) {
 
   if (input == nullptr || output == nullptr) {
     display_help();
+    return EXIT_FAILURE;
+  }
+
+  if (smt_options.direct_deduction && !smt_options.reduce_po_set) {
+    std::cerr << "Error: --direct-deduction requires --reduce-po to be set"
+              << std::endl;
     return EXIT_FAILURE;
   }
 

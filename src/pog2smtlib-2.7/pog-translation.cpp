@@ -93,6 +93,252 @@ inline const string POGTranslations::assertLocalHypCommand(
   return assertCommand(formula, fmt::format(pattern, i));
 }
 
+string POGTranslations::ofGoal(const goal_t &goal, bool rp, size_t rpN,
+                               bool dd) {
+  if (not rp) {
+    return this->ofGoal(goal);
+  } else {
+    return this->ofGoal(goal, rpN, dd);
+  }
+}
+
+string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
+  [[maybe_unused]] constexpr bool debugme = false;
+  /*
+  1. Compute the set of predicates corresponding to the initial goal : simple
+  goal and local hypotheses. That is, unless dd is set true, in that case the
+  set of predicates is just the simple goal.
+  2. Then, lasso in all the predicates that have a common free symbol with the
+  goal, set the result as the new goal, repeat this operation lassoWidth time.
+  3. Compute the full signature of the lassoed predicates.
+  4. Produce the translation of this signature and of the lassoed predicates.
+  */
+
+  /* 1 */
+  const size_t &group = goal.first;
+  const size_t &sgoal = goal.second;
+  assert(group < m_pog.pos.size());
+  const pog::POGroup &POGroup = m_pog.pos.at(group);
+  assert(sgoal < POGroup.simpleGoals.size());
+
+  // vocabulary collects the free symbols in the predicates in the
+  // initial lasso seed: the goal predicate and, unless direct-deduction (dd)
+  // is true, the local hypotheses.
+  std::unordered_set<Data> vocabulary;
+
+  [[maybe_unused]] auto to_string =
+      [](const std::unordered_set<Data> &vocabulary) -> std::string {
+    std::string result;
+    for (auto data : vocabulary) {
+      if (!result.empty()) {
+        result += "|";
+      }
+      result += data.to_string();
+    }
+    return result;
+  };
+
+  const pog::PO &PO = POGroup.simpleGoals.at(sgoal);
+
+  const Signature &s = m_pogSignatures.ofSimpleGoal(goal);
+  Signature signature = s;  // the signature of the produced problem
+  vocabulary.insert(s.m_data.begin(), s.m_data.end());  // the free symbols
+
+  if (not dd) {
+    for (const auto localHypRef : PO.localHypsRef) {
+      if (!(0 < localHypRef))
+        throw std::runtime_error(
+            "local hypothesis reference should be strictly positive");
+      const Signature &s2 = m_pogSignatures.ofLocalHyp(group, localHypRef);
+      signature += s2;
+      vocabulary.insert(s2.m_data.begin(), s2.m_data.end());
+    }
+  }
+
+  // Step 1 complete: initialPreds now contains the seed predicates. Further
+  // steps (lasso expansion, signature computation and translation) will use
+  // this set.
+
+  /* Step 2 (and 3)
+   * if lassoWidth is different from zero then
+   *   let accumulator be an initially empty vector of Pred references
+   *   let rest be a vector of references of Pred instances that are in the
+   *   Define elements used by the POGroup
+   *   let counter be zero
+   *   while counter < lassoWidth do
+   *     increment counter
+   *     let vocabulary_extension be a set of std::unordered_set<Data>;
+   *     for each Pred reference r in rest
+   *       let psig be m_pogSignatures of r
+   *       if psig.m_data has an element in common with vocabulary then
+   *          add r to accumulator
+   *          remove r from rest
+   *          if counter < lassoWidth then
+   *            add psig.m_data to vocabulary_extension
+   *       end if
+   *     end for
+   *     if counter < lassoWidth then
+   *       add vocabulary_extension to vocabulary
+   *     end if
+   *   end while
+   */
+
+  /* hypotheses lassoed in the problem together with
+     - the Define element name
+     - the position in the Define element
+   */
+  std::vector<std::tuple<const Pred *, size_t>> accumulatorHypotheses;
+  std::vector<std::tuple<const Pred *, const string &, size_t>> accumulator;
+  if (0 < lassoWidth) {
+    /* hypotheses not lassoed in the problem, together with
+      - the Define element name,
+      - the position in the Define element,
+      - their signature
+    */
+    std::list<std::tuple<const Pred *, size_t, const Signature &>>
+        restHypotheses;
+    std::list<
+        std::tuple<const Pred *, const string &, size_t, const Signature &>>
+        rest;
+
+    // local function (should be in POG API really): get Define by name
+    auto getDefine = [this](const string &definition) -> const pog::Define & {
+      for (auto &define : m_pog.defines) {
+        if (define.name == definition) return define;
+      }
+      throw std::runtime_error("cannot find Define element " + definition);
+    };
+    // get all the PO group hypotheses that may be lassoed in and their
+    // signature
+    for (size_t i = 0u; i < POGroup.hyps.size(); ++i) {
+      const Pred *pred = &POGroup.hyps.at(i);
+      const Signature &s2 = m_pogSignatures.ofHypothesis(group, i);
+      restHypotheses.push_back({pred, i, s2});
+    }
+    // get all the Define hypotheses that may be lassoed in and their signature
+    for (const string &definition : POGroup.definitions) {
+      const pog::Define &define = getDefine(definition);
+      size_t position = 0;
+      for (const variant<pog::Set, Pred> &elem : define.contents) {
+        if (std::holds_alternative<Pred>(elem)) {
+          const Pred *pred = &std::get<Pred>(elem);
+          const Signature &signature = m_pogSignatures.ofGlobalHypothesis(pred);
+          rest.push_back({pred, define.name, position, signature});
+          ++position;
+        }
+      }
+    }
+    // try to compute efficiently intersection of two sets
+    auto intersects = [](const std::unordered_set<Data> &s1,
+                         const std::unordered_set<Data> &s2) {
+      const auto &smaller = s1.size() < s2.size() ? s1 : s2;
+      const auto &larger = s1.size() < s2.size() ? s2 : s1;
+      for (const auto &elem : smaller) {
+        if (larger.find(elem) != larger.end()) {
+          return true;
+        }
+      }
+      return false;
+    };
+    unsigned counter = 0;
+    // lasso predicates into the problem
+    while (counter < lassoWidth) {
+      ++counter;
+      if (debugme) {
+        std::cerr << "lasso iteration: " << counter << std::endl;
+        std::cerr << to_string(vocabulary) << std::endl;
+      }
+      std::unordered_set<Data> newnames;
+      Signature extension;
+      auto itH = restHypotheses.begin();
+      while (itH != restHypotheses.end()) {
+        auto next = std::next(itH);
+        auto [pred, pos, psig] = *itH;
+        if (debugme) {
+          std::cerr << "testing if pred is lassoed: " << pred->show() << " "
+                    << to_string(psig.m_data) << std::endl;
+        }
+        if (intersects(vocabulary, psig.m_data)) {
+          newnames.insert(psig.m_data.begin(), psig.m_data.end());
+          accumulatorHypotheses.push_back({pred, pos});
+          extension += psig;
+          restHypotheses.erase(itH);
+        }
+        itH = next;
+      }
+      auto it = rest.begin();
+      while (it != rest.end()) {
+        auto next = std::next(it);
+        auto [pred, name, pos, psig] = *it;
+        if (debugme) {
+          std::cerr << "testing if pred is lassoed: " << pred->show() << " "
+                    << to_string(psig.m_data) << std::endl;
+        }
+        if (intersects(vocabulary, psig.m_data)) {
+          if (debugme) {
+            std::cerr << pred->show() << " lassoed in" << std::endl;
+          }
+          newnames.insert(psig.m_data.begin(), psig.m_data.end());
+          accumulator.push_back({pred, name, pos});
+          extension += psig;
+          rest.erase(it);
+        }
+        it = next;
+      }
+      vocabulary.insert(std::make_move_iterator(newnames.begin()),
+                        std::make_move_iterator(newnames.end()));
+      signature += extension;
+    }
+  }
+  // Steps 2, 3 complete
+
+  // Step 4
+  BConstruct::Context context;
+  string script = translate(signature, context);
+  if (not dd) {
+    for (size_t i = 0u; i < POGroup.hyps.size(); ++i) {
+      const Pred &pred = POGroup.hyps.at(i);
+      if (not pred.isPureTypingPredicate()) {
+        const string formula = translate(pred);
+        script += assertHypothesisCommand(formula, i);
+      }
+    }
+    for (const auto localHypRef : PO.localHypsRef) {
+      const Pred &pred = POGroup.localHyps.at(localHypRef - 1);
+      if (not pred.isPureTypingPredicate()) {
+        const string formula = translate(pred);
+        script += assertLocalHypCommand(formula, localHypRef - 1);
+      }
+    }
+  }
+  for (auto hyp : accumulatorHypotheses) {
+    const auto &[pred, pos] = hyp;
+    if (not pred->isPureTypingPredicate()) {
+      const string formula = translate(*pred);
+      script += assertHypothesisCommand(formula, pos);
+    }
+  }
+  for (auto hyp : accumulator) {
+    const auto &[pred, name, pos] = hyp;
+    if (not pred->isPureTypingPredicate()) {
+      const string formula = translate(*pred);
+      script += assertDefineHypothesisCommand(formula, name, pos);
+    }
+  }
+  if (!PO.goal.isPureTypingPredicate()) {
+    static const unsigned indent = 2u;
+    const string translation = translate(PO.goal, indent);
+    const string command = assertGoalCommand(translation);
+    script.append(command);
+  } else {
+    static const string tautology = "true";
+    const string command = assertGoalCommand(tautology);
+    script.append(command);
+  }
+
+  return script;
+}
+
 string POGTranslations::ofGoal(const goal_t &goal) {
   static constexpr bool debug_me = false;
   const size_t &group = goal.first;
@@ -306,4 +552,20 @@ string POGTranslations::toString(
     POGTranslations::groupPreludeCache const &prelude) {
   return fmt::format("  - script: \n{}\n  -context: {}\n", prelude.m_script,
                      ::toString(prelude.m_context));
+}
+
+const pog::Define &POGTranslations::define(const std::string &definition) {
+  static pog::Define nil = pog::Define(std::string());
+  if (m_defines.empty()) {
+    for (const auto &define : m_pog.defines) {
+      if ("B definitions" == define.name) continue;
+      m_defines.insert({define.name, define});
+    }
+  }
+  const auto &it = m_defines.find(definition);
+  if (it == m_defines.end()) {
+    return nil;
+  } else {
+    return it->second;
+  }
 }

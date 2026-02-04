@@ -106,6 +106,16 @@ void POGSignatures::initGroupSignatures(size_t group) {
   }
 }
 
+const Signature &POGSignatures::ofHypothesis(size_t group, size_t hypothesis) {
+  if (m_groups.at(group)->hypotheses.at(hypothesis) == std::nullopt) {
+    m_groups.at(group)->hypotheses.at(hypothesis) =
+        predicateSignature(m_pog.pos.at(group).hyps.at(hypothesis));
+  }
+  const Signature &result =
+      m_groups.at(group)->hypotheses.at(hypothesis).value();
+  return result;
+}
+
 const Signature &POGSignatures::ofLocalHyp(size_t group, size_t localHyp) {
   initGroupSignatures(group);
   if (m_groups.at(group)->localHyps.at(localHyp) == std::nullopt) {
@@ -140,4 +150,51 @@ const Signature POGSignatures::ofGoal(const goal_t &goal) {
 const Signature &POGSignatures::ofGroup(size_t group) {
   initGroupSignatures(group);
   return m_groups.at(group)->common.value();
+}
+
+const Signature POGSignatures::ofSimpleGoal(const goal_t &goal) {
+  const size_t group = goal.first;
+  const size_t sgoal = goal.second;
+  if (m_groups.at(group) == std::nullopt) {
+    m_groups.at(group) = POGroupSignatures(m_pog.pos.at(group));
+  }
+  if (m_groups.at(group)->simpleGoals.at(sgoal) == std::nullopt) {
+    m_groups.at(group)->simpleGoals.at(sgoal) =
+        predicateSignature(m_pog.pos.at(group).simpleGoals.at(sgoal).goal);
+  }
+  return m_groups.at(group)->simpleGoals.at(sgoal).value();
+}
+
+const Signature &POGSignatures::ofGlobalHypothesis(const Pred *const pred) {
+  auto it = m_global_hyps.find(pred);
+  if (it != m_global_hyps.end()) {
+    return it->second;
+  }
+  Signature signature = predicateSignature(*pred);
+  auto [it2, success] = m_global_hyps.insert({pred, std::move(signature)});
+  return it2->second;
+}
+
+std::set<const Pred *> POGSignatures::filterGlobalHypotheses(size_t gid,
+                                                             const Data &data) {
+  std::set<const Pred *> result;
+
+  const auto &group = m_pog.pos.at(gid);
+  for (const auto &definition : group.definitions) {
+    size_t i = 0;
+    for (; i < m_pog.defines.size(); ++i) {
+      if (definition == m_pog.defines.at(i).name) break;
+    }
+    const auto &def = m_pog.defines.at(i);
+    for (const auto &elem : def.contents) {
+      const Pred *pred = std::get_if<Pred>(&elem);
+      if (pred != nullptr) {
+        const auto &s = predicateSignature(*pred);
+        if (s.m_data.find(data) != s.m_data.end()) {
+          result.insert(pred);
+        }
+      }
+    }
+  }
+  return result;
 }

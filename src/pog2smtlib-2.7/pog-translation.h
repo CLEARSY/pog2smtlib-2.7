@@ -35,11 +35,22 @@ class POGTranslations {
       : m_pog(pog), m_pogSignatures(pogSignatures) {}
 
   void ofGoal(ostream &os, const goal_t &goal);  // todo
-  std::string ofGoal(const goal_t &goal);
+  std::string ofGoal(const goal_t &goal, bool rp, size_t rpN, bool dd);
 
   string to_string() const;
 
  private:
+  /**
+   * @brief returns the Define set of hypotheses of the given name
+   *
+   * Returns an empty dummy Define value in case the given name is not
+   * registered (or should be ignored).
+   * */
+  const pog::Define &define(const std::string &definition);
+
+  std::string ofGoal(const goal_t &goal);
+  std::string ofGoal(const goal_t &goal, size_t rpN, bool dd);
+
   const pog::pog &m_pog;
   POGSignatures &m_pogSignatures;
 
@@ -49,6 +60,7 @@ class POGTranslations {
   };
   static string toString(const groupPreludeCache &);
 
+  std::map<const std::string, const pog::Define &> m_defines;
   std::map<size_t, groupPreludeCache> m_groupPreludes;
   std::map<size_t, std::string> m_groupScripts;
   std::map<goal_t, std::string> m_localHypScripts;

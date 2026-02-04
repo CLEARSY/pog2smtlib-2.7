@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- tool=bxml;options='-a -M SOFTWARE';sha='266d9b4ea8ed1d87e78c73621650a98282860339' -->
+<Machine xmlns='https://www.atelierb.eu/Formats/bxml' version='1.0' name='m3' type='abstraction' position='false' semantic='true' b0check='false'>
+<Concrete_Constants>
+<Id value='c0' typref='1'/>
+<Id value='c1' typref='1'/>
+<Id value='c2' typref='1'/>
+<Id value='c3' typref='1'/>
+</Concrete_Constants>
+<Abstract_Variables>
+<Id value='v0' typref='1'/>
+<Id value='v1' typref='1'/>
+<Id value='v2' typref='1'/>
+</Abstract_Variables>
+<Properties>
+<Nary_Pred op='&amp;'>
+<Exp_Comparison op=':'>
+<Id value='c0' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op=':'>
+<Id value='c1' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op=':'>
+<Id value='c2' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op=':'>
+<Id value='c3' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op='='>
+<Id value='c0' typref='1'/>
+<Id value='c1' typref='1'/>
+</Exp_Comparison>
+<Exp_Comparison op='='>
+<Id value='c1' typref='1'/>
+<Id value='c2' typref='1'/>
+</Exp_Comparison>
+</Nary_Pred>
+</Properties>
+<Invariant>
+<Nary_Pred op='&amp;'>
+<Exp_Comparison op=':'>
+<Id value='v0' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op=':'>
+<Id value='v1' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op=':'>
+<Id value='v2' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op='='>
+<Id value='v0' typref='1'/>
+<Id value='c0' typref='1'/>
+</Exp_Comparison>
+<Exp_Comparison op='='>
+<Id value='v2' typref='1'/>
+<Binary_Exp op='+i' typref='1'>
+<Id value='c0' typref='1'/>
+<Id value='c1' typref='1'/>
+</Binary_Exp>
+</Exp_Comparison>
+</Nary_Pred>
+</Invariant>
+<Initialisation>
+<Assignement_Sub>
+<Variables>
+<Id value='v0' typref='1'/>
+<Id value='v1' typref='1'/>
+<Id value='v2' typref='1'/>
+</Variables>
+<Values>
+<Integer_Literal value='0' typref='1'/>
+<Integer_Literal value='0' typref='1'/>
+<Id value='c3' typref='1'/>
+</Values>
+</Assignement_Sub>
+</Initialisation>
+<Operations>
+<Operation name='op1'>
+<Input_Parameters>
+<Id value='p0' typref='1'/>
+<Id value='p1' typref='1'/>
+<Id value='p2' typref='1'/>
+</Input_Parameters>
+<Precondition>
+<Nary_Pred op='&amp;'>
+<Exp_Comparison op=':'>
+<Id value='p0' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op=':'>
+<Id value='p1' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op=':'>
+<Id value='p2' typref='1'/>
+<Id value='INTEGER' typref='2'/>
+</Exp_Comparison>
+<Exp_Comparison op='&lt;i'>
+<Id value='p0' typref='1'/>
+<Id value='p1' typref='1'/>
+</Exp_Comparison>
+<Exp_Comparison op='&lt;i'>
+<Id value='p1' typref='1'/>
+<Id value='p2' typref='1'/>
+</Exp_Comparison>
+</Nary_Pred>
+</Precondition>
+<Body>
+<If_Sub elseif='no'>
+<Condition>
+<Exp_Comparison op='&lt;i'>
+<Id value='p0' typref='1'/>
+<Id value='v0' typref='1'/>
+</Exp_Comparison>
+</Condition>
+<Then>
+<Assignement_Sub>
+<Variables>
+<Id value='v0' typref='1'/>
+</Variables>
+<Values>
+<Binary_Exp op='-i' typref='1'>
+<Binary_Exp op='-i' typref='1'>
+<Id value='v0' typref='1'/>
+<Id value='v1' typref='1'/>
+</Binary_Exp>
+<Id value='p2' typref='1'/>
+</Binary_Exp>
+</Values>
+</Assignement_Sub>
+</Then>
+<Else>
+<If_Sub elseif='yes'>
+<Condition>
+<Exp_Comparison op='&lt;i'>
+<Id value='p1' typref='1'/>
+<Id value='v1' typref='1'/>
+</Exp_Comparison>
+</Condition>
+<Then>
+<Assignement_Sub>
+<Variables>
+<Id value='v1' typref='1'/>
+</Variables>
+<Values>
+<Binary_Exp op='+i' typref='1'>
+<Id value='c3' typref='1'/>
+<Id value='p0' typref='1'/>
+</Binary_Exp>
+</Values>
+</Assignement_Sub>
+</Then>
+<Else>
+<Assignement_Sub>
+<Variables>
+<Id value='v2' typref='1'/>
+</Variables>
+<Values>
+<Binary_Exp op='+i' typref='1'>
+<Id value='v0' typref='1'/>
+<Id value='p1' typref='1'/>
+</Binary_Exp>
+</Values>
+</Assignement_Sub>
+</Else>
+</If_Sub>
+</Else>
+</If_Sub>
+</Body>
+</Operation>
+</Operations>
+<TypeInfos>
+<Type id='0'>
+<Id value='BOOL'/>
+</Type>
+<Type id='1'>
+<Id value='INTEGER'/>
+</Type>
+<Type id='2'>
+<Unary_Exp op='POW'>
+<Id value='INTEGER'/>
+</Unary_Exp>
+</Type>
+<Type id='3'>
+<Unary_Exp op='POW'>
+<Unary_Exp op='POW'>
+<Id value='INTEGER'/>
+</Unary_Exp>
+</Unary_Exp>
+</Type>
+</TypeInfos>
+
+</Machine>

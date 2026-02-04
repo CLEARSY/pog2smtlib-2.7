@@ -69,27 +69,59 @@ using goal_t = std::pair<size_t, size_t>;
 
 class POGSignatures {
  public:
+  map<const Pred* const, Signature>
+      m_global_hyps;  // Signature of each global hypothesis
   map<string, Signature> m_defines;
   struct POGroupSignatures {
     optional<Signature>
         common;  /// @brief signature of Define and Hypothesis elements
+    vector<optional<Signature>> hypotheses;
     vector<optional<Signature>> localHyps;
     vector<optional<Signature>> goals;
+    vector<optional<Signature>> simpleGoals;
+    POGroupSignatures(const pog::POGroup& group)
+        : common(std::nullopt),
+          hypotheses{group.hyps.size(), std::nullopt},
+          localHyps{group.localHyps.size(), std::nullopt},
+          goals{group.simpleGoals.size(), std::nullopt},
+          simpleGoals{group.simpleGoals.size(), std::nullopt} {}
+    POGroupSignatures()
+        : common(std::nullopt),
+          hypotheses{},
+          localHyps{},
+          goals{},
+          simpleGoals{} {}
   };
   vector<optional<POGroupSignatures>> m_groups;
 
+  /**
+   * @brief Construct a POGSignatures helper for a parsed POG
+   *
+   * This constructor initializes the POGSignatures object which provides
+   * on-demand computed signatures for the different consistuents of a POG
+   * object: define, hypotheses, local hypotheses, goals, etc.
+   *
+   * @param pog Reference to the parsed `pog::pog` object containing
+   * definitions and proof-obligation groups.
+   */
   explicit POGSignatures(const pog::pog& pog);
   POGSignatures(const POGSignatures& other) = delete;
   ~POGSignatures() = default;
 
   const Signature ofGoal(const goal_t& goal);
+  const Signature ofSimpleGoal(const goal_t& goal);
+
   /** @brief the signature of all common elements of the group of PO
    * @param group the index of the group in the POG
    * @returns the signature of all the referenced 'Define' elements
    * and of all the 'Hypothesis' elements
    */
   const Signature& ofGroup(size_t group);
+  const Signature& ofHypothesis(size_t group, size_t hypothesis);
   const Signature& ofLocalHyp(size_t group, size_t localHyp);
+  const Signature& ofGlobalHypothesis(const Pred* const pred);
+
+  std::set<const Pred*> filterGlobalHypotheses(size_t group, const Data& data);
 
   string to_string() const;
 

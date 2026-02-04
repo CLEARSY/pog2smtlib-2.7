@@ -58,6 +58,10 @@ if [[ ! "${reffiles[*]}" == "${outfiles[*]}" ]]; then
     exit 1
 fi
 
+# Bash gotcha: when a glob doesn’t match anything, Bash leaves it unexpanded, so "*.smt" becomes a literal filename.
+
+shopt -s nullglob
+
 # Compare contents
 for outfile in "$outdir"/*.smt
 do
@@ -69,6 +73,8 @@ do
         exit 1
     fi
 done
+
+shopt -u nullglob
 
 set +x
 

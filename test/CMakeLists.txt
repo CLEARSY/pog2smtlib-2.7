@@ -23,6 +23,30 @@ endmacro(add_cl_test)
 add_cl_test("issue_clearsy_27a" "-u")
 add_cl_test("issue_clearsy_27b" "-m")
 
+add_cl_test("issue_clearsy_18_dd" "--direct-deduction")
+
+add_cl_test("issue_clearsy_18_0_rp0" "--reduce-po 0")
+add_cl_test("issue_clearsy_18_0_rp1" "--reduce-po 1")
+add_cl_test("issue_clearsy_18_0_ddrp0" "--direct-deduction --reduce-po 0")
+add_cl_test("issue_clearsy_18_0_ddrp1" "--direct-deduction --reduce-po 1")
+
+add_cl_test("issue_clearsy_18_1_rp0" "--reduce-po 0")
+add_cl_test("issue_clearsy_18_1_rp1" "--reduce-po 1")
+add_cl_test("issue_clearsy_18_1_ddrp0" "--direct-deduction --reduce-po 0")
+add_cl_test("issue_clearsy_18_1_ddrp1" "--direct-deduction --reduce-po 1")
+
+add_cl_test("issue_clearsy_18_2_rp0" "--reduce-po 0")
+add_cl_test("issue_clearsy_18_2_rp1" "--reduce-po 1")
+add_cl_test("issue_clearsy_18_2_ddrp0" "--direct-deduction --reduce-po 0")
+add_cl_test("issue_clearsy_18_2_ddrp1" "--direct-deduction --reduce-po 1")
+
+add_cl_test("issue_clearsy_18_3_rp0" "--reduce-po 0")
+add_cl_test("issue_clearsy_18_3_rp1" "--reduce-po 1")
+add_cl_test("issue_clearsy_18_3_rp2" "--reduce-po 2")
+add_cl_test("issue_clearsy_18_3_ddrp0" "--direct-deduction --reduce-po 0")
+add_cl_test("issue_clearsy_18_3_ddrp1" "--direct-deduction --reduce-po 1")
+add_cl_test("issue_clearsy_18_3_ddrp2" "--direct-deduction --reduce-po 2")
+
 # Non regression
 
 add_cl_test("issue_clearsy_11")

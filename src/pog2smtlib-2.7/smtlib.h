@@ -30,7 +30,21 @@ struct smt_options_t {
   bool produce_unsat_core;
   bool produce_model;
 
-  smt_options_t() : produce_unsat_core{false}, produce_model{false} {}
+  // If reduce_po_set is true then reduce_po contains the value of --reduce-po
+  // (n >= 0). When reduce_po_set is false, the option was not provided.
+  bool reduce_po_set;
+  size_t reduce_po;
+
+  // When true, enables direct deduction behavior. It is only valid when
+  // reduce_po_set is true (validation is done by the caller).
+  bool direct_deduction;
+
+  smt_options_t()
+      : produce_unsat_core{false},
+        produce_model{false},
+        reduce_po_set{false},
+        reduce_po{0},
+        direct_deduction{false} {}
 };
 
 /** @brief builds the translation to SMTLIB of one POG goal saves the
