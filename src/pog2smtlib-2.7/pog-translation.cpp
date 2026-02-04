@@ -174,13 +174,18 @@ string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
    *          add r to accumulator
    *          remove r from rest
    *          if counter < lassoWidth then
-   *            add psig.m_data to vocabulary_extension
+   *            for each free symbol s in psig.m_data
+   *              if s is not in vocabulary then
+   *                insert s into vocabulary_extension
    *       end if
    *     end for
-   *     if counter < lassoWidth then
-   *       add vocabulary_extension to vocabulary
+   *     if vocabulary_extension is empty
+   *       exit from loop
    *     end if
+   *     add vocabulary_extension to vocabulary
+   *     increment counter
    *   end while
+   *
    */
 
   /* hypotheses lassoed in the problem together with
@@ -212,8 +217,10 @@ string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
     // signature
     for (size_t i = 0u; i < POGroup.hyps.size(); ++i) {
       const Pred *pred = &POGroup.hyps.at(i);
-      const Signature &s2 = m_pogSignatures.ofHypothesis(group, i);
-      restHypotheses.push_back({pred, i, s2});
+      if (not pred->isPureTypingPredicate()) {
+        const Signature &s2 = m_pogSignatures.ofHypothesis(group, i);
+        restHypotheses.push_back({pred, i, s2});
+      }
     }
     // get all the Define hypotheses that may be lassoed in and their signature
     for (const string &definition : POGroup.definitions) {
@@ -222,10 +229,13 @@ string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
       for (const variant<pog::Set, Pred> &elem : define.contents) {
         if (std::holds_alternative<Pred>(elem)) {
           const Pred *pred = &std::get<Pred>(elem);
-          const Signature &signature = m_pogSignatures.ofGlobalHypothesis(pred);
-          rest.push_back({pred, define.name, position, signature});
-          ++position;
+          if (not pred->isPureTypingPredicate()) {
+            const Signature &signature =
+                m_pogSignatures.ofGlobalHypothesis(pred);
+            rest.push_back({pred, define.name, position, signature});
+          }
         }
+        ++position;
       }
     }
     // try to compute efficiently intersection of two sets
@@ -259,7 +269,21 @@ string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
                     << to_string(psig.m_data) << std::endl;
         }
         if (intersects(vocabulary, psig.m_data)) {
-          newnames.insert(psig.m_data.begin(), psig.m_data.end());
+          if (debugme) {
+            std::cerr << pred->show() << " lassoed in" << std::endl;
+          }
+          for (const auto &data : psig.m_data) {
+            if (debugme) {
+              std::cerr << data.to_string() << " "
+                        << (vocabulary.find(data) == vocabulary.end()
+                                ? "is new"
+                                : "is already present")
+                        << std::endl;
+            }
+            if (vocabulary.find(data) == vocabulary.end()) {
+              newnames.insert(data);
+            }
+          }
           accumulatorHypotheses.push_back({pred, pos});
           extension += psig;
           restHypotheses.erase(itH);
@@ -278,15 +302,42 @@ string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
           if (debugme) {
             std::cerr << pred->show() << " lassoed in" << std::endl;
           }
-          newnames.insert(psig.m_data.begin(), psig.m_data.end());
+          for (const auto &data : psig.m_data) {
+            if (debugme) {
+              std::cerr << data.to_string() << " "
+                        << (vocabulary.find(data) == vocabulary.end()
+                                ? "is new"
+                                : "is already present")
+                        << std::endl;
+            }
+            if (vocabulary.find(data) == vocabulary.end()) {
+              newnames.insert(data);
+            }
+          }
           accumulator.push_back({pred, name, pos});
           extension += psig;
           rest.erase(it);
         }
         it = next;
       }
+      if (debugme) {
+        std::cerr << "New names at iteration " << counter << ": " << std::endl;
+        for (const auto &data : newnames) {
+          std::cerr << "  " << data.to_string() << std::endl;
+        }
+      }
+      if (newnames.empty()) {
+        break;
+      }
       vocabulary.insert(std::make_move_iterator(newnames.begin()),
                         std::make_move_iterator(newnames.end()));
+      if (debugme) {
+        std::cerr << "Vocabulary at end of iteration " << counter << ": "
+                  << std::endl;
+        for (const auto &data : vocabulary) {
+          std::cerr << "  " << data.to_string() << std::endl;
+        }
+      }
       signature += extension;
     }
   }
