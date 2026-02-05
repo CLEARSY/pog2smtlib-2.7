@@ -42,9 +42,9 @@ static void translateAndSave(POGTranslations &pogTranslation,
       fmt::format("{}_{}_{}.po2", filePrefix, goal.first, goal.second)};
 
   string result;
-  result.append(pogTranslation.ofGoal(goal, options.reduce_po_set,
-                                      options.reduce_po,
-                                      options.direct_deduction));
+  result.append(pogTranslation.ofGoal(
+      goal, options.reduce_po_set, options.reduce_po_lasso,
+      options.reduce_po_depth, options.direct_deduction));
 
   std::ofstream out;
   out.open(filename);

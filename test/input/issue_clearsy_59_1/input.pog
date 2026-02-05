@@ -42,8 +42,8 @@
             <Id value="c1" typref="1" />
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="c1" typref="1" />
             <Id value="c2" typref="1" />
+            <Id value="c3" typref="1" />
         </Exp_Comparison>
     </Define>
     <Define name="inprp" />

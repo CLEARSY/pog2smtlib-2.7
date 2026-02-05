@@ -93,16 +93,17 @@ inline const string POGTranslations::assertLocalHypCommand(
   return assertCommand(formula, fmt::format(pattern, i));
 }
 
-string POGTranslations::ofGoal(const goal_t &goal, bool rp, size_t rpN,
-                               bool dd) {
+string POGTranslations::ofGoal(const goal_t &goal, bool rp, bool fixpoint,
+                               size_t rpN, bool dd) {
   if (not rp) {
     return this->ofGoal(goal);
   } else {
-    return this->ofGoal(goal, rpN, dd);
+    return this->ofGoal(goal, fixpoint, rpN, dd);
   }
 }
 
-string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
+string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
+                               size_t lassoWidth, bool dd) {
   [[maybe_unused]] constexpr bool debugme = false;
   /*
   1. Compute the set of predicates corresponding to the initial goal : simple
@@ -194,7 +195,7 @@ string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
    */
   std::vector<std::tuple<const Pred *, size_t>> accumulatorHypotheses;
   std::vector<std::tuple<const Pred *, const string &, size_t>> accumulator;
-  if (0 < lassoWidth) {
+  if (fixpoint or 0 < lassoWidth) {
     /* hypotheses not lassoed in the problem, together with
       - the Define element name,
       - the position in the Define element,
@@ -252,7 +253,7 @@ string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
     };
     unsigned counter = 0;
     // lasso predicates into the problem
-    while (counter < lassoWidth) {
+    while (fixpoint or counter < lassoWidth) {
       ++counter;
       if (debugme) {
         std::cerr << "lasso iteration: " << counter << std::endl;
@@ -296,7 +297,8 @@ string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
         auto [pred, name, pos, psig] = *it;
         if (debugme) {
           std::cerr << "testing if pred is lassoed: " << pred->show() << " "
-                    << to_string(psig.m_data) << std::endl;
+                    << to_string(psig.m_data)
+                    << " vocabulary=" << to_string(vocabulary) << std::endl;
         }
         if (intersects(vocabulary, psig.m_data)) {
           if (debugme) {
@@ -326,7 +328,11 @@ string POGTranslations::ofGoal(const goal_t &goal, size_t lassoWidth, bool dd) {
           std::cerr << "  " << data.to_string() << std::endl;
         }
       }
-      if (newnames.empty()) {
+      if (newnames.empty()) {  // fixpoint is reached
+        if (debugme) {
+          std::cerr << "Fixpoint reached at iteration " << counter << std::endl;
+        }
+        signature += extension;
         break;
       }
       vocabulary.insert(std::make_move_iterator(newnames.begin()),

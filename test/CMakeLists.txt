@@ -47,6 +47,9 @@ add_cl_test("issue_clearsy_18_3_ddrp0" "--logic HO_ALL --direct-deduction --redu
 add_cl_test("issue_clearsy_18_3_ddrp1" "--logic HO_ALL --direct-deduction --reduce-po 1")
 add_cl_test("issue_clearsy_18_3_ddrp2" "--logic HO_ALL --direct-deduction --reduce-po 2")
 
+add_cl_test("issue_clearsy_59_1" "--lasso")
+add_cl_test("issue_clearsy_59_2" "--lasso")
+
 # Non regression
 
 add_cl_test("issue_clearsy_11" "--logic HO_ALL")

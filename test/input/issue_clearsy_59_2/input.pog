@@ -37,13 +37,46 @@
             <Id value="c3" typref="1" />
             <Id value="INTEGER" typref="0" />
         </Exp_Comparison>
+        <Exp_Comparison op=":">
+            <Id value="c4" typref="1" />
+            <Id value="INTEGER" typref="0" />
+        </Exp_Comparison>
+        <Exp_Comparison op=":">
+            <Id value="c5" typref="1" />
+            <Id value="INTEGER" typref="0" />
+        </Exp_Comparison>
+        <Exp_Comparison op=":">
+            <Id value="c6" typref="1" />
+            <Id value="INTEGER" typref="0" />
+        </Exp_Comparison>
         <Exp_Comparison op="=">
             <Id value="c0" typref="1" />
             <Id value="c1" typref="1" />
         </Exp_Comparison>
         <Exp_Comparison op="=">
-            <Id value="c1" typref="1" />
             <Id value="c2" typref="1" />
+            <Id value="c3" typref="1" />
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="c3" typref="1" />
+            <Binary_Exp op="+i" typref="1">
+                <Id value="c4" typref="1" />
+                <Integer_Literal value="1" typref="1" />
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="c4" typref="1" />
+            <Binary_Exp op="+i" typref="1">
+                <Id value="c5" typref="1" />
+                <Integer_Literal value="1" typref="1" />
+            </Binary_Exp>
+        </Exp_Comparison>
+        <Exp_Comparison op="=">
+            <Id value="c5" typref="1" />
+            <Binary_Exp op="+i" typref="1">
+                <Id value="c6" typref="1" />
+                <Integer_Literal value="1" typref="1" />
+            </Binary_Exp>
         </Exp_Comparison>
     </Define>
     <Define name="inprp" />
@@ -52,7 +85,7 @@
     <Define name="ass">
         <Exp_Comparison op="&lt;=i">
             <Integer_Literal value="0" typref="1" />
-            <Id value="c3" typref="1" />
+            <Id value="c2" typref="1" />
         </Exp_Comparison>
     </Define>
     <Define name="cst" />
@@ -72,7 +105,7 @@
             <Goal>
                 <Exp_Comparison op="&lt;=i">
                     <Integer_Literal value="0" typref="1" />
-                    <Id value="c3" typref="1" />
+                    <Id value="c2" typref="1" />
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>

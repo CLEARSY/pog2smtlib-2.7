@@ -19,6 +19,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <map>
 #include <stdexcept>
 #include <string>
@@ -68,6 +69,9 @@ pog2smtlib-2.7 OPTIONS -i input_file -o output
           Include only predicates in Lasso(N) (0 <=N), with Lasso 
           built with the free symbols in the Simple_Goal element and
           the corresponding Local_Hyp elements.
+  -rpX, --lasso
+          Include only predicates in the fixed point of Lasso
+          (exclusve with option --reduce-po).
   -dd, --direct-deduction
           Modifies the --reduce-po to seed the lasso with the free
           symbols in the Simple_Goal element only.
@@ -222,10 +226,21 @@ static void parse_options(int argc, char **argv, char *&input, char *&output,
       }
     } else if (strcmp(argv[arg], "-rp") == 0 or
                strcmp(argv[arg], "--reduce-po") == 0) {
-      if (arg + 1 < argstop) {
+      if (arg + 1 < argstop && not smt_options.reduce_po_lasso) {
         const size_t n = argtoul(argv[arg + 1]);
         smt_options.reduce_po_set = true;
-        smt_options.reduce_po = n;
+        smt_options.reduce_po_lasso = false;
+        smt_options.reduce_po_depth = n;
+        arg += 2;
+      } else {
+        display_help();
+        exit(EXIT_FAILURE);
+      }
+    } else if (strcmp(argv[arg], "-rpX") == 0 or
+               strcmp(argv[arg], "--lasso") == 0) {
+      if (not smt_options.reduce_po_set or smt_options.reduce_po_lasso) {
+        smt_options.reduce_po_set = true;
+        smt_options.reduce_po_lasso = true;
         arg += 2;
       } else {
         display_help();

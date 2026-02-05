@@ -35,7 +35,8 @@ class POGTranslations {
       : m_pog(pog), m_pogSignatures(pogSignatures) {}
 
   void ofGoal(ostream &os, const goal_t &goal);  // todo
-  std::string ofGoal(const goal_t &goal, bool rp, size_t rpN, bool dd);
+  std::string ofGoal(const goal_t &goal, bool rp, bool fixpoint, size_t rpN,
+                     bool dd);
 
   string to_string() const;
 
@@ -49,7 +50,20 @@ class POGTranslations {
   const pog::Define &define(const std::string &definition);
 
   std::string ofGoal(const goal_t &goal);
-  std::string ofGoal(const goal_t &goal, size_t rpN, bool dd);
+
+  /**
+   * @brief gets the SMT encoding for a given goal applying intros/lasso tactics
+   * @param goal the goal to encode
+   * @param fixpoint apply lasso tactic until reaching a fixpoint
+   * @param rpN apply lasso tactic up to a given width (only if fixpoint is
+   * false)
+   * @param dd do intros before applying lasso
+   * @details The intros tactic consists in moving local hypotheses to the list
+   * of global hypotheses. The lasso tactic consist in discarding global
+   * hypotheses that have no free symbols appearing in the seed. When rpN is 0 :
+   * all are discarded. Otherwise the seed is the result of lasso(rpN-1).
+   */
+  std::string ofGoal(const goal_t &goal, bool fixpoint, size_t rpN, bool dd);
 
   const pog::pog &m_pog;
   POGSignatures &m_pogSignatures;

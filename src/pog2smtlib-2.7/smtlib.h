@@ -34,13 +34,25 @@ struct smt_options_t {
   bool produce_model;
   std::string logic;
 
-  // If reduce_po_set is true then reduce_po contains the value of --reduce-po
-  // (n >= 0). When reduce_po_set is false, the option was not provided.
+  /*
+   * Option reduce_po_set is true and reduce_po_lasso is false
+   * and reduce_po is N if and only if
+   *   1) option --lasso is not passed, and
+   *   2) option --reduce-po is passed with value N.
+   * Option reduce_po_set is true and reduce_po_lasso is true if and only if
+   *   1) option --lasso is passed, and
+   *   2) option --reduce-po is not passed.
+   * Caller enforces that options --lasso and --reduce-po are exclusive.
+   * Options reduce_po_set is false if and only if
+   *   1) option --lasso is not passed
+   *   2) option --reduce-po is not passed.
+   */
   bool reduce_po_set;
-  size_t reduce_po;
+  bool reduce_po_lasso;
+  size_t reduce_po_depth;
 
-  // When true, enables direct deduction behavior. It is only valid when
-  // reduce_po_set is true (validation is done by the caller).
+  // When reduce_po_set is true, enables direct deduction behavior. It is only
+  // valid when reduce_po_set is true (validation is done by the caller).
   bool direct_deduction;
 
   smt_options_t()
@@ -48,7 +60,8 @@ struct smt_options_t {
         produce_model{false},
         logic{DEFAULT_SMT_LOGIC},
         reduce_po_set{false},
-        reduce_po{0},
+        reduce_po_lasso{false},
+        reduce_po_depth{0},
         direct_deduction{false} {}
 };
 
