@@ -164,13 +164,13 @@ static void parse_options(int argc, char **argv, char *&input, char *&output,
                           goal_index_t &goals, smt_options_t &smt_options) {
   // allow --version only
   if (argc == 2 &&
-      (strcmp(argv[1], "-v") == 0 or strcmp(argv[1], "--version") == 0)) {
+      (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)) {
     display_version();
     exit(EXIT_SUCCESS);
   }
   // allow --help only
   if (argc == 2 &&
-      (strcmp(argv[1], "-h") == 0 or strcmp(argv[1], "--help") == 0)) {
+      (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)) {
     display_help(std::cout);
     exit(EXIT_SUCCESS);
   }
@@ -203,19 +203,19 @@ static void parse_options(int argc, char **argv, char *&input, char *&output,
         display_help();
         exit(EXIT_FAILURE);
       }
-    } else if (strcmp(argv[arg], "-h") == 0 or
+    } else if (strcmp(argv[arg], "-h") == 0 ||
                strcmp(argv[arg], "--help") == 0) {
       display_help(std::cout);
       arg += 1;
-    } else if (strcmp(argv[arg], "-m") == 0 or
+    } else if (strcmp(argv[arg], "-m") == 0 ||
                strcmp(argv[arg], "--model") == 0) {
       smt_options.produce_model = true;
       arg += 1;
-    } else if (strcmp(argv[arg], "-u") == 0 or
+    } else if (strcmp(argv[arg], "-u") == 0 ||
                strcmp(argv[arg], "--unsat-core") == 0) {
       smt_options.produce_unsat_core = true;
       arg += 1;
-    } else if (strcmp(argv[arg], "-l") == 0 or
+    } else if (strcmp(argv[arg], "-l") == 0 ||
                strcmp(argv[arg], "--logic") == 0) {
       if (arg + 1 < argstop) {
         smt_options.logic = std::string(argv[arg + 1]);
@@ -224,9 +224,9 @@ static void parse_options(int argc, char **argv, char *&input, char *&output,
         display_help();
         exit(EXIT_FAILURE);
       }
-    } else if (strcmp(argv[arg], "-rp") == 0 or
+    } else if (strcmp(argv[arg], "-rp") == 0 ||
                strcmp(argv[arg], "--reduce-po") == 0) {
-      if (arg + 1 < argstop && not smt_options.reduce_po_lasso) {
+      if (arg + 1 < argstop && !smt_options.reduce_po_lasso) {
         const size_t n = argtoul(argv[arg + 1]);
         smt_options.reduce_po_set = true;
         smt_options.reduce_po_lasso = false;
@@ -236,9 +236,9 @@ static void parse_options(int argc, char **argv, char *&input, char *&output,
         display_help();
         exit(EXIT_FAILURE);
       }
-    } else if (strcmp(argv[arg], "-rpX") == 0 or
+    } else if (strcmp(argv[arg], "-rpX") == 0 ||
                strcmp(argv[arg], "--lasso") == 0) {
-      if (not smt_options.reduce_po_set or smt_options.reduce_po_lasso) {
+      if (!smt_options.reduce_po_set || smt_options.reduce_po_lasso) {
         smt_options.reduce_po_set = true;
         smt_options.reduce_po_lasso = true;
         arg += 2;
@@ -246,11 +246,11 @@ static void parse_options(int argc, char **argv, char *&input, char *&output,
         display_help();
         exit(EXIT_FAILURE);
       }
-    } else if (strcmp(argv[arg], "-dd") == 0 or
+    } else if (strcmp(argv[arg], "-dd") == 0 ||
                strcmp(argv[arg], "--direct-deduction") == 0) {
       smt_options.direct_deduction = true;
       arg += 1;
-    } else if (strcmp(argv[arg], "-v") == 0 or
+    } else if (strcmp(argv[arg], "-v") == 0 ||
                strcmp(argv[arg], "--version") == 0) {
       display_version();
       arg += 1;

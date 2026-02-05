@@ -95,7 +95,7 @@ inline const string POGTranslations::assertLocalHypCommand(
 
 string POGTranslations::ofGoal(const goal_t &goal, bool rp, bool fixpoint,
                                size_t rpN, bool dd) {
-  if (not rp) {
+  if (!rp) {
     return this->ofGoal(goal);
   } else {
     return this->ofGoal(goal, fixpoint, rpN, dd);
@@ -145,7 +145,7 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
   Signature signature = s;  // the signature of the produced problem
   vocabulary.insert(s.m_data.begin(), s.m_data.end());  // the free symbols
 
-  if (not dd) {
+  if (!dd) {
     for (const auto localHypRef : PO.localHypsRef) {
       if (!(0 < localHypRef))
         throw std::runtime_error(
@@ -195,7 +195,7 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
    */
   std::vector<std::tuple<const Pred *, size_t>> accumulatorHypotheses;
   std::vector<std::tuple<const Pred *, const string &, size_t>> accumulator;
-  if (fixpoint or 0 < lassoWidth) {
+  if (fixpoint || 0 < lassoWidth) {
     /* hypotheses not lassoed in the problem, together with
       - the Define element name,
       - the position in the Define element,
@@ -218,7 +218,7 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
     // signature
     for (size_t i = 0u; i < POGroup.hyps.size(); ++i) {
       const Pred *pred = &POGroup.hyps.at(i);
-      if (not pred->isPureTypingPredicate()) {
+      if (!pred->isPureTypingPredicate()) {
         const Signature &s2 = m_pogSignatures.ofHypothesis(group, i);
         restHypotheses.push_back({pred, i, s2});
       }
@@ -230,7 +230,7 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
       for (const variant<pog::Set, Pred> &elem : define.contents) {
         if (std::holds_alternative<Pred>(elem)) {
           const Pred *pred = &std::get<Pred>(elem);
-          if (not pred->isPureTypingPredicate()) {
+          if (!pred->isPureTypingPredicate()) {
             const Signature &signature =
                 m_pogSignatures.ofGlobalHypothesis(pred);
             rest.push_back({pred, define.name, position, signature});
@@ -253,7 +253,7 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
     };
     unsigned counter = 0;
     // lasso predicates into the problem
-    while (fixpoint or counter < lassoWidth) {
+    while (fixpoint || counter < lassoWidth) {
       ++counter;
       if (debugme) {
         std::cerr << "lasso iteration: " << counter << std::endl;
@@ -352,17 +352,17 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
   // Step 4
   BConstruct::Context context;
   string script = translate(signature, context);
-  if (not dd) {
+  if (!dd) {
     for (size_t i = 0u; i < POGroup.hyps.size(); ++i) {
       const Pred &pred = POGroup.hyps.at(i);
-      if (not pred.isPureTypingPredicate()) {
+      if (!pred.isPureTypingPredicate()) {
         const string formula = translate(pred);
         script += assertHypothesisCommand(formula, i);
       }
     }
     for (const auto localHypRef : PO.localHypsRef) {
       const Pred &pred = POGroup.localHyps.at(localHypRef - 1);
-      if (not pred.isPureTypingPredicate()) {
+      if (!pred.isPureTypingPredicate()) {
         const string formula = translate(pred);
         script += assertLocalHypCommand(formula, localHypRef - 1);
       }
@@ -370,14 +370,14 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
   }
   for (auto hyp : accumulatorHypotheses) {
     const auto &[pred, pos] = hyp;
-    if (not pred->isPureTypingPredicate()) {
+    if (!pred->isPureTypingPredicate()) {
       const string formula = translate(*pred);
       script += assertHypothesisCommand(formula, pos);
     }
   }
   for (auto hyp : accumulator) {
     const auto &[pred, name, pos] = hyp;
-    if (not pred->isPureTypingPredicate()) {
+    if (!pred->isPureTypingPredicate()) {
       const string formula = translate(*pred);
       script += assertDefineHypothesisCommand(formula, name, pos);
     }
