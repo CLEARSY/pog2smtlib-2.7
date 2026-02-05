@@ -16,7 +16,7 @@
   (forall ((p |? REAL|))
     (forall ((x |REAL|))
       (= (|set.in REAL| x (|set.intent REAL| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent REAL|))
 (define-sort |POW (REAL x REAL)| () (P |(REAL x REAL)|))
 (declare-fun |rPI| (|POW REAL|) |REAL|)

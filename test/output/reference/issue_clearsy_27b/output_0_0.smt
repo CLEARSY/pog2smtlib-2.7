@@ -1,6 +1,6 @@
 (set-option :print-success false)
 (set-option :produce-models true)
-(set-logic HO_ALL)
+(set-logic ALL)
 (define-sort |Z| () Int)
 (declare-const c4 |Z|)
 (declare-const c2 |Z|)

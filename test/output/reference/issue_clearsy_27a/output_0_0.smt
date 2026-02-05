@@ -1,6 +1,6 @@
 (set-option :print-success false)
 (set-option :produce-unsat-cores true)
-(set-logic HO_ALL)
+(set-logic ALL)
 (assert (!
   (not
     (not

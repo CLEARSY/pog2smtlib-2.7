@@ -16,7 +16,7 @@
   (forall ((p |? Z|))
     (forall ((x |Z|))
       (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent Z|))
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
 (declare-fun |SIGMA| (|POW Z|) |Z|)

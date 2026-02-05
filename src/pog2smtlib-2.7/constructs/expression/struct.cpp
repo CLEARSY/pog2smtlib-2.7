@@ -35,7 +35,7 @@ static constexpr std::string_view SCRIPT =
   (forall ((p |? {1}|))
     (forall ((x {3}))
       (= ({4} x ({0} p))
-         (p x))))
+         (@ p x))))
   :named |ax.struct.definition {1}|))
 )";
 

@@ -71,7 +71,7 @@
   (forall ((p |? (BOOL x Z)|))
     (forall ((x |(BOOL x Z)|))
       (= (|set.in (BOOL x Z)| x (|set.intent (BOOL x Z)| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent (BOOL x Z)|))
 (assert (!
   (forall ((s |POW (BOOL x Z)|) (t |POW (BOOL x Z)|))

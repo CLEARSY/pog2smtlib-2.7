@@ -19,7 +19,7 @@
   (forall ((p |? Z|))
     (forall ((x |Z|))
       (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent Z|))
 (declare-fun |set.subset Z| (|POW Z| |POW Z|) Bool)
 (assert (!

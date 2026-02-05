@@ -22,7 +22,7 @@
   (forall ((p |? Z|))
     (forall ((x |Z|))
       (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent Z|))
 (declare-fun |directproduct Z Z POW Z| (|POW (Z x Z)| |POW (Z x POW Z)|) |POW (Z x (Z x POW Z))|)
 (assert (!
@@ -41,7 +41,7 @@
   (forall ((p |? (Z x POW Z)|))
     (forall ((x |(Z x POW Z)|))
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
@@ -49,7 +49,7 @@
   (forall ((p |? (Z x Z)|))
     (forall ((x |(Z x Z)|))
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (not

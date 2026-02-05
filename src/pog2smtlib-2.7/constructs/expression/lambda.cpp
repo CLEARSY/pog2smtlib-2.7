@@ -35,8 +35,8 @@ static constexpr std::string_view SCRIPT =
   (forall ((P |? {1}|)(E (-> |{1}| |{2}|)))
     (forall ((p |({1} x {2})|))
       (= ({4} p ({0} P E))
-         (and (P (fst p))
-              (= (snd p) (E (fst p)))))))
+         (and (@ P (fst p))
+              (= (snd p) (@ E (fst p)))))))
     :named |ax.set.in.lambda {1} {2}|))
 )";
 

@@ -10,13 +10,13 @@
   (forall ((p |? Z|))
     (forall ((x |Z|))
       (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent Z|))
 (declare-fun |INTER Z Z| (|? Z| (-> |Z| |POW Z|)) |POW Z|)
 (assert (!
   (forall ((P |? Z|)(E (-> |Z| |POW Z|))(x |Z|))
     (= (|set.in Z| x (|INTER Z Z| P E))
-       (forall ((e |Z|)) (=> (P e) (|set.in Z| x (E e))))))
+       (forall ((e |Z|)) (=> (@ P e) (|set.in Z| x (E e))))))
   :named |ax.set.in.quantified.inter (Z x Z)|))
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))

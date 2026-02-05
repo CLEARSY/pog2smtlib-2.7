@@ -90,7 +90,7 @@
   (forall ((p |? (REAL x REAL)|))
     (forall ((x |(REAL x REAL)|))
       (= (|set.in (REAL x REAL)| x (|set.intent (REAL x REAL)| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent (REAL x REAL)|))
 (declare-fun |finite sub-sets (REAL x REAL)| (|POW (REAL x REAL)|) |POW POW (REAL x REAL)|)
 (assert (!
@@ -106,7 +106,7 @@
   (forall ((p |? REAL|))
     (forall ((x |REAL|))
       (= (|set.in REAL| x (|set.intent REAL| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent REAL|))
 (assert (!
   (not

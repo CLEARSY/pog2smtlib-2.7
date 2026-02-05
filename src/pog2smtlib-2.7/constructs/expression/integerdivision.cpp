@@ -35,13 +35,13 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
   (forall ((a {1}) (b {1}))
     (and
       (=> (and (<= 0 a) (< 0 b))
-        (= ({0} a b) (/ a b)))
+        (= ({0} a b) (div a b)))
       (=> (and (<= 0 a) (< b 0))
-        (= ({0} a b) (- (/ a (- b)))))
+        (= ({0} a b) (- (div a (- b)))))
       (=> (and (< a 0) (< 0 b))
-        (= ({0} a b) (- (/ (- a) b))))
+        (= ({0} a b) (- (div (- a) b))))
       (=> (and (<= a 0) (< b 0))
-        (= ({0} a b) (/ a b)))))
+        (= ({0} a b) (div a b)))))
   :named |ax.int.div :1|))
   )";
 

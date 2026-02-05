@@ -27,6 +27,8 @@
 #include "translate-signature.h"
 #include "utils.h"
 
+std::string DEFAULT_SMT_LOGIC = "ALL";
+
 static void translateAndSave(POGTranslations &pogTranslation,
                              const goal_t &goal, const std::string &filePrefix,
                              const smt_options_t &options) {
@@ -53,7 +55,7 @@ static void translateAndSave(POGTranslations &pogTranslation,
   if (options.produce_model) {
     out << "(set-option :produce-models true)\n";
   }
-  out << "(set-logic HO_ALL)\n";
+  out << "(set-logic " << options.logic << ")\n";
   out << result;
   out << "(check-sat)\n";
   if (options.produce_unsat_core) {

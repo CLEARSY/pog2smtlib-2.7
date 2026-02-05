@@ -74,7 +74,7 @@
   (forall ((p |? POW Z|))
     (forall ((x |POW Z|))
       (= (|set.in POW Z| x (|set.intent POW Z| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent POW Z|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
@@ -82,7 +82,7 @@
   (forall ((p |? Z|))
     (forall ((x |Z|))
       (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent Z|))
 (declare-const |set.empty Z| |POW Z|)
 (assert (!

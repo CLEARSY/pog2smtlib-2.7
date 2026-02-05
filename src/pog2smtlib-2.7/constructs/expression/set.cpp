@@ -36,7 +36,7 @@ static constexpr std::string_view SCRIPT =
   (forall ((p |? {0}|))
     (forall ((x {1}))
       (= ({4} x ({2} p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent {0}|))
 )";
 

@@ -14,7 +14,7 @@
   (forall ((p |? struct(Note, Suffisant)|))
     (forall ((x |struct(Note, Suffisant)|))
       (= (|set.in struct(Note, Suffisant)| x (|set.intent struct(Note, Suffisant)| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent struct(Note, Suffisant)|))
 (declare-fun |set.in BOOL| (|BOOL| |POW BOOL|) Bool)
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
@@ -23,7 +23,7 @@
   (forall ((p |? struct(Note, Suffisant)|))
     (forall ((x |struct(Note, Suffisant)|))
       (= (|set.in struct(Note, Suffisant)| x (|struct struct(Note, Suffisant)| p))
-         (p x))))
+         (@ p x))))
   :named |ax.struct.definition struct(Note, Suffisant)|))
 (declare-const BOOL |POW BOOL|)
 (assert (!

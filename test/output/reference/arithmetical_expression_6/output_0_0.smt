@@ -9,13 +9,13 @@
   (forall ((a |Z|) (b |Z|))
     (and
       (=> (and (<= 0 a) (< 0 b))
-        (= (|int.div| a b) (/ a b)))
+        (= (|int.div| a b) (div a b)))
       (=> (and (<= 0 a) (< b 0))
-        (= (|int.div| a b) (- (/ a (- b)))))
+        (= (|int.div| a b) (- (div a (- b)))))
       (=> (and (< a 0) (< 0 b))
-        (= (|int.div| a b) (- (/ (- a) b))))
+        (= (|int.div| a b) (- (div (- a) b))))
       (=> (and (<= a 0) (< b 0))
-        (= (|int.div| a b) (/ a b)))))
+        (= (|int.div| a b) (div a b)))))
   :named |ax.int.div :1|))
   (assert (!
   (not

@@ -10,7 +10,7 @@
   (forall ((p |? REAL|))
     (forall ((x |REAL|))
       (= (|set.in REAL| x (|set.intent REAL| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent REAL|))
 (assert (!
   (not

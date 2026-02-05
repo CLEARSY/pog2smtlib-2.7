@@ -22,7 +22,7 @@
   (forall ((p |? Z|))
     (forall ((x |Z|))
       (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent Z|))
 (define-sort |? (Z x POW Z)| () (-> |(Z x POW Z)| Bool))
 (declare-const |set.intent (Z x POW Z)| (-> |? (Z x POW Z)| |POW (Z x POW Z)|))
@@ -30,7 +30,7 @@
   (forall ((p |? (Z x POW Z)|))
     (forall ((x |(Z x POW Z)|))
       (= (|set.in (Z x POW Z)| x (|set.intent (Z x POW Z)| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent (Z x POW Z)|))
 (assert (!
   (not

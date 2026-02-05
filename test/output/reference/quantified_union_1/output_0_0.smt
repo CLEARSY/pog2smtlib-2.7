@@ -10,13 +10,13 @@
   (forall ((p |? Z|))
     (forall ((x |Z|))
       (= (|set.in Z| x (|set.intent Z| p))
-         (p x))))
+         (@ p x))))
   :named |ax:set.in.intent Z|))
 (declare-fun |UNION Z Z| (|? Z| (-> |Z| |POW Z|)) |POW Z|)
 (assert (!
   (forall ((P |? Z|)(E (-> |Z| |POW Z|))(x |Z|))
     (= (|set.in Z| x (|UNION Z Z| P E))
-       (exists ((e |Z|)) (and (P e) (|set.in Z| x (E e))))))
+       (exists ((e |Z|)) (and (@ P e) (|set.in Z| x (E e))))))
   :named |ax.set.in.quantified.union (Z x Z)|))
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))

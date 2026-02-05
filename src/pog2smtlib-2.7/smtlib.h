@@ -17,6 +17,7 @@
 
 #include <cstddef>
 #include <map>
+#include <string>
 #include <vector>
 
 #include "pog.h"
@@ -26,9 +27,12 @@ using goal_t = std::pair<size_t, size_t>;  // <group, simple_goal>
 using goal_index_t = std::vector<goal_t>;
 using goal_selection_t = std::map<size_t, std::vector<size_t>>;
 
+extern std::string DEFAULT_SMT_LOGIC;
+
 struct smt_options_t {
   bool produce_unsat_core;
   bool produce_model;
+  std::string logic;
 
   // If reduce_po_set is true then reduce_po contains the value of --reduce-po
   // (n >= 0). When reduce_po_set is false, the option was not provided.
@@ -42,6 +46,7 @@ struct smt_options_t {
   smt_options_t()
       : produce_unsat_core{false},
         produce_model{false},
+        logic{DEFAULT_SMT_LOGIC},
         reduce_po_set{false},
         reduce_po{0},
         direct_deduction{false} {}
