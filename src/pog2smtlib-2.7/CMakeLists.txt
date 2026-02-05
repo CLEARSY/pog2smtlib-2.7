@@ -9,6 +9,17 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID MATCHES Clang$)
   add_compile_options(-Wall -Wextra -Wunused -Wpedantic -Werror)
 endif()
 
+add_custom_target(POG2SMTLIB27_VERSION
+  ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
+                   -D DST=${CMAKE_CURRENT_SOURCE_DIR}/version.h
+                   -D SRC_DIR=${pog2smtlib-2.7}
+                   -P ${pog2smtlib-2.7_SOURCE_DIR}/cmake/modules/GenerateGitInformation.cmake
+  DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
+  BYPRODUCTS
+    ${CMAKE_CURRENT_SOURCE_DIR}/version.h
+)
+
 add_subdirectory(constructs/type)
 add_subdirectory(constructs/expression)
 add_subdirectory(constructs/predicate)
@@ -51,17 +62,17 @@ set(POG2SMTLIB27_SOURCES
     )
 
 include_directories(
-  ${CMAKE_CURRENT_BINARY_DIR}
-  ${POGLIB_SOURCE_DIR}
-  ${BASTLIB_SOURCE_DIR}
-  ${tinyxml2_SOURCE_DIR}
-  ${FMT_CXX_SOURCE_DIR}/include/
-  )
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${POGLIB_SOURCE_DIR}
+    ${BASTLIB_SOURCE_DIR}
+    ${tinyxml2_SOURCE_DIR}
+    ${FMT_CXX_SOURCE_DIR}/include/
+    )
 
 add_executable(pog2smtlib27
     ${POG2SMTLIB27_SOURCES}
     ${POG2SMTLIB27_HEADERS}
     )
-
+add_dependencies(pog2smtlib27 POG2SMTLIB27_VERSION)
 target_link_libraries(pog2smtlib27 PRIVATE fmt::fmt-header-only -Bstatic POGLIB BAST_LIB tinyxml2::tinyxml2)
 set(pog2smtlib27_EXE ${CMAKE_CURRENT_BINARY_DIR}/pog2smtlib27 CACHE PATH "pog2smtlib27 executable")

@@ -12,6 +12,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include <fmt/core.h>
+
 #include <algorithm>
 #include <cstdlib>  // For EXIT_FAILURE
 #include <cstring>
@@ -27,8 +29,22 @@
 #include "smtlib.h"
 #include "tinyxml2.h"
 #include "translate-signature.h"
+#include "version.h"
 
-static void display_help() {
+static std::string thanks() {
+  return std::string(
+      "Partly financed by French National Research Agency through project "
+      "ANR-21-CE25-0010\n"
+      "(Enhancing B Language Reasoners with SAT and SMT Techniques – "
+      "BLaSST).\n");
+}
+
+static void display_version() {
+  std::cout << fmt::format("{} ({})\n{}\n{}\n", POG2SMTLIB27_VERSION,
+                           POG2SMTLIB27_SHA, POG2SMTLIB27_COPYRIGHT, thanks());
+}
+
+static void display_help(std::ostream &oss = std::cerr) {
 
   static const std::string HELP =
       R"(Translates Atelier B proof obligation file to SMT-LIB format.
@@ -55,12 +71,17 @@ pog2smtlib-2.7 OPTIONS -i input_file -o output
   -dd, --direct-deduction
           Modifies the --reduce-po to seed the lasso with the free
           symbols in the Simple_Goal element only.
+  -v, --version
+          Prints version information.
   -h, --help
           Prints this help.
 )";
 
-  std::cout << HELP;
+  oss << HELP;
 }
+
+static void parse_options(int argc, char **argv, char *&input, char *&output,
+                          goal_index_t &goals, smt_options_t &smt_options);
 
 [[maybe_unused]] static void classifyGoals(const goal_index_t &goals,
                                            goal_selection_t &sgoals) {
@@ -97,95 +118,7 @@ int main(int argc, char **argv) {
   goal_index_t goals;
   smt_options_t smt_options;
 
-  // process mandatory arguments
-  if (argc < 5) {
-    display_help();
-    return EXIT_FAILURE;
-  }
-  if (strcmp(argv[argc - 4], "-i") != 0) {
-    display_help();
-    return EXIT_FAILURE;
-  }
-  input = argv[argc - 3];
-  if (strcmp(argv[argc - 2], "-o") != 0) {
-    display_help();
-    return EXIT_FAILURE;
-  }
-  output = argv[argc - 1];
-  // process optional arguments
-  int arg = 1;
-  const int argstop = argc - 4;  // the last four arguments are mandatory
-  while (arg < argstop) {
-    if (strcmp(argv[arg], "-a") == 0) {
-      if (arg + 2 < argstop) {
-        const size_t group = argtoul(argv[arg + 1]);
-        const size_t goal = argtoul(argv[arg + 2]);
-        goals.push_back(std::make_pair(group, goal));
-        arg += 3;
-      } else {
-        display_help();
-        return EXIT_FAILURE;
-      }
-    } else if (strcmp(argv[arg], "-h") == 0 or
-               strcmp(argv[arg], "--help") == 0) {
-      display_help();
-      arg += 1;
-    } else if (strcmp(argv[arg], "-m") == 0 or
-               strcmp(argv[arg], "--model") == 0) {
-      smt_options.produce_model = true;
-      arg += 1;
-    } else if (strcmp(argv[arg], "-u") == 0 or
-               strcmp(argv[arg], "--unsat-core") == 0) {
-      smt_options.produce_unsat_core = true;
-      arg += 1;
-    } else if (strcmp(argv[arg], "-l") == 0 or
-               strcmp(argv[arg], "--logic") == 0) {
-      if (arg + 1 < argstop) {
-        smt_options.logic = std::string(argv[arg + 1]);
-        arg += 2;
-      } else {
-        display_help();
-        return EXIT_FAILURE;
-      }
-    } else if (strcmp(argv[arg], "-rp") == 0 or
-               strcmp(argv[arg], "--reduce-po") == 0) {
-      if (arg + 1 < argstop) {
-        const size_t n = argtoul(argv[arg + 1]);
-        smt_options.reduce_po_set = true;
-        smt_options.reduce_po = n;
-        arg += 2;
-      } else {
-        display_help();
-        return EXIT_FAILURE;
-      }
-    } else if (strcmp(argv[arg], "-dd") == 0 or
-               strcmp(argv[arg], "--direct-deduction") == 0) {
-      smt_options.direct_deduction = true;
-      arg += 1;
-    } else {
-      display_help();
-      return EXIT_FAILURE;
-    }
-  }
-
-  if (input == nullptr || output == nullptr) {
-    display_help();
-    return EXIT_FAILURE;
-  }
-
-  if (smt_options.direct_deduction && !smt_options.reduce_po_set) {
-    std::cerr << "Error: --direct-deduction requires --reduce-po to be set"
-              << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  std::filesystem::path inputPath(input);
-  std::string extension = inputPath.extension().string();
-
-  if (extension != ".pog") {
-    std::cout << "Input file is not a pog file." << std::endl;
-    return EXIT_FAILURE;
-  }
+  parse_options(argc, argv, input, output, goals, smt_options);
 
   std::ifstream infile(input);  // Open the file using std::ifstream constructor
 
@@ -221,4 +154,105 @@ int main(int argc, char **argv) {
     saveSmtLibFile(pog, output, smt_options);
   }
   return EXIT_SUCCESS;
+}
+
+static void parse_options(int argc, char **argv, char *&input, char *&output,
+                          goal_index_t &goals, smt_options_t &smt_options) {
+  // allow --version only
+  if (argc == 2 &&
+      (strcmp(argv[1], "-v") == 0 or strcmp(argv[1], "--version") == 0)) {
+    display_version();
+    exit(EXIT_SUCCESS);
+  }
+  // allow --help only
+  if (argc == 2 &&
+      (strcmp(argv[1], "-h") == 0 or strcmp(argv[1], "--help") == 0)) {
+    display_help(std::cout);
+    exit(EXIT_SUCCESS);
+  }
+  // process mandatory arguments
+  if (argc < 5) {
+    display_help();
+    exit(EXIT_FAILURE);
+  }
+  if (strcmp(argv[argc - 4], "-i") != 0) {
+    display_help();
+    exit(EXIT_FAILURE);
+  }
+  input = argv[argc - 3];
+  if (strcmp(argv[argc - 2], "-o") != 0) {
+    display_help();
+    exit(EXIT_FAILURE);
+  }
+  output = argv[argc - 1];
+  // process optional arguments
+  int arg = 1;
+  const int argstop = argc - 4;  // the last four arguments are mandatory
+  while (arg < argstop) {
+    if (strcmp(argv[arg], "-a") == 0) {
+      if (arg + 2 < argstop) {
+        const size_t group = argtoul(argv[arg + 1]);
+        const size_t goal = argtoul(argv[arg + 2]);
+        goals.push_back(std::make_pair(group, goal));
+        arg += 3;
+      } else {
+        display_help();
+        exit(EXIT_FAILURE);
+      }
+    } else if (strcmp(argv[arg], "-h") == 0 or
+               strcmp(argv[arg], "--help") == 0) {
+      display_help(std::cout);
+      arg += 1;
+    } else if (strcmp(argv[arg], "-m") == 0 or
+               strcmp(argv[arg], "--model") == 0) {
+      smt_options.produce_model = true;
+      arg += 1;
+    } else if (strcmp(argv[arg], "-u") == 0 or
+               strcmp(argv[arg], "--unsat-core") == 0) {
+      smt_options.produce_unsat_core = true;
+      arg += 1;
+    } else if (strcmp(argv[arg], "-l") == 0 or
+               strcmp(argv[arg], "--logic") == 0) {
+      if (arg + 1 < argstop) {
+        smt_options.logic = std::string(argv[arg + 1]);
+        arg += 2;
+      } else {
+        display_help();
+        exit(EXIT_FAILURE);
+      }
+    } else if (strcmp(argv[arg], "-rp") == 0 or
+               strcmp(argv[arg], "--reduce-po") == 0) {
+      if (arg + 1 < argstop) {
+        const size_t n = argtoul(argv[arg + 1]);
+        smt_options.reduce_po_set = true;
+        smt_options.reduce_po = n;
+        arg += 2;
+      } else {
+        display_help();
+        exit(EXIT_FAILURE);
+      }
+    } else if (strcmp(argv[arg], "-dd") == 0 or
+               strcmp(argv[arg], "--direct-deduction") == 0) {
+      smt_options.direct_deduction = true;
+      arg += 1;
+    } else if (strcmp(argv[arg], "-v") == 0 or
+               strcmp(argv[arg], "--version") == 0) {
+      display_version();
+      arg += 1;
+    } else {
+      display_help();
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  if (input == nullptr || output == nullptr) {
+    display_help();
+    exit(EXIT_FAILURE);
+  }
+
+  if (smt_options.direct_deduction && !smt_options.reduce_po_set) {
+    std::cerr << "Error: --direct-deduction requires --reduce-po to be set"
+              << std::endl;
+    exit(EXIT_FAILURE);
+  }
 }
