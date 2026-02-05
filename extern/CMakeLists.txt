@@ -11,5 +11,3 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(fmt)
 
-add_subdirectory(POGLIB)
-

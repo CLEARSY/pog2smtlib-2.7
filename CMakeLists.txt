@@ -29,6 +29,9 @@ if(PROJECT_IS_TOP_LEVEL)
       DEPENDENCIES pog2smtlib27
     )
   endif()
+  add_subdirectory(extern/tinyxml2)
+  add_subdirectory(extern/BAST)
+  add_subdirectory(extern/POGLIB)
 endif(PROJECT_IS_TOP_LEVEL)
 
 foreach(submodule
