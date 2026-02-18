@@ -34,9 +34,9 @@
 (assert (!
   (forall ((X |POW Z|) (Y |POW Z|) (f |POW (Z x Z)|))
      (= (|set.in POW (Z x Z)| f (|injections Z Z| X Y))
-        (forall ((p1 |(Z x Z)|) (p2 |(Z x Z)|))
-          (=> (and (|set.in (Z x Z)| p1 f) (|set.in (Z x Z)| p2 f) (= (snd p1) (snd p2)))
-              (= (fst p1) (fst p2))))))
+        (forall ((p |(Z x Z)|) (q |(Z x Z)|))
+          (=> (and (|set.in (Z x Z)| p f) (|set.in (Z x Z)| q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q))))))
   :named |ax:set.in.injections (Z x Z)|))
 (define-sort |POW POW Z| () (P |POW Z|))
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))

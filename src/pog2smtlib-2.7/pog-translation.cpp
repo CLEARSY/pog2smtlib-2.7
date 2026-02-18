@@ -353,13 +353,6 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
   BConstruct::Context context;
   string script = translate(signature, context);
   if (!dd) {
-    for (size_t i = 0u; i < POGroup.hyps.size(); ++i) {
-      const Pred &pred = POGroup.hyps.at(i);
-      if (!pred.isPureTypingPredicate()) {
-        const string formula = translate(pred);
-        script += assertHypothesisCommand(formula, i);
-      }
-    }
     for (const auto localHypRef : PO.localHypsRef) {
       const Pred &pred = POGroup.localHyps.at(localHypRef - 1);
       if (!pred.isPureTypingPredicate()) {

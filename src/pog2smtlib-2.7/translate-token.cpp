@@ -249,8 +249,8 @@ static std::unordered_map<Expr::BinaryOp, std::string> binOpExprToStringMap = {
     {Expr::BinaryOp::Concatenation, "^"},
     {Expr::BinaryOp::Head_Insertion, "→"},
     {Expr::BinaryOp::Tail_Insertion, "←"},
-    {Expr::BinaryOp::Head_Restriction, "/\\"},
-    {Expr::BinaryOp::Tail_Restriction, "\\/"}};
+    {Expr::BinaryOp::Head_Restriction, "↑"},
+    {Expr::BinaryOp::Tail_Restriction, "↓"}};
 
 std::string smtSymbol(Expr::BinaryOp op) {
   const auto itr = binOpExprToStringMap.find(op);

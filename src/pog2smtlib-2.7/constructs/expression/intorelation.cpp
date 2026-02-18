@@ -33,9 +33,9 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
 (assert (!
   (forall ((f {1})(p {3}))
     (= ({4} p ({0} f))
-    (and (exists ((p2 {5})) (and ({6} p2 f) (= (fst p) (fst p2))
-         ({7} (snd p) (snd p2)))))))
-    :named |ax.rel {8}|))
+       (exists ((q {5}))
+           (and ({6} q f) (= (fst p) (fst q)) ({7} (snd p) (snd q))))))
+  :named |ax.rel {8}|))
 )";
 namespace Expression {
 

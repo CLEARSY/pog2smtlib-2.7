@@ -34,7 +34,7 @@ static constexpr std::string_view SCRIPT =
 (assert (!
   (forall ((P |? {1}|)(E (-> {2} {3}))(x {5}))
     (= ({4} x ({0} P E))
-       (exists ((e {2})) (and (@ P e) ({4} x (E e))))))
+       (exists ((e {2})) (and (@ P e) ({4} x (@ E e))))))
   :named |ax.set.in.quantified.union {6}|))
 )";
 

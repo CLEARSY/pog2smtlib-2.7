@@ -12,6 +12,7 @@
       (= (|set.in Z| x (|set.intent Z| p))
          (@ p x))))
   :named |ax:set.in.intent Z|))
+(define-sort |BOOL| () Bool)
 (assert (!
   (not
     (or

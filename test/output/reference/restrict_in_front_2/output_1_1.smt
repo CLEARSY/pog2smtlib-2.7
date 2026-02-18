@@ -37,9 +37,9 @@
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|) (f |POW ((Z x Z) x Z)|))
      (= (|set.in POW ((Z x Z) x Z)| f (|injections (Z x Z) Z| X Y))
-        (forall ((p1 |((Z x Z) x Z)|) (p2 |((Z x Z) x Z)|))
-          (=> (and (|set.in ((Z x Z) x Z)| p1 f) (|set.in ((Z x Z) x Z)| p2 f) (= (snd p1) (snd p2)))
-              (= (fst p1) (fst p2))))))
+        (forall ((p |((Z x Z) x Z)|) (q |((Z x Z) x Z)|))
+          (=> (and (|set.in ((Z x Z) x Z)| p f) (|set.in ((Z x Z) x Z)| q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q))))))
   :named |ax:set.in.injections ((Z x Z) x Z)|))
 (declare-fun |bijections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!

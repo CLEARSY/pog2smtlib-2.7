@@ -40,9 +40,9 @@
 (assert (!
   (forall ((X |POW (REAL x REAL)|) (Y |POW Z|) (f |POW ((REAL x REAL) x Z)|))
      (= (|set.in POW ((REAL x REAL) x Z)| f (|injections (REAL x REAL) Z| X Y))
-        (forall ((p1 |((REAL x REAL) x Z)|) (p2 |((REAL x REAL) x Z)|))
-          (=> (and (|set.in ((REAL x REAL) x Z)| p1 f) (|set.in ((REAL x REAL) x Z)| p2 f) (= (snd p1) (snd p2)))
-              (= (fst p1) (fst p2))))))
+        (forall ((p |((REAL x REAL) x Z)|) (q |((REAL x REAL) x Z)|))
+          (=> (and (|set.in ((REAL x REAL) x Z)| p f) (|set.in ((REAL x REAL) x Z)| q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q))))))
   :named |ax:set.in.injections ((REAL x REAL) x Z)|))
 (define-sort |POW POW (REAL x REAL)| () (P |POW (REAL x REAL)|))
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))

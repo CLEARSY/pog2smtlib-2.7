@@ -34,9 +34,9 @@ static constexpr std::string_view SCRIPT =
 (assert (!
   (forall ((X {2}) (Y {3}) (f {5}))
      (= ({6} f (|injections {0} {1}| X Y))
-        (forall ((p1 {7}) (p2 {7}))
-          (=> (and ({8} p1 f) ({8} p2 f) (= (snd p1) (snd p2)))
-              (= (fst p1) (fst p2))))))
+        (forall ((p {7}) (q {7}))
+          (=> (and ({8} p f) ({8} q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q))))))
   :named |ax:set.in.injections {9}|))
 )";
 

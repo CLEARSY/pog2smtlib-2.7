@@ -18,7 +18,7 @@
 (assert (!
   (forall ((P |? POW Z|)(E (-> |POW Z| |POW Z|))(x |Z|))
     (= (|set.in Z| x (|UNION POW Z Z| P E))
-       (exists ((e |POW Z|)) (and (@ P e) (|set.in Z| x (E e))))))
+       (exists ((e |POW Z|)) (and (@ P e) (|set.in Z| x (@ E e))))))
   :named |ax.set.in.quantified.union (POW Z x Z)|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))

@@ -35,9 +35,9 @@ static constexpr std::string_view SCRIPT =
   (forall ((X {2}) (Y {3}))
     (forall ((f {5}))
       (= ({6} f (|functions {0} {1}| X Y))
-         (forall ((p1 {7}) (p2 {7}))
-           (=> (and ({8} p1 f) ({8} p2 f) (= (fst p1) (fst p2)))
-               (= (snd p1) (snd p2)))))))
+         (forall ((p {7}) (q {7}))
+           (=> (and ({8} p f) ({8} q f) (= (fst p) (fst q)))
+               (= (snd p) (snd q)))))))
 :named |ax:set.in.functions {9}|))
 )";
 

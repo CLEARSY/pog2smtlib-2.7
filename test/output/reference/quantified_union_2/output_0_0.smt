@@ -16,7 +16,7 @@
 (assert (!
   (forall ((P |? Z|)(E (-> |Z| |POW Z|))(x |Z|))
     (= (|set.in Z| x (|UNION Z Z| P E))
-       (exists ((e |Z|)) (and (@ P e) (|set.in Z| x (E e))))))
+       (exists ((e |Z|)) (and (@ P e) (|set.in Z| x (@ E e))))))
   :named |ax.set.in.quantified.union (Z x Z)|))
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))

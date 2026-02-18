@@ -31,7 +31,7 @@ namespace BConstruct {
 
 static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) |{1}|)
 (assert (!
-  (= 1 ({0} {3}))
+  (= 1.0 ({0} {3}))
   :named |ax.rpi.empty|)
 )
 (assert (!

@@ -21,7 +21,7 @@
 (define-sort |POW (REAL x REAL)| () (P |(REAL x REAL)|))
 (declare-fun |rSIGMA| (|POW REAL|) |REAL|)
 (assert (!
-  (= 0 (|rSIGMA| |set.empty REAL|))
+  (= 0.0 (|rSIGMA| |set.empty REAL|))
   :named |ax.rsigma.empty|))
 (assert (!
   (forall ((s |POW REAL|))

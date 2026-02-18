@@ -58,9 +58,9 @@
   (forall ((X |POW Z|) (Y |POW POW Z|))
     (forall ((f |POW (Z x POW Z)|))
       (= (|set.in POW (Z x POW Z)| f (|functions Z POW Z| X Y))
-         (forall ((p1 |(Z x POW Z)|) (p2 |(Z x POW Z)|))
-           (=> (and (|set.in (Z x POW Z)| p1 f) (|set.in (Z x POW Z)| p2 f) (= (fst p1) (fst p2)))
-               (= (snd p1) (snd p2)))))))
+         (forall ((p |(Z x POW Z)|) (q |(Z x POW Z)|))
+           (=> (and (|set.in (Z x POW Z)| p f) (|set.in (Z x POW Z)| q f) (= (fst p) (fst q)))
+               (= (snd p) (snd q)))))))
 :named |ax:set.in.functions (Z x POW Z)|))
 (declare-fun |functions.partial Z POW Z| (|POW Z| |POW POW Z|) |POW POW (Z x POW Z)|)
 (assert (!

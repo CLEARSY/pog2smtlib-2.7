@@ -14,10 +14,10 @@
             (and (<= l e) (<= e u))))
     :named |ax.set.in.interval|))
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
-(declare-fun |/\ Z| (|POW (Z x Z)| |Z|) |POW (Z x Z)|)
+(declare-fun |↑ Z| (|POW (Z x Z)| |Z|) |POW (Z x Z)|)
 (assert (!
   (forall ((s |POW (Z x Z)|)(x |Z|)(p |(Z x Z)|))
-    (= (|set.in (Z x Z)| p (|/\ Z| s x))
+    (= (|set.in (Z x Z)| p (|↑ Z| s x))
        (and (|set.in Z| (fst p) (|interval| 1 x))
             (|set.in (Z x Z)| p s))))
   :named |ax.restrict.front.def Z|))
@@ -37,7 +37,7 @@
   :named |ax.set.eq (Z x Z)|))
 (assert (!
   (not
-    (= (|/\ Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4))))) 2) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5)))))))
+    (= (|↑ Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4))))) 2) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5)))))))
   :named |Goal|))
 (check-sat)
 (exit)

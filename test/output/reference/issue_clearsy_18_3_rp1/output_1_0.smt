@@ -10,12 +10,6 @@
 (declare-const c0 |Z|)
 (declare-const c1 |Z|)
 (assert (!
-  (< p0 p1)
-  :named |Hypothesis:3|))
-(assert (!
-  (< p1 p2)
-  :named |Hypothesis:4|))
-(assert (!
   (< p0 v0)
   :named |Local_Hyp:0|))
 (assert (!

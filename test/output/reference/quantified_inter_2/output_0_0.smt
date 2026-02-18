@@ -16,7 +16,7 @@
 (assert (!
   (forall ((P |? Z|)(E (-> |Z| |POW Z|))(x |Z|))
     (= (|set.in Z| x (|INTER Z Z| P E))
-       (forall ((e |Z|)) (=> (@ P e) (|set.in Z| x (E e))))))
+       (forall ((e |Z|)) (=> (@ P e) (|set.in Z| x (@ E e))))))
   :named |ax.set.in.quantified.inter (Z x Z)|))
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))

@@ -50,9 +50,9 @@
   (forall ((X |POW Z|) (Y |POW Z|))
     (forall ((f |POW (Z x Z)|))
       (= (|set.in POW (Z x Z)| f (|functions Z Z| X Y))
-         (forall ((p1 |(Z x Z)|) (p2 |(Z x Z)|))
-           (=> (and (|set.in (Z x Z)| p1 f) (|set.in (Z x Z)| p2 f) (= (fst p1) (fst p2)))
-               (= (snd p1) (snd p2)))))))
+         (forall ((p |(Z x Z)|) (q |(Z x Z)|))
+           (=> (and (|set.in (Z x Z)| p f) (|set.in (Z x Z)| q f) (= (fst p) (fst q)))
+               (= (snd p) (snd q)))))))
 :named |ax:set.in.functions (Z x Z)|))
 (declare-fun |rel.domain Z Z| (|POW (Z x Z)|) |POW Z|)
 (assert (!
@@ -80,9 +80,9 @@
 (assert (!
   (forall ((X |POW Z|) (Y |POW Z|) (f |POW (Z x Z)|))
      (= (|set.in POW (Z x Z)| f (|injections Z Z| X Y))
-        (forall ((p1 |(Z x Z)|) (p2 |(Z x Z)|))
-          (=> (and (|set.in (Z x Z)| p1 f) (|set.in (Z x Z)| p2 f) (= (snd p1) (snd p2)))
-              (= (fst p1) (fst p2))))))
+        (forall ((p |(Z x Z)|) (q |(Z x Z)|))
+          (=> (and (|set.in (Z x Z)| p f) (|set.in (Z x Z)| q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q))))))
   :named |ax:set.in.injections (Z x Z)|))
 (declare-fun |functions.total Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!

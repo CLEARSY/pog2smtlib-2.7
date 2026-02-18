@@ -92,9 +92,9 @@
   (forall ((X |POW Z|) (Y |POW POW Z|))
     (forall ((f |POW (Z x POW Z)|))
       (= (|set.in POW (Z x POW Z)| f (|functions Z POW Z| X Y))
-         (forall ((p1 |(Z x POW Z)|) (p2 |(Z x POW Z)|))
-           (=> (and (|set.in (Z x POW Z)| p1 f) (|set.in (Z x POW Z)| p2 f) (= (fst p1) (fst p2)))
-               (= (snd p1) (snd p2)))))))
+         (forall ((p |(Z x POW Z)|) (q |(Z x POW Z)|))
+           (=> (and (|set.in (Z x POW Z)| p f) (|set.in (Z x POW Z)| q f) (= (fst p) (fst q)))
+               (= (snd p) (snd q)))))))
 :named |ax:set.in.functions (Z x POW Z)|))
 (declare-fun |rel.domain Z POW Z| (|POW (Z x POW Z)|) |POW Z|)
 (assert (!
@@ -114,9 +114,9 @@
 (assert (!
   (forall ((X |POW (Z x POW Z)|) (Y |POW Z|) (f |POW ((Z x POW Z) x Z)|))
      (= (|set.in POW ((Z x POW Z) x Z)| f (|injections (Z x POW Z) Z| X Y))
-        (forall ((p1 |((Z x POW Z) x Z)|) (p2 |((Z x POW Z) x Z)|))
-          (=> (and (|set.in ((Z x POW Z) x Z)| p1 f) (|set.in ((Z x POW Z) x Z)| p2 f) (= (snd p1) (snd p2)))
-              (= (fst p1) (fst p2))))))
+        (forall ((p |((Z x POW Z) x Z)|) (q |((Z x POW Z) x Z)|))
+          (=> (and (|set.in ((Z x POW Z) x Z)| p f) (|set.in ((Z x POW Z) x Z)| q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q))))))
   :named |ax:set.in.injections ((Z x POW Z) x Z)|))
 (declare-fun |surjections POW Z Z| (|POW POW Z| |POW Z|) |POW POW (POW Z x Z)|)
 (assert (!
@@ -130,9 +130,9 @@
 (assert (!
   (forall ((X |POW POW Z|) (Y |POW Z|) (f |POW (POW Z x Z)|))
      (= (|set.in POW (POW Z x Z)| f (|injections POW Z Z| X Y))
-        (forall ((p1 |(POW Z x Z)|) (p2 |(POW Z x Z)|))
-          (=> (and (|set.in (POW Z x Z)| p1 f) (|set.in (POW Z x Z)| p2 f) (= (snd p1) (snd p2)))
-              (= (fst p1) (fst p2))))))
+        (forall ((p |(POW Z x Z)|) (q |(POW Z x Z)|))
+          (=> (and (|set.in (POW Z x Z)| p f) (|set.in (POW Z x Z)| q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q))))))
   :named |ax:set.in.injections (POW Z x Z)|))
 (declare-fun |functions.partial Z POW Z| (|POW Z| |POW POW Z|) |POW POW (Z x POW Z)|)
 (assert (!

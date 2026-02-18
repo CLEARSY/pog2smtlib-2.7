@@ -40,9 +40,9 @@
 (assert (!
   (forall ((f |POW (Z x POW Z)|)(p |(Z x Z)|))
     (= (|set.in (Z x Z)| p (|rel Z Z| f))
-    (and (exists ((p2 |(Z x POW Z)|)) (and (|set.in (Z x POW Z)| p2 f) (= (fst p) (fst p2))
-         (|set.in Z| (snd p) (snd p2)))))))
-    :named |ax.rel (Z x Z)|))
+       (exists ((q |(Z x POW Z)|))
+           (and (|set.in (Z x POW Z)| q f) (= (fst p) (fst q)) (|set.in Z| (snd p) (snd q))))))
+  :named |ax.rel (Z x Z)|))
 (assert (!
   (= func (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)(= _c1 4))))))(= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 5)(= _c1 4))))))(= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1)))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 6)(= _c1 8)(= _c1 5))))))))))
   :named |Define:lprp:1|))

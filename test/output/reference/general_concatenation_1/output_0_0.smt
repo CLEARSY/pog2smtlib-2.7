@@ -41,9 +41,9 @@
 (assert (!
   (forall ((X |POW (Z x POW Z)|) (Y |POW Z|) (f |POW ((Z x POW Z) x Z)|))
      (= (|set.in POW ((Z x POW Z) x Z)| f (|injections (Z x POW Z) Z| X Y))
-        (forall ((p1 |((Z x POW Z) x Z)|) (p2 |((Z x POW Z) x Z)|))
-          (=> (and (|set.in ((Z x POW Z) x Z)| p1 f) (|set.in ((Z x POW Z) x Z)| p2 f) (= (snd p1) (snd p2)))
-              (= (fst p1) (fst p2))))))
+        (forall ((p |((Z x POW Z) x Z)|) (q |((Z x POW Z) x Z)|))
+          (=> (and (|set.in ((Z x POW Z) x Z)| p f) (|set.in ((Z x POW Z) x Z)| q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q))))))
   :named |ax:set.in.injections ((Z x POW Z) x Z)|))
 (declare-fun |set.in POW (Z x POW Z)| (|POW (Z x POW Z)| |POW POW (Z x POW Z)|) Bool)
 (define-sort |POW (Z x POW (Z x POW Z))| () (P |(Z x POW (Z x POW Z))|))

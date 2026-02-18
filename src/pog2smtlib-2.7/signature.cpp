@@ -365,6 +365,10 @@ void GetSignatureVisitor::visitConstant(const BType &type,
                                         Expr::Visitor::EConstant c) {
   SignatureReset(m_signature);
   switch (c) {
+    case Expr::Visitor::EConstant::BOOL:
+      m_signature.m_operators.emplace(MonomorphizedOperator{c});
+      m_signature.m_types.insert(std::make_shared<BType>(BType::BOOL));
+      break;
     case Expr::Visitor::EConstant::MaxInt:
     case Expr::Visitor::EConstant::MinInt:
     case Expr::Visitor::EConstant::INTEGER:
@@ -374,7 +378,6 @@ void GetSignatureVisitor::visitConstant(const BType &type,
     case Expr::Visitor::EConstant::NAT:
     case Expr::Visitor::EConstant::NAT1:
     case Expr::Visitor::EConstant::STRING:
-    case Expr::Visitor::EConstant::BOOL:
     case Expr::Visitor::EConstant::REAL:
     case Expr::Visitor::EConstant::FLOAT:
     case Expr::Visitor::EConstant::TRUE:

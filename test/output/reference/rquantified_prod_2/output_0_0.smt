@@ -21,7 +21,7 @@
 (define-sort |POW (REAL x REAL)| () (P |(REAL x REAL)|))
 (declare-fun |rPI| (|POW REAL|) |REAL|)
 (assert (!
-  (= 1 (|rPI| |set.empty REAL|))
+  (= 1.0 (|rPI| |set.empty REAL|))
   :named |ax.rpi.empty|)
 )
 (assert (!

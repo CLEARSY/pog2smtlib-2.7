@@ -37,9 +37,9 @@
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|) (f |POW ((Z x Z) x Z)|))
      (= (|set.in POW ((Z x Z) x Z)| f (|injections (Z x Z) Z| X Y))
-        (forall ((p1 |((Z x Z) x Z)|) (p2 |((Z x Z) x Z)|))
-          (=> (and (|set.in ((Z x Z) x Z)| p1 f) (|set.in ((Z x Z) x Z)| p2 f) (= (snd p1) (snd p2)))
-              (= (fst p1) (fst p2))))))
+        (forall ((p |((Z x Z) x Z)|) (q |((Z x Z) x Z)|))
+          (=> (and (|set.in ((Z x Z) x Z)| p f) (|set.in ((Z x Z) x Z)| q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q))))))
   :named |ax:set.in.injections ((Z x Z) x Z)|))
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |bijections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
@@ -68,10 +68,10 @@
   (forall ((s |POW (Z x Z)|))
     (= (|size Z| s) (Value (|card (Z x Z)| s))))
   :named |ax.size.definition Z|))
-(declare-fun |\/ Z| (|POW (Z x Z)| |Z|) |POW (Z x Z)|)
+(declare-fun |↓ Z| (|POW (Z x Z)| |Z|) |POW (Z x Z)|)
 (assert (!
   (forall ((s |POW (Z x Z)|)(x |Z|)(p |(Z x Z)|))
-    (= (|set.in (Z x Z)| p (|\/ Z| s x))
+    (= (|set.in (Z x Z)| p (|↓ Z| s x))
        (and (|set.in Z| (fst p) (|interval| 1 (- (|size Z| s) x)))
             (|set.in (Z x Z)| (maplet (+ x (fst p)) (snd p)) s))))
   :named |ax.restrict.tail.def Z|))
@@ -85,7 +85,7 @@
   :named |ax:set.in.intent (Z x Z)|))
 (assert (!
   (not
-    (= (|\/ Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4))))) 3) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (= _c0 (maplet 1 4))))))
+    (= (|↓ Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4))))) 3) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (= _c0 (maplet 1 4))))))
   :named |Goal|))
 (check-sat)
 (exit)

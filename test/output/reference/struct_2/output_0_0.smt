@@ -1,7 +1,7 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(define-sort |BOOL| () Bool)
 (define-sort |Z| () Int)
+(define-sort |BOOL| () Bool)
 (declare-sort P 1)
 (declare-datatype |struct(Note, Suffisant)| ((|rec(Note, Suffisant)| (|'Note| |Z|)(|'Suffisant| |BOOL|))))
 (define-sort |POW struct(Note, Suffisant)| () (P |struct(Note, Suffisant)|))
