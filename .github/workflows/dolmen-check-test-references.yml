@@ -1,0 +1,26 @@
+name: Check Test References
+
+on:
+  push:
+    paths:
+      - 'test/output/reference/**/*.smt'
+  pull_request:
+    paths:
+      - 'test/output/reference/**/*.smt'
+
+jobs:
+  smtlib-27-check:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/clearsy/dolmen:latest
+
+    steps:
+      - name: Checkout code
+        run: |
+          cd /home/opam
+          mkdir work
+          git clone --single-branch --branch ${{ github.head_ref || github.ref_name }} https://github.com/${{ github.repository }}.git work
+
+      - name: Check test references
+        run: |
+          /home/opam/work/scripts/check-reference-files.sh /home/opam/work/test/output/reference
