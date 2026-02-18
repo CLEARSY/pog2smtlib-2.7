@@ -15,13 +15,12 @@ jobs:
       image: ghcr.io/clearsy/dolmen:latest
 
     steps:
-      - name: Checkout and check
+      - name: Checkout code
         run: |
           cd /home/opam
           mkdir work
           git clone --single-branch --branch ${{ github.head_ref || github.ref_name }} https://github.com/${{ github.repository }}.git work
-          cd work
-          git log --oneline -n 10
-          pwd
-          ls -al /home/opam/work/scripts/
+
+      - name: Check test references
+        run: |
           /home/opam/work/scripts/check-reference-files.sh /home/opam/work/test/output/reference
