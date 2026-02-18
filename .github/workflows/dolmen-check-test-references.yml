@@ -21,8 +21,9 @@ jobs:
           mkdir work
           git clone --single-branch --branch ${{ github.head_ref || github.ref_name }} https://github.com/${{ github.repository }}.git work
           cd work
-          git checkout ${{ github.sha }}
+          git log --oneline -n 10
 
       - name: Run smtlib-27 check
         run: |
+          cd /home/opam/work
           scripts/check_reference_files.sh test/output/reference
