@@ -15,7 +15,7 @@ jobs:
       image: ghcr.io/clearsy/dolmen:latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout and check
         run: |
           cd /home/opam
           mkdir work
@@ -24,7 +24,4 @@ jobs:
           git log --oneline -n 10
           pwd
           ls
-
-      - name: Run smtlib-27 check
-        run: |
           /home/opam/work/scripts/check_reference_files.sh /home/opam/work/test/output/reference
