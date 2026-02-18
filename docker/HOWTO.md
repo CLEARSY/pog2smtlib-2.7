@@ -1,7 +1,11 @@
 # HOWTO build and push the docker image
 
+## Build and push the image to GitHub registry
+
+CR_PAT is a GitHub token with the "write:packages" scope.
+
 ```sh
-docker login registry.gitlab.clearsy.com:443
-docker build -t registry.gitlab.clearsy.com:443/atelierb/pog2smtlib-2.7/dolmen .
-docker push registry.gitlab.clearsy.com:443/atelierb/pog2smtlib-2.7/dolmen
+echo $CR_PAT | docker login ghcr.io -u dde_cls --password-stdin
+docker build -t ghcr.io/clearsy/dolmen:latest .
+docker push ghcr.io/clearsy/dolmen:latest
 ```

@@ -1,0 +1,23 @@
+name: Check Test References
+
+on:
+  push:
+    paths:
+      - 'test/output/reference/**/*.smt'
+  pull_request:
+    paths:
+      - 'test/output/reference/**/*.smt'
+
+jobs:
+  smtlib-27-check:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/clearsy/dolmen:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run smtlib-27 check
+        run: |
+          scripts/check_reference_files.sh test/output/reference
