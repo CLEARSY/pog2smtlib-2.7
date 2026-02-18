@@ -1,7 +1,6 @@
 [submodule "extern/tinyxml2"]
 	path = extern/tinyxml2
 	url = https://github.com/leethomason/tinyxml2.git
-	update = none
 
 [submodule "extern/BAST"]
 	path = extern/BAST
