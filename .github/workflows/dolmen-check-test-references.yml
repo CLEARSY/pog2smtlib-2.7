@@ -17,6 +17,7 @@ jobs:
     steps:
       - name: Checkout code
         run: |
+          cd /home/opam
           git clone https://github.com/${{ github.repository }}.git .
           git checkout ${{ github.sha }}
 
