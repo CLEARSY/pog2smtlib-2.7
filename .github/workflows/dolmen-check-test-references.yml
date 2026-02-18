@@ -22,6 +22,8 @@ jobs:
           git clone --single-branch --branch ${{ github.head_ref || github.ref_name }} https://github.com/${{ github.repository }}.git work
           cd work
           git log --oneline -n 10
+          pwd
+          ls
 
       - name: Run smtlib-27 check
         run: |
