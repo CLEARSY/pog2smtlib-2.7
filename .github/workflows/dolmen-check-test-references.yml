@@ -23,5 +23,5 @@ jobs:
           cd work
           git log --oneline -n 10
           pwd
-          ls
+          ls -al /home/opam/work/scripts/
           /home/opam/work/scripts/check_reference_files.sh /home/opam/work/test/output/reference
