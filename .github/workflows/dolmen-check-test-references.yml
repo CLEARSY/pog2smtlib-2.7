@@ -18,7 +18,9 @@ jobs:
       - name: Checkout code
         run: |
           cd /home/opam
-          git clone https://github.com/${{ github.repository }}.git .
+          mkdir work
+          git clone https://github.com/${{ github.repository }}.git work
+          cd work
           git checkout ${{ github.sha }}
 
       - name: Run smtlib-27 check
