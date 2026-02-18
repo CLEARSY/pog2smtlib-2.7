@@ -25,6 +25,4 @@ jobs:
 
       - name: Run smtlib-27 check
         run: |
-          cd /home/opam/work
-          ls ./scripts
-          ./scripts/check_reference_files.sh test/output/reference
+          /home/opam/work/scripts/check_reference_files.sh /home/opam/work/test/output/reference
