@@ -29,9 +29,10 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT =
+static constexpr std::string_view DECLARATION =
     R"((declare-fun |functions {0} {1}| ({2} {3}) {4})
-(assert (!
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((X {2}) (Y {3}))
     (forall ((f {5}))
       (= ({6} f (|functions {0} {1}| X Y))
@@ -39,6 +40,15 @@ static constexpr std::string_view SCRIPT =
            (=> (and ({8} p f) ({8} q f) (= (fst p) (fst q)))
                (= (snd p) (snd q)))))))
 :named |ax:set.in.functions {9}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((X {2}) (Y {3}) (f {5})) (!
+    (= ({6} f (|functions {0} {1}| X Y))
+       (forall ((p {7}) (q {7}))
+         (=> (and ({8} p f) ({8} q f) (= (fst p) (fst q)))
+             (= (snd p) (snd q)))))
+    :pattern ( ({6} f (|functions {0} {1}| X Y)) )))
+  :named |ax:set.in.functions {9}|))
 )";
 
 namespace Expression {
@@ -52,6 +62,8 @@ Function::Function(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Function(const BType &U, const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Function::m_cache, U, V);
   if (!result) {
@@ -61,7 +73,7 @@ shared_ptr<Abstract> Factory::Function(const BType &U, const BType &V) {
     const auto PUxV = BType::POW(UxV);
     const auto PPUxV = BType::POW(PUxV);
     const std::string script =
-        fmt::format(SCRIPT, /*0*/ symbolInner(U),
+        fmt::format(script_pattern, /*0*/ symbolInner(U),
                     /*1*/ symbolInner(V),
                     /*2*/ symbol(PU),
                     /*3*/ symbol(PV),

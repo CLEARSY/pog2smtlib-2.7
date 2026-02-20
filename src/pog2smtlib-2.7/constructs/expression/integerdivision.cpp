@@ -30,8 +30,10 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {1}) {1})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((a {1}) (b {1}))
     (and
       (=> (and (<= 0 a) (< 0 b))
@@ -43,7 +45,21 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
       (=> (and (<= a 0) (< b 0))
         (= ({0} a b) (div a b)))))
   :named |ax.int.div :1|))
-  )";
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((a {1}) (b {1})) (!
+    (and
+      (=> (and (<= 0 a) (< 0 b))
+        (= ({0} a b) (div a b)))
+      (=> (and (<= 0 a) (< b 0))
+        (= ({0} a b) (- (div a (- b)))))
+      (=> (and (< a 0) (< 0 b))
+        (= ({0} a b) (- (div (- a) b))))
+      (=> (and (<= a 0) (< b 0))
+        (= ({0} a b) (div a b))))
+    :pattern ( (div a b)
+  :named |ax.int.div :1|))
+)";
 
 namespace Expression {
 
@@ -56,11 +72,14 @@ IntegerDivision::IntegerDivision(const std::string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::IntegerDivision() {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::IntegerDivision::m_cache);
   if (!result) {
-    const string script = fmt::format(
-        SCRIPT, smtSymbol(Expr::BinaryOp::IDivision), symbol(BType::INT));
+    const string script =
+        fmt::format(script_pattern, smtSymbol(Expr::BinaryOp::IDivision),
+                    symbol(BType::INT));
     const PreRequisites requisites{Factory::Type(BType::INT)};
     result = make(BConstruct::Expression::IntegerDivision::m_cache, script,
                   requisites);

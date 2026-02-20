@@ -29,12 +29,20 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT =
+static constexpr std::string_view DECLARATION =
     R"((declare-fun {0} (|? {1}| (-> {2} {3})) {3})
-(assert (!
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((P |? {1}|)(E (-> {2} {3}))(x {5}))
     (= ({4} x ({0} P E))
        (forall ((e {2})) (=> (@ P e) ({4} x (@ E e))))))
+  :named |ax.set.in.quantified.inter {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((P |? {1}|)(E (-> {2} {3}))(x {5})) (!
+    (= ({4} x ({0} P E))
+       (forall ((e {2})) (=> (@ P e) ({4} x (@ E e)))))
+    :pattern ( ({4} x ({0} P E)) )))
   :named |ax.set.in.quantified.inter {6}|))
 )";
 
@@ -51,13 +59,15 @@ Quantified_Intersection::Quantified_Intersection(
 
 shared_ptr<Abstract> Factory::Quantified_Intersection(const BType& U,
                                                       const BType& V) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Quantified_Intersection::m_cache, U, V);
   if (!result) {
     const auto PV = BType::POW(V);
     const auto UxV = BType::PROD(U, V);
     const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::QuantifiedOp::Intersection, U, V),
+        script_pattern, /*0*/ smtSymbol(Expr::QuantifiedOp::Intersection, U, V),
         /*1*/ symbolInner(U),
         /*2*/ symbol(U),
         /*3*/ symbol(PV),

@@ -29,14 +29,22 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT =
+static constexpr std::string_view DECLARATION =
     R"((declare-fun |surjections {0} {1}| ({2} {3}) {4})
-(assert (!
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((X {2}) (Y {3}))
     (forall ((f {5}))
       (= ({6} f (|surjections {0} {1}| X Y))
          (= ({7} f) Y)
       )))
+  :named |ax:set.in.surjections {8}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((X {2}) (Y {3}) (f {5})) (!
+    (= ({6} f (|surjections {0} {1}| X Y))
+       (= ({7} f) Y))
+    :pattern ( ({6} f (|surjections {0} {1}| X Y)) )))
   :named |ax:set.in.surjections {8}|))
 )";
 
@@ -51,6 +59,8 @@ Surjection::Surjection(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Surjection(const BType &U, const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Surjection::m_cache, U, V);
   if (!result) {
@@ -61,7 +71,7 @@ shared_ptr<Abstract> Factory::Surjection(const BType &U, const BType &V) {
     const auto PxUV = BType::POW(xUV);
     const auto PPxUV = BType::POW(PxUV);
     const std::string script =
-        fmt::format(SCRIPT, /*0*/ symbolInner(U),
+        fmt::format(script_pattern, /*0*/ symbolInner(U),
                     /*1*/ symbolInner(V),
                     /*2*/ symbol(PU),
                     /*3*/ symbol(PV),

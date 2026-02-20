@@ -29,14 +29,24 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT =
+static constexpr std::string_view DECLARATION =
     R"((declare-fun |injections {0} {1}| ({2} {3}) {4})
-(assert (!
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((X {2}) (Y {3}) (f {5}))
      (= ({6} f (|injections {0} {1}| X Y))
         (forall ((p {7}) (q {7}))
           (=> (and ({8} p f) ({8} q f) (= (snd p) (snd q)))
               (= (fst p) (fst q))))))
+  :named |ax:set.in.injections {9}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((X {2}) (Y {3}) (f {5})) (!
+     (= ({6} f (|injections {0} {1}| X Y))
+        (forall ((p {7}) (q {7}))
+          (=> (and ({8} p f) ({8} q f) (= (snd p) (snd q)))
+              (= (fst p) (fst q)))))
+      :pattern ( ({6} f (|injections {0} {1}| X Y)) )))
   :named |ax:set.in.injections {9}|))
 )";
 
@@ -51,6 +61,8 @@ Injection::Injection(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Injection(const BType &U, const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Injection::m_cache, U, V);
   if (!result) {
@@ -60,7 +72,7 @@ shared_ptr<Abstract> Factory::Injection(const BType &U, const BType &V) {
     const auto PUxV = BType::POW(UxV);
     const auto PPUxV = BType::POW(PUxV);
     const std::string script =
-        fmt::format(SCRIPT, /*0*/ symbolInner(U),
+        fmt::format(script_pattern, /*0*/ symbolInner(U),
                     /*1*/ symbolInner(V),
                     /*2*/ symbol(PU),
                     /*3*/ symbol(PV),

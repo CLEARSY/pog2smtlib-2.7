@@ -29,13 +29,25 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {1})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {1})
+)";
+static constexpr std::string_view BASE_SCRIPT = R"((assert (!
   (forall ((R {1})) (= ({0} R 1) R))
   :named |ax.set.iterate.1 {4}|))
-(assert (!
+)";
+static constexpr std::string_view BASE_SCRIPT_T = R"((assert (!
+  (forall ((R {1})) (! (= ({0} R 1) R) :pattern ({0} R 1)))
+  :named |ax.set.iterate.1 {4}|))
+)";
+static constexpr std::string_view INDUCT_SCRIPT = R"((assert (!
   (forall ((R {1})(n {2}))
     (= ({0} R (+ n 1)) ({3} R ({0} R n))))
+  :named |ax.set.iterate.n+1 {4}|))
+)";
+static constexpr std::string_view INDUCT_SCRIPT_T = R"((assert (!
+  (forall ((R {1})(n {2}))
+    (! (= ({0} R (+ n 1)) ({3} R ({0} R n))) :pattern ({0} R (+ n 1))))
   :named |ax.set.iterate.n+1 {4}|))
 )";
 
@@ -50,13 +62,16 @@ Iteration::Iteration(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Iteration(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, BASE_SCRIPT_T, INDUCT_SCRIPT_T,
+                    BASE_SCRIPT, INDUCT_SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Iteration::m_cache, T);
   if (!result) {
     const auto TxT = BType::PROD(T, T);
     const auto PTxT = BType::POW(TxT);
     const string script =
-        fmt::format(SCRIPT,
+        fmt::format(script_pattern,
                     /*0*/ smtSymbol(Expr::BinaryOp::Iteration, T),
                     /*1*/ symbol(PTxT),
                     /*2*/ symbol(BType::INT),

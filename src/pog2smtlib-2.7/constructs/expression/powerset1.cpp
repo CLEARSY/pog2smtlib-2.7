@@ -29,12 +29,21 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {1}) (t {1}))
     (= ({3} s ({0} t))
        (and ({3} s ({4} t))
             (not (= s {5})))))
+  :named |ax.non empty sub-sets {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {1}) (t {1})) (!
+    (= ({3} s ({0} t))
+       (and ({3} s ({4} t))
+            (not (= s {5}))))
+    :pattern ( ({3} s ({0} t)) )))
   :named |ax.non empty sub-sets {6}|))
 )";
 
@@ -49,13 +58,15 @@ PowerSet1::PowerSet1(const BType& T, const string& script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::PowerSet1(const BType& T) {
+  std::string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::PowerSet1::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
     const auto PPT = BType::POW(PT);
     const string script =
-        fmt::format(SCRIPT,
+        fmt::format(script_pattern,
                     /*0*/ smtSymbol(Expr::UnaryOp::Non_Empty_Subsets, T),
                     /*1*/ symbol(PT),
                     /*2*/ symbol(PPT),

@@ -14,13 +14,17 @@
 (define-sort |POW POW (BOOL x Z)| () (P |POW (BOOL x Z)|))
 (declare-fun |set.subseteq (BOOL x Z)| (|POW (BOOL x Z)| |POW (BOOL x Z)|) Bool)
 (assert (!
-    (forall ((s |POW (BOOL x Z)|) (t |POW (BOOL x Z)|))
-      (=
-        (|set.subseteq (BOOL x Z)| s t)
-        (forall ((e |(BOOL x Z)|)) (=> (|set.in (BOOL x Z)| e s) (|set.in (BOOL x Z)| e t)))
-      )
-    )
-    :named |ax.set.subseteq (BOOL x Z)|))
+  (forall ((s |POW (BOOL x Z)|) (t |POW (BOOL x Z)|) (e |(BOOL x Z)|))
+    (=>
+      (and (|set.subseteq (BOOL x Z)| s t) (|set.in (BOOL x Z)| e s))
+      (|set.in (BOOL x Z)| e t)))
+  :named |ax.set.subseteq.elim (BOOL x Z)|))
+(assert (!
+  (forall ((s |POW (BOOL x Z)|) (t |POW (BOOL x Z)|))
+    (=>
+      (forall ((e |(BOOL x Z)|)) (=> (|set.in (BOOL x Z)| e s) (|set.in (BOOL x Z)| e t)))
+      (|set.subseteq (BOOL x Z)| s t)))
+  :named |ax.set.subseteq.intro (BOOL x Z)|))
 (declare-fun |set.in POW (BOOL x Z)| (|POW (BOOL x Z)| |POW POW (BOOL x Z)|) Bool)
 (declare-fun |sub-sets (BOOL x Z)| (|POW (BOOL x Z)|) |POW POW (BOOL x Z)|)
 (assert (!
@@ -31,17 +35,10 @@
   :named |ax.sub-sets (BOOL x Z)|))
 (declare-fun |set.product BOOL Z| (|POW BOOL| |POW Z|) |POW (BOOL x Z)|)
 (assert (!
-  (forall ((s1 |POW BOOL|) (s2 |POW Z|))
-    (forall ((p |(BOOL x Z)|))
-      (= (|set.in (BOOL x Z)| p (|set.product BOOL Z| s1 s2))
-        (and (|set.in BOOL| (fst p) s1) (|set.in Z| (snd p) s2)))))
-  :named |ax.set.in.product.1 (BOOL x Z)|))
-(assert (!
-  (forall ((s1 |POW BOOL|) (s2 |POW Z|))
-    (forall ((x1 |BOOL|) (x2 |Z|))
-      (= (|set.in (BOOL x Z)| (maplet x1 x2) (|set.product BOOL Z| s1 s2))
-        (and (|set.in BOOL| x1 s1) (|set.in Z| x2 s2)))))
-  :named |ax.set.in.product.2 (BOOL x Z)|))
+  (forall ((U |POW BOOL|)(V |POW Z|)(p |(BOOL x Z)|))
+    (= (|set.in (BOOL x Z)| p (|set.product BOOL Z| U V))
+      (and (|set.in BOOL| (fst p) U) (|set.in Z| (snd p) V))))
+  :named |ax.set.product (BOOL x Z)|))
 (declare-fun |relations BOOL Z| (|POW BOOL| |POW Z|) |POW POW (BOOL x Z)|)
 (assert (!
   (forall ((X |POW BOOL|) (Y |POW Z|))
@@ -81,19 +78,23 @@
   :named |ax.set.eq (BOOL x Z)|))
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-      (=
-        (|set.subseteq Z| s t)
-        (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq Z|))
+  (forall ((s |POW Z|) (t |POW Z|) (e |Z|))
+    (=>
+      (and (|set.subseteq Z| s t) (|set.in Z| e s))
+      (|set.in Z| e t)))
+  :named |ax.set.subseteq.elim Z|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=>
+      (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
+      (|set.subseteq Z| s t)))
+  :named |ax.set.subseteq.intro Z|))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))
     (=
@@ -111,8 +112,9 @@
 )
 (declare-const BOOL |POW BOOL|)
 (assert (!
-  (forall ((e |BOOL|)) (|set.in BOOL| e BOOL))
-  :named |ax.set.in.BOOL|))
+  (forall ((e |BOOL|))
+    (|set.in BOOL| e BOOL))
+  :named |ax.rw.universe BOOL|))
 (declare-const s13$1 |Z|)
 (assert (!
   (= s5 (|interval| 0 255))

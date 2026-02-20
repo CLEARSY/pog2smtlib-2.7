@@ -29,13 +29,23 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((e1 {1}) (e2 {2}))
     (forall ((f {4}))
       (= ({5} f ({0} e1 e2))
          (and ({5} f ({9} e1 e2))
               ({5} f (|bijections {6} {7}| e1 e2))))))
+  :named |ax:def.tbij {8}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((e1 {1}) (e2 {2}) (f {4}))
+      (= ({5} f ({0} e1 e2))
+         (and ({5} f ({9} e1 e2))
+              ({5} f (|bijections {6} {7}| e1 e2))))
+    :pattern ( ({5} f ({0} e1 e2)) )))
   :named |ax:def.tbij {8}|))
 )";
 
@@ -51,6 +61,8 @@ Total_Bijection::Total_Bijection(const BType &U, const BType &V,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Total_Bijection(const BType &U, const BType &V) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Total_Bijection::m_cache, U, V);
   if (!result) {
@@ -60,7 +72,7 @@ shared_ptr<Abstract> Factory::Total_Bijection(const BType &U, const BType &V) {
     const auto PUxV = BType::POW(UxV);
     const auto PPUxV = BType::POW(PUxV);
     const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Total_Bijections, U, V),
+        script_pattern, /*0*/ smtSymbol(Expr::BinaryOp::Total_Bijections, U, V),
         /*1*/ symbol(PU),
         /*2*/ symbol(PV),
         /*3*/ symbol(PPUxV),

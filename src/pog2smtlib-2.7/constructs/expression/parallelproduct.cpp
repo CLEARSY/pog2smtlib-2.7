@@ -29,8 +29,10 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((R1 {1}) (R2 {2}) (p {4}))
     (= ({5} p ({0} R1 R2))
        (and
@@ -41,6 +43,16 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
   )
   :named |ax.set.in.parallelproduct {8} {9} {10} {11}|))
 )";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((R1 {1}) (R2 {2}) (p {4})) (!
+    (= ({5} p ({0} R1 R2))
+       (and
+         ({6} (maplet (fst (fst p)) (fst (snd p))) R1)
+         ({7} (maplet (snd (fst p)) (snd (snd p))) R2)))
+    :pattern ( ({5} p ({0} R1 R2)) )))
+  :named |ax.set.in.parallelproduct {8} {9} {10} {11}|))
+)";
+
 /*
 R1: P(T x U) , R2: P(V x W) -> P ((T x V) x (U x W))
 {1}: P(T x U) , {2}: P(V x W) -> {3}: P ((T x V) x (U x W))
@@ -64,6 +76,8 @@ Parallel_Product::Parallel_Product(const BType &T, const BType &U,
 
 shared_ptr<Abstract> Factory::Parallel_Product(const BType &T, const BType &U,
                                                const BType &V, const BType &W) {
+  std::string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Parallel_Product::m_cache, T, U, V, W);
   if (!result) {
@@ -86,7 +100,8 @@ shared_ptr<Abstract> Factory::Parallel_Product(const BType &T, const BType &U,
     {7}: set.in (V x W)
     */
     const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Parallel_Product, T, U, V, W),
+        script_pattern,
+        /*0*/ smtSymbol(Expr::BinaryOp::Parallel_Product, T, U, V, W),
         /*1*/ symbol(PxTU),
         /*2*/ symbol(PxVW),
         /*3*/ symbol(PxxTVxUW),

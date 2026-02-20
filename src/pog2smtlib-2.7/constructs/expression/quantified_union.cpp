@@ -29,12 +29,20 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT =
+static constexpr std::string_view DECLARATION =
     R"((declare-fun {0} (|? {1}| (-> {2} {3})) {3})
-(assert (!
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((P |? {1}|)(E (-> {2} {3}))(x {5}))
     (= ({4} x ({0} P E))
        (exists ((e {2})) (and (@ P e) ({4} x (@ E e))))))
+  :named |ax.set.in.quantified.union {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((P |? {1}|)(E (-> {2} {3}))(x {5})) (!
+    (= ({4} x ({0} P E))
+       (exists ((e {2})) (and (@ P e) ({4} x (@ E e)))))
+    :pattern ( ({4} x ({0} P E)) )))
   :named |ax.set.in.quantified.union {6}|))
 )";
 
@@ -51,19 +59,21 @@ Quantified_Union::Quantified_Union(const BType& U, const BType& V,
 
 std::shared_ptr<Abstract> Factory::Quantified_Union(const BType& U,
                                                     const BType& V) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Quantified_Union::m_cache, U, V);
   if (!result) {
     const auto PV = BType::POW(V);
     const auto UxV = BType::PROD(U, V);
-    const string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::QuantifiedOp::Union, U, V),
-                    /*1*/ symbolInner(U),
-                    /*2*/ symbol(U),
-                    /*3*/ symbol(PV),
-                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, V),
-                    /*5*/ symbol(V),
-                    /*6*/ symbolInner(UxV));
+    const string script = fmt::format(
+        script_pattern, /*0*/ smtSymbol(Expr::QuantifiedOp::Union, U, V),
+        /*1*/ symbolInner(U),
+        /*2*/ symbol(U),
+        /*3*/ symbol(PV),
+        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, V),
+        /*5*/ symbol(V),
+        /*6*/ symbolInner(UxV));
     const PreRequisites requisites{Factory::SetMembership(V), Factory::Set(U)};
     result = make(BConstruct::Expression::Quantified_Union::m_cache, U, V,
                   script, requisites);

@@ -54,8 +54,9 @@
   :named |ax.struct.definition struct(x1, y1)|))
 (declare-const INTEGER |POW Z|)
 (assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
+  (forall ((e |Z|))
+    (|set.in Z| e INTEGER))
+  :named |ax.rw.universe Z|))
 (assert (!
   (forall ((s |POW struct(x1, y1)|) (t |POW struct(x1, y1)|))
     (=

@@ -29,9 +29,16 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-const {0} {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-const {0} {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((e |{1}|)) (= ({3} e {0}) (and (<= {4} e) (<= e {5}))))
+  :named |ax.set.in.INT|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((e |{1}|)) (!
+    (= ({3} e {0}) (and (<= {4} e) (<= e {5})))
+    :pattern ( ({3} e {0}) )))
   :named |ax.set.in.INT|))
 )";
 
@@ -45,10 +52,12 @@ Int::Int(const std::string &script, const PreRequisites &requisites)
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Int() {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::Int::m_cache);
   if (!result) {
     const string script =
-        fmt::format(SCRIPT,
+        fmt::format(script_pattern,
                     /*0*/ smtSymbol(Expr::Visitor::EConstant::INT),
                     /*1*/ symbolInner(BType::INT),
                     /*2*/ symbol(BType::POW(BType::INT)),

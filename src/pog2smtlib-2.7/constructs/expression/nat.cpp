@@ -29,9 +29,14 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-const {0} {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-const {0} {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((e {1})) (= ({3} e {0}) (and (<= 0 e) (<= e {4}))))
+  :named |ax.set.in.NAT|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((e {1})) (! (= ({3} e {0}) (and (<= 0 e) (<= e {4}))) :pattern ( ({3} e {0}) )))
   :named |ax.set.in.NAT|))
 )";
 
@@ -45,10 +50,12 @@ Nat::Nat(const std::string &script, const PreRequisites &requisites)
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Nat() {
+  std::string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::Nat::m_cache);
   if (!result) {
     const string script =
-        fmt::format(SCRIPT,
+        fmt::format(script_pattern,
                     /*0*/ smtSymbol(Expr::Visitor::EConstant::NAT),
                     /*1*/ symbol(BType::INT),
                     /*2*/ symbol(BType::POW(BType::INT)),

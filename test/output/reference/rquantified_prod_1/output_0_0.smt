@@ -22,8 +22,7 @@
 (declare-fun |rPI| (|POW REAL|) |REAL|)
 (assert (!
   (= 1.0 (|rPI| |set.empty REAL|))
-  :named |ax.rpi.empty|)
-)
+  :named |ax.rpi.empty|))
 (assert (!
   (forall ((s |POW REAL|))
     (forall ((e |REAL|))
@@ -33,8 +32,7 @@
              (|rPI|
                (|set.intent REAL|
                  (lambda ((x |REAL|)) (and (|set.in REAL| x s) (not (= x e)))))))))))
-  :named |ax.rpi.incr|)
-)
+  :named |ax.rpi.incr|))
 (declare-fun |set.in (REAL x REAL)| (|(REAL x REAL)| |POW (REAL x REAL)|) Bool)
 (assert (!
   (not

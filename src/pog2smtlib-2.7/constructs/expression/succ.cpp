@@ -29,14 +29,23 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-const {0} {1})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-const {0} {1})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((x {3}))
       (=
         ({2} x {0})
         (= (snd x) (+ (fst x) 1))
       )
   )
+  :named |ax:int.succ|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((x {3})) (!
+      (=
+        ({2} x {0})
+        (= (snd x) (+ (fst x) 1)))
+    :pattern ( ({2} x {0}) )))
   :named |ax:int.succ|))
 )";
 
@@ -50,11 +59,13 @@ Succ::Succ(const std::string &script, const PreRequisites &requisites)
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Succ() {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::Succ::m_cache);
   if (!result) {
     const auto xZZ = BType::PROD(BType::INT, BType::INT);
     const string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::Visitor::EConstant::Successor),
+        script_pattern, /*0*/ smtSymbol(Expr::Visitor::EConstant::Successor),
         /*1*/ symbol(BType::POW(xZZ)),
         /*2*/
         smtSymbol(Pred::ComparisonOp::Membership, xZZ),

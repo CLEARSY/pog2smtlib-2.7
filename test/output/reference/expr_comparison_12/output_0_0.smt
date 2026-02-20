@@ -14,17 +14,10 @@
 (declare-const S1 |POW Z|)
 (declare-fun |set.product Z Z| (|POW Z| |POW Z|) |POW (Z x Z)|)
 (assert (!
-  (forall ((s1 |POW Z|) (s2 |POW Z|))
-    (forall ((p |(Z x Z)|))
-      (= (|set.in (Z x Z)| p (|set.product Z Z| s1 s2))
-        (and (|set.in Z| (fst p) s1) (|set.in Z| (snd p) s2)))))
-  :named |ax.set.in.product.1 (Z x Z)|))
-(assert (!
-  (forall ((s1 |POW Z|) (s2 |POW Z|))
-    (forall ((x1 |Z|) (x2 |Z|))
-      (= (|set.in (Z x Z)| (maplet x1 x2) (|set.product Z Z| s1 s2))
-        (and (|set.in Z| x1 s1) (|set.in Z| x2 s2)))))
-  :named |ax.set.in.product.2 (Z x Z)|))
+  (forall ((U |POW Z|)(V |POW Z|)(p |(Z x Z)|))
+    (= (|set.in (Z x Z)| p (|set.product Z Z| U V))
+      (and (|set.in Z| (fst p) U) (|set.in Z| (snd p) V))))
+  :named |ax.set.product (Z x Z)|))
 (assert (!
   (|set.in (Z x Z)| vproduct (|set.product Z Z| S1 S2))
   :named |Define:lprp:3|))

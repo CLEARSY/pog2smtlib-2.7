@@ -29,8 +29,10 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((e1 {1}) (e2 {2}))
     (forall ((f {4}))
       (= ({5} f ({0} e1 e2))
@@ -38,6 +40,14 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
               ({5} f (|functions {6} {7}| e1 e2))))))
   :named |ax:def.pfun {8}|)
 )
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((e1 {1}) (e2 {2}) (f {4}))
+      (= ({5} f ({0} e1 e2))
+         (and ({5} f (|relations {6} {7}| e1 e2))
+              ({5} f (|functions {6} {7}| e1 e2))))
+      :pattern ( ({5} f ({0} e1 e2)) )))
+  :named |ax:def.pfun {8}|))
 )";
 
 namespace Expression {
@@ -52,6 +62,8 @@ Partial_Function::Partial_Function(const BType &U, const BType &V,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Partial_Function(const BType &U, const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Partial_Function::m_cache, U, V);
   if (!result) {
@@ -60,16 +72,17 @@ shared_ptr<Abstract> Factory::Partial_Function(const BType &U, const BType &V) {
     const auto UxV = BType::PROD(U, V);
     const auto PUxV = BType::POW(UxV);
     const auto PPUxV = BType::POW(PUxV);
-    const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Partial_Functions, U, V),
-        /*1*/ symbol(PU),
-        /*2*/ symbol(PV),
-        /*3*/ symbol(PPUxV),
-        /*4*/ symbol(PUxV),
-        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
-        /*6*/ symbolInner(U),
-        /*7*/ symbolInner(V),
-        /*8*/ symbolInner(UxV));
+    const std::string script =
+        fmt::format(script_pattern,
+                    /*0*/ smtSymbol(Expr::BinaryOp::Partial_Functions, U, V),
+                    /*1*/ symbol(PU),
+                    /*2*/ symbol(PV),
+                    /*3*/ symbol(PPUxV),
+                    /*4*/ symbol(PUxV),
+                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
+                    /*6*/ symbolInner(U),
+                    /*7*/ symbolInner(V),
+                    /*8*/ symbolInner(UxV));
     const PreRequisites requisites = {Factory::Function(U, V),
                                       Factory::Relation(U, V)};
     result = make(BConstruct::Expression::Partial_Function::m_cache, U, V,

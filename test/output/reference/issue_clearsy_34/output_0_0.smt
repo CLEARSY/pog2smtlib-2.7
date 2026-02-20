@@ -13,11 +13,11 @@
 (declare-const s405 |POW Z|)
 (declare-const s403 |Z|)
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))
     (=
@@ -30,13 +30,17 @@
   :named |ax.set.in.INT|))
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-      (=
-        (|set.subseteq Z| s t)
-        (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq Z|))
+  (forall ((s |POW Z|) (t |POW Z|) (e |Z|))
+    (=>
+      (and (|set.subseteq Z| s t) (|set.in Z| e s))
+      (|set.in Z| e t)))
+  :named |ax.set.subseteq.elim Z|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=>
+      (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
+      (|set.subseteq Z| s t)))
+  :named |ax.set.subseteq.intro Z|))
 (declare-const NAT |POW Z|)
 (assert (!
   (forall ((e |Z|)) (= (|set.in Z| e NAT) (and (<= 0 e) (<= e MAXINT))))
@@ -61,26 +65,34 @@
 (define-sort |POW POW (s129 x POW (Z x Z))| () (P |POW (s129 x POW (Z x Z))|))
 (declare-fun |set.subseteq (Z x Z)| (|POW (Z x Z)| |POW (Z x Z)|) Bool)
 (assert (!
-    (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-      (=
-        (|set.subseteq (Z x Z)| s t)
-        (forall ((e |(Z x Z)|)) (=> (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
-      )
-    )
-    :named |ax.set.subseteq (Z x Z)|))
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|) (e |(Z x Z)|))
+    (=>
+      (and (|set.subseteq (Z x Z)| s t) (|set.in (Z x Z)| e s))
+      (|set.in (Z x Z)| e t)))
+  :named |ax.set.subseteq.elim (Z x Z)|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=>
+      (forall ((e |(Z x Z)|)) (=> (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
+      (|set.subseteq (Z x Z)| s t)))
+  :named |ax.set.subseteq.intro (Z x Z)|))
 (declare-fun |set.in ((Z x Z) x Z)| (|((Z x Z) x Z)| |POW ((Z x Z) x Z)|) Bool)
 (define-sort |POW POW ((Z x Z) x Z)| () (P |POW ((Z x Z) x Z)|))
 (declare-fun |set.in (s129 x s169)| (|(s129 x s169)| |POW (s129 x s169)|) Bool)
 (define-sort |POW POW (s129 x s169)| () (P |POW (s129 x s169)|))
 (declare-fun |set.subseteq (s129 x POW (Z x Z))| (|POW (s129 x POW (Z x Z))| |POW (s129 x POW (Z x Z))|) Bool)
 (assert (!
-    (forall ((s |POW (s129 x POW (Z x Z))|) (t |POW (s129 x POW (Z x Z))|))
-      (=
-        (|set.subseteq (s129 x POW (Z x Z))| s t)
-        (forall ((e |(s129 x POW (Z x Z))|)) (=> (|set.in (s129 x POW (Z x Z))| e s) (|set.in (s129 x POW (Z x Z))| e t)))
-      )
-    )
-    :named |ax.set.subseteq (s129 x POW (Z x Z))|))
+  (forall ((s |POW (s129 x POW (Z x Z))|) (t |POW (s129 x POW (Z x Z))|) (e |(s129 x POW (Z x Z))|))
+    (=>
+      (and (|set.subseteq (s129 x POW (Z x Z))| s t) (|set.in (s129 x POW (Z x Z))| e s))
+      (|set.in (s129 x POW (Z x Z))| e t)))
+  :named |ax.set.subseteq.elim (s129 x POW (Z x Z))|))
+(assert (!
+  (forall ((s |POW (s129 x POW (Z x Z))|) (t |POW (s129 x POW (Z x Z))|))
+    (=>
+      (forall ((e |(s129 x POW (Z x Z))|)) (=> (|set.in (s129 x POW (Z x Z))| e s) (|set.in (s129 x POW (Z x Z))| e t)))
+      (|set.subseteq (s129 x POW (Z x Z))| s t)))
+  :named |ax.set.subseteq.intro (s129 x POW (Z x Z))|))
 (declare-fun |set.in POW (s129 x POW (Z x Z))| (|POW (s129 x POW (Z x Z))| |POW POW (s129 x POW (Z x Z))|) Bool)
 (declare-fun |sub-sets (Z x Z)| (|POW (Z x Z)|) |POW POW (Z x Z)|)
 (assert (!
@@ -91,17 +103,10 @@
   :named |ax.sub-sets (Z x Z)|))
 (declare-fun |set.product Z Z| (|POW Z| |POW Z|) |POW (Z x Z)|)
 (assert (!
-  (forall ((s1 |POW Z|) (s2 |POW Z|))
-    (forall ((p |(Z x Z)|))
-      (= (|set.in (Z x Z)| p (|set.product Z Z| s1 s2))
-        (and (|set.in Z| (fst p) s1) (|set.in Z| (snd p) s2)))))
-  :named |ax.set.in.product.1 (Z x Z)|))
-(assert (!
-  (forall ((s1 |POW Z|) (s2 |POW Z|))
-    (forall ((x1 |Z|) (x2 |Z|))
-      (= (|set.in (Z x Z)| (maplet x1 x2) (|set.product Z Z| s1 s2))
-        (and (|set.in Z| x1 s1) (|set.in Z| x2 s2)))))
-  :named |ax.set.in.product.2 (Z x Z)|))
+  (forall ((U |POW Z|)(V |POW Z|)(p |(Z x Z)|))
+    (= (|set.in (Z x Z)| p (|set.product Z Z| U V))
+      (and (|set.in Z| (fst p) U) (|set.in Z| (snd p) V))))
+  :named |ax.set.product (Z x Z)|))
 (declare-fun |rel.range (Z x Z) Z| (|POW ((Z x Z) x Z)|) |POW Z|)
 (assert (!
   (forall ((r |POW ((Z x Z) x Z)|) (e |Z|))
@@ -123,13 +128,17 @@
   :named |ax:set.in.range (Z x Z)|))
 (declare-fun |set.subseteq (s129 x s169)| (|POW (s129 x s169)| |POW (s129 x s169)|) Bool)
 (assert (!
-    (forall ((s |POW (s129 x s169)|) (t |POW (s129 x s169)|))
-      (=
-        (|set.subseteq (s129 x s169)| s t)
-        (forall ((e |(s129 x s169)|)) (=> (|set.in (s129 x s169)| e s) (|set.in (s129 x s169)| e t)))
-      )
-    )
-    :named |ax.set.subseteq (s129 x s169)|))
+  (forall ((s |POW (s129 x s169)|) (t |POW (s129 x s169)|) (e |(s129 x s169)|))
+    (=>
+      (and (|set.subseteq (s129 x s169)| s t) (|set.in (s129 x s169)| e s))
+      (|set.in (s129 x s169)| e t)))
+  :named |ax.set.subseteq.elim (s129 x s169)|))
+(assert (!
+  (forall ((s |POW (s129 x s169)|) (t |POW (s129 x s169)|))
+    (=>
+      (forall ((e |(s129 x s169)|)) (=> (|set.in (s129 x s169)| e s) (|set.in (s129 x s169)| e t)))
+      (|set.subseteq (s129 x s169)| s t)))
+  :named |ax.set.subseteq.intro (s129 x s169)|))
 (declare-fun |set.in POW (s129 x s169)| (|POW (s129 x s169)| |POW POW (s129 x s169)|) Bool)
 (declare-fun |sub-sets (s129 x POW (Z x Z))| (|POW (s129 x POW (Z x Z))|) |POW POW (s129 x POW (Z x Z))|)
 (assert (!
@@ -140,17 +149,10 @@
   :named |ax.sub-sets (s129 x POW (Z x Z))|))
 (declare-fun |set.product s129 POW (Z x Z)| (|POW s129| |POW POW (Z x Z)|) |POW (s129 x POW (Z x Z))|)
 (assert (!
-  (forall ((s1 |POW s129|) (s2 |POW POW (Z x Z)|))
-    (forall ((p |(s129 x POW (Z x Z))|))
-      (= (|set.in (s129 x POW (Z x Z))| p (|set.product s129 POW (Z x Z)| s1 s2))
-        (and (|set.in s129| (fst p) s1) (|set.in POW (Z x Z)| (snd p) s2)))))
-  :named |ax.set.in.product.1 (s129 x POW (Z x Z))|))
-(assert (!
-  (forall ((s1 |POW s129|) (s2 |POW POW (Z x Z)|))
-    (forall ((x1 |s129|) (x2 |POW (Z x Z)|))
-      (= (|set.in (s129 x POW (Z x Z))| (maplet x1 x2) (|set.product s129 POW (Z x Z)| s1 s2))
-        (and (|set.in s129| x1 s1) (|set.in POW (Z x Z)| x2 s2)))))
-  :named |ax.set.in.product.2 (s129 x POW (Z x Z))|))
+  (forall ((U |POW s129|)(V |POW POW (Z x Z)|)(p |(s129 x POW (Z x Z))|))
+    (= (|set.in (s129 x POW (Z x Z))| p (|set.product s129 POW (Z x Z)| U V))
+      (and (|set.in s129| (fst p) U) (|set.in POW (Z x Z)| (snd p) V))))
+  :named |ax.set.product (s129 x POW (Z x Z))|))
 (declare-fun |relations Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((X |POW Z|) (Y |POW Z|))
@@ -213,17 +215,10 @@
   :named |ax.sub-sets (s129 x s169)|))
 (declare-fun |set.product s129 s169| (|POW s129| |POW s169|) |POW (s129 x s169)|)
 (assert (!
-  (forall ((s1 |POW s129|) (s2 |POW s169|))
-    (forall ((p |(s129 x s169)|))
-      (= (|set.in (s129 x s169)| p (|set.product s129 s169| s1 s2))
-        (and (|set.in s129| (fst p) s1) (|set.in s169| (snd p) s2)))))
-  :named |ax.set.in.product.1 (s129 x s169)|))
-(assert (!
-  (forall ((s1 |POW s129|) (s2 |POW s169|))
-    (forall ((x1 |s129|) (x2 |s169|))
-      (= (|set.in (s129 x s169)| (maplet x1 x2) (|set.product s129 s169| s1 s2))
-        (and (|set.in s129| x1 s1) (|set.in s169| x2 s2)))))
-  :named |ax.set.in.product.2 (s129 x s169)|))
+  (forall ((U |POW s129|)(V |POW s169|)(p |(s129 x s169)|))
+    (= (|set.in (s129 x s169)| p (|set.product s129 s169| U V))
+      (and (|set.in s129| (fst p) U) (|set.in s169| (snd p) V))))
+  :named |ax.set.product (s129 x s169)|))
 (declare-fun |relations s129 POW (Z x Z)| (|POW s129| |POW POW (Z x Z)|) |POW POW (s129 x POW (Z x Z))|)
 (assert (!
   (forall ((X |POW s129|) (Y |POW POW (Z x Z)|))
@@ -317,13 +312,17 @@
  :named |ax:set.in.relations.total (s129 x POW (Z x Z))|))
 (declare-fun |set.subseteq POW (Z x Z)| (|POW POW (Z x Z)| |POW POW (Z x Z)|) Bool)
 (assert (!
-    (forall ((s |POW POW (Z x Z)|) (t |POW POW (Z x Z)|))
-      (=
-        (|set.subseteq POW (Z x Z)| s t)
-        (forall ((e |POW (Z x Z)|)) (=> (|set.in POW (Z x Z)| e s) (|set.in POW (Z x Z)| e t)))
-      )
-    )
-    :named |ax.set.subseteq POW (Z x Z)|))
+  (forall ((s |POW POW (Z x Z)|) (t |POW POW (Z x Z)|) (e |POW (Z x Z)|))
+    (=>
+      (and (|set.subseteq POW (Z x Z)| s t) (|set.in POW (Z x Z)| e s))
+      (|set.in POW (Z x Z)| e t)))
+  :named |ax.set.subseteq.elim POW (Z x Z)|))
+(assert (!
+  (forall ((s |POW POW (Z x Z)|) (t |POW POW (Z x Z)|))
+    (=>
+      (forall ((e |POW (Z x Z)|)) (=> (|set.in POW (Z x Z)| e s) (|set.in POW (Z x Z)| e t)))
+      (|set.subseteq POW (Z x Z)| s t)))
+  :named |ax.set.subseteq.intro POW (Z x Z)|))
 (declare-fun |functions.total Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((e1 |POW Z|) (e2 |POW Z|))

@@ -29,8 +29,11 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {1}) {1})
+)";
+
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((a {1}) (b {1}))
     (and
       (=> (and (<= 0 a) (< 0 b))
@@ -41,6 +44,20 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
         (= ({0} a b) (- (/ (- a) b))))
       (=> (and (<= a 0) (< b 0))
         (= ({0} a b) (/ a b)))))
+  :named |ax.real.div :1|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((a {1}) (b {1})) (!
+    (and
+      (=> (and (<= 0 a) (< 0 b))
+        (= ({0} a b) (/ a b)))
+      (=> (and (<= 0 a) (< b 0))
+        (= ({0} a b) (- (/ a (- b)))))
+      (=> (and (< a 0) (< 0 b))
+        (= ({0} a b) (- (/ (- a) b))))
+      (=> (and (<= a 0) (< b 0))
+        (= ({0} a b) (/ a b))))
+    :pattern ( ({0} a b) )))
   :named |ax.real.div :1|))
 )";
 
@@ -55,11 +72,14 @@ RealDivision::RealDivision(const std::string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::RealDivision() {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::RealDivision::m_cache);
   if (!result) {
-    const string script = fmt::format(
-        SCRIPT, smtSymbol(Expr::BinaryOp::RDivision), symbol(BType::REAL));
+    const string script =
+        fmt::format(script_pattern, smtSymbol(Expr::BinaryOp::RDivision),
+                    symbol(BType::REAL));
     const PreRequisites requisites{Factory::Type(BType::REAL)};
     result =
         make(BConstruct::Expression::RealDivision::m_cache, script, requisites);

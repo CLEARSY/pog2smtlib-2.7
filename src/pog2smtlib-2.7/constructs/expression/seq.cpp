@@ -29,8 +29,9 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((E {1}) (s {3}))
     (=>
       ({4} s ({0} E))
@@ -41,6 +42,21 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
     ({6}
       ({0} E)
       ({7} ({8} 1 (Value ({9} E))) E)))
+  :named |ax.seq.is.total.fun {10}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((E {1}) (s {3})) (!
+    (=>
+      ({4} s ({0} E))
+      ((_ is Finite) ({5} s)))
+    :pattern ( ({4} s ({0} E)) )))
+  :named |ax.seq.is.finite {10}|))
+(assert (!
+  (forall ((E {1})) (!
+    ({6}
+      ({0} E)
+      ({7} ({8} 1 (Value ({9} E))) E))
+    :pattern ( ({0} E) )))
   :named |ax.seq.is.total.fun {10}|))
 )";
 
@@ -54,6 +70,8 @@ Seq::Seq(const BType& T, const string& script, const PreRequisites& requisites)
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Seq(const BType& T) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::Seq::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
@@ -61,7 +79,7 @@ shared_ptr<Abstract> Factory::Seq(const BType& T) {
     const auto PZxT = BType::POW(ZxT);
     const auto PPZxT = BType::POW(PZxT);
     const std::string script = fmt::format(
-        SCRIPT,
+        script_pattern,
         /*0*/ smtSymbol(Expr::UnaryOp::Sequences, T),
         /*1*/ symbol(PT),
         /*2*/ symbol(PPZxT),

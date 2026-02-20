@@ -29,12 +29,22 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {1})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {1})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((R {1})(p {2}))
     (= ({3} p ({0} R))
        (or (= (fst p) (snd p))
            ({3} p ({5} R)))))
+  :named |ax.closure {4}|))
+)";
+
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((R {1})(p {2})) (!
+    (= ({3} p ({0} R))
+       (or (= (fst p) (snd p))
+           ({3} p ({5} R))))
+    :pattern ( ({3} p ({0} R)) )))
   :named |ax.closure {4}|))
 )";
 
@@ -49,13 +59,15 @@ Closure::Closure(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Closure(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Closure::m_cache, T);
   if (!result) {
     const auto TxT = BType::PROD(T, T);
     const auto PTxT = BType::POW(TxT);
     const string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Closure, T),
+        fmt::format(script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::Closure, T),
                     /*1*/ symbol(PTxT),
                     /*2*/ symbol(TxT),
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, TxT),

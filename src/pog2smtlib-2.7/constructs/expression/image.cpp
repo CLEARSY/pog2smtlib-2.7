@@ -29,11 +29,20 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((r {1}) (s {2}) (x {4}))
     (= ({5} x ({0} r s))
        (exists ((y {6})) (and ({7} y s) ({8} (maplet y x) r)))))
+  :named |ax:set.in.image {9}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((r {1}) (s {2}) (x {4})) (!
+    (= ({5} x ({0} r s))
+       (exists ((y {6})) (and ({7} y s) ({8} (maplet y x) r))))
+    :pattern ( ({5} x ({0} r s)) )))
   :named |ax:set.in.image {9}|))
 )";
 
@@ -48,6 +57,8 @@ Image::Image(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Image(const BType &U, const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Image::m_cache, U, V);
   if (!result) {
@@ -56,17 +67,17 @@ shared_ptr<Abstract> Factory::Image(const BType &U, const BType &V) {
     const auto UxV = BType::PROD(U, V);
     const auto PUxV = BType::POW(UxV);
     const auto UxPUxV = BType::PROD(U, PUxV);
-    const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Image, U, V),
-                    /*1*/ symbol(PUxV),
-                    /*2*/ symbol(PU),
-                    /*3*/ symbol(PV),
-                    /*4*/ symbol(V),
-                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, V),
-                    /*6*/ symbol(U),
-                    /*7*/ smtSymbol(Pred::ComparisonOp::Membership, U),
-                    /*8*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
-                    /*9*/ symbolInner(UxPUxV));
+    const std::string script = fmt::format(
+        script_pattern, /*0*/ smtSymbol(Expr::BinaryOp::Image, U, V),
+        /*1*/ symbol(PUxV),
+        /*2*/ symbol(PU),
+        /*3*/ symbol(PV),
+        /*4*/ symbol(V),
+        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, V),
+        /*6*/ symbol(U),
+        /*7*/ smtSymbol(Pred::ComparisonOp::Membership, U),
+        /*8*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
+        /*9*/ symbolInner(UxPUxV));
     const PreRequisites requisites = {Factory::SetMembership(UxV)};
     result =
         make(BConstruct::Expression::Image::m_cache, U, V, script, requisites);

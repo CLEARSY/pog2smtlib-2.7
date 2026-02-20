@@ -29,13 +29,23 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((e1 {1}) (e2 {2}))
     (forall ((f {4}))
       (= ({5} f ({0} e1 e2))
          (and ({5} f ({9} e1 e2))
                 ({5} f (|surjections {6} {7}| e1 e2))))))
+  :named |ax:def.tsurj {8}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((e1 {1}) (e2 {2}) (f {4}))
+    (= ({5} f ({0} e1 e2))
+       (and ({5} f ({9} e1 e2))
+            ({5} f (|surjections {6} {7}| e1 e2)))))
+    :pattern ( ({5} f ({0} e1 e2)) )))
   :named |ax:def.tsurj {8}|))
 )";
 
@@ -51,6 +61,8 @@ Total_Surjection::Total_Surjection(const BType &U, const BType &V,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Total_Surjection(const BType &U, const BType &V) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Total_Surjection::m_cache, U, V);
   if (!result) {
@@ -59,17 +71,18 @@ shared_ptr<Abstract> Factory::Total_Surjection(const BType &U, const BType &V) {
     const auto UxV = BType::PROD(U, V);
     const auto PUxV = BType::POW(UxV);
     const auto PPUxV = BType::POW(PUxV);
-    const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Total_Surjections, U, V),
-        /*1*/ symbol(PU),
-        /*2*/ symbol(PV),
-        /*3*/ symbol(PPUxV),
-        /*4*/ symbol(PUxV),
-        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
-        /*6*/ symbolInner(U),
-        /*7*/ symbolInner(V),
-        /*8*/ symbolInner(UxV),
-        /*9*/ smtSymbol(Expr::BinaryOp::Total_Functions, U, V));
+    const std::string script =
+        fmt::format(script_pattern,
+                    /*0*/ smtSymbol(Expr::BinaryOp::Total_Surjections, U, V),
+                    /*1*/ symbol(PU),
+                    /*2*/ symbol(PV),
+                    /*3*/ symbol(PPUxV),
+                    /*4*/ symbol(PUxV),
+                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PUxV),
+                    /*6*/ symbolInner(U),
+                    /*7*/ symbolInner(V),
+                    /*8*/ symbolInner(UxV),
+                    /*9*/ smtSymbol(Expr::BinaryOp::Total_Functions, U, V));
     const PreRequisites requisites = {Factory::Total_Function(U, V),
                                       Factory::Surjection(U, V)};
     result = make(BConstruct::Expression::Total_Surjection::m_cache, U, V,

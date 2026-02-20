@@ -28,19 +28,50 @@ using std::string;
 
 namespace BConstruct {
 
-// 0: the SMT symbol for generic empty set operator
-// 1: the SMT symbol for the generic "is element of" operator
-// 2: the SMT symbol for the type of the monomorphized empty set operator
-// 3: the SMT symbol for the element type of 2
-// 4: the auxiliary SMT symbol for 3
-static constexpr std::string_view SCRIPT = R"((declare-const |{0} {4}| {2})
+/*
+; declaration - requisites : POW T,
+(declare-const |set.empty T| |POW T|)
+; rewriting with triggers - requisites : set.in T
 (assert (!
-  (forall ((e {3})) (not (|{1} {4}| e |{0} {4}|)))
-  :named |ax.set.in.empty {4}|))
-)";
-static constexpr std::string_view emptySetOperatorStr = "set.empty";
-static constexpr std::string_view isElementOfOperatorStr = "set.in";
+  (forall ((e |T|))
+    (!
+      (not (|set.in T| e |set.empty T|))
+      :pattern ((|set.in T| e |set.empty T|))
+    ))
+  :named |ax.set.in.empty T|))
+; rewriting no triggers requisites : set.in T
+(assert (!
+  (forall ((e |T|)) (not (|set.in T| e |set.empty T|)))
+  :named |ax.set.in.empty T|))
+; definition requisites : set.intent T
+(define-fun |set.empty T| () |P T| (|set.intent T| (|lambda ((_c |T|) false)))
 
+pattern variables:
+0: |set.empty T| => smtSymbol(Expr::Visitor::EConstant::EmptySet, T)
+1: |T| => symbol(T)
+2: |POW T| =>symbol(PT)
+3: |set.in T| => smtSymbol(Pred::ComparisonOp::Membership, T)
+4: |set.intent T| => smtSymbol(Expr::NaryOp::Set, T)
+5: |ax.set.in.empty T|
+*/
+
+static const string DECLARATION = R"((declare-const {0} {2})
+)";
+static const string SCRIPT = R"((assert (!
+  (forall ((e {1})) (not ({3} e {0})))
+  :named {5}))
+)";
+static const string SCRIPT_T = R"((assert (!
+  (forall ((e {1})) (!
+    (not ({3} e {0}))
+    :pattern (({3} e {0}))))
+  :named {5}))
+)";
+/*
+static const string DEFINITION = R"((define-fun {0} () {2}
+  ({4} (lambda ((_c {1})) false)))
+)";
+*/
 namespace Expression {
 
 MapUnaryBType<EmptySet> EmptySet::m_cache;
@@ -52,19 +83,24 @@ EmptySet::EmptySet(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::EmptySet(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::EmptySet::m_cache, T);
   if (!result) {
     const BType PT = BType::POW(T);
     const string script =
-        fmt::format(SCRIPT, emptySetOperatorStr, isElementOfOperatorStr,
-                    symbol(PT), symbol(T), symbolInner(T));
-    const PreRequisites requisites{Factory::Type(PT),
-                                   Factory::SetMembership(T)};
+        fmt::format(script_pattern,
+                    /*0*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, T),
+                    /*1*/ symbol(T),
+                    /*2*/ symbol(PT),
+                    /*3*/ smtSymbol(Pred::ComparisonOp::Membership, T),
+                    /*4*/ smtSymbol(Expr::NaryOp::Set, T),
+                    /*5*/ fmt::format("|ax.set.in.empty {0}|", symbolInner(T)));
+    const BConstruct::PreRequisites requisites{Factory::SetMembership(T)};
     result =
         make(BConstruct::Expression::EmptySet::m_cache, T, script, requisites);
   }
   return result;
 }
-
 };  // namespace BConstruct

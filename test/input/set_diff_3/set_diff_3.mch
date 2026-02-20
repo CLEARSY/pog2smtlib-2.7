@@ -1,0 +1,9 @@
+MACHINE
+    set_diff_3
+CONSTANTS
+    s1
+PROPERTIES
+    s1 : POW(INTEGER)
+ASSERTIONS
+    s1 - s1 = {}
+END

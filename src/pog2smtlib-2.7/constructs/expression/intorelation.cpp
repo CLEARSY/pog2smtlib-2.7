@@ -29,14 +29,24 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((f {1})(p {3}))
     (= ({4} p ({0} f))
        (exists ((q {5}))
            (and ({6} q f) (= (fst p) (fst q)) ({7} (snd p) (snd q))))))
   :named |ax.rel {8}|))
 )";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((f {1})(p {3}))
+    (= ({4} p ({0} f))
+       (exists ((q {5}))
+           (and ({6} q f) (= (fst p) (fst q)) ({7} (snd p) (snd q)))))
+    :pattern (({4} p ({0} f))))
+  :named |ax.rel {8}|))
+)";
+
 namespace Expression {
 
 MapBinaryBType<Transformed_Into_Relation> Transformed_Into_Relation::m_cache;
@@ -50,6 +60,8 @@ Transformed_Into_Relation::Transformed_Into_Relation(
 
 shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType &U,
                                                         const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Transformed_Into_Relation::m_cache, U, V);
   if (!result) {
@@ -59,7 +71,7 @@ shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType &U,
     const auto PUxPV = BType::POW(UxPV);
     const auto PUxV = BType::POW(UxV);
     const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Rel, U, V),
+        fmt::format(script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::Rel, U, V),
                     /*1*/ symbol(PUxPV),
                     /*2*/ symbol(PUxV),
                     /*3*/ symbol(UxV),

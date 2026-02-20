@@ -20,8 +20,9 @@
   :named |ax:set.in.intent Z|))
 (declare-const INTEGER |POW Z|)
 (assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
+  (forall ((e |Z|))
+    (|set.in Z| e INTEGER))
+  :named |ax.rw.universe Z|))
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))
     (=

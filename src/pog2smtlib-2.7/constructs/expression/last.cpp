@@ -29,10 +29,17 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {1}))
     ({3} (maplet ({4} s) ({0} s)) s))
+  :named |ax.last.definition {5}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {1})) (!
+    ({3} (maplet ({4} s) ({0} s)) s)
+    :pattern ( ({0} s) )))
   :named |ax.last.definition {5}|))
 )";
 
@@ -47,12 +54,14 @@ Last::Last(const BType& T, const std::string& script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Last(const BType& T) {
+  std::string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::Last::m_cache, T);
   if (!result) {
     const auto ZxT = BType::PROD(BType::INT, T);
     const auto PZxT = BType::POW(ZxT);
     const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Last, T),
+        fmt::format(script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::Last, T),
                     /*1*/ symbol(PZxT),
                     /*2*/ symbol(T),
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),

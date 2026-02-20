@@ -1,0 +1,61 @@
+(set-option :print-success false)
+(set-logic HO_ALL)
+(define-sort |Z| () Int)
+(declare-const zero |Z|)
+(declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
+(declare-sort P 1)
+(define-sort |(Z x Z)| () (C |Z| |Z|))
+(define-sort |POW Z| () (P |Z|))
+(define-sort |POW (Z x Z)| () (P |(Z x Z)|))
+(declare-fun |set.in Z| (|Z| |POW Z|) Bool)
+(define-sort |POW POW Z| () (P |POW Z|))
+(declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
+(declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
+(define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
+(declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
+(assert (!
+  (forall ((p |? (Z x Z)|))
+    (forall ((x |(Z x Z)|))
+      (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
+         (@ p x))))
+  :named |ax:set.in.intent (Z x Z)|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=
+      (= s t)
+      (forall ((e |(Z x Z)|)) (= (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))))
+  :named |ax.set.eq (Z x Z)|))
+(define-sort |? POW Z| () (-> |POW Z| Bool))
+(declare-const |set.intent POW Z| (-> |? POW Z| |POW POW Z|))
+(assert (!
+  (forall ((p |? POW Z|))
+    (forall ((x |POW Z|))
+      (= (|set.in POW Z| x (|set.intent POW Z| p))
+         (@ p x))))
+  :named |ax:set.in.intent POW Z|))
+(define-sort |? Z| () (-> |Z| Bool))
+(declare-const |set.intent Z| (-> |? Z| |POW Z|))
+(assert (!
+  (forall ((p |? Z|))
+    (forall ((x |Z|))
+      (= (|set.in Z| x (|set.intent Z| p))
+         (@ p x))))
+  :named |ax:set.in.intent Z|))
+(assert (!
+  (forall ((s |POW POW Z|) (t |POW POW Z|))
+    (=
+      (= s t)
+      (forall ((e |POW Z|)) (= (|set.in POW Z| e s) (|set.in POW Z| e t)))))
+  :named |ax.set.eq POW Z|))
+(assert (!
+  (= zero (- 1 1))
+  :named |Define:lprp:1|))
+(assert (!
+  (= (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 2))(= _c0 (maplet 2 3))))) (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet (+ zero 1) (+ 2 zero)))(= _c0 (maplet 2 (+ 2 1)))))))
+  :named |Local_Hyp:0|))
+(assert (!
+  (not
+    (= (|set.intent POW Z| (lambda ((_c0 |POW Z|)) (or (= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 0))))(= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1))))))) (|set.intent POW Z| (lambda ((_c0 |POW Z|)) (or (= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 (+ zero 1)))))(= _c0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 zero)(= _c1 0))))))))))
+  :named |Goal|))
+(check-sat)
+(exit)

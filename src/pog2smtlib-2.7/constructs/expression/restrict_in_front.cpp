@@ -29,12 +29,22 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2} {1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({2} {1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {2})(x {1})(p {3}))
     (= ({4} p ({0} s x))
        (and ({5} (fst p) ({6} 1 x))
             ({4} p s))))
+  :named |ax.restrict.front.def {7}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {2})(x {1})(p {3})) (!
+    (= ({4} p ({0} s x))
+       (and ({5} (fst p) ({6} 1 x))
+            ({4} p s)))
+    :pattern ( ({4} p ({0} s x)) )))
   :named |ax.restrict.front.def {7}|))
 )";
 
@@ -49,13 +59,15 @@ Restrict_In_Front::Restrict_In_Front(const BType& T, const std::string& script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Restrict_In_Front(const BType& T) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Restrict_In_Front::m_cache, T);
   if (!result) {
     const auto ZxT = BType::PROD(BType::INT, T);
     const auto PZxT = BType::POW(ZxT);
     const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Head_Restriction, T),
+        script_pattern, /*0*/ smtSymbol(Expr::BinaryOp::Head_Restriction, T),
         /*1*/ symbol(BType::INT),
         /*2*/ symbol(PZxT),
         /*3*/ symbol(ZxT),

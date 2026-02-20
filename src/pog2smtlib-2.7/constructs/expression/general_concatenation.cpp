@@ -30,17 +30,24 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view BASE_SCRIPT = R"((assert (!
   (= ({0} |seq.empty {3}|) |seq.empty {6}|)
-  :named |ax.generalized.concatenation.empty {6}|
-))
-(assert (!
+  :named |ax.generalized.concatenation.empty {6}|))
+)";
+static constexpr std::string_view INDUCT_SCRIPT = R"((assert (!
   (forall ((s {1})(x {2}))
     (= ({0} ({4} x s))
        ({5} x ({0} s))))
-  :named |ax.generalized.concatenation.not.empty {6}|
-))
+  :named |ax.generalized.concatenation.not.empty {6}|))
+)";
+static constexpr std::string_view INDUCT_SCRIPT_T = R"((assert (!
+  (forall ((s {1})(x {2})) (!
+    (= ({0} ({4} x s))
+       ({5} x ({0} s)))
+    :pattern ( ({0} ({4} x s)) )))
+  :named |ax.generalized.concatenation.not.empty {6}|))
 )";
 
 namespace Expression {
@@ -57,13 +64,16 @@ General_Concatenation::General_Concatenation(const BType& T,
 shared_ptr<Abstract> Factory::General_Concatenation(const BType& T) {
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::General_Concatenation::m_cache, T);
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, BASE_SCRIPT, INDUCT_SCRIPT_T,
+                    BASE_SCRIPT, INDUCT_SCRIPT);
   if (!result) {
     const auto ZxT = BType::PROD(BType::INT, T);
     const auto PZxT = BType::POW(ZxT);
     const auto ZxPZxT = BType::PROD(BType::INT, PZxT);
     const auto PZxPZxT = BType::POW(ZxPZxT);
     const string script =
-        fmt::format(SCRIPT,
+        fmt::format(script_pattern,
                     /*0*/ smtSymbol(Expr::UnaryOp::Concatenation, T),
                     /*1*/ symbol(PZxPZxT),
                     /*2*/ symbol(PZxT),

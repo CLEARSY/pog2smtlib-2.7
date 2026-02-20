@@ -41,13 +41,17 @@
   :named |ax:set.in.injections (Z x Z)|))
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-      (=
-        (|set.subseteq Z| s t)
-        (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq Z|))
+  (forall ((s |POW Z|) (t |POW Z|) (e |Z|))
+    (=>
+      (and (|set.subseteq Z| s t) (|set.in Z| e s))
+      (|set.in Z| e t)))
+  :named |ax.set.subseteq.elim Z|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=>
+      (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
+      (|set.subseteq Z| s t)))
+  :named |ax.set.subseteq.intro Z|))
 (declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |bijections Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
@@ -59,11 +63,11 @@
               (|set.in POW (Z x Z)| f (|surjections Z Z| X Y))))))
   :named |ax:set.in.bijections (Z x Z)|))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (declare-fun |sub-sets Z| (|POW Z|) |POW POW Z|)
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))

@@ -11,13 +11,17 @@
   :named |ax.set.in.empty BOOL|))
 (declare-fun |set.subseteq BOOL| (|POW BOOL| |POW BOOL|) Bool)
 (assert (!
-    (forall ((s |POW BOOL|) (t |POW BOOL|))
-      (=
-        (|set.subseteq BOOL| s t)
-        (forall ((e |BOOL|)) (=> (|set.in BOOL| e s) (|set.in BOOL| e t)))
-      )
-    )
-    :named |ax.set.subseteq BOOL|))
+  (forall ((s |POW BOOL|) (t |POW BOOL|) (e |BOOL|))
+    (=>
+      (and (|set.subseteq BOOL| s t) (|set.in BOOL| e s))
+      (|set.in BOOL| e t)))
+  :named |ax.set.subseteq.elim BOOL|))
+(assert (!
+  (forall ((s |POW BOOL|) (t |POW BOOL|))
+    (=>
+      (forall ((e |BOOL|)) (=> (|set.in BOOL| e s) (|set.in BOOL| e t)))
+      (|set.subseteq BOOL| s t)))
+  :named |ax.set.subseteq.intro BOOL|))
 (assert (!
   (not
     (|set.subseteq BOOL| vset |set.empty BOOL|))

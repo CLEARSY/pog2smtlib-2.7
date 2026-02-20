@@ -29,12 +29,21 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((E {1})(s {3}))
     (= ({4} s ({0} E))
        (and ({4} s ({5} E))
             ({4} s (|surjections {6} {7}| {8} E)))))
+  :named |ax.perm {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((E {1})(s {3})) (!
+    (= ({4} s ({0} E))
+       (and ({4} s ({5} E))
+            ({4} s (|surjections {6} {7}| {8} E)))
+    :pattern ( ({4} s ({0} E)) )))
   :named |ax.perm {6}|))
 )";
 
@@ -49,6 +58,8 @@ Perm::Perm(const BType& T, const std::string& script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Perm(const BType& T) {
+  std::string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::Perm::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
@@ -56,7 +67,7 @@ shared_ptr<Abstract> Factory::Perm(const BType& T) {
     const auto PZxT = BType::POW(ZxT);
     const auto PPZxT = BType::POW(PZxT);
     const string script =
-        fmt::format(SCRIPT,
+        fmt::format(script_pattern,
                     /*0*/ smtSymbol(Expr::UnaryOp::Permutations, T),
                     /*1*/ symbol(PT),
                     /*2*/ symbol(PPZxT),

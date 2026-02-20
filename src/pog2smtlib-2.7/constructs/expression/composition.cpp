@@ -29,14 +29,26 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((r {1}) (s {2}) (p {4}))
     (= ({5} p ({0} r s))
        (exists ((y {6}))
          (and
            ({7} (maplet (fst p) y) r)
            ({8} (maplet y (snd p)) s)))))
+  :named |ax.set.in.relcomp {9}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((r {1}) (s {2}) (p {4}))
+    (= ({5} p ({0} r s))
+       (exists ((y {6}))
+         (and
+           ({7} (maplet (fst p) y) r)
+           ({8} (maplet y (snd p)) s))))
+    :pattern ( ({5} p ({0} r s)) )))
   :named |ax.set.in.relcomp {9}|))
 )";
 
@@ -52,6 +64,8 @@ Composition::Composition(const BType &T, const BType &U, const BType &V,
 
 shared_ptr<Abstract> Factory::Composition(const BType &T, const BType &U,
                                           const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Composition::m_cache, T, U, V);
   if (!result) {
@@ -66,7 +80,7 @@ shared_ptr<Abstract> Factory::Composition(const BType &T, const BType &U,
     const auto PTxV = BType::POW(TxV);
     const auto TxUxV = BType::PROD(TxU, V);
     const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Composition, T, U, V),
+        script_pattern, /*0*/ smtSymbol(Expr::BinaryOp::Composition, T, U, V),
         /*1*/ symbol(PTxU),
         /*2*/ symbol(PUxV),
         /*3*/ symbol(PTxV),

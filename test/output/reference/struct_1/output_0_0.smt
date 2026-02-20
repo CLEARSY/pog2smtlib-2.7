@@ -27,14 +27,15 @@
   :named |ax.struct.definition struct(Note, Suffisant)|))
 (declare-const BOOL |POW BOOL|)
 (assert (!
-  (forall ((e |BOOL|)) (|set.in BOOL| e BOOL))
-  :named |ax.set.in.BOOL|))
+  (forall ((e |BOOL|))
+    (|set.in BOOL| e BOOL))
+  :named |ax.rw.universe BOOL|))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (assert (!
   (not
     (|set.in struct(Note, Suffisant)| (|rec(Note, Suffisant)|21 false) (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (|'Note| _c0) (|interval| 0 20))(|set.in BOOL| (|'Suffisant| _c0) BOOL))))))

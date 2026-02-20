@@ -29,14 +29,25 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
-(forall ((r {1})(p {3}))
-  (= ({4} p ({0} r))
-     (and (exists ((y {5})) ({8} (maplet (fst p) y) r))
-          (forall ((y {5}))
-            (= ({6} y (snd p))
-               ({8} (maplet (fst p) y) r))))))
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
+  (forall ((r {1})(p {3}))
+    (= ({4} p ({0} r))
+       (and (exists ((y {5})) ({8} (maplet (fst p) y) r))
+            (forall ((y {5}))
+              (= ({6} y (snd p))
+                 ({8} (maplet (fst p) y) r))))))
+  :named |ax.set.in.fnc {7}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((r {1})(p {3})) (!
+    (= ({4} p ({0} r))
+       (and (exists ((y {5})) ({8} (maplet (fst p) y) r))
+            (forall ((y {5}))
+              (= ({6} y (snd p))
+                 ({8} (maplet (fst p) y) r)))))
+    :pattern (({4} p ({0} r)))
   :named |ax.set.in.fnc {7}|))
 )";
 
@@ -53,6 +64,8 @@ Transformed_Into_Function::Transformed_Into_Function(
 
 shared_ptr<Abstract> Factory::Transformed_Into_Function(const BType &U,
                                                         const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Transformed_Into_Function::m_cache, U, V);
   if (!result) {
@@ -62,7 +75,7 @@ shared_ptr<Abstract> Factory::Transformed_Into_Function(const BType &U,
     const auto PUxPV = BType::POW(UxPV);
     const auto PUxV = BType::POW(UxV);
     const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Fnc, U, V),
+        fmt::format(script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::Fnc, U, V),
                     /*1*/ symbol(PUxV),
                     /*2*/ symbol(PUxPV),
                     /*3*/ symbol(UxPV),

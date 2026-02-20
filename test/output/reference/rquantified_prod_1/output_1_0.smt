@@ -47,11 +47,11 @@
 (define-sort |POW POW (REAL x REAL)| () (P |POW (REAL x REAL)|))
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (declare-fun |bijections (REAL x REAL) Z| (|POW (REAL x REAL)| |POW Z|) |POW POW ((REAL x REAL) x Z)|)
 (assert (!
   (forall ((X |POW (REAL x REAL)|) (Y |POW Z|))
@@ -62,13 +62,17 @@
   :named |ax:set.in.bijections ((REAL x REAL) x Z)|))
 (declare-fun |set.subseteq (REAL x REAL)| (|POW (REAL x REAL)| |POW (REAL x REAL)|) Bool)
 (assert (!
-    (forall ((s |POW (REAL x REAL)|) (t |POW (REAL x REAL)|))
-      (=
-        (|set.subseteq (REAL x REAL)| s t)
-        (forall ((e |(REAL x REAL)|)) (=> (|set.in (REAL x REAL)| e s) (|set.in (REAL x REAL)| e t)))
-      )
-    )
-    :named |ax.set.subseteq (REAL x REAL)|))
+  (forall ((s |POW (REAL x REAL)|) (t |POW (REAL x REAL)|) (e |(REAL x REAL)|))
+    (=>
+      (and (|set.subseteq (REAL x REAL)| s t) (|set.in (REAL x REAL)| e s))
+      (|set.in (REAL x REAL)| e t)))
+  :named |ax.set.subseteq.elim (REAL x REAL)|))
+(assert (!
+  (forall ((s |POW (REAL x REAL)|) (t |POW (REAL x REAL)|))
+    (=>
+      (forall ((e |(REAL x REAL)|)) (=> (|set.in (REAL x REAL)| e s) (|set.in (REAL x REAL)| e t)))
+      (|set.subseteq (REAL x REAL)| s t)))
+  :named |ax.set.subseteq.intro (REAL x REAL)|))
 (declare-fun |set.in POW (REAL x REAL)| (|POW (REAL x REAL)| |POW POW (REAL x REAL)|) Bool)
 (declare-fun |card (REAL x REAL)| (|POW (REAL x REAL)|) Cardinals)
 (assert (!

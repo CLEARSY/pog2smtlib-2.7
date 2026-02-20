@@ -8,13 +8,17 @@
 (declare-const aset |POW Z|)
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-      (=
-        (|set.subseteq Z| s t)
-        (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq Z|))
+  (forall ((s |POW Z|) (t |POW Z|) (e |Z|))
+    (=>
+      (and (|set.subseteq Z| s t) (|set.in Z| e s))
+      (|set.in Z| e t)))
+  :named |ax.set.subseteq.elim Z|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=>
+      (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
+      (|set.subseteq Z| s t)))
+  :named |ax.set.subseteq.intro Z|))
 (declare-const |set.empty Z| |POW Z|)
 (assert (!
   (forall ((e |Z|)) (not (|set.in Z| e |set.empty Z|)))

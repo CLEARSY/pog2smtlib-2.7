@@ -29,12 +29,13 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) |{1}|)
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({2}) |{1}|)
+)";
+static constexpr std::string_view BASE_SCRIPT = R"((assert (!
   (= 1 ({0} {3}))
-  :named |ax.pi.empty|)
-)
-(assert (!
+  :named |ax.pi.empty|))
+)";
+static constexpr std::string_view INDUCT_SCRIPT = R"((assert (!
   (forall ((s {2}))
     (forall ((e |{1}|))
       (= ({4} e s)
@@ -43,8 +44,19 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) |{1}|)
              ({0}
                ({5}
                  (lambda ((x |{1}|)) (and ({4} x s) (not (= x e)))))))))))
-  :named |ax.pi.incr|)
-)
+  :named |ax.pi.incr|))
+)";
+static constexpr std::string_view INDUCT_SCRIPT_T = R"((assert (!
+  (forall ((s {2})) (!
+    (forall ((e |{1}|))
+      (= ({4} e s)
+        (= ({0} s)
+          (* e
+             ({0}
+               ({5}
+                 (lambda ((x |{1}|)) (and ({4} x s) (not (= x e))))))))))
+     :pattern ( ({0} s) )))
+  :named |ax.pi.incr|))
 )";
 
 namespace Expression {
@@ -58,12 +70,15 @@ GeneralizedProduct::GeneralizedProduct(const std::string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::GeneralizedProduct() {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, BASE_SCRIPT, INDUCT_SCRIPT_T,
+                    BASE_SCRIPT, INDUCT_SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::GeneralizedProduct::m_cache);
   if (!result) {
     const auto PZ = BType::POW(BType::INT);
     const string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::QuantifiedOp::IProduct),
+        script_pattern, /*0*/ smtSymbol(Expr::QuantifiedOp::IProduct),
         /*1*/ symbolInner(BType::INT),
         /*2*/ symbol(PZ),
         /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::INT),

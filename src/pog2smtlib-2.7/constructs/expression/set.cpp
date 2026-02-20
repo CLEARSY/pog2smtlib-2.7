@@ -29,17 +29,55 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT =
-    R"((define-sort |? {0}| () (-> {1} Bool))
-(declare-const {2} (-> |? {0}| {3}))
+/*
+; sort
+(define-sort |? T| () (-> |T| Bool))
+; declaration - requisites : POW T,
+(declare-fun |set.intent T| (|? T|) |POW T|)
+; rewriting with triggers - requisites:
 (assert (!
+  (forall ((p |? T|) (x |T|)) (!
+    (= (|set.in T| x (|set.intent T| p))
+      (p x))
+    :pattern ((|set.in T| x (|set.intent T| p)))))
+  :named |ax:rw.intent T|))
+; rewriting no triggers requisites:
+(assert (!
+  (forall ((p |? T|) (x |T|))
+    (= (|set.in T| x (|set.intent T| p))
+      (p x))))
+  :named |ax.rw.intent T|))
+; this construct cannot be given a definitional semantics.
+
+pattern variables:
+0: T => symbolInner(T)
+1: |T| => symbol(T)
+2: |set.intent T| => smtSymbol(Expr::NaryOp::Set, T)
+3: |POW T| =>symbol(PT)
+4: |set.in T| => smtSymbol(Pred::ComparisonOp::Membership, T)
+5: |ax.rw.intent T|
+*/
+
+static const string SORT =
+    R"((define-sort |? {0}| () (-> {1} Bool))
+)";
+static const string DECLARATION =
+    R"((declare-const {2} (-> |? {0}| {3}))
+)";
+static const string SCRIPT = R"((assert (!
   (forall ((p |? {0}|))
     (forall ((x {1}))
       (= ({4} x ({2} p))
          (@ p x))))
   :named |ax:set.in.intent {0}|))
 )";
-
+static const string SCRIPT_T = R"((assert (!
+  (forall ((p |? {0}|) (x {1})) (!
+    (= ({4} x ({2} p))
+      (p x))
+    :pattern (({4} x ({2} p)))))
+  :named {5}))
+)";
 namespace Expression {
 
 MapUnaryBType<Set> Set::m_cache;
@@ -50,16 +88,28 @@ Set::Set(const BType& T, const string& script, const PreRequisites& requisites)
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Set(const BType& T) {
+  string script_pattern{};
+  if (script_pattern.empty()) {
+    script_pattern.append(SORT);
+    script_pattern.append(DECLARATION);
+    if (Parameters::encodingOptions.axiomTriggers) {
+      script_pattern.append(SCRIPT_T);
+    } else {
+      script_pattern.append(SCRIPT);
+    }
+  }
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Set::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
+    const string arg0{symbolInner(T)};
+    const string arg1{symbol(T)};
+    const string arg2{smtSymbol(Expr::NaryOp::Set, T)};
+    const string arg3{symbol(PT)};
+    const string arg4{smtSymbol(Pred::ComparisonOp::Membership, T)};
+    const string arg5{fmt::format("|ax.rw.intent {0}|", arg0)};
     const string script =
-        fmt::format(SCRIPT, /*0*/ symbolInner(T),
-                    /*1*/ symbol(T),
-                    /*2*/ smtSymbol(Expr::NaryOp::Set, T),
-                    /*3*/ symbol(PT),
-                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T));
+        fmt::format(script_pattern, arg0, arg1, arg2, arg3, arg4, arg5);
     const PreRequisites requisites{Factory::SetMembership(T)};
     result = make(BConstruct::Expression::Set::m_cache, T, script, requisites);
   }

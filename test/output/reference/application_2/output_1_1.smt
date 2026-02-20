@@ -13,13 +13,17 @@
 (define-sort |POW POW (Z x POW Z)| () (P |POW (Z x POW Z)|))
 (declare-fun |set.subseteq (Z x POW Z)| (|POW (Z x POW Z)| |POW (Z x POW Z)|) Bool)
 (assert (!
-    (forall ((s |POW (Z x POW Z)|) (t |POW (Z x POW Z)|))
-      (=
-        (|set.subseteq (Z x POW Z)| s t)
-        (forall ((e |(Z x POW Z)|)) (=> (|set.in (Z x POW Z)| e s) (|set.in (Z x POW Z)| e t)))
-      )
-    )
-    :named |ax.set.subseteq (Z x POW Z)|))
+  (forall ((s |POW (Z x POW Z)|) (t |POW (Z x POW Z)|) (e |(Z x POW Z)|))
+    (=>
+      (and (|set.subseteq (Z x POW Z)| s t) (|set.in (Z x POW Z)| e s))
+      (|set.in (Z x POW Z)| e t)))
+  :named |ax.set.subseteq.elim (Z x POW Z)|))
+(assert (!
+  (forall ((s |POW (Z x POW Z)|) (t |POW (Z x POW Z)|))
+    (=>
+      (forall ((e |(Z x POW Z)|)) (=> (|set.in (Z x POW Z)| e s) (|set.in (Z x POW Z)| e t)))
+      (|set.subseteq (Z x POW Z)| s t)))
+  :named |ax.set.subseteq.intro (Z x POW Z)|))
 (declare-fun |set.in POW (Z x POW Z)| (|POW (Z x POW Z)| |POW POW (Z x POW Z)|) Bool)
 (declare-fun |sub-sets (Z x POW Z)| (|POW (Z x POW Z)|) |POW POW (Z x POW Z)|)
 (assert (!
@@ -30,17 +34,10 @@
   :named |ax.sub-sets (Z x POW Z)|))
 (declare-fun |set.product Z POW Z| (|POW Z| |POW POW Z|) |POW (Z x POW Z)|)
 (assert (!
-  (forall ((s1 |POW Z|) (s2 |POW POW Z|))
-    (forall ((p |(Z x POW Z)|))
-      (= (|set.in (Z x POW Z)| p (|set.product Z POW Z| s1 s2))
-        (and (|set.in Z| (fst p) s1) (|set.in POW Z| (snd p) s2)))))
-  :named |ax.set.in.product.1 (Z x POW Z)|))
-(assert (!
-  (forall ((s1 |POW Z|) (s2 |POW POW Z|))
-    (forall ((x1 |Z|) (x2 |POW Z|))
-      (= (|set.in (Z x POW Z)| (maplet x1 x2) (|set.product Z POW Z| s1 s2))
-        (and (|set.in Z| x1 s1) (|set.in POW Z| x2 s2)))))
-  :named |ax.set.in.product.2 (Z x POW Z)|))
+  (forall ((U |POW Z|)(V |POW POW Z|)(p |(Z x POW Z)|))
+    (= (|set.in (Z x POW Z)| p (|set.product Z POW Z| U V))
+      (and (|set.in Z| (fst p) U) (|set.in POW Z| (snd p) V))))
+  :named |ax.set.product (Z x POW Z)|))
 (assert (!
   (forall ((s |POW Z|) (t |POW Z|))
     (=

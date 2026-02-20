@@ -29,11 +29,19 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((E {1})(s {3}))
     (= ({4} s ({0} E))
        (and ({4} s ({5} E)) (not (= s |seq.empty {6}|)))))
+  :named |ax.seq1 {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((E {1})(s {3})) (!
+    (= ({4} s ({0} E))
+       (and ({4} s ({5} E)) (not (= s |seq.empty {6}|))))
+    :pattern ( ({4} s ({0} E) )))
   :named |ax.seq1 {6}|))
 )";
 
@@ -48,7 +56,8 @@ Seq1::Seq1(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Seq1(const BType& T) {
-
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Seq1::m_cache, T);
   if (!result) {
@@ -57,7 +66,7 @@ std::shared_ptr<Abstract> Factory::Seq1(const BType& T) {
     const auto PZxT = BType::POW(ZxT);
     const auto PPZxT = BType::POW(PZxT);
     const string script =
-        fmt::format(SCRIPT,
+        fmt::format(script_pattern,
                     /*0*/ smtSymbol(Expr::UnaryOp::Non_Empty_Sequences, T),
                     /*1*/ symbol(PT),
                     /*2*/ symbol(PPZxT),

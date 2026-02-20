@@ -31,8 +31,11 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((e1 {1}) (e2 {2}))
     (forall ((f {4}))
       (= ({5} f ({0} e1 e2))
@@ -40,6 +43,16 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
               ({5} f (|relations.total {6} {7}| e1 e2))))))
   :named |ax:def.tfun {8}|))
 )";
+
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((e1 {1}) (e2 {2}) (f {4})) (!
+    (= ({5} f ({0} e1 e2))
+       (and ({5} f ({9} e1 e2))
+            ({5} f (|relations.total {6} {7}| e1 e2))))
+    :pattern ( ({5} f ({0} e1 e2)) )))
+  :named |ax:def.tfun {8}|))
+)";
+
 namespace Expression {
 
 MapBinaryBType<Total_Function> Total_Function::m_cache;
@@ -54,6 +67,8 @@ Total_Function::Total_Function(const BType &U, const BType &V,
 shared_ptr<Abstract> Factory::Total_Function(const BType &U, const BType &V) {
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Total_Function::m_cache, U, V);
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   if (!result) {
     const auto PU = BType::POW(U);
     const auto PV = BType::POW(V);
@@ -61,7 +76,7 @@ shared_ptr<Abstract> Factory::Total_Function(const BType &U, const BType &V) {
     const auto PUxV = BType::POW(UxV);
     const auto PPUxV = BType::POW(PUxV);
     const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Total_Functions, U, V),
+        script_pattern, /*0*/ smtSymbol(Expr::BinaryOp::Total_Functions, U, V),
         /*1*/ symbol(PU),
         /*2*/ symbol(PV),
         /*3*/ symbol(PPUxV),

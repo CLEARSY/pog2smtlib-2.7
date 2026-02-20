@@ -26,8 +26,9 @@
     :named |ax.set.in.lambda Z Z|))
 (declare-const INTEGER |POW Z|)
 (assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
+  (forall ((e |Z|))
+    (|set.in Z| e INTEGER))
+  :named |ax.rw.universe Z|))
 (assert (!
   (not
     (|set.in (Z x Z)| (maplet 1 2) (|set.lambda Z Z| (lambda ((_c0 |Z|))     (|set.in Z| _c0 INTEGER))  (lambda ((_c0 |Z|)) (+ _c0 1)))))

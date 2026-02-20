@@ -29,8 +29,11 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((R1 {1}) (R2 {2}) (p {4}))
     (= ({5} p ({0} R1 R2))
        (and
@@ -39,6 +42,16 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
        )
     )
   )
+  :named |ax.set.in.directproduct {8}|))
+)";
+
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((R1 {1}) (R2 {2}) (p {4})) (!
+    (= ({5} p ({0} R1 R2))
+       (and
+         ({6} (maplet (fst p) (fst (snd p))) R1)
+         ({7} (maplet (fst p) (snd (snd p))) R2)))
+    :pattern ( ({5} p ({0} R1 R2)) )))
   :named |ax.set.in.directproduct {8}|))
 )";
 
@@ -55,6 +68,8 @@ Direct_Product::Direct_Product(const BType &T, const BType &U, const BType &V,
 
 shared_ptr<Abstract> Factory::Direct_Product(const BType &T, const BType &U,
                                              const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Direct_Product::m_cache, T, U, V);
   if (!result) {
@@ -66,16 +81,17 @@ shared_ptr<Abstract> Factory::Direct_Product(const BType &T, const BType &U,
     const auto xUV = BType::PROD(U, V);
     const auto xTxUV = BType::PROD(T, xUV);
     const auto PxTxUV = BType::POW(xTxUV);
-    const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Direct_Product, T, U, V),
-        /*1*/ symbol(PxTU),
-        /*2*/ symbol(PxTV),
-        /*3*/ symbol(PxTxUV),
-        /*4*/ symbol(xTxUV),
-        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, xTxUV),
-        /*6*/ smtSymbol(Pred::ComparisonOp::Membership, xTU),
-        /*7*/ smtSymbol(Pred::ComparisonOp::Membership, xTV),
-        /*8*/ symbolInner(xxTUV));
+    const std::string script =
+        fmt::format(script_pattern,
+                    /*0*/ smtSymbol(Expr::BinaryOp::Direct_Product, T, U, V),
+                    /*1*/ symbol(PxTU),
+                    /*2*/ symbol(PxTV),
+                    /*3*/ symbol(PxTxUV),
+                    /*4*/ symbol(xTxUV),
+                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, xTxUV),
+                    /*6*/ smtSymbol(Pred::ComparisonOp::Membership, xTU),
+                    /*7*/ smtSymbol(Pred::ComparisonOp::Membership, xTV),
+                    /*8*/ symbolInner(xxTUV));
     const PreRequisites requisites = {Factory::SetMembership(xTxUV),
                                       Factory::SetMembership(xTU),
                                       Factory::SetMembership(xTV)};

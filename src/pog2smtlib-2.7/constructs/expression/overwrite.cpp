@@ -29,14 +29,25 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {1}) {1})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((r1 {1}) (r2 {1}))
     (forall ((x {2}))
       (= ({3} x ({0} r1 r2))
          (or (and ({3} x r1)
                   (not ({4} (fst x) ({5} r1))))
              ({3} x r2)))))
+  :named |ax:set.in.overwrite {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((r1 {1}) (r2 {1}) (x {2})) (!
+    (= ({3} x ({0} r1 r2))
+       (or (and ({3} x r1)
+                (not ({4} (fst x) ({5} r1))))
+           ({3} x r2)))
+    :pattern ( ({3} x ({0} r1 r2)) )))
   :named |ax:set.in.overwrite {6}|))
 )";
 
@@ -51,19 +62,21 @@ Overwrite::Overwrite(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Overwrite(const BType &U, const BType &V) {
+  std::string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Overwrite::m_cache, U, V);
   if (!result) {
     const auto UxV = BType::PROD(U, V);
     const auto PUxV = BType::POW(UxV);
-    const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Surcharge, U, V),
-                    /*1*/ symbol(PUxV),
-                    /*2*/ symbol(UxV),
-                    /*3*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
-                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, U),
-                    /*5*/ smtSymbol(Expr::UnaryOp::Domain, U, V),
-                    /*6*/ symbolInner(UxV));
+    const std::string script = fmt::format(
+        script_pattern, /*0*/ smtSymbol(Expr::BinaryOp::Surcharge, U, V),
+        /*1*/ symbol(PUxV),
+        /*2*/ symbol(UxV),
+        /*3*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
+        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, U),
+        /*5*/ smtSymbol(Expr::UnaryOp::Domain, U, V),
+        /*6*/ symbolInner(UxV));
     const PreRequisites requisites = {Factory::SetMembership(UxV),
                                       Factory::SetMembership(U),
                                       Factory::Domain(U, V)};

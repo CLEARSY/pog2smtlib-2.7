@@ -29,12 +29,21 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {1})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {1})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((r {1}) (e {2}))
     (forall ((x {3}))
       (= ({4} x ({0} r e))
         (and ({4} x r) (not ({5} (snd x) e))))))
+  :named |ax:set.in.subtract.ran {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((r {1}) (e {2}) (x {3}))
+    (= ({4} x ({0} r e))
+      (and ({4} x r) (not ({5} (snd x) e))))
+    :pattern ( ({4} x ({0} r e)) )))
   :named |ax:set.in.subtract.ran {6}|))
 )";
 
@@ -51,20 +60,23 @@ Subtraction_Range::Subtraction_Range(const BType &U, const BType &V,
 
 shared_ptr<Abstract> Factory::Subtraction_Range(const BType &U,
                                                 const BType &V) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Subtraction_Range::m_cache, U, V);
   if (!result) {
     const auto PV = BType::POW(V);
     const auto UxV = BType::PROD(U, V);
     const auto PUxV = BType::POW(UxV);
-    const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Range_Subtraction, U, V),
-        /*1*/ symbol(PUxV),
-        /*2*/ symbol(PV),
-        /*3*/ symbol(UxV),
-        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
-        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, V),
-        /*6*/ symbolInner(UxV));
+    const std::string script =
+        fmt::format(script_pattern,
+                    /*0*/ smtSymbol(Expr::BinaryOp::Range_Subtraction, U, V),
+                    /*1*/ symbol(PUxV),
+                    /*2*/ symbol(PV),
+                    /*3*/ symbol(UxV),
+                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
+                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, V),
+                    /*6*/ symbolInner(UxV));
     const PreRequisites requisites = {Factory::SetMembership(UxV)};
     result = make(BConstruct::Expression::Subtraction_Range::m_cache, U, V,
                   script, requisites);

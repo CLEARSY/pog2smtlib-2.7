@@ -48,11 +48,11 @@
   :named |ax:set.in.injections (POW Z x Z)|))
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (declare-fun |bijections POW Z Z| (|POW POW Z| |POW Z|) |POW POW (POW Z x Z)|)
 (assert (!
   (forall ((X |POW POW Z|) (Y |POW Z|))

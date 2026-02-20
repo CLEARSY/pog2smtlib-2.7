@@ -44,6 +44,7 @@ Tail::Tail(const BType& T, const std::string& script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Tail(const BType& T) {
+
   shared_ptr<Abstract> result = find(BConstruct::Expression::Tail::m_cache, T);
   if (!result) {
     const auto ZxT = BType::PROD(BType::INT, T);

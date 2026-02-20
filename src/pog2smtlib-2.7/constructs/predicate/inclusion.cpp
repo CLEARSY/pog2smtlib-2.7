@@ -28,17 +28,53 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT =
+/*
+string pattern positional parameters:
+0 : smtSymbol(Pred::ComparisonOp::Subset, T),
+1 : symbol(PT),
+2 : symbolInner(T)
+3 : smtSymbol(Pred::ComparisonOp::Membership, T)
+4 : symbol(T)
+*/
+static const string DECLARATION =
     R"((declare-fun {0} ({1} {1}) Bool)
-(assert (!
-    (forall ((s {1}) (t {1}))
-      (=
-        ({0} s t)
-        (forall ((e |{2}|)) (=> ({3} e s) ({3} e t)))
-      )
-    )
-    :named |ax.set.subseteq {2}|))
 )";
+
+static const string SCRIPT = R"((assert (!
+  (forall ((s {1}) (t {1}) (e {4}))
+    (=>
+      (and ({0} s t) ({3} e s))
+      ({3} e t)))
+  :named |ax.set.subseteq.elim {2}|))
+(assert (!
+  (forall ((s {1}) (t {1}))
+    (=>
+      (forall ((e {4})) (=> ({3} e s) ({3} e t)))
+      ({0} s t)))
+  :named |ax.set.subseteq.intro {2}|))
+)";
+
+static const string SCRIPT_T = R"((assert (!
+  (forall ((s {1}) (t {1}) (e {4}))
+    (!
+      (=>
+        (and ({0} s t) ({3} e s))
+        ({3} e t))
+    :pattern (({0} s t) ({3} e s))))
+  :named |ax.set.subseteq.elim {2}|))
+(assert (!
+  (forall ((s {1}) (t {1}))
+    (=>
+      (forall ((e {4})) (=> ({3} e s) ({3} e t)))
+      ({0} s t)))
+  :named |ax.set.subseteq.intro {2}|))
+)";
+/*
+static const string DEFINITION =
+    R"((define-fun {0} ((s {1}) (t {1})) Bool
+  (forall ((e |{2}|)) (=> ({3} e s) ({3} e t))))
+)";
+*/
 
 namespace Predicate {
 
@@ -51,14 +87,17 @@ Inclusion::Inclusion(const BType& T, const std::string& script,
 };  // namespace Predicate
 
 shared_ptr<Abstract> Factory::Inclusion(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Predicate::Inclusion::m_cache, T);
   if (!result) {
     const BType PT = BType::POW(T);
     const std::string op = smtSymbol(Pred::ComparisonOp::Membership, T);
-    const string script = fmt::format(
-        SCRIPT, smtSymbol(Pred::ComparisonOp::Subset, T), symbol(PT),
-        symbolInner(T), smtSymbol(Pred::ComparisonOp::Membership, T));
+    const string script =
+        fmt::format(script_pattern, smtSymbol(Pred::ComparisonOp::Subset, T),
+                    symbol(PT), symbolInner(T),
+                    smtSymbol(Pred::ComparisonOp::Membership, T), symbol(T));
     const PreRequisites requisites = {Factory::SetMembership(T)};
     result =
         make(BConstruct::Predicate::Inclusion::m_cache, T, script, requisites);

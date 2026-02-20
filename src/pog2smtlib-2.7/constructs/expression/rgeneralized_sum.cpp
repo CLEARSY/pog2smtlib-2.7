@@ -29,11 +29,13 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) |{1}|)
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({2}) |{1}|)
+)";
+static constexpr std::string_view BASE_SCRIPT = R"((assert (!
   (= 0.0 ({0} {3}))
   :named |ax.rsigma.empty|))
-(assert (!
+)";
+static constexpr std::string_view INDUCT_SCRIPT = R"((assert (!
   (forall ((s {2}))
     (forall ((e |{1}|))
       (= ({4} e s)
@@ -42,6 +44,17 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) |{1}|)
              ({0}
                ({5}
                  (lambda ((x |{1}|)) (and ({4} x s) (not (= x e)))))))))))
+  :named |ax.rsigma.incr|))
+)";
+static constexpr std::string_view INDUCT_SCRIPT_T = R"((assert (!
+  (forall ((s {2}) (e |{1}|))(!
+    (= ({4} e s)
+      (= ({0} s)
+        (+ e
+           ({0}
+             ({5}
+               (lambda ((x |{1}|)) (and ({4} x s) (not (= x e)))))))))))
+    :pattern ( ({4} e s) )))
   :named |ax.rsigma.incr|))
 )";
 
@@ -56,12 +69,15 @@ RGeneralizedSum::RGeneralizedSum(const std::string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::RGeneralizedSum() {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, BASE_SCRIPT, INDUCT_SCRIPT_T,
+                    BASE_SCRIPT, INDUCT_SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::RGeneralizedSum::m_cache);
   if (!result) {
     const auto PREAL = BType::POW(BType::REAL);
     const string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::QuantifiedOp::RSum),
+        script_pattern, /*0*/ smtSymbol(Expr::QuantifiedOp::RSum),
         /*1*/ symbolInner(BType::REAL),
         /*2*/ symbol(PREAL),
         /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::REAL),

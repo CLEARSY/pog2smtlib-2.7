@@ -29,15 +29,24 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2} {1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({2} {1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {2})(x {1})(p {3}))
     (= ({4} p ({0} s x))
        (or (= p (maplet ({5} s) x))
            ({4} p s))))
   :named |ax.insert.tail.def {6}|))
 )";
-
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {2})(x {1})(p {3})) (!
+    (= ({4} p ({0} s x))
+       (or (= p (maplet ({5} s) x))
+           ({4} p s)))
+    :pattern ( ({4} p ({0} s x)) )))
+  :named |ax.insert.tail.def {6}|))
+)";
 namespace Expression {
 
 MapUnaryBType<Insert_At_Tail> Insert_At_Tail::m_cache;
@@ -49,19 +58,21 @@ Insert_At_Tail::Insert_At_Tail(const BType& T, const std::string& script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Insert_At_Tail(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Insert_At_Tail::m_cache, T);
   if (!result) {
     const auto ZxT = BType::PROD(BType::INT, T);
     const auto PZxT = BType::POW(ZxT);
-    const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Tail_Insertion, T),
-                    /*1*/ symbol(T),
-                    /*2*/ symbol(PZxT),
-                    /*3*/ symbol(ZxT),
-                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
-                    /*5*/ smtSymbol(Expr::UnaryOp::Size, T),
-                    /*6*/ symbolInner(T));
+    const std::string script = fmt::format(
+        script_pattern, /*0*/ smtSymbol(Expr::BinaryOp::Tail_Insertion, T),
+        /*1*/ symbol(T),
+        /*2*/ symbol(PZxT),
+        /*3*/ symbol(ZxT),
+        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),
+        /*5*/ smtSymbol(Expr::UnaryOp::Size, T),
+        /*6*/ symbolInner(T));
     const PreRequisites requisites = {
         Factory::SetMembership(ZxT),
         Factory::Size(T),

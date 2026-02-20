@@ -48,12 +48,12 @@
   :named |ax:set.in.intent POW Z|))
 (declare-fun |fnc Z POW Z| (|POW (Z x POW Z)|) |POW (Z x POW POW Z)|)
 (assert (!
-(forall ((r |POW (Z x POW Z)|)(p |(Z x POW POW Z)|))
-  (= (|set.in (Z x POW POW Z)| p (|fnc Z POW Z| r))
-     (and (exists ((y |POW Z|)) (|set.in (Z x POW Z)| (maplet (fst p) y) r))
-          (forall ((y |POW Z|))
-            (= (|set.in POW Z| y (snd p))
-               (|set.in (Z x POW Z)| (maplet (fst p) y) r))))))
+  (forall ((r |POW (Z x POW Z)|)(p |(Z x POW POW Z)|))
+    (= (|set.in (Z x POW POW Z)| p (|fnc Z POW Z| r))
+       (and (exists ((y |POW Z|)) (|set.in (Z x POW Z)| (maplet (fst p) y) r))
+            (forall ((y |POW Z|))
+              (= (|set.in POW Z| y (snd p))
+                 (|set.in (Z x POW Z)| (maplet (fst p) y) r))))))
   :named |ax.set.in.fnc (Z x POW Z)|))
 (assert (!
   (= func (|set.intent (Z x POW Z)| (lambda ((_c0 |(Z x POW Z)|)) (or (= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)(= _c1 4))))))(= _c0 (maplet 0 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 2)(= _c1 4)(= _c1 6)(= _c1 7))))))(= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 1)(= _c1 5)(= _c1 4))))))(= _c0 (maplet 1 (|set.intent Z| (lambda ((_c1 |Z|)) (= _c1 1)))))(= _c0 (maplet 2 (|set.intent Z| (lambda ((_c1 |Z|)) (or (= _c1 6)(= _c1 8)(= _c1 5))))))))))

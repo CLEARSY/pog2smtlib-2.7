@@ -29,8 +29,9 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) {1})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({2}) {1})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {2}))
     (=> (not (= s {3})) ({4} ({0} s) s)))
   :named |ax.rmin.is.member|))
@@ -38,6 +39,17 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) {1})
    (forall ((s {2}))
      (forall ((e {1}))
         (=> ({4} e s) (<= ({0} s) e))))
+  :named |ax.rmin.is.ge|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {2})) (!
+    (=> (not (= s {3})) ({4} ({0} s) s))
+    :pattern ( ({0} s) )))
+  :named |ax.rmin.is.member|))
+(assert (!
+  (forall ((s {2}) (e {1})) (!
+    (=> ({4} e s) (<= ({0} s) e))
+    :pattern ( ({0} s) )))
   :named |ax.rmin.is.ge|))
 )";
 
@@ -51,10 +63,12 @@ RMin::RMin(const std::string &script, const PreRequisites &requisites)
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::RMin() {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::RMin::m_cache);
   if (!result) {
     const string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::RMinimum),
+        script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::RMinimum),
         /*1*/ symbol(BType::REAL),
         /*2*/ symbol(BType::POW(BType::REAL)),
         /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::REAL),

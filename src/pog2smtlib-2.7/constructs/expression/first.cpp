@@ -29,10 +29,17 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {1}))
     ({3} (maplet 1 ({0} s)) s))
+  :named |ax.first.definition {4}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {1})) (!
+    ({3} (maplet 1 ({0} s)) s)
+    :trigger ( ({0} s) )))
   :named |ax.first.definition {4}|))
 )";
 
@@ -47,12 +54,14 @@ First::First(const BType& T, const std::string& script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::First(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::First::m_cache, T);
   if (!result) {
     const auto ZxT = BType::PROD(BType::INT, T);
     const auto PZxT = BType::POW(ZxT);
     const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::First, T),
+        fmt::format(script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::First, T),
                     /*1*/ symbol(PZxT),
                     /*2*/ symbol(T),
                     /*3*/ smtSymbol(Pred::ComparisonOp::Membership, ZxT),

@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 
+#include "parameters.h"
 #include "pog-signatures.h"
 #include "pog.h"
 #include "smtlib.h"
@@ -46,7 +47,6 @@ static void display_version() {
 }
 
 static void display_help(std::ostream &oss = std::cerr) {
-
   static const std::string HELP =
       R"(Translates Atelier B proof obligation file to SMT-LIB format.
 
@@ -65,6 +65,8 @@ pog2smtlib-2.7 OPTIONS -i input_file -o output
   -l, --logic
           Sets the option of the set-logic in the produced SMT files,
           the default value being ALL.
+  --axiom-triggers    annotates axioms with triggers
+  --no-axiom-triggers does not annotate axioms with triggers
   -rp N, --reduce-po N
           Include only predicates in Lasso(N) (0 <=N), with Lasso 
           built with the free symbols in the Simple_Goal element and
@@ -224,6 +226,12 @@ static void parse_options(int argc, char **argv, char *&input, char *&output,
         display_help();
         exit(EXIT_FAILURE);
       }
+    } else if (strcmp(argv[arg], "--axiom-triggers") == 0) {
+      Parameters::encodingOptions.axiomTriggers = true;
+      arg += 1;
+    } else if (strcmp(argv[arg], "--no-axiom-triggers") == 0) {
+      Parameters::encodingOptions.axiomTriggers = false;
+      arg += 1;
     } else if (strcmp(argv[arg], "-rp") == 0 ||
                strcmp(argv[arg], "--reduce-po") == 0) {
       if (arg + 1 < argstop && !smt_options.reduce_po_lasso) {

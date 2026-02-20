@@ -29,11 +29,21 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((E {1}) (x {3}))
     (= ({4} x ({0} E))
        (forall ((e {2})) (=> ({4} x e) ({5} e E)))))
+  :named |ax.set.in.generalized.intersection {6}|))
+)";
+
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((E {1}) (x {3})) (!
+    (= ({4} x ({0} E))
+       (forall ((e {2})) (=> ({4} x e) ({5} e E))))
+    :pattern ( ({0} E) )))
   :named |ax.set.in.generalized.intersection {6}|))
 )";
 
@@ -48,19 +58,21 @@ GeneralizedIntersection::GeneralizedIntersection(
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::GeneralizedIntersection(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::GeneralizedIntersection::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
     const auto PPT = BType::POW(PT);
-    const string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Intersection, T),
-                    /*1*/ symbol(PPT),
-                    /*2*/ symbol(PT),
-                    /*3*/ symbol(T),
-                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T),
-                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
-                    /*6*/ symbolInner(T));
+    const string script = fmt::format(
+        script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::Intersection, T),
+        /*1*/ symbol(PPT),
+        /*2*/ symbol(PT),
+        /*3*/ symbol(T),
+        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, T),
+        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
+        /*6*/ symbolInner(T));
     const PreRequisites requisites{Factory::SetMembership(PT)};
     result = make(BConstruct::Expression::GeneralizedIntersection::m_cache, T,
                   script, requisites);

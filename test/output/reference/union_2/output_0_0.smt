@@ -9,23 +9,31 @@
 (define-sort |POW POW POW Z| () (P |POW POW Z|))
 (declare-fun |set.subseteq POW Z| (|POW POW Z| |POW POW Z|) Bool)
 (assert (!
-    (forall ((s |POW POW Z|) (t |POW POW Z|))
-      (=
-        (|set.subseteq POW Z| s t)
-        (forall ((e |POW Z|)) (=> (|set.in POW Z| e s) (|set.in POW Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq POW Z|))
+  (forall ((s |POW POW Z|) (t |POW POW Z|) (e |POW Z|))
+    (=>
+      (and (|set.subseteq POW Z| s t) (|set.in POW Z| e s))
+      (|set.in POW Z| e t)))
+  :named |ax.set.subseteq.elim POW Z|))
+(assert (!
+  (forall ((s |POW POW Z|) (t |POW POW Z|))
+    (=>
+      (forall ((e |POW Z|)) (=> (|set.in POW Z| e s) (|set.in POW Z| e t)))
+      (|set.subseteq POW Z| s t)))
+  :named |ax.set.subseteq.intro POW Z|))
 (declare-fun |set.in POW POW Z| (|POW POW Z| |POW POW POW Z|) Bool)
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-      (=
-        (|set.subseteq Z| s t)
-        (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq Z|))
+  (forall ((s |POW Z|) (t |POW Z|) (e |Z|))
+    (=>
+      (and (|set.subseteq Z| s t) (|set.in Z| e s))
+      (|set.in Z| e t)))
+  :named |ax.set.subseteq.elim Z|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=>
+      (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
+      (|set.subseteq Z| s t)))
+  :named |ax.set.subseteq.intro Z|))
 (declare-fun |sub-sets POW Z| (|POW POW Z|) |POW POW POW Z|)
 (assert (!
   (forall ((s |POW POW Z|) (t |POW POW Z|))
@@ -87,8 +95,9 @@
   :named |ax.non empty sub-sets Z|))
 (declare-const INTEGER |POW Z|)
 (assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
+  (forall ((e |Z|))
+    (|set.in Z| e INTEGER))
+  :named |ax.rw.universe Z|))
 (declare-fun |union Z| (|POW POW Z|) |POW Z|)
 (assert (!
   (forall ((E |POW POW Z|) (x |Z|))

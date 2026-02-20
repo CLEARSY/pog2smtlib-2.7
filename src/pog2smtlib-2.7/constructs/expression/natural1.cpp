@@ -29,9 +29,14 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-const {0} {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-const {0} {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((e {1})) (= ({3} e {0}) (<= 1 e)))
+  :named |ax.set.in.NATURAL1|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((e {1})) (! (= ({3} e {0}) (<= 1 e))) :pattern ( ({3} e {0}) )))
   :named |ax.set.in.NATURAL1|))
 )";
 
@@ -45,10 +50,12 @@ Natural1::Natural1(const std::string &script, const PreRequisites &requisites)
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Natural1() {
+  std::string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::Natural1::m_cache);
   if (!result) {
     const string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::Visitor::EConstant::NATURAL1),
+        script_pattern, /*0*/ smtSymbol(Expr::Visitor::EConstant::NATURAL1),
         /*1*/ symbol(BType::INT), /*2*/ symbol(BType::POW(BType::INT)),
         /*3*/ smtSymbol(Pred::ComparisonOp::Membership, BType::INT));
     const PreRequisites requisites{Factory::SetMembership(BType::INT)};

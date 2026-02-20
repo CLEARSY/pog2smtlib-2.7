@@ -29,14 +29,26 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((E {1}) (F {2}) (t {4}))
     (= ({5} t ({0} E F))
        (and
 				 ({6} (fst (fst t)) E)
 				 ({7} (snd (fst t)) F)
 				 (= (snd t) (fst (fst t))))))
+  :named |ax.set.in.prj1 {8}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((E {1}) (F {2}) (t {4})) (!
+    (= ({5} t ({0} E F))
+       (and
+				 ({6} (fst (fst t)) E)
+				 ({7} (snd (fst t)) F)
+				 (= (snd t) (fst (fst t)))))
+    :pattern ( ({5} t ({0} E F)) )))
   :named |ax.set.in.prj1 {8}|))
 )";
 
@@ -51,6 +63,8 @@ Prj1::Prj1(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Prj1(const BType &U, const BType &V) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Prj1::m_cache, U, V);
   if (!result) {
@@ -60,7 +74,7 @@ shared_ptr<Abstract> Factory::Prj1(const BType &U, const BType &V) {
     const auto UxVxU = BType::PROD(UxV, U);
     const auto PUxVxU = BType::POW(UxVxU);
     const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::First_Projection, U, V),
+        script_pattern, /*0*/ smtSymbol(Expr::BinaryOp::First_Projection, U, V),
         /*1*/ symbol(PU),
         /*2*/ symbol(PV),
         /*3*/ symbol(PUxVxU),

@@ -29,13 +29,23 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((X {1}))
     (= ({0} X)
        ({2}
          (lambda ((x {6}))
            (and ({5} (fst x) X) (= (fst x) (snd x)))))))
+  :named |def.id {4}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((X {1})) (!
+    (= ({0} X)
+       ({2}
+         (lambda ((x {6}))
+           (and ({5} (fst x) X) (= (fst x) (snd x))))))
+    :pattern ( ({0} X) )))
   :named |def.id {4}|))
 )";
 
@@ -50,6 +60,8 @@ Identity::Identity(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Identity(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Identity::m_cache, T);
   if (!result) {
@@ -57,7 +69,7 @@ std::shared_ptr<Abstract> Factory::Identity(const BType& T) {
     const auto PT = BType::POW(T);
     const auto PTxT = BType::POW(TxT);
     const string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Identity, T),
+        fmt::format(script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::Identity, T),
                     /*1*/ symbol(PT),
                     /*2*/ smtSymbol(Expr::NaryOp::Set, TxT),
                     /*3*/ symbol(PTxT),

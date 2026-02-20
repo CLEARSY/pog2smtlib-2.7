@@ -29,11 +29,20 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {4})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {4})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((X {1}) (Y {2}))
     (= ({0} X Y)
        ({3} ({5} X Y))))
+    :named |def.relations {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((X {1}) (Y {2})) (!
+    (= ({0} X Y)
+       ({3} ({5} X Y)))
+    :pattern ( ({0} X Y) )))
     :named |def.relations {6}|))
 )";
 
@@ -48,6 +57,8 @@ Relation::Relation(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Relation(const BType &U, const BType &V) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Relation::m_cache, U, V);
   if (!result) {
@@ -56,14 +67,14 @@ shared_ptr<Abstract> Factory::Relation(const BType &U, const BType &V) {
     const auto UxV = BType::PROD(U, V);
     const auto PUxV = BType::POW(UxV);
     const auto PPUxV = BType::POW(PUxV);
-    const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Relations, U, V),
-                    /*1*/ symbol(PU),
-                    /*2*/ symbol(PV),
-                    /*3*/ smtSymbol(Expr::UnaryOp::Subsets, UxV),
-                    /*4*/ symbol(PPUxV),
-                    /*5*/ smtSymbol(Expr::BinaryOp::Cartesian_Product, U, V),
-                    /*6*/ symbolInner(UxV));
+    const std::string script = fmt::format(
+        script_pattern, /*0*/ smtSymbol(Expr::BinaryOp::Relations, U, V),
+        /*1*/ symbol(PU),
+        /*2*/ symbol(PV),
+        /*3*/ smtSymbol(Expr::UnaryOp::Subsets, UxV),
+        /*4*/ symbol(PPUxV),
+        /*5*/ smtSymbol(Expr::BinaryOp::Cartesian_Product, U, V),
+        /*6*/ symbolInner(UxV));
     const PreRequisites requisites = {Factory::ExpressionCartesianProduct(U, V),
                                       Factory::PowerSet(UxV)};
     result = make(BConstruct::Expression::Relation::m_cache, U, V, script,

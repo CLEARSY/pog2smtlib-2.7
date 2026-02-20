@@ -29,14 +29,59 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {1}) {1})
+/*
+; declaration - requisites : POW T,
+(declare-fun |set.inter T| (|POW T| |POW T|) |POW T|)
+; rewriting with triggers - requisites : set.in T, POW T
 (assert (!
-  (forall ((e |{3}|) (s {1}) (t {1}))
-    (= ({2} e ({0} s t))
-       (and ({2} e s) ({2} e t))))
-  :named |ax.set.in.inter {3}|))
+  (forall ((U |POW T|)) ((V |POW T|)) ((e |T|))
+    (!
+      (= (|set.in T| e (|set.inter T| U V))
+        (and (|set.in T| e U) (|set.in T| e V))
+      :pattern ((|set.in T| e (|set.inter T| U V)))))
+  :named |ax.rw.inter T|))
+; rewriting no triggers requisites : set.in T
+(assert (!
+  (forall ((U |POW T|)) ((V |POW T|)) ((e |T|))
+    (= (|set.in T| e (|set.inter T| U V))
+      (and (|set.in T| e U) (|set.in T| e V))))
+  :named |ax.rw.inter T|))
+; definition requisites : set.intent T :> set.in T, POW T
+(define-fun |set.inter T| ((U |POW T|)(V |POW T|)) |POW T|
+  (|set.intent T| (|lambda ((_c |T|) (and (|set.in T| _c U) (|set.in T| _c
+V)))))
+
+pattern variables:
+0: |set.inter T| => smtSymbol(Expr::BinaryOp::Intersection, T)
+1: |T| => symbol(T)
+2: |POW T| =>symbol(PT)
+3: |set.in T| => smtSymbol(Pred::ComparisonOp::Membership, T)
+4: |set.intent T|
+5: |ax.rw.intersection T|
+*/
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({2} {2}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
+  (forall ((e {1}) (s {2}) (t {2}))
+    (= ({3} e ({0} s t))
+       (and ({3} e s) ({3} e t))))
+  :named {4}))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((e {1}) (s {2}) (t {2})) (!
+    (= ({3} e ({0} s t))
+       (and ({3} e s) ({3} e t)))
+    :pattern ( ({3} e ({0} s t)) )))
+  :named {4}))
 )";
 
+/*
+static const string DEFINITION =
+    R"((define-fun {0} ((U {2})(V {2})) {2}
+  ({4} (lambda ((_c {1})) (and ({3} _c U) ({3} _c V)))))
+)";
+*/
 namespace Expression {
 
 MapUnaryBType<Intersection> Intersection::m_cache;
@@ -48,15 +93,19 @@ Intersection::Intersection(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Intersection(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Intersection::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
+    const string arg0{smtSymbol(Expr::BinaryOp::Intersection, T)};
+    const string arg1{symbol(T)};
+    const string arg2{symbol(PT)};
+    const string arg3{smtSymbol(Pred::ComparisonOp::Membership, T)};
+    const string arg4{fmt::format("|ax.set.in.inter {0}|", symbolInner(T))};
     const string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Intersection, T),
-                    /*1*/ symbol(PT),
-                    /*2*/ smtSymbol(Pred::ComparisonOp::Membership, T),
-                    /*3*/ symbolInner(T));
+        fmt::format(script_pattern, arg0, arg1, arg2, arg3, arg4);
     const PreRequisites requisites{Factory::SetMembership(T)};
     result = make(BConstruct::Expression::Intersection::m_cache, T, script,
                   requisites);

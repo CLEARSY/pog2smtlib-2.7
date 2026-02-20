@@ -27,23 +27,28 @@
   :named |ax.struct.definition struct(Note, Suffisant)|))
 (declare-const BOOL |POW BOOL|)
 (assert (!
-  (forall ((e |BOOL|)) (|set.in BOOL| e BOOL))
-  :named |ax.set.in.BOOL|))
+  (forall ((e |BOOL|))
+    (|set.in BOOL| e BOOL))
+  :named |ax.rw.universe BOOL|))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (declare-fun |set.subseteq struct(Note, Suffisant)| (|POW struct(Note, Suffisant)| |POW struct(Note, Suffisant)|) Bool)
 (assert (!
-    (forall ((s |POW struct(Note, Suffisant)|) (t |POW struct(Note, Suffisant)|))
-      (=
-        (|set.subseteq struct(Note, Suffisant)| s t)
-        (forall ((e |struct(Note, Suffisant)|)) (=> (|set.in struct(Note, Suffisant)| e s) (|set.in struct(Note, Suffisant)| e t)))
-      )
-    )
-    :named |ax.set.subseteq struct(Note, Suffisant)|))
+  (forall ((s |POW struct(Note, Suffisant)|) (t |POW struct(Note, Suffisant)|) (e |struct(Note, Suffisant)|))
+    (=>
+      (and (|set.subseteq struct(Note, Suffisant)| s t) (|set.in struct(Note, Suffisant)| e s))
+      (|set.in struct(Note, Suffisant)| e t)))
+  :named |ax.set.subseteq.elim struct(Note, Suffisant)|))
+(assert (!
+  (forall ((s |POW struct(Note, Suffisant)|) (t |POW struct(Note, Suffisant)|))
+    (=>
+      (forall ((e |struct(Note, Suffisant)|)) (=> (|set.in struct(Note, Suffisant)| e s) (|set.in struct(Note, Suffisant)| e t)))
+      (|set.subseteq struct(Note, Suffisant)| s t)))
+  :named |ax.set.subseteq.intro struct(Note, Suffisant)|))
 (assert (!
   (not
     (|set.subseteq struct(Note, Suffisant)| (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (|'Note| _c0) (|interval| 0 19))(|set.in BOOL| (|'Suffisant| _c0) BOOL)))) (|struct struct(Note, Suffisant)| (lambda ((_c0 |struct(Note, Suffisant)|)) (and (|set.in Z| (|'Note| _c0) (|interval| 0 20))(|set.in BOOL| (|'Suffisant| _c0) BOOL))))))

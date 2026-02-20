@@ -29,15 +29,24 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT =
+static constexpr std::string_view DECLARATION =
     R"((declare-fun {0} (|? {1}| (-> |{1}| |{2}|)) {3})
-(assert (!
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((P |? {1}|)(E (-> |{1}| |{2}|)))
     (forall ((p |({1} x {2})|))
       (= ({4} p ({0} P E))
          (and (@ P (fst p))
               (= (snd p) (@ E (fst p)))))))
     :named |ax.set.in.lambda {1} {2}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((P |? {1}|)(E (-> |{1}| |{2}|))(p |({1} x {2})|)) (!
+    (= ({4} p ({0} P E))
+       (and (@ P (fst p))
+            (= (snd p) (@ E (fst p)))))
+    :pattern ( ({4} p ({0} P E)) )))
+  :named |ax.set.in.lambda {1} {2}|))
 )";
 
 namespace Expression {
@@ -51,17 +60,20 @@ Lambda::Lambda(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Lambda(const BType &U, const BType &V) {
+  static string script_pattern{};  // the script pattern is the same for all
+                                   // types T (compute only once)
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Lambda::m_cache, U, V);
   if (!result) {
     const auto UxV = BType::PROD(U, V);
     const auto PUxV = BType::POW(UxV);
-    const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::QuantifiedOp::Lambda, U, V),
-                    /*1*/ symbolInner(U),
-                    /*2*/ symbolInner(V),
-                    /*3*/ symbol(PUxV),
-                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV));
+    const std::string script = fmt::format(
+        script_pattern, /*0*/ smtSymbol(Expr::QuantifiedOp::Lambda, U, V),
+        /*1*/ symbolInner(U),
+        /*2*/ symbolInner(V),
+        /*3*/ symbol(PUxV),
+        /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV));
     const PreRequisites requisites = {Factory::SetMembership(UxV),
                                       Factory::Set(U), Factory::Equality(V)};
     result =

@@ -23,6 +23,7 @@
 
 #include "btype-utils.h"
 #include "btype.h"
+#include "parameters.h"
 #include "signature.h"
 
 /**
@@ -928,6 +929,38 @@ struct BConstructPtrEqual {
 using Context = std::unordered_set<std::shared_ptr<Abstract>, Abstract::PtrHash,
                                    Abstract::PtrEqual>;
 };  // namespace BConstruct
+
+inline void initScriptPattern(std::string &script_pattern,
+                              const std::string_view &declaration,
+                              const std::string_view &axiom_with_triggers,
+                              const std::string_view &axiom_no_triggers) {
+  if (script_pattern.empty()) {
+    script_pattern.append(declaration);
+    if (Parameters::encodingOptions.axiomTriggers) {
+      script_pattern.append(axiom_with_triggers);
+    } else {
+      script_pattern.append(axiom_no_triggers);
+    }
+  }
+}
+
+inline void initScriptPattern(
+    std::string &script_pattern, const std::string_view &declaration,
+    const std::string_view &base_axiom_with_triggers,
+    const std::string_view &inductive_axiom_with_triggers,
+    const std::string_view &base_axiom_no_triggers,
+    const std::string_view &inductive_axiom_no_triggers) {
+  if (script_pattern.empty()) {
+    script_pattern.append(declaration);
+    if (Parameters::encodingOptions.axiomTriggers) {
+      script_pattern.append(base_axiom_with_triggers);
+      script_pattern.append(inductive_axiom_with_triggers);
+    } else {
+      script_pattern.append(base_axiom_no_triggers);
+      script_pattern.append(inductive_axiom_no_triggers);
+    }
+  }
+}
 
 extern std::string toString(const BConstruct::Context &context);
 

@@ -11,10 +11,10 @@
 (define-sort |POW (Z x POW Z)| () (P |(Z x POW Z)|))
 (declare-fun |set.in (Z x POW Z)| (|(Z x POW Z)| |POW (Z x POW Z)|) Bool)
 (declare-fun |fun.eval Z POW Z| (|POW (Z x POW Z)| |Z|) |POW Z|)
- (assert (!
-    (forall ((f |POW (Z x POW Z)|)(x |Z|))
-        (|set.in (Z x POW Z)| (maplet x (|fun.eval Z POW Z| f x)) f))
-    :named |ax.fun.eval (Z x POW Z)|))
+(assert (!
+  (forall ((f |POW (Z x POW Z)|)(x |Z|))
+    (|set.in (Z x POW Z)| (maplet x (|fun.eval Z POW Z| f x)) f))
+  :named |ax.fun.eval (Z x POW Z)|))
 (define-sort |? Z| () (-> |Z| Bool))
 (declare-const |set.intent Z| (-> |? Z| |POW Z|))
 (assert (!

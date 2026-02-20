@@ -29,8 +29,9 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) {1})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({2}) {1})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {2}))
     (=> (not (= s {3})) ({4} ({0} s) s)))
   :named |ax.max.is.member|))
@@ -39,6 +40,18 @@ static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) {1})
     (forall ((e {1}))
       (=> ({4} e s) (<= e ({0} s)))))
     :named |ax.max.is.ge|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {2}))
+    (=> (not (= s {3})) ({4} ({0} s) s))
+    :pattern ( ({0} s) )))
+  :named |ax.max.is.member|))
+(assert (!
+  (forall ((s {2})) (!
+    (forall ((e {1}))
+      (=> ({4} e s) (<= e ({0} s))))
+    :pattern ( ({0} s) )))
+  :named |ax.max.is.ge|))
 )";
 
 namespace Expression {
@@ -51,10 +64,12 @@ Max::Max(const std::string &script, const PreRequisites &requisites)
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Max() {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::Max::m_cache);
   if (!result) {
     const string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::IMaximum),
+        script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::IMaximum),
         /*1*/ symbol(BType::INT),
         /*2*/ symbol(BType::POW(BType::INT)),
         /*3*/ smtSymbol(Expr::Visitor::EConstant::EmptySet, BType::INT),

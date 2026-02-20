@@ -29,11 +29,19 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((E {1})(s {3}))
     (= ({4} s ({0} E))
        (and ({4} s ({5} E)) (not (= s |seq.empty {6}|)))))
+  :named |ax.iseq1 {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((E {1})(s {3})) (!)
+    (= ({4} s ({0} E))
+       (and ({4} s ({5} E)) (not (= s |seq.empty {6}|))))
+    :pattern (({4} s ({0} E))))
   :named |ax.iseq1 {6}|))
 )";
 
@@ -48,6 +56,8 @@ Injective_Seq1::Injective_Seq1(const BType& T, const std::string& script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Injective_Seq1(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Injective_Seq1::m_cache, T);
   if (!result) {
@@ -56,7 +66,7 @@ shared_ptr<Abstract> Factory::Injective_Seq1(const BType& T) {
     const auto PZxT = BType::POW(ZxT);
     const auto PPZxT = BType::POW(PZxT);
     const string script = fmt::format(
-        SCRIPT,
+        script_pattern,
         /*0*/ smtSymbol(Expr::UnaryOp::Non_Empty_Injective_Sequences, T),
         /*1*/ symbol(PT),
         /*2*/ symbol(PPZxT),

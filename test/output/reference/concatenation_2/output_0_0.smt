@@ -43,11 +43,11 @@
   :named |ax:set.in.injections ((Z x Z) x Z)|))
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (declare-fun |bijections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|))
@@ -74,8 +74,7 @@
     (= (|set.in (Z x Z)| p (|^ Z| s1 s2))
        (or (|set.in (Z x Z)| p s1)
            (|set.in (Z x Z)| (maplet (- (fst p) (|size Z| s1)) (snd p)) s2))))
-  :named |ax.conc.definition Z|
-))
+  :named |ax.conc.definition Z|))
 (define-sort |? (Z x Z)| () (-> |(Z x Z)| Bool))
 (declare-const |set.intent (Z x Z)| (-> |? (Z x Z)| |POW (Z x Z)|))
 (assert (!

@@ -13,13 +13,17 @@
 (define-sort |POW ((Z x Z) x Z)| () (P |((Z x Z) x Z)|))
 (declare-fun |set.subseteq (Z x Z)| (|POW (Z x Z)| |POW (Z x Z)|) Bool)
 (assert (!
-    (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-      (=
-        (|set.subseteq (Z x Z)| s t)
-        (forall ((e |(Z x Z)|)) (=> (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
-      )
-    )
-    :named |ax.set.subseteq (Z x Z)|))
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|) (e |(Z x Z)|))
+    (=>
+      (and (|set.subseteq (Z x Z)| s t) (|set.in (Z x Z)| e s))
+      (|set.in (Z x Z)| e t)))
+  :named |ax.set.subseteq.elim (Z x Z)|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=>
+      (forall ((e |(Z x Z)|)) (=> (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
+      (|set.subseteq (Z x Z)| s t)))
+  :named |ax.set.subseteq.intro (Z x Z)|))
 (declare-fun |set.in POW (Z x Z)| (|POW (Z x Z)| |POW POW (Z x Z)|) Bool)
 (declare-fun |set.in ((Z x Z) x Z)| (|((Z x Z) x Z)| |POW ((Z x Z) x Z)|) Bool)
 (define-sort |POW POW ((Z x Z) x Z)| () (P |POW ((Z x Z) x Z)|))
@@ -32,17 +36,10 @@
   :named |ax.sub-sets (Z x Z)|))
 (declare-fun |set.product Z Z| (|POW Z| |POW Z|) |POW (Z x Z)|)
 (assert (!
-  (forall ((s1 |POW Z|) (s2 |POW Z|))
-    (forall ((p |(Z x Z)|))
-      (= (|set.in (Z x Z)| p (|set.product Z Z| s1 s2))
-        (and (|set.in Z| (fst p) s1) (|set.in Z| (snd p) s2)))))
-  :named |ax.set.in.product.1 (Z x Z)|))
-(assert (!
-  (forall ((s1 |POW Z|) (s2 |POW Z|))
-    (forall ((x1 |Z|) (x2 |Z|))
-      (= (|set.in (Z x Z)| (maplet x1 x2) (|set.product Z Z| s1 s2))
-        (and (|set.in Z| x1 s1) (|set.in Z| x2 s2)))))
-  :named |ax.set.in.product.2 (Z x Z)|))
+  (forall ((U |POW Z|)(V |POW Z|)(p |(Z x Z)|))
+    (= (|set.in (Z x Z)| p (|set.product Z Z| U V))
+      (and (|set.in Z| (fst p) U) (|set.in Z| (snd p) V))))
+  :named |ax.set.product (Z x Z)|))
 (declare-fun |rel.range (Z x Z) Z| (|POW ((Z x Z) x Z)|) |POW Z|)
 (assert (!
   (forall ((r |POW ((Z x Z) x Z)|) (e |Z|))
@@ -147,11 +144,11 @@
   :named |ax:set.in.bijections ((Z x Z) x Z)|))
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (declare-fun |bijections Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((X |POW Z|) (Y |POW Z|))
@@ -162,13 +159,17 @@
   :named |ax:set.in.bijections (Z x Z)|))
 (declare-fun |set.subseteq POW (Z x Z)| (|POW POW (Z x Z)| |POW POW (Z x Z)|) Bool)
 (assert (!
-    (forall ((s |POW POW (Z x Z)|) (t |POW POW (Z x Z)|))
-      (=
-        (|set.subseteq POW (Z x Z)| s t)
-        (forall ((e |POW (Z x Z)|)) (=> (|set.in POW (Z x Z)| e s) (|set.in POW (Z x Z)| e t)))
-      )
-    )
-    :named |ax.set.subseteq POW (Z x Z)|))
+  (forall ((s |POW POW (Z x Z)|) (t |POW POW (Z x Z)|) (e |POW (Z x Z)|))
+    (=>
+      (and (|set.subseteq POW (Z x Z)| s t) (|set.in POW (Z x Z)| e s))
+      (|set.in POW (Z x Z)| e t)))
+  :named |ax.set.subseteq.elim POW (Z x Z)|))
+(assert (!
+  (forall ((s |POW POW (Z x Z)|) (t |POW POW (Z x Z)|))
+    (=>
+      (forall ((e |POW (Z x Z)|)) (=> (|set.in POW (Z x Z)| e s) (|set.in POW (Z x Z)| e t)))
+      (|set.subseteq POW (Z x Z)| s t)))
+  :named |ax.set.subseteq.intro POW (Z x Z)|))
 (declare-fun |functions.total Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((e1 |POW Z|) (e2 |POW Z|))
@@ -239,8 +240,9 @@
   :named |ax.iseq1 Z|))
 (declare-const INTEGER |POW Z|)
 (assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
+  (forall ((e |Z|))
+    (|set.in Z| e INTEGER))
+  :named |ax.rw.universe Z|))
 (assert (!
   (not
     (|set.in POW (Z x Z)| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 1))(= _c0 (maplet 3 2))))) (|iseq1 Z| INTEGER)))

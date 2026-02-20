@@ -29,11 +29,21 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((E {1}) (x {3}))
     (= ({4} x ({0} E))
        (exists ((e {2})) (and ({4} x e) ({5} e E)))))
+  :named |ax.set.in.generalized.union {6}|))
+)";
+
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((E {1}) (x {3})) (!
+    (= ({4} x ({0} E))
+       (exists ((e {2})) (and ({4} x e) ({5} e E))))
+    :pattern ( ({4} x ({0} E)) )))
   :named |ax.set.in.generalized.union {6}|))
 )";
 
@@ -48,13 +58,15 @@ GeneralizedUnion::GeneralizedUnion(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::GeneralizedUnion(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::GeneralizedUnion::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
     const auto PPT = BType::POW(PT);
     const string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Union, T),
+        fmt::format(script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::Union, T),
                     /*1*/ symbol(PPT),
                     /*2*/ symbol(PT),
                     /*3*/ symbol(T),

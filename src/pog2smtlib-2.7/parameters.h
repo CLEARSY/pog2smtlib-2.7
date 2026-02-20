@@ -22,6 +22,10 @@ namespace Parameters {
 extern const std::string MAXINT;
 extern const std::string MININT;
 
+extern struct encodingOptions_t {
+  bool axiomTriggers;
+} encodingOptions;
+
 };  // namespace Parameters
 
 #endif  // PARAMETERS_H

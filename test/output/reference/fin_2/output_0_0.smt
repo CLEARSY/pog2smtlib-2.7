@@ -41,11 +41,11 @@
 (define-sort |POW POW Z| () (P |POW Z|))
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (declare-fun |bijections Z Z| (|POW Z| |POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((X |POW Z|) (Y |POW Z|))
@@ -56,13 +56,17 @@
   :named |ax:set.in.bijections (Z x Z)|))
 (declare-fun |set.subseteq Z| (|POW Z| |POW Z|) Bool)
 (assert (!
-    (forall ((s |POW Z|) (t |POW Z|))
-      (=
-        (|set.subseteq Z| s t)
-        (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq Z|))
+  (forall ((s |POW Z|) (t |POW Z|) (e |Z|))
+    (=>
+      (and (|set.subseteq Z| s t) (|set.in Z| e s))
+      (|set.in Z| e t)))
+  :named |ax.set.subseteq.elim Z|))
+(assert (!
+  (forall ((s |POW Z|) (t |POW Z|))
+    (=>
+      (forall ((e |Z|)) (=> (|set.in Z| e s) (|set.in Z| e t)))
+      (|set.subseteq Z| s t)))
+  :named |ax.set.subseteq.intro Z|))
 (declare-fun |set.in POW Z| (|POW Z| |POW POW Z|) Bool)
 (declare-fun |card Z| (|POW Z|) Cardinals)
 (assert (!
@@ -91,17 +95,22 @@
   :named |ax.finite sub-sets Z|))
 (declare-const INTEGER |POW Z|)
 (assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
+  (forall ((e |Z|))
+    (|set.in Z| e INTEGER))
+  :named |ax.rw.universe Z|))
 (declare-fun |set.subseteq POW Z| (|POW POW Z| |POW POW Z|) Bool)
 (assert (!
-    (forall ((s |POW POW Z|) (t |POW POW Z|))
-      (=
-        (|set.subseteq POW Z| s t)
-        (forall ((e |POW Z|)) (=> (|set.in POW Z| e s) (|set.in POW Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq POW Z|))
+  (forall ((s |POW POW Z|) (t |POW POW Z|) (e |POW Z|))
+    (=>
+      (and (|set.subseteq POW Z| s t) (|set.in POW Z| e s))
+      (|set.in POW Z| e t)))
+  :named |ax.set.subseteq.elim POW Z|))
+(assert (!
+  (forall ((s |POW POW Z|) (t |POW POW Z|))
+    (=>
+      (forall ((e |POW Z|)) (=> (|set.in POW Z| e s) (|set.in POW Z| e t)))
+      (|set.subseteq POW Z| s t)))
+  :named |ax.set.subseteq.intro POW Z|))
 (define-sort |POW POW POW Z| () (P |POW POW Z|))
 (declare-fun |set.in POW POW Z| (|POW POW Z| |POW POW POW Z|) Bool)
 (declare-fun |sub-sets POW Z| (|POW POW Z|) |POW POW POW Z|)
@@ -113,13 +122,17 @@
   :named |ax.sub-sets POW Z|))
 (declare-fun |set.subseteq POW POW Z| (|POW POW POW Z| |POW POW POW Z|) Bool)
 (assert (!
-    (forall ((s |POW POW POW Z|) (t |POW POW POW Z|))
-      (=
-        (|set.subseteq POW POW Z| s t)
-        (forall ((e |POW POW Z|)) (=> (|set.in POW POW Z| e s) (|set.in POW POW Z| e t)))
-      )
-    )
-    :named |ax.set.subseteq POW POW Z|))
+  (forall ((s |POW POW POW Z|) (t |POW POW POW Z|) (e |POW POW Z|))
+    (=>
+      (and (|set.subseteq POW POW Z| s t) (|set.in POW POW Z| e s))
+      (|set.in POW POW Z| e t)))
+  :named |ax.set.subseteq.elim POW POW Z|))
+(assert (!
+  (forall ((s |POW POW POW Z|) (t |POW POW POW Z|))
+    (=>
+      (forall ((e |POW POW Z|)) (=> (|set.in POW POW Z| e s) (|set.in POW POW Z| e t)))
+      (|set.subseteq POW POW Z| s t)))
+  :named |ax.set.subseteq.intro POW POW Z|))
 (assert (!
   (|set.subseteq POW Z| p1 (|finite sub-sets Z| INTEGER))
   :named |Define:lprp:1|))

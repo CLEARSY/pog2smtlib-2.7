@@ -8,11 +8,11 @@
 (declare-fun |set.in Z| (|Z| |POW Z|) Bool)
 (define-sort |POW (Z x Z)| () (P |(Z x Z)|))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 (declare-fun |↑ Z| (|POW (Z x Z)| |Z|) |POW (Z x Z)|)
 (assert (!

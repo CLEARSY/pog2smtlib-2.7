@@ -29,13 +29,21 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT =
+static constexpr std::string_view DECLARATION =
     R"((declare-const {0} (-> |? {1}| {2}))
-(assert (!
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((p |? {1}|))
     (forall ((x {3}))
       (= ({4} x ({0} p))
          (@ p x))))
+  :named |ax.struct.definition {1}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((p |? {1}|) (x {3})) (!
+      (= ({4} x ({0} p))
+         (p x))
+    :pattern ( ({4} x ({0} p)) )))
   :named |ax.struct.definition {1}|))
 )";
 
@@ -50,12 +58,14 @@ Struct::Struct(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Struct(const BType& T) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Struct::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
     const string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::EKind::Struct, T),
+        fmt::format(script_pattern, /*0*/ smtSymbol(Expr::EKind::Struct, T),
                     /*1*/ symbolInner(T),
                     /*2*/ symbol(PT),
                     /*3*/ symbol(T),

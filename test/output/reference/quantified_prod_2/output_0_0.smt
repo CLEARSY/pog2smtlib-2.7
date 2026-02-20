@@ -22,8 +22,7 @@
 (declare-fun |PI| (|POW Z|) |Z|)
 (assert (!
   (= 1 (|PI| |set.empty Z|))
-  :named |ax.pi.empty|)
-)
+  :named |ax.pi.empty|))
 (assert (!
   (forall ((s |POW Z|))
     (forall ((e |Z|))
@@ -33,8 +32,7 @@
              (|PI|
                (|set.intent Z|
                  (lambda ((x |Z|)) (and (|set.in Z| x s) (not (= x e)))))))))))
-  :named |ax.pi.incr|)
-)
+  :named |ax.pi.incr|))
 (declare-fun |set.in (Z x Z)| (|(Z x Z)| |POW (Z x Z)|) Bool)
 (assert (!
   (not

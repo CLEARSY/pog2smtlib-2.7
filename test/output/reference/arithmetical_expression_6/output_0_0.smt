@@ -17,7 +17,7 @@
       (=> (and (<= a 0) (< b 0))
         (= (|int.div| a b) (div a b)))))
   :named |ax.int.div :1|))
-  (assert (!
+(assert (!
   (not
     (= c1 (|int.div| c2 c3)))
   :named |Goal|))

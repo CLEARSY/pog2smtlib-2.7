@@ -1,6 +1,6 @@
 
 MACHINE
-    equal
+    equal_1
 ASSERTIONS
     2+2=5
 END

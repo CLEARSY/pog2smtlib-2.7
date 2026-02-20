@@ -44,11 +44,11 @@
 (define-sort |POW POW (Z x Z)| () (P |POW (Z x Z)|))
 (declare-datatype Cardinals ( ( Infinite ) ( Finite ( Value Int ) )))
 (declare-fun |interval| (|Z| |Z|) |POW Z|)
- (assert (!
-    (forall ((l |Z|) (u |Z|) (e |Z|))
-        (= (|set.in Z| e (|interval| l u))
-            (and (<= l e) (<= e u))))
-    :named |ax.set.in.interval|))
+(assert (!
+  (forall ((l |Z|)(u |Z|)(e |Z|))
+    (= (|set.in Z| e (|interval| l u))
+      (and (<= l e) (<= e u))))
+  :named |ax.set.in.interval|))
 (declare-fun |bijections (Z x Z) Z| (|POW (Z x Z)| |POW Z|) |POW POW ((Z x Z) x Z)|)
 (assert (!
   (forall ((X |POW (Z x Z)|) (Y |POW Z|))
@@ -59,13 +59,17 @@
   :named |ax:set.in.bijections ((Z x Z) x Z)|))
 (declare-fun |set.subseteq (Z x Z)| (|POW (Z x Z)| |POW (Z x Z)|) Bool)
 (assert (!
-    (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-      (=
-        (|set.subseteq (Z x Z)| s t)
-        (forall ((e |(Z x Z)|)) (=> (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
-      )
-    )
-    :named |ax.set.subseteq (Z x Z)|))
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|) (e |(Z x Z)|))
+    (=>
+      (and (|set.subseteq (Z x Z)| s t) (|set.in (Z x Z)| e s))
+      (|set.in (Z x Z)| e t)))
+  :named |ax.set.subseteq.elim (Z x Z)|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=>
+      (forall ((e |(Z x Z)|)) (=> (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
+      (|set.subseteq (Z x Z)| s t)))
+  :named |ax.set.subseteq.intro (Z x Z)|))
 (declare-fun |set.in POW (Z x Z)| (|POW (Z x Z)| |POW POW (Z x Z)|) Bool)
 (declare-fun |card (Z x Z)| (|POW (Z x Z)|) Cardinals)
 (assert (!

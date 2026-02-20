@@ -29,11 +29,19 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
- (assert (!
-    (forall ((f {1})(x {2}))
-        ({4} (maplet x ({0} f x)) f))
-    :named |ax.fun.eval {5}|))
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
+  (forall ((f {1})(x {2}))
+    ({4} (maplet x ({0} f x)) f))
+  :named |ax.fun.eval {5}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((f {1})(x {2})) (!
+    ({4} (maplet x ({0} f x)) f)
+    :trigger ( (maplet x ({0} f x)) )))
+  :named |ax.fun.eval {5}|))
 )";
 
 namespace Expression {
@@ -47,13 +55,17 @@ Evaluation::Evaluation(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Evaluation(const BType &U, const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Evaluation::m_cache, U, V);
   if (!result) {
     const auto UxV = BType::PROD(U, V);
     const auto PUxV = BType::POW(UxV);
+    string pattern = string(DECLARATION);
+    pattern.append(SCRIPT);
     const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Application, U, V),
+        fmt::format(pattern, /*0*/ smtSymbol(Expr::BinaryOp::Application, U, V),
                     /*1*/ symbol(PUxV),
                     /*2*/ symbol(U),
                     /*3*/ symbol(V),

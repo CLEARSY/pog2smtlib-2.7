@@ -20,13 +20,17 @@
   :named |ax.set.in.relcomp ((Z x Z) x Z)|))
 (declare-fun |set.subseteq (Z x Z)| (|POW (Z x Z)| |POW (Z x Z)|) Bool)
 (assert (!
-    (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
-      (=
-        (|set.subseteq (Z x Z)| s t)
-        (forall ((e |(Z x Z)|)) (=> (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
-      )
-    )
-    :named |ax.set.subseteq (Z x Z)|))
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|) (e |(Z x Z)|))
+    (=>
+      (and (|set.subseteq (Z x Z)| s t) (|set.in (Z x Z)| e s))
+      (|set.in (Z x Z)| e t)))
+  :named |ax.set.subseteq.elim (Z x Z)|))
+(assert (!
+  (forall ((s |POW (Z x Z)|) (t |POW (Z x Z)|))
+    (=>
+      (forall ((e |(Z x Z)|)) (=> (|set.in (Z x Z)| e s) (|set.in (Z x Z)| e t)))
+      (|set.subseteq (Z x Z)| s t)))
+  :named |ax.set.subseteq.intro (Z x Z)|))
 (declare-fun |set.in POW (Z x Z)| (|POW (Z x Z)| |POW POW (Z x Z)|) Bool)
 (define-const MAXINT |Z| 2147483647)
 (declare-fun |iterate Z| (|POW (Z x Z)| |Z|) |POW (Z x Z)|)
@@ -54,25 +58,19 @@
   :named |ax.sub-sets (Z x Z)|))
 (declare-fun |set.product Z Z| (|POW Z| |POW Z|) |POW (Z x Z)|)
 (assert (!
-  (forall ((s1 |POW Z|) (s2 |POW Z|))
-    (forall ((p |(Z x Z)|))
-      (= (|set.in (Z x Z)| p (|set.product Z Z| s1 s2))
-        (and (|set.in Z| (fst p) s1) (|set.in Z| (snd p) s2)))))
-  :named |ax.set.in.product.1 (Z x Z)|))
-(assert (!
-  (forall ((s1 |POW Z|) (s2 |POW Z|))
-    (forall ((x1 |Z|) (x2 |Z|))
-      (= (|set.in (Z x Z)| (maplet x1 x2) (|set.product Z Z| s1 s2))
-        (and (|set.in Z| x1 s1) (|set.in Z| x2 s2)))))
-  :named |ax.set.in.product.2 (Z x Z)|))
+  (forall ((U |POW Z|)(V |POW Z|)(p |(Z x Z)|))
+    (= (|set.in (Z x Z)| p (|set.product Z Z| U V))
+      (and (|set.in Z| (fst p) U) (|set.in Z| (snd p) V))))
+  :named |ax.set.product (Z x Z)|))
 (declare-const NAT1 |POW Z|)
 (assert (!
   (forall ((e |Z|)) (= (|set.in Z| e NAT1) (and (<= 1 e) (<= e MAXINT))))
   :named |ax.set.in.NAT1|))
 (declare-const INTEGER |POW Z|)
 (assert (!
-  (forall ((e |Z|)) (|set.in Z| e INTEGER))
-  :named |ax.set.in.INTEGER|))
+  (forall ((e |Z|))
+    (|set.in Z| e INTEGER))
+  :named |ax.rw.universe Z|))
 (assert (!
   (not
     (|set.in POW (Z x Z)| (|iterate Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (= _c0 (maplet 1 0)))) 1) (|sub-sets (Z x Z)| (|set.product Z Z| INTEGER NAT1))))

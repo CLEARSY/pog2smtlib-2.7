@@ -29,12 +29,21 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {2}) (t {2}))
     (=
       ({1} s ({0} t))
       ({4} s t)))
+  :named |ax.sub-sets {5}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {2}) (t {2})) (!)
+    (=
+      ({1} s ({0} t))
+      ({4} s t))
+    :pattern ( ({1} s ({0} t)) )))
   :named |ax.sub-sets {5}|))
 )";
 
@@ -49,13 +58,15 @@ PowerSet::PowerSet(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::PowerSet(const BType& T) {
+  std::string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::PowerSet::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
     const auto PPT = BType::POW(PT);
     const string script =
-        fmt::format(SCRIPT,
+        fmt::format(script_pattern,
                     /*0*/ smtSymbol(Expr::UnaryOp::Subsets, T),
                     /*1*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
                     /*2*/ symbol(PT),

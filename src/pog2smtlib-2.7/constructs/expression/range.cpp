@@ -29,12 +29,20 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({2}) {1})
-(assert (!
+static const string DECLARATION = R"((declare-fun {0} ({2}) {1})
+)";
+static const string SCRIPT = R"((assert (!
   (forall ((r {2}) (e |{6}|))
     (= ({3} e ({0} r))
        (exists ((x |{7}|)) ({4} (maplet x e) r))))
-  :named |ax:set.in.range {5}|))
+  :named {8}))
+)";
+static const string SCRIPT_T = R"((assert (!
+  (forall ((r {2}) (e |{6}|)) (!
+    (= ({3} e ({0} r))
+       (exists ((x |{7}|)) ({4} (maplet x e) r)))
+    :pattern ( ({3} e ({0} r)) )))
+  :named {8}))
 )";
 
 namespace Expression {
@@ -48,23 +56,26 @@ Range::Range(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Range(const BType &U, const BType &V) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Range::m_cache, U, V);
   if (!result) {
-    const auto PU = BType::POW(U);
     const auto PV = BType::POW(V);
-    const auto UxV = BType::PROD(U, V);
-    const auto PUxV = BType::POW(UxV);
-    const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Range, U, V),
-                    /*1*/ symbol(PV),
-                    /*2*/ symbol(PUxV),
-                    /*3*/ smtSymbol(Pred::ComparisonOp::Membership, V),
-                    /*4*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
-                    /*5*/ symbolInner(UxV),
-                    /*6*/ symbolInner(V),
-                    /*7*/ symbolInner(U));
-    const PreRequisites requisites = {Factory::SetMembership(UxV)};
+    const auto xUV = BType::PROD(U, V);
+    const auto PxUV = BType::POW(xUV);
+    const string arg0{smtSymbol(Expr::UnaryOp::Range, U, V)};
+    const string arg1{symbol(PV)};
+    const string arg2{symbol(PxUV)};
+    const string arg3{smtSymbol(Pred::ComparisonOp::Membership, V)};
+    const string arg4{smtSymbol(Pred::ComparisonOp::Membership, xUV)};
+    const string arg5{symbolInner(xUV)};
+    const string arg6{symbolInner(V)};
+    const string arg7{symbolInner(U)};
+    const string arg8{fmt::format("|ax:set.in.range {0}|", symbolInner(xUV))};
+    const std::string script = fmt::format(script_pattern, arg0, arg1, arg2,
+                                           arg3, arg4, arg5, arg6, arg7, arg8);
+    const PreRequisites requisites{Factory::SetMembership(xUV)};
     result =
         make(BConstruct::Expression::Range::m_cache, U, V, script, requisites);
   }

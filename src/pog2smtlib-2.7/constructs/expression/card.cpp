@@ -29,12 +29,22 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) Cardinals)
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1}) Cardinals)
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {1}))
     (or (= ({0} s) Infinite)
         (exists ((f {2}))
           ({3} f (|bijections {4} {5}| s ({6} 1 (Value ({0} s))))))))
+  :named |ax.card.definition {4}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {1})) (!
+    (or (= ({0} s) Infinite)
+        (exists ((f {2}))
+          ({3} f (|bijections {4} {5}| s ({6} 1 (Value ({0} s)))))))
+    :pattern ( ({0} s) )))
   :named |ax.card.definition {4}|))
 )";
 
@@ -49,6 +59,8 @@ Card::Card(const BType& T, const string& script,
 };  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Card(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   std::shared_ptr<Abstract> result =
       find(BConstruct::Expression::Card::m_cache, T);
   if (!result) {
@@ -56,7 +68,7 @@ std::shared_ptr<Abstract> Factory::Card(const BType& T) {
     const auto TxZ = BType::PROD(T, BType::INT);
     const auto PTxZ = BType::POW(TxZ);
     const string script =
-        fmt::format(SCRIPT,
+        fmt::format(script_pattern,
                     /*0*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
                     /*1*/ symbol(PT),
                     /*2*/ symbol(PTxZ),

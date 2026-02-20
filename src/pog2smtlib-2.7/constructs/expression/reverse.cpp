@@ -29,13 +29,23 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((R {1}))
     (= ({0} R)
        ({3}
          (lambda ((x |{4}|))
            ({5} (maplet (snd x) (fst x)) R)))))
+  :named |def.reverse {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((R {1})) (!
+    (= ({0} R)
+       ({3}
+         (lambda ((x |{4}|))
+           ({5} (maplet (snd x) (fst x)) R))))
+    :pattern ( ({0} R) )))
   :named |def.reverse {6}|))
 )";
 
@@ -50,6 +60,8 @@ Reverse::Reverse(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Reverse(const BType &U, const BType &V) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Reverse::m_cache, U, V);
   if (!result) {
@@ -57,14 +69,14 @@ shared_ptr<Abstract> Factory::Reverse(const BType &U, const BType &V) {
     const auto PVxU = BType::POW(VxU);
     const auto UxV = BType::PROD(U, V);
     const auto PUxV = BType::POW(UxV);
-    const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Inverse, U, V),
-                    /*1*/ symbol(PUxV),
-                    /*2*/ symbol(PVxU),
-                    /*3*/ smtSymbol(Expr::NaryOp::Set, VxU),
-                    /*4*/ symbolInner(VxU),
-                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
-                    /*6*/ symbolInner(UxV));
+    const std::string script = fmt::format(
+        script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::Inverse, U, V),
+        /*1*/ symbol(PUxV),
+        /*2*/ symbol(PVxU),
+        /*3*/ smtSymbol(Expr::NaryOp::Set, VxU),
+        /*4*/ symbolInner(VxU),
+        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, UxV),
+        /*6*/ symbolInner(UxV));
     const PreRequisites requisites = {Factory::Set(VxU),
                                       Factory::SetMembership(UxV)};
     result = make(BConstruct::Expression::Reverse::m_cache, U, V, script,

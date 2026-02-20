@@ -29,14 +29,26 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1} {2}) {3})
-(assert (!
+static constexpr std::string_view DECLARATION =
+    R"((declare-fun {0} ({1} {2}) {3})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((E {1}) (F {2}) (t {4}))
     (= ({5} t ({0} E F))
        (and
 				 ({6} (fst (fst t)) E)
 				 ({7} (snd (fst t)) F)
 				 (= (snd t) (snd (fst t))))))
+  :named |ax.set.in.prj2 {8}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((E {1}) (F {2}) (t {4}))(!
+    (= ({5} t ({0} E F))
+       (and
+				 ({6} (fst (fst t)) E)
+				 ({7} (snd (fst t)) F)
+				 (= (snd t) (snd (fst t)))))
+    :pattern ( ({5} t ({0} E F)) )))
   :named |ax.set.in.prj2 {8}|))
 )";
 
@@ -51,6 +63,8 @@ Prj2::Prj2(const BType &U, const BType &V, const string &script,
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Prj2(const BType &U, const BType &V) {
+  string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result =
       find(BConstruct::Expression::Prj2::m_cache, U, V);
   if (!result) {
@@ -59,17 +73,19 @@ shared_ptr<Abstract> Factory::Prj2(const BType &U, const BType &V) {
     const auto UxV = BType::PROD(U, V);
     const auto UxVxV = BType::PROD(UxV, V);
     const auto PUxVxV = BType::POW(UxVxV);
-    const std::string script = fmt::format(
-        SCRIPT, /*0*/ smtSymbol(Expr::BinaryOp::Second_Projection, U, V),
-        /*1*/ symbol(PU),
-        /*2*/ symbol(PV),
-        /*3*/ symbol(PUxVxV),
-        /*4*/ symbol(UxVxV),
-        /*5*/ smtSymbol(Pred::ComparisonOp::Membership, UxVxV),
-        /*6*/ smtSymbol(Pred::ComparisonOp::Membership, U),
-        /*7*/ smtSymbol(Pred::ComparisonOp::Membership, V),
-        /*8*/ symbolInner(UxV));
-    const PreRequisites requisites = {Factory::SetMembership(UxVxV)};
+    const std::string script =
+        fmt::format(script_pattern,
+                    /*0*/ smtSymbol(Expr::BinaryOp::Second_Projection, U, V),
+                    /*1*/ symbol(PU),
+                    /*2*/ symbol(PV),
+                    /*3*/ symbol(PUxVxV),
+                    /*4*/ symbol(UxVxV),
+                    /*5*/ smtSymbol(Pred::ComparisonOp::Membership, UxVxV),
+                    /*6*/ smtSymbol(Pred::ComparisonOp::Membership, U),
+                    /*7*/ smtSymbol(Pred::ComparisonOp::Membership, V),
+                    /*8*/ symbolInner(UxV));
+    const BConstruct::PreRequisites requisites = {
+        Factory::SetMembership(UxVxV)};
     result =
         make(BConstruct::Expression::Prj2::m_cache, U, V, script, requisites);
   }

@@ -29,13 +29,23 @@ using std::string;
 
 namespace BConstruct {
 
-static constexpr std::string_view SCRIPT = R"((declare-fun {0} ({1}) {2})
-(assert (!
+static constexpr std::string_view DECLARATION = R"((declare-fun {0} ({1}) {2})
+)";
+static constexpr std::string_view SCRIPT = R"((assert (!
   (forall ((s {1}) (t {1}))
     (= ({3} s ({0} t))
        (and
          ({3} s ({4} t))
          (not (= ({5} s) Infinite)))))
+  :named |ax.finite sub-sets {6}|))
+)";
+static constexpr std::string_view SCRIPT_T = R"((assert (!
+  (forall ((s {1}) (t {1})) (!
+    (= ({3} s ({0} t))
+       (and
+         ({3} s ({4} t))
+         (not (= ({5} s) Infinite))))
+    :trigger ( ({3} s ({0} t)) )))
   :named |ax.finite sub-sets {6}|))
 )";
 
@@ -49,18 +59,20 @@ Fin::Fin(const BType& T, const string& script, const PreRequisites& requisites)
 };  // namespace Expression
 
 shared_ptr<Abstract> Factory::Fin(const BType& T) {
+  static string script_pattern{};
+  initScriptPattern(script_pattern, DECLARATION, SCRIPT_T, SCRIPT);
   shared_ptr<Abstract> result = find(BConstruct::Expression::Fin::m_cache, T);
   if (!result) {
     const auto PT = BType::POW(T);
     const auto PPT = BType::POW(PT);
-    const std::string script =
-        fmt::format(SCRIPT, /*0*/ smtSymbol(Expr::UnaryOp::Finite_Subsets, T),
-                    /*1*/ symbol(PT),
-                    /*2*/ symbol(PPT),
-                    /*3*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
-                    /*4*/ smtSymbol(Expr::UnaryOp::Subsets, T),
-                    /*5*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
-                    /*6*/ symbolInner(T));
+    const std::string script = fmt::format(
+        script_pattern, /*0*/ smtSymbol(Expr::UnaryOp::Finite_Subsets, T),
+        /*1*/ symbol(PT),
+        /*2*/ symbol(PPT),
+        /*3*/ smtSymbol(Pred::ComparisonOp::Membership, PT),
+        /*4*/ smtSymbol(Expr::UnaryOp::Subsets, T),
+        /*5*/ smtSymbol(Expr::UnaryOp::Cardinality, T),
+        /*6*/ symbolInner(T));
     const PreRequisites requisites = {Factory::PowerSet(T), Factory::Card(T)};
     result = make(BConstruct::Expression::Fin::m_cache, T, script, requisites);
   }
