@@ -36,7 +36,7 @@ static constexpr std::string_view SCRIPT = R"((assert (!
     (= ({4} s ({0} E))
        (and ({4} s ({5} E))
             ({4} s (|surjections {6} {7}| {8} E)))))
-  :named |ax.perm {6}|))
+  :named |ax.perm {7}|))
 )";
 static constexpr std::string_view SCRIPT_T = R"((assert (!
   (forall ((E {1})(s {3})) (!
@@ -44,7 +44,7 @@ static constexpr std::string_view SCRIPT_T = R"((assert (!
        (and ({4} s ({5} E))
             ({4} s (|surjections {6} {7}| {8} E)))
     :pattern ( ({4} s ({0} E)) )))
-  :named |ax.perm {6}|))
+  :named |ax.perm {7}|))
 )";
 
 namespace Expression {
