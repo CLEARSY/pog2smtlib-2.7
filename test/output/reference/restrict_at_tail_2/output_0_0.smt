@@ -68,6 +68,10 @@
   (forall ((s |POW (Z x Z)|))
     (= (|size Z| s) (Value (|card (Z x Z)| s))))
   :named |ax.size.definition Z|))
+(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
+(assert (!
+  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
+  :named |ax.set.in.empty (Z x Z)|))
 (declare-fun |↓ Z| (|POW (Z x Z)| |Z|) |POW (Z x Z)|)
 (assert (!
   (forall ((s |POW (Z x Z)|)(x |Z|)(p |(Z x Z)|))
@@ -83,13 +87,13 @@
       (= (|set.in (Z x Z)| x (|set.intent (Z x Z)| p))
          (@ p x))))
   :named |ax:set.in.intent (Z x Z)|))
-(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
+(declare-const |seq.empty Z| |POW (Z x Z)|)
 (assert (!
-  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
-  :named |ax.set.in.empty (Z x Z)|))
+  (= |seq.empty Z| |set.empty (Z x Z)|)
+  :named |ax:seq.empty.def Z|))
 (assert (!
   (not
-    (= (|↓ Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4))))) 3) |set.empty (Z x Z)|))
+    (= (|↓ Z| (|set.intent (Z x Z)| (lambda ((_c0 |(Z x Z)|)) (or (= _c0 (maplet 1 0))(= _c0 (maplet 2 5))(= _c0 (maplet 3 4))))) 3) |seq.empty Z|))
   :named |Goal|))
 (check-sat)
 (exit)

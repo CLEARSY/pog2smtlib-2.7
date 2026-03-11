@@ -32,7 +32,7 @@
     <Define name="ass">
         <Exp_Comparison op="=">
             <Id value="sq" typref="2" />
-            <EmptySet typref="2" />
+            <EmptySeq typref="2" />
         </Exp_Comparison>
     </Define>
     <Define name="cst" />
@@ -52,7 +52,7 @@
             <Goal>
                 <Exp_Comparison op="=">
                     <Id value="sq" typref="2" />
-                    <EmptySet typref="2" />
+                    <EmptySeq typref="2" />
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>

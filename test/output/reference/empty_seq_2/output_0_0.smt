@@ -157,6 +157,10 @@
          (and (|set.in POW (Z x Z)| f (|injections Z Z| X Y))
               (|set.in POW (Z x Z)| f (|surjections Z Z| X Y))))))
   :named |ax:set.in.bijections (Z x Z)|))
+(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
+(assert (!
+  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
+  :named |ax.set.in.empty (Z x Z)|))
 (declare-fun |set.subseteq POW (Z x Z)| (|POW POW (Z x Z)| |POW POW (Z x Z)|) Bool)
 (assert (!
   (forall ((s |POW POW (Z x Z)|) (t |POW POW (Z x Z)|) (e |POW (Z x Z)|))
@@ -192,10 +196,10 @@
         (exists ((f |POW (Z x Z)|))
           (|set.in POW (Z x Z)| f (|bijections Z Z| s (|interval| 1 (Value (|card Z| s))))))))
   :named |ax.card.definition Z|))
-(declare-const |set.empty (Z x Z)| |POW (Z x Z)|)
+(declare-const |seq.empty Z| |POW (Z x Z)|)
 (assert (!
-  (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
-  :named |ax.set.in.empty (Z x Z)|))
+  (= |seq.empty Z| |set.empty (Z x Z)|)
+  :named |ax:seq.empty.def Z|))
 (declare-fun |seq Z| (|POW Z|) |POW POW (Z x Z)|)
 (assert (!
   (forall ((E |POW Z|) (s |POW (Z x Z)|))
@@ -216,7 +220,7 @@
   :named |ax.rw.universe Z|))
 (assert (!
   (not
-    (|set.in POW (Z x Z)| |set.empty (Z x Z)| (|seq Z| INTEGER)))
+    (|set.in POW (Z x Z)| |seq.empty Z| (|seq Z| INTEGER)))
   :named |Goal|))
 (check-sat)
 (exit)

@@ -32,7 +32,7 @@
                 </Nary_Exp>
                 <Integer_Literal value="3" typref="1" />
             </Binary_Exp>
-            <EmptySet typref="2" />
+            <EmptySeq typref="2" />
         </Exp_Comparison>
     </Define>
     <Define name="cst" />
@@ -59,7 +59,7 @@
                         </Nary_Exp>
                         <Integer_Literal value="3" typref="1" />
                     </Binary_Exp>
-                    <EmptySet typref="2" />
+                    <EmptySeq typref="2" />
                 </Exp_Comparison>
             </Goal>
         </Simple_Goal>

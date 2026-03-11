@@ -24,7 +24,7 @@
     <Define name="inv" />
     <Define name="ass">
         <Exp_Comparison op=":">
-            <EmptySet typref="2" />
+            <EmptySeq typref="2" />
             <Unary_Exp op="seq" typref="3">
                 <Id value="INTEGER" typref="0" />
             </Unary_Exp>
@@ -46,7 +46,7 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op=":">
-                    <EmptySet typref="2" />
+                    <EmptySeq typref="2" />
                     <Unary_Exp op="seq" typref="3">
                         <Id value="INTEGER" typref="0" />
                     </Unary_Exp>

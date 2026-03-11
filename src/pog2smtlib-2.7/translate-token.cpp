@@ -403,10 +403,13 @@ std::string smtSymbol(Expr::Visitor::EConstant c) {
 std::string smtSymbol(Expr::Visitor::EConstant c, const BType& type) {
   if (c == Expr::Visitor::EConstant::EmptySet) {
     return fmt::format("|set.empty {0}|", symbolInner(type));
-  } /* else if (c == Expr::Visitor::EConstant::EmptySeq) {
-    return fmt::format("|seq.empty {0}|", symbolInner(type));
-  } */
-  else {
+  } else if (c == Expr::Visitor::EConstant::EmptySeq) {
+    const BType::PowerType type1 = type.toPowerType();
+    const BType& type2 = type1.content;
+    const BType::ProductType type3 = type2.toProductType();
+    const BType& etype = type3.rhs;
+    return fmt::format("|seq.empty {0}|", symbolInner(etype));
+  } else {
     return smtSymbol(c);
   }
 }

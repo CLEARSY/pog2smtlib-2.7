@@ -215,12 +215,16 @@
 (assert (!
   (forall ((e |(Z x Z)|)) (not (|set.in (Z x Z)| e |set.empty (Z x Z)|)))
   :named |ax.set.in.empty (Z x Z)|))
+(declare-const |seq.empty Z| |POW (Z x Z)|)
+(assert (!
+  (= |seq.empty Z| |set.empty (Z x Z)|)
+  :named |ax:seq.empty.def Z|))
 (assert (!
   (|set.in POW (Z x Z)| sq (|seq Z| INTEGER))
   :named |Define:lprp:1|))
 (assert (!
   (not
-    (= sq |set.empty (Z x Z)|))
+    (= sq |seq.empty Z|))
   :named |Goal|))
 (check-sat)
 (exit)

@@ -786,7 +786,6 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
           case Expr::Visitor::EConstant::STRING:
             construct = BConstruct::Factory::factory().String();
             break;
-
           case Expr::Visitor::EConstant::EmptySet:
             if (types.size() != 1) {
               throw std::runtime_error(
@@ -795,6 +794,15 @@ static void buildAndQueueConstruct(const MonomorphizedOperator &o,
                               FILE_NAME, LINE_NUMBER));
             }
             construct = BConstruct::Factory::factory().EmptySet(*types.at(0));
+            break;
+          case Expr::Visitor::EConstant::EmptySeq:
+            if (types.size() != 1) {
+              throw std::runtime_error(
+                  fmt::format("Erroneous typing information associated to "
+                              "empty sequence operator",
+                              FILE_NAME, LINE_NUMBER));
+            }
+            construct = BConstruct::Factory::factory().EmptySeq(*types.at(0));
             break;
           default:
             throw std::runtime_error(

@@ -226,7 +226,7 @@
   :named |ax.rw.universe Z|))
 (assert (!
   (not
-    (|set.in POW (Z x Z)| |set.empty (Z x Z)| (|seq1 Z| INTEGER)))
+    (|set.in POW (Z x Z)| |seq.empty Z| (|seq1 Z| INTEGER)))
   :named |Goal|))
 (check-sat)
 (exit)

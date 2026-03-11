@@ -82,7 +82,7 @@
             </Unary_Exp>
         </Exp_Comparison>
         <Exp_Comparison op=":">
-            <EmptySet typref="5" />
+            <EmptySeq typref="5" />
             <Unary_Exp op="seq" typref="6">
                 <Nary_Exp op="{" typref="0">
                     <Integer_Literal value="0" typref="1" />
@@ -91,7 +91,7 @@
             </Unary_Exp>
         </Exp_Comparison>
         <Exp_Comparison op=":">
-            <EmptySet typref="5" />
+            <EmptySeq typref="5" />
             <Unary_Exp op="seq1" typref="6">
                 <Nary_Exp op="{" typref="0">
                     <Integer_Literal value="0" typref="1" />
@@ -100,7 +100,7 @@
             </Unary_Exp>
         </Exp_Comparison>
         <Exp_Comparison op=":">
-            <EmptySet typref="5" />
+            <EmptySeq typref="5" />
             <Unary_Exp op="iseq" typref="6">
                 <Nary_Exp op="{" typref="0">
                     <Integer_Literal value="0" typref="1" />
@@ -109,7 +109,7 @@
             </Unary_Exp>
         </Exp_Comparison>
         <Exp_Comparison op=":">
-            <EmptySet typref="5" />
+            <EmptySeq typref="5" />
             <Unary_Exp op="iseq1" typref="6">
                 <Nary_Exp op="{" typref="0">
                     <Integer_Literal value="0" typref="1" />
@@ -482,7 +482,7 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op=":">
-                    <EmptySet typref="5" />
+                    <EmptySeq typref="5" />
                     <Unary_Exp op="seq" typref="6">
                         <Nary_Exp op="{" typref="0">
                             <Integer_Literal value="0" typref="1" />
@@ -573,7 +573,7 @@
         </Hypothesis>
         <Hypothesis>
             <Exp_Comparison op=":">
-                <EmptySet typref="5" />
+                <EmptySeq typref="5" />
                 <Unary_Exp op="seq" typref="6">
                     <Nary_Exp op="{" typref="0">
                         <Integer_Literal value="0" typref="1" />
@@ -586,7 +586,7 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op=":">
-                    <EmptySet typref="5" />
+                    <EmptySeq typref="5" />
                     <Unary_Exp op="seq1" typref="6">
                         <Nary_Exp op="{" typref="0">
                             <Integer_Literal value="0" typref="1" />
@@ -677,7 +677,7 @@
         </Hypothesis>
         <Hypothesis>
             <Exp_Comparison op=":">
-                <EmptySet typref="5" />
+                <EmptySeq typref="5" />
                 <Unary_Exp op="seq" typref="6">
                     <Nary_Exp op="{" typref="0">
                         <Integer_Literal value="0" typref="1" />
@@ -688,7 +688,7 @@
         </Hypothesis>
         <Hypothesis>
             <Exp_Comparison op=":">
-                <EmptySet typref="5" />
+                <EmptySeq typref="5" />
                 <Unary_Exp op="seq1" typref="6">
                     <Nary_Exp op="{" typref="0">
                         <Integer_Literal value="0" typref="1" />
@@ -701,7 +701,7 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op=":">
-                    <EmptySet typref="5" />
+                    <EmptySeq typref="5" />
                     <Unary_Exp op="iseq" typref="6">
                         <Nary_Exp op="{" typref="0">
                             <Integer_Literal value="0" typref="1" />
@@ -792,7 +792,7 @@
         </Hypothesis>
         <Hypothesis>
             <Exp_Comparison op=":">
-                <EmptySet typref="5" />
+                <EmptySeq typref="5" />
                 <Unary_Exp op="seq" typref="6">
                     <Nary_Exp op="{" typref="0">
                         <Integer_Literal value="0" typref="1" />
@@ -803,7 +803,7 @@
         </Hypothesis>
         <Hypothesis>
             <Exp_Comparison op=":">
-                <EmptySet typref="5" />
+                <EmptySeq typref="5" />
                 <Unary_Exp op="seq1" typref="6">
                     <Nary_Exp op="{" typref="0">
                         <Integer_Literal value="0" typref="1" />
@@ -814,7 +814,7 @@
         </Hypothesis>
         <Hypothesis>
             <Exp_Comparison op=":">
-                <EmptySet typref="5" />
+                <EmptySeq typref="5" />
                 <Unary_Exp op="iseq" typref="6">
                     <Nary_Exp op="{" typref="0">
                         <Integer_Literal value="0" typref="1" />
@@ -827,7 +827,7 @@
             <Tag>Assertion is verified</Tag>
             <Goal>
                 <Exp_Comparison op=":">
-                    <EmptySet typref="5" />
+                    <EmptySeq typref="5" />
                     <Unary_Exp op="iseq1" typref="6">
                         <Nary_Exp op="{" typref="0">
                             <Integer_Literal value="0" typref="1" />

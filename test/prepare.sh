@@ -8,16 +8,16 @@
 #     - le paramètre est le nom de la machine (nom du fichier sans extension)
 #     - les chemins BXML_EXE et POG_EXE doivent être configurés
 #
-BXML_EXE=/opt/atelierb-full-25.05/bin/bxml
-POG_EXE=/opt/atelierb-full-25.05/bin/pog
+BXML_EXE=/opt/atelierb-full-25.05.3/bin/bxml
+POG_EXE=$HOME/dev/NPOG/issue/81070/build-release/src/POG/pog
 DETOX_EXE=$HOME/bin/detox
 
 function prepare_pog() {
   infile=$1
   component=`basename $infile .mch`
   echo "component: $component"
-  $BXML_EXE -a -i 2 $component.mch > $component.bxml
-  $POG_EXE -z pog $component.bxml
+  $BXML_EXE -0 -a -i 2 $component.mch > $component.bxml
+  $POG_EXE -0 -w -z pog $component.bxml
   mv $component.pog input.pog
   rm $component.bxml $component.pos
   $DETOX_EXE -H -t input.pog

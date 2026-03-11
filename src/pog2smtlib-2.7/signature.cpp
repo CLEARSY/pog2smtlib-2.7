@@ -386,17 +386,28 @@ void GetSignatureVisitor::visitConstant(const BType &type,
       break;
     case Expr::Visitor::EConstant::EmptySet:
       if (type.getKind() != BType::Kind::PowerType) {
-        throw Exception("Empty set constant must have a powerset type");
+        throw Exception("Empty set constant must have a type POW( _ )");
       }
-      /*
-      case Expr::Visitor::EConstant::EmptySeq:
-        if (type.getKind() != BType::Kind::PowerType) {
-          throw Exception("Empty set constant must have a powerset type");
-        }
-      */
       m_signature.m_operators.emplace(MonomorphizedOperator{
           c, std::make_shared<BType>(type.toPowerType().content)});
       break;
+    case Expr::Visitor::EConstant::EmptySeq: {
+      if (type.getKind() != BType::Kind::PowerType) {
+        throw Exception("Empty seq constant must have type POW( _ )");
+      }
+      const BType type2 = type.toPowerType().content;
+      if (type.toPowerType().content.getKind() != BType::Kind::ProductType) {
+        throw Exception("Empty seq constant must have type POW( _ * _ )");
+      }
+      const BType::ProductType pairtype =
+          type.toPowerType().content.toProductType();
+      if (pairtype.lhs.getKind() != BType::Kind::INTEGER) {
+        throw Exception("Empty seq constant must have type POW( Z * _ )");
+      }
+      m_signature.m_operators.emplace(
+          MonomorphizedOperator{c, std::make_shared<BType>(pairtype.rhs)});
+      break;
+    }
     case Expr::Visitor::EConstant::Successor:
     case Expr::Visitor::EConstant::Predecessor:
       m_signature.m_operators.emplace(MonomorphizedOperator{c});
