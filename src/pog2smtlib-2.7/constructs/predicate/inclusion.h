@@ -27,4 +27,4 @@ class Inclusion : public UnaryBType {
   static MapUnaryBType<Inclusion> m_cache;
 };
 
-};  // namespace BConstruct::Predicate
+}  // namespace BConstruct::Predicate

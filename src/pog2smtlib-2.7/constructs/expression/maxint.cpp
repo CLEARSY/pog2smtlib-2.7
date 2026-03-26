@@ -40,7 +40,7 @@ shared_ptr<Maxint> Maxint::m_cache;
 Maxint::Maxint(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "MAXINT") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Maxint() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Maxint::m_cache);
@@ -53,4 +53,4 @@ shared_ptr<Abstract> Factory::Maxint() {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

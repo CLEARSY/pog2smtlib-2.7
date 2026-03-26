@@ -40,7 +40,7 @@ std::shared_ptr<Ceiling> Ceiling::m_cache;
 Ceiling::Ceiling(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "ceiling") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Ceiling() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Ceiling::m_cache);
@@ -52,4 +52,4 @@ shared_ptr<Abstract> Factory::Ceiling() {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

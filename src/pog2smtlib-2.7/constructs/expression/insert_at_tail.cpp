@@ -55,7 +55,7 @@ Insert_At_Tail::Insert_At_Tail(const BType& T, const std::string& script,
                                const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "←") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Insert_At_Tail(const BType& T) {
   static string script_pattern{};
@@ -82,4 +82,4 @@ shared_ptr<Abstract> Factory::Insert_At_Tail(const BType& T) {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

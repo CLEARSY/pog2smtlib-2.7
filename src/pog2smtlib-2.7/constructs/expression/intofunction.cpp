@@ -60,7 +60,7 @@ Transformed_Into_Function::Transformed_Into_Function(
     const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "fnc") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Transformed_Into_Function(const BType &U,
                                                         const BType &V) {
@@ -93,4 +93,4 @@ shared_ptr<Abstract> Factory::Transformed_Into_Function(const BType &U,
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

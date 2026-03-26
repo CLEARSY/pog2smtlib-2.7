@@ -41,7 +41,7 @@ SetMembership::SetMembership(const BType& T, const std::string& script,
                              const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, ":") {}
 
-};  // namespace Predicate
+}  // namespace Predicate
 
 shared_ptr<Abstract> Factory::SetMembership(const BType& T) {
   std::shared_ptr<Abstract> result =
@@ -68,4 +68,4 @@ shared_ptr<Abstract> Factory::SetMembership(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

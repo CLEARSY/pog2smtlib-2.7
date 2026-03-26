@@ -28,4 +28,4 @@ class ToReal : public Uniform {
   static std::shared_ptr<BConstruct::Expression::ToReal> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -56,7 +56,7 @@ Insert_In_Front::Insert_In_Front(const BType& T, const std::string& script,
                                  const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "→") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Insert_In_Front(const BType& T) {
   static string script_pattern{};
@@ -82,4 +82,4 @@ shared_ptr<Abstract> Factory::Insert_In_Front(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

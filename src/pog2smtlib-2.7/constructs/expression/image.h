@@ -29,4 +29,4 @@ class Image : public BinaryBType {
   static MapBinaryBType<Image> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

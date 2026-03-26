@@ -29,4 +29,4 @@ class Insert_At_Tail : public UnaryBType {
   static MapUnaryBType<Insert_At_Tail> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

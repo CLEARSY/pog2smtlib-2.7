@@ -30,4 +30,4 @@ class Total_Function : public BinaryBType {
   static MapBinaryBType<Total_Function> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

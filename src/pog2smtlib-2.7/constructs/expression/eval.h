@@ -29,4 +29,4 @@ class Evaluation : public BinaryBType {
   static MapBinaryBType<Evaluation> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

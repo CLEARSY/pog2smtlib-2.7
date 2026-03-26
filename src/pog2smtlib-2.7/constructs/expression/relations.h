@@ -29,4 +29,4 @@ class Relation : public BinaryBType {
   static MapBinaryBType<Relation> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

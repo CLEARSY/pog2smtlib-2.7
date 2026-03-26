@@ -29,4 +29,4 @@ class First : public UnaryBType {
   static MapUnaryBType<First> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

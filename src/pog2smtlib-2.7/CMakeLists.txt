@@ -4,9 +4,21 @@ message(STATUS "Processing ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
 # configure compilers
-if(CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID MATCHES Clang$)
+if(CMAKE_CXX_COMPILER_ID STREQUAL GNU)
+  add_compile_options(-Wall -Wextra -Wunused)
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "11.0")
+    add_compile_options(-Wpedantic -Werror)
+  else()
+    message(STATUS "GCC < 11.0 détecté : -Werror et -Wpedantic désactivés (C++)")
+  endif()
+endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES Clang$)
   add_compile_options(-Wall -Wextra -Wunused -Wpedantic -Werror)
+endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  add_compile_options(/W4 /WX /permissive-)
 endif()
 
 add_custom_target(POG2SMTLIB27_VERSION

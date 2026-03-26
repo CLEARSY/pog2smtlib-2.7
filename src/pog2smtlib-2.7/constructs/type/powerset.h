@@ -27,4 +27,4 @@ class PowerSet : public Uniform {
   static std::shared_ptr<BConstruct::Type::PowerSet> m_cache;
 };
 
-};  // namespace BConstruct::Type
+}  // namespace BConstruct::Type

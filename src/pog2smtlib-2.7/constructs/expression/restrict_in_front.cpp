@@ -56,7 +56,7 @@ Restrict_In_Front::Restrict_In_Front(const BType& T, const std::string& script,
                                      const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "↑") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Restrict_In_Front(const BType& T) {
   string script_pattern{};
@@ -85,4 +85,4 @@ shared_ptr<Abstract> Factory::Restrict_In_Front(const BType& T) {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

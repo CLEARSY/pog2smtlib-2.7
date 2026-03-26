@@ -55,7 +55,7 @@ Quantified_Intersection::Quantified_Intersection(
     const PreRequisites& requisites)
     : BinaryBType(U, V, script, requisites, "INTER") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Quantified_Intersection(const BType& U,
                                                       const BType& V) {
@@ -82,4 +82,4 @@ shared_ptr<Abstract> Factory::Quantified_Intersection(const BType& U,
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

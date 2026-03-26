@@ -29,4 +29,4 @@ class Card : public UnaryBType {
   static MapUnaryBType<Card> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

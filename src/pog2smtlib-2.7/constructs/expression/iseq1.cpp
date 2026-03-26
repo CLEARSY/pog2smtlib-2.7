@@ -53,7 +53,7 @@ Injective_Seq1::Injective_Seq1(const BType& T, const std::string& script,
                                const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "iseq1") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Injective_Seq1(const BType& T) {
   static string script_pattern{};
@@ -84,4 +84,4 @@ shared_ptr<Abstract> Factory::Injective_Seq1(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

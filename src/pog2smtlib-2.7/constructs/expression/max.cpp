@@ -61,7 +61,7 @@ std::shared_ptr<Max> Max::m_cache;
 Max::Max(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "max") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Max() {
   string script_pattern{};
@@ -80,4 +80,4 @@ shared_ptr<Abstract> Factory::Max() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

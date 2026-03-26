@@ -27,4 +27,4 @@ class CartesianProduct : public Uniform {
   static std::shared_ptr<BConstruct::Type::CartesianProduct> m_cache;
 };
 
-};  // namespace BConstruct::Type
+}  // namespace BConstruct::Type

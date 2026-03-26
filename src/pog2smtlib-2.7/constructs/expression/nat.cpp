@@ -47,7 +47,7 @@ std::shared_ptr<Nat> Nat::m_cache;
 Nat::Nat(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "NAT") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Nat() {
   std::string script_pattern{};
@@ -68,4 +68,4 @@ shared_ptr<Abstract> Factory::Nat() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

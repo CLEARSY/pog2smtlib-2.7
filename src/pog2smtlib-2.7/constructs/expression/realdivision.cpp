@@ -69,7 +69,7 @@ RealDivision::RealDivision(const std::string &script,
                            const PreRequisites &requisites)
     : Uniform(script, requisites, "/r") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::RealDivision() {
   string script_pattern{};
@@ -87,4 +87,4 @@ shared_ptr<Abstract> Factory::RealDivision() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

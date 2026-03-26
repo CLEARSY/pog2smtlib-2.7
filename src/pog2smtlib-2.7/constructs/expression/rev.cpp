@@ -53,7 +53,7 @@ Rev::Rev(const BType& T, const std::string& script,
          const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "rev") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Rev(const BType& T) {
   string script_pattern{};
@@ -76,4 +76,4 @@ shared_ptr<Abstract> Factory::Rev(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

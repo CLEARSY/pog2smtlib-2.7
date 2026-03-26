@@ -32,4 +32,4 @@ class Parallel_Product : public QuaternaryBType {
   static MapQuadrupleBType<Parallel_Product> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -28,4 +28,4 @@ class Cardinals : public Uniform {
   static std::shared_ptr<BConstruct::Expression::Cardinals> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

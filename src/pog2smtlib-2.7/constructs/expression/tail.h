@@ -29,4 +29,4 @@ class Tail : public UnaryBType {
   static MapUnaryBType<Tail> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

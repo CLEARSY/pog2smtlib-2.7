@@ -29,4 +29,4 @@ class Restrict_At_Tail : public UnaryBType {
   static MapUnaryBType<Restrict_At_Tail> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

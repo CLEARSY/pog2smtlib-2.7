@@ -28,4 +28,4 @@ class Natural1 : public Uniform {
   static std::shared_ptr<Natural1> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

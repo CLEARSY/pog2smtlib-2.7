@@ -47,7 +47,7 @@ RExponentiation::RExponentiation(const std::string &script,
                                  const PreRequisites &requisites)
     : Uniform(script, requisites, "**r") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::RExponentiation() {
   shared_ptr<Abstract> result =
@@ -65,4 +65,4 @@ shared_ptr<Abstract> Factory::RExponentiation() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

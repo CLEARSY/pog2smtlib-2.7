@@ -30,4 +30,4 @@ class Restriction_Domain : public BinaryBType {
   static MapBinaryBType<Restriction_Domain> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

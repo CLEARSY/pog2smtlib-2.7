@@ -28,4 +28,4 @@ class Real : public Uniform {
   static std::shared_ptr<Real> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

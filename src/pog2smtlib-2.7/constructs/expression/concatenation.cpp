@@ -58,7 +58,7 @@ Concatenation::Concatenation(const BType& T, const std::string& script,
                              const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "^") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Concatenation(const BType& T) {
   static string script_pattern{};
@@ -85,4 +85,4 @@ shared_ptr<Abstract> Factory::Concatenation(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

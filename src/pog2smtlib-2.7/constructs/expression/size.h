@@ -29,4 +29,4 @@ class Size : public UnaryBType {
   static MapUnaryBType<Size> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

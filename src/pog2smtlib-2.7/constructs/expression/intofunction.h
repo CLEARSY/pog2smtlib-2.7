@@ -30,4 +30,4 @@ class Transformed_Into_Function : public BinaryBType {
   static MapBinaryBType<Transformed_Into_Function> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

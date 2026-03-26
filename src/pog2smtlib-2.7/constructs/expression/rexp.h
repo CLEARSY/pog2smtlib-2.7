@@ -28,4 +28,4 @@ class RExponentiation : public Uniform {
   static std::shared_ptr<BConstruct::Expression::RExponentiation> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

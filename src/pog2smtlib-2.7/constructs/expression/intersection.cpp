@@ -90,7 +90,7 @@ Intersection::Intersection(const BType& T, const string& script,
                            const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "/\\") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Intersection(const BType& T) {
   static string script_pattern{};
@@ -112,4 +112,4 @@ std::shared_ptr<Abstract> Factory::Intersection(const BType& T) {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

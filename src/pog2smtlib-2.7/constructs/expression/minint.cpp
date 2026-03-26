@@ -40,7 +40,7 @@ shared_ptr<Minint> Minint::m_cache;
 Minint::Minint(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "MININT") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Minint() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Minint::m_cache);
@@ -63,4 +63,4 @@ shared_ptr<Abstract> Factory::Minint() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

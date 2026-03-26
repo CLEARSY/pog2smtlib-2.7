@@ -28,4 +28,4 @@ class Succ : public Uniform {
   static std::shared_ptr<BConstruct::Expression::Succ> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

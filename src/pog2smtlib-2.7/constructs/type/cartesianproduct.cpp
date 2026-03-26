@@ -38,7 +38,7 @@ CartesianProduct::CartesianProduct() {
   m_debug_string = "CartesianProduct";
 }
 
-};  // namespace Type
+}  // namespace Type
 
 shared_ptr<Abstract> Factory::CartesianProduct() {
   std::shared_ptr<Abstract> result =
@@ -53,4 +53,4 @@ shared_ptr<Abstract> Factory::CartesianProduct() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

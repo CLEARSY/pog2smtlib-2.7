@@ -29,4 +29,4 @@ class Union : public UnaryBType {
   static MapUnaryBType<Union> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

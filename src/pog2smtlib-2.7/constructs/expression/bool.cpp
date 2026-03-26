@@ -30,7 +30,7 @@ std::shared_ptr<Bool> Bool::m_cache;
 Bool::Bool(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "BOOL") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Bool() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Bool::m_cache);
@@ -43,4 +43,4 @@ shared_ptr<Abstract> Factory::Bool() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

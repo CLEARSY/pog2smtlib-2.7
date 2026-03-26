@@ -30,4 +30,4 @@ class Composition : public TernaryBType {
   static MapTernaryBType<Composition> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

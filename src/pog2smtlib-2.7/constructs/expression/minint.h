@@ -28,4 +28,4 @@ class Minint : public Uniform {
   static std::shared_ptr<Minint> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

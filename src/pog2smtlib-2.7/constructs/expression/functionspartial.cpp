@@ -59,7 +59,7 @@ Partial_Function::Partial_Function(const BType &U, const BType &V,
                                    const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "+->") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Partial_Function(const BType &U, const BType &V) {
   static string script_pattern{};
@@ -91,4 +91,4 @@ shared_ptr<Abstract> Factory::Partial_Function(const BType &U, const BType &V) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

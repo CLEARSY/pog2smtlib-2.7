@@ -55,7 +55,7 @@ Quantified_Union::Quantified_Union(const BType& U, const BType& V,
                                    const PreRequisites& requisites)
     : BinaryBType(U, V, script, requisites, "UNION") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Quantified_Union(const BType& U,
                                                     const BType& V) {
@@ -81,4 +81,4 @@ std::shared_ptr<Abstract> Factory::Quantified_Union(const BType& U,
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

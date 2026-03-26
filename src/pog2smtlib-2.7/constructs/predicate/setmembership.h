@@ -27,4 +27,4 @@ class SetMembership : public UnaryBType {
   static MapUnaryBType<SetMembership> m_cache;
 };
 
-};  // namespace BConstruct::Predicate
+}  // namespace BConstruct::Predicate

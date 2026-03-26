@@ -28,4 +28,4 @@ class Maxint : public Uniform {
   static std::shared_ptr<Maxint> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

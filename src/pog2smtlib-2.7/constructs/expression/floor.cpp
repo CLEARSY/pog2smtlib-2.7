@@ -40,7 +40,7 @@ std::shared_ptr<Floor> Floor::m_cache;
 Floor::Floor(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "floor") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Floor() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Floor::m_cache);
@@ -53,4 +53,4 @@ shared_ptr<Abstract> Factory::Floor() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

@@ -28,4 +28,4 @@ class Min : public Uniform {
   static std::shared_ptr<BConstruct::Expression::Min> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

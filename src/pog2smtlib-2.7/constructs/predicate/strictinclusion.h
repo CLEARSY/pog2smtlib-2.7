@@ -27,4 +27,4 @@ class StrictInclusion : public UnaryBType {
   static MapUnaryBType<StrictInclusion> m_cache;
 };
 
-};  // namespace BConstruct::Predicate
+}  // namespace BConstruct::Predicate

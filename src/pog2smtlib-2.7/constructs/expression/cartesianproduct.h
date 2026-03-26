@@ -30,4 +30,4 @@ class CartesianProduct : public BinaryBType {
   static MapBinaryBType<CartesianProduct> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

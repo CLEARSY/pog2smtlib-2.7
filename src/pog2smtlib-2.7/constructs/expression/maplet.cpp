@@ -39,7 +39,7 @@ shared_ptr<Maplet> Maplet::m_cache;
 Maplet::Maplet(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "|->") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Maplet() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Maplet::m_cache);
@@ -51,4 +51,4 @@ shared_ptr<Abstract> Factory::Maplet() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

@@ -27,4 +27,4 @@ class Type : public UnaryBType {
   static MapUnaryBType<Type> m_cache;
 };
 
-};  // namespace BConstruct::Type
+}  // namespace BConstruct::Type

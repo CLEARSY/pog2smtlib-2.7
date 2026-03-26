@@ -29,4 +29,4 @@ class Intersection : public UnaryBType {
   static MapUnaryBType<Intersection> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

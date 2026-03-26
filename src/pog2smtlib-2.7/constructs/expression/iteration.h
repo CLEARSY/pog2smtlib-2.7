@@ -29,4 +29,4 @@ class Iteration : public UnaryBType {
   static MapUnaryBType<Iteration> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

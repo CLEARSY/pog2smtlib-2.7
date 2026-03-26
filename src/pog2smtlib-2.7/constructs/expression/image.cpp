@@ -54,7 +54,7 @@ Image::Image(const BType &U, const BType &V, const string &script,
              const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "_image") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Image(const BType &U, const BType &V) {
   static string script_pattern{};
@@ -85,4 +85,4 @@ shared_ptr<Abstract> Factory::Image(const BType &U, const BType &V) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

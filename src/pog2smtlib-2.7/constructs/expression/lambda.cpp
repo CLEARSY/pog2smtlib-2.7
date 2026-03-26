@@ -57,7 +57,7 @@ Lambda::Lambda(const BType &U, const BType &V, const string &script,
                const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "λ") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Lambda(const BType &U, const BType &V) {
   static string script_pattern{};  // the script pattern is the same for all
@@ -82,4 +82,4 @@ shared_ptr<Abstract> Factory::Lambda(const BType &U, const BType &V) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

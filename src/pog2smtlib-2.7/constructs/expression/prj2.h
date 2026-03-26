@@ -29,4 +29,4 @@ class Prj2 : public BinaryBType {
   static MapBinaryBType<Prj2> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

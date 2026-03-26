@@ -30,4 +30,4 @@ class Direct_Product : public TernaryBType {
   static MapTernaryBType<Direct_Product> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

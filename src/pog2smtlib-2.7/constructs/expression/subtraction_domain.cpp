@@ -56,7 +56,7 @@ Subtraction_Domain::Subtraction_Domain(const BType &U, const BType &V,
                                        const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "<<|") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Subtraction_Domain(const BType &U,
                                                  const BType &V) {
@@ -83,4 +83,4 @@ shared_ptr<Abstract> Factory::Subtraction_Domain(const BType &U,
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

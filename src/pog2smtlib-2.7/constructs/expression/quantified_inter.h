@@ -30,4 +30,4 @@ class Quantified_Intersection : public BinaryBType {
   static MapBinaryBType<Quantified_Intersection> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

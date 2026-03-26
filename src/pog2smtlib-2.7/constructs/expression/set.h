@@ -29,4 +29,4 @@ class Set : public UnaryBType {
   static MapUnaryBType<Set> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

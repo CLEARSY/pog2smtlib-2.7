@@ -28,4 +28,4 @@ class RealDivision : public Uniform {
   static std::shared_ptr<RealDivision> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

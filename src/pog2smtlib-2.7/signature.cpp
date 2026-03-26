@@ -17,7 +17,6 @@
 #include <fmt/format.h>
 
 #include <iostream>
-#include <source_location>
 #include <string>
 #include <tuple>
 #include <unordered_set>
@@ -27,6 +26,7 @@ using std::string;
 using std::unordered_set;
 using std::vector;
 
+#include "cc-compatibility.h"
 #include "predDesc.h"
 #include "special-cases.h"
 #include "type-utils.h"

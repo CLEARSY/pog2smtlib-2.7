@@ -44,7 +44,7 @@ EmptySeq::EmptySeq(const BType& T, const std::string& script,
                    const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "[]") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::EmptySeq(const BType& T) {
 
@@ -65,4 +65,4 @@ shared_ptr<Abstract> Factory::EmptySeq(const BType& T) {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

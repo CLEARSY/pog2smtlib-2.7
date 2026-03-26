@@ -51,7 +51,7 @@ Size::Size(const BType& T, const std::string& script,
            const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "size") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Size(const BType& T) {
   string script_pattern{};
@@ -71,4 +71,4 @@ shared_ptr<Abstract> Factory::Size(const BType& T) {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

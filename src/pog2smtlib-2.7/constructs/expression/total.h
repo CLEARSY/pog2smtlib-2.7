@@ -30,4 +30,4 @@ class Total_Relation : public BinaryBType {
   static MapBinaryBType<Total_Relation> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

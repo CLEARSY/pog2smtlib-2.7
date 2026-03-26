@@ -40,7 +40,7 @@ std::shared_ptr<Cardinals> Cardinals::m_cache;
 Cardinals::Cardinals(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "cardinals") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Cardinals() {
   shared_ptr<Abstract> result =
@@ -53,4 +53,4 @@ shared_ptr<Abstract> Factory::Cardinals() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

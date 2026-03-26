@@ -55,7 +55,7 @@ PowerSet1::PowerSet1(const BType& T, const string& script,
                      const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "POW1") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::PowerSet1(const BType& T) {
   std::string script_pattern{};
@@ -82,4 +82,4 @@ shared_ptr<Abstract> Factory::PowerSet1(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

@@ -58,7 +58,7 @@ Total_Bijection::Total_Bijection(const BType &U, const BType &V,
                                  const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, ">->>") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Total_Bijection(const BType &U, const BType &V) {
   string script_pattern{};
@@ -89,4 +89,4 @@ shared_ptr<Abstract> Factory::Total_Bijection(const BType &U, const BType &V) {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

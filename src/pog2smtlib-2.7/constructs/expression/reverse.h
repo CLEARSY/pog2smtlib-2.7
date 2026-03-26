@@ -29,4 +29,4 @@ class Reverse : public BinaryBType {
   static MapBinaryBType<Reverse> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

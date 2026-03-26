@@ -28,4 +28,4 @@ class Predecessor : public Uniform {
   static std::shared_ptr<BConstruct::Expression::Predecessor> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

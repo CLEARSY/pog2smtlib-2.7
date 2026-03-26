@@ -28,4 +28,4 @@ class Integer : public Uniform {
   static std::shared_ptr<Integer> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

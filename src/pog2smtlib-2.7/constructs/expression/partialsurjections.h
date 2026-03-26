@@ -30,4 +30,4 @@ class Partial_Surjection : public BinaryBType {
   static MapBinaryBType<Partial_Surjection> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

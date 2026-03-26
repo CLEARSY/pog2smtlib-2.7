@@ -45,7 +45,7 @@ Equality::Equality(const BType &T, const std::string &script,
                    const PreRequisites &requisites)
     : UnaryBType(T, script, requisites, "=") {}
 
-};  // namespace Predicate
+}  // namespace Predicate
 
 shared_ptr<Abstract> Factory::Equality(const BType &T) {
 
@@ -65,4 +65,4 @@ shared_ptr<Abstract> Factory::Equality(const BType &T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

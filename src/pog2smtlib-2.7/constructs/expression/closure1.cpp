@@ -59,7 +59,7 @@ Closure1::Closure1(const BType& T, const string& script,
                    const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "closure1") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Closure1(const BType& T) {
   static string script_pattern{};
@@ -85,4 +85,4 @@ std::shared_ptr<Abstract> Factory::Closure1(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

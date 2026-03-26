@@ -60,7 +60,7 @@ std::shared_ptr<RMin> RMin::m_cache;
 RMin::RMin(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "rmin") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::RMin() {
   string script_pattern{};
@@ -79,4 +79,4 @@ shared_ptr<Abstract> Factory::RMin() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

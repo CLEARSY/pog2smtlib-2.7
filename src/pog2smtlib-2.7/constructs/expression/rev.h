@@ -29,4 +29,4 @@ class Rev : public UnaryBType {
   static MapUnaryBType<Rev> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

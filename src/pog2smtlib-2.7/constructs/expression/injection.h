@@ -29,4 +29,4 @@ class Injection : public BinaryBType {
   static MapBinaryBType<Injection> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

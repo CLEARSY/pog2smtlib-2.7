@@ -31,7 +31,7 @@ std::shared_ptr<Integer> Integer::m_cache;
 Integer::Integer(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "INTEGER") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Integer() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Integer::m_cache);
@@ -43,4 +43,4 @@ shared_ptr<Abstract> Factory::Integer() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

@@ -29,4 +29,4 @@ class Closure1 : public UnaryBType {
   static MapUnaryBType<Closure1> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

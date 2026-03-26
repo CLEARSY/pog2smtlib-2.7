@@ -28,4 +28,4 @@ class RMin : public Uniform {
   static std::shared_ptr<BConstruct::Expression::RMin> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

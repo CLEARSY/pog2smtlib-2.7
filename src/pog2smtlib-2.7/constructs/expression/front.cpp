@@ -41,7 +41,7 @@ Front::Front(const BType& T, const std::string& script,
              const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "front") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Front(const BType& T) {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Front::m_cache, T);
@@ -61,4 +61,4 @@ shared_ptr<Abstract> Factory::Front(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

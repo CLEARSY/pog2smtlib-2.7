@@ -56,7 +56,7 @@ Transformed_Into_Relation::Transformed_Into_Relation(
     const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "rel") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType &U,
                                                         const BType &V) {
@@ -89,4 +89,4 @@ shared_ptr<Abstract> Factory::Transformed_Into_Relation(const BType &U,
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

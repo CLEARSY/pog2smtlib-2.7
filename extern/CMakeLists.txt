@@ -10,4 +10,3 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(fmt)
-

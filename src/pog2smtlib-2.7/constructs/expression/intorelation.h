@@ -30,4 +30,4 @@ class Transformed_Into_Relation : public BinaryBType {
   static MapBinaryBType<Transformed_Into_Relation> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

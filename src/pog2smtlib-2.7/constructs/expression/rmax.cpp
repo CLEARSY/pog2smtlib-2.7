@@ -60,7 +60,7 @@ std::shared_ptr<RMax> RMax::m_cache;
 RMax::RMax(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "rmax") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::RMax() {
   string script_pattern{};
@@ -79,4 +79,4 @@ shared_ptr<Abstract> Factory::RMax() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

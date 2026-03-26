@@ -28,4 +28,4 @@ class Interval : public Uniform {
   static std::shared_ptr<BConstruct::Expression::Interval> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

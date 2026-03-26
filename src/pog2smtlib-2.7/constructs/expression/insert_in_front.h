@@ -29,4 +29,4 @@ class Insert_In_Front : public UnaryBType {
   static MapUnaryBType<Insert_In_Front> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

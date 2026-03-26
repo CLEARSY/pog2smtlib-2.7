@@ -28,4 +28,4 @@ class GeneralizedSum : public Uniform {
   static std::shared_ptr<GeneralizedSum> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -53,7 +53,7 @@ Seq1::Seq1(const BType& T, const string& script,
            const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "seq1") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Seq1(const BType& T) {
   string script_pattern{};
@@ -81,4 +81,4 @@ std::shared_ptr<Abstract> Factory::Seq1(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

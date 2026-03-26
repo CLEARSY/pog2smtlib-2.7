@@ -55,7 +55,7 @@ Fin1::Fin1(const BType& T, const string& script,
            const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "FIN1") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Fin1(const BType& T) {
   static string script_pattern{};
@@ -80,4 +80,4 @@ shared_ptr<Abstract> Factory::Fin1(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

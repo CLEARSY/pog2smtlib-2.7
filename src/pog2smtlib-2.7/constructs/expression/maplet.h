@@ -28,4 +28,4 @@ class Maplet : public Uniform {
   static std::shared_ptr<Maplet> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -29,4 +29,4 @@ class EmptySet : public UnaryBType {
   static MapUnaryBType<EmptySet> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -67,7 +67,7 @@ MapUnaryBType<Seq> Seq::m_cache;
 Seq::Seq(const BType& T, const string& script, const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "seq") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Seq(const BType& T) {
   string script_pattern{};
@@ -99,4 +99,4 @@ shared_ptr<Abstract> Factory::Seq(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

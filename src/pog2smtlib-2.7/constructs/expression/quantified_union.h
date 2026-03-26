@@ -30,4 +30,4 @@ class Quantified_Union : public BinaryBType {
   static MapBinaryBType<Quantified_Union> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -42,7 +42,7 @@ MapUnaryBType<Type> Type::m_cache;
 Type::Type(const BType &T, const std::string &script,
            const PreRequisites &requisites)
     : UnaryBType(T, script, requisites, "_type") {}
-};  // namespace Type
+}  // namespace Type
 
 shared_ptr<Abstract> Factory::Type(const BType &T) {
   shared_ptr<Abstract> result = find(BConstruct::Type::Type::m_cache, T);
@@ -128,4 +128,4 @@ shared_ptr<Abstract> Factory::Type(const BType &T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

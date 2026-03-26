@@ -30,4 +30,4 @@ class Total_Bijection : public BinaryBType {
   static MapBinaryBType<Total_Bijection> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

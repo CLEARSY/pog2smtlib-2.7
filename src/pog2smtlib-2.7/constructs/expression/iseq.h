@@ -29,4 +29,4 @@ class Injective_Seq : public UnaryBType {
   static MapUnaryBType<Injective_Seq> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

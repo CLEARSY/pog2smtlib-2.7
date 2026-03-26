@@ -29,4 +29,4 @@ class Fin1 : public UnaryBType {
   static MapUnaryBType<Fin1> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

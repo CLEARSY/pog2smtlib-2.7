@@ -45,7 +45,7 @@ Data::Data(const struct ::Data &data, const string &script,
       m_type(*data.m_type),
       m_name(data.to_string()) {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Data(const struct Data &data) {
   {
@@ -71,4 +71,4 @@ shared_ptr<Abstract> Factory::Data(const struct Data &data) {
   return construct;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

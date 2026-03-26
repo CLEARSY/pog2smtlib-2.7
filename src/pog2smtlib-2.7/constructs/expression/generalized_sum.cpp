@@ -67,7 +67,7 @@ GeneralizedSum::GeneralizedSum(const std::string &script,
                                const PreRequisites &requisites)
     : Uniform(script, requisites, "Σ") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::GeneralizedSum() {
   static string script_pattern{};
@@ -92,4 +92,4 @@ shared_ptr<Abstract> Factory::GeneralizedSum() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

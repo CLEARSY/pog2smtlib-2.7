@@ -30,4 +30,4 @@ class Subtraction_Range : public BinaryBType {
   static MapBinaryBType<Subtraction_Range> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

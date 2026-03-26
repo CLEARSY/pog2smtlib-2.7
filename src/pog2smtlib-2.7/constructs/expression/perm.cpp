@@ -55,7 +55,7 @@ Perm::Perm(const BType& T, const std::string& script,
            const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "perm") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Perm(const BType& T) {
   std::string script_pattern{};
@@ -85,4 +85,4 @@ shared_ptr<Abstract> Factory::Perm(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

@@ -56,7 +56,7 @@ MapUnaryBType<Fin> Fin::m_cache;
 Fin::Fin(const BType& T, const string& script, const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "FIN") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Fin(const BType& T) {
   static string script_pattern{};
@@ -78,4 +78,4 @@ shared_ptr<Abstract> Factory::Fin(const BType& T) {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

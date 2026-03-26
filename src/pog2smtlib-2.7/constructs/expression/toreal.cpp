@@ -40,7 +40,7 @@ std::shared_ptr<ToReal> ToReal::m_cache;
 ToReal::ToReal(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "to_real") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::ToReal() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::ToReal::m_cache);
@@ -53,4 +53,4 @@ shared_ptr<Abstract> Factory::ToReal() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

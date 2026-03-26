@@ -85,4 +85,4 @@ std::string universeScript(const std::string& name, const BType& T) {
   // BType ptype = BType::POW(type);
   return fmt::format(script_pattern, arg0, arg1, arg2, arg3, arg4, arg5);
 }
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

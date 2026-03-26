@@ -81,7 +81,7 @@ Union::Union(const BType& T, const string& script,
              const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "\\/") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Union(const BType& T) {
   static string script_pattern{};  // the script pattern is the same for all
@@ -105,4 +105,4 @@ std::shared_ptr<Abstract> Factory::Union(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

@@ -31,7 +31,7 @@ std::shared_ptr<Real> Real::m_cache;
 Real::Real(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "REAL") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Real() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::Real::m_cache);
@@ -43,4 +43,4 @@ shared_ptr<Abstract> Factory::Real() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

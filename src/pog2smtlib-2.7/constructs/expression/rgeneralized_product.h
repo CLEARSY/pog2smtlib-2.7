@@ -28,4 +28,4 @@ class RGeneralizedProduct : public Uniform {
   static std::shared_ptr<RGeneralizedProduct> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

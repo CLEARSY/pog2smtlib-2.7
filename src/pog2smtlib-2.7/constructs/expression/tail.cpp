@@ -41,7 +41,7 @@ Tail::Tail(const BType& T, const std::string& script,
            const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "tail") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Tail(const BType& T) {
 
@@ -59,4 +59,4 @@ shared_ptr<Abstract> Factory::Tail(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

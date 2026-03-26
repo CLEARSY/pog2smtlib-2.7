@@ -57,7 +57,7 @@ Predecessor::Predecessor(const std::string &script,
                          const PreRequisites &requisites)
     : Uniform(script, requisites, "pred") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Predecessor() {
   string script_pattern{};
@@ -78,4 +78,4 @@ shared_ptr<Abstract> Factory::Predecessor() {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

@@ -85,7 +85,7 @@ MapUnaryBType<Set> Set::m_cache;
 Set::Set(const BType& T, const string& script, const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "_set") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Set(const BType& T) {
   string script_pattern{};
@@ -116,4 +116,4 @@ std::shared_ptr<Abstract> Factory::Set(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

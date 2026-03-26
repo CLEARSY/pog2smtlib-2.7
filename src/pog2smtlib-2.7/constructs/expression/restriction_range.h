@@ -30,4 +30,4 @@ class Restriction_Range : public BinaryBType {
   static MapBinaryBType<Restriction_Range> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

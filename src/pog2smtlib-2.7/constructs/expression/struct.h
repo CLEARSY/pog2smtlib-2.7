@@ -29,4 +29,4 @@ class Struct : public UnaryBType {
   static MapUnaryBType<Struct> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

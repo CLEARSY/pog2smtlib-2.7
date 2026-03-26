@@ -29,4 +29,4 @@ class Identity : public UnaryBType {
   static MapUnaryBType<Identity> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

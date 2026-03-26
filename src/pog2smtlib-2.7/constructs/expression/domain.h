@@ -29,4 +29,4 @@ class Domain : public BinaryBType {
   static MapBinaryBType<Domain> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -47,7 +47,7 @@ std::shared_ptr<Natural1> Natural1::m_cache;
 Natural1::Natural1(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "NATURAL1") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Natural1() {
   std::string script_pattern{};
@@ -65,4 +65,4 @@ shared_ptr<Abstract> Factory::Natural1() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

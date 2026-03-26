@@ -29,4 +29,4 @@ Record::Record(const BType &T) : UnaryBType(T) {
   m_debug_string = fmt::format("rec_{}", T.to_string());
 }
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

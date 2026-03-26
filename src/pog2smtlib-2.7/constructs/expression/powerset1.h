@@ -29,4 +29,4 @@ class PowerSet1 : public UnaryBType {
   static MapUnaryBType<PowerSet1> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -28,4 +28,4 @@ class RMax : public Uniform {
   static std::shared_ptr<BConstruct::Expression::RMax> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

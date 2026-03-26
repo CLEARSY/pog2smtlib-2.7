@@ -28,4 +28,4 @@ class Floor : public Uniform {
   static std::shared_ptr<Floor> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

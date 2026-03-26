@@ -29,4 +29,4 @@ RecordField::RecordField(const char *field, const BType &T) : Named(field) {
   m_debug_string = fmt::format("record_{}", T.to_string());
 }
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

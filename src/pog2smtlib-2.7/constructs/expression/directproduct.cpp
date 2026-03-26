@@ -64,7 +64,7 @@ Direct_Product::Direct_Product(const BType &T, const BType &U, const BType &V,
                                const PreRequisites &requisites)
     : TernaryBType(T, U, V, script, requisites, "⊗") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Direct_Product(const BType &T, const BType &U,
                                              const BType &V) {
@@ -101,4 +101,4 @@ shared_ptr<Abstract> Factory::Direct_Product(const BType &T, const BType &U,
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

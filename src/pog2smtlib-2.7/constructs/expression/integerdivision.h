@@ -28,4 +28,4 @@ class IntegerDivision : public Uniform {
   static std::shared_ptr<IntegerDivision> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

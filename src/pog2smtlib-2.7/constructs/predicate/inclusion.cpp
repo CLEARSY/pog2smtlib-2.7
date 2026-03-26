@@ -84,7 +84,7 @@ Inclusion::Inclusion(const BType& T, const std::string& script,
                      const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "<:") {}
 
-};  // namespace Predicate
+}  // namespace Predicate
 
 shared_ptr<Abstract> Factory::Inclusion(const BType& T) {
   static string script_pattern{};
@@ -105,4 +105,4 @@ shared_ptr<Abstract> Factory::Inclusion(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

@@ -28,4 +28,4 @@ class Bool : public Uniform {
   static std::shared_ptr<Bool> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

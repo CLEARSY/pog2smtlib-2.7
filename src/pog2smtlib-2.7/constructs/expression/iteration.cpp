@@ -59,7 +59,7 @@ Iteration::Iteration(const BType& T, const string& script,
                      const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "iterate") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Iteration(const BType& T) {
   static string script_pattern{};
@@ -84,4 +84,4 @@ std::shared_ptr<Abstract> Factory::Iteration(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

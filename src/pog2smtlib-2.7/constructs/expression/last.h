@@ -29,4 +29,4 @@ class Last : public UnaryBType {
   static MapUnaryBType<Last> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

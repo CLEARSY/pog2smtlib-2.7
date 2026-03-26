@@ -30,4 +30,4 @@ class Partial_Function : public BinaryBType {
   static MapBinaryBType<Partial_Function> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

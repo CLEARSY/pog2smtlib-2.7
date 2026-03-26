@@ -37,7 +37,7 @@ PowerSet::PowerSet() {
   m_debug_string = "PowerSet";
 }
 
-};  // namespace Type
+}  // namespace Type
 
 shared_ptr<Abstract> Factory::PowerSet() {
   std::shared_ptr<Abstract> result = find(BConstruct::Type::PowerSet::m_cache);
@@ -49,4 +49,4 @@ shared_ptr<Abstract> Factory::PowerSet() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

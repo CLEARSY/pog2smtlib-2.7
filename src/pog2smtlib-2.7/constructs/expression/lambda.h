@@ -29,4 +29,4 @@ class Lambda : public BinaryBType {
   static MapBinaryBType<Lambda> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

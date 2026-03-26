@@ -42,6 +42,6 @@ struct PtrEqual {
   }
 };
 
-};  // namespace BConstruct
+}  // namespace BConstruct
 
 #endif  // BCONSTRUCT_HASH_H

@@ -51,7 +51,7 @@ First::First(const BType& T, const std::string& script,
              const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "first") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::First(const BType& T) {
   static string script_pattern{};
@@ -72,4 +72,4 @@ shared_ptr<Abstract> Factory::First(const BType& T) {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

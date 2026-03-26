@@ -29,4 +29,4 @@ class Function : public BinaryBType {
   static MapBinaryBType<Function> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

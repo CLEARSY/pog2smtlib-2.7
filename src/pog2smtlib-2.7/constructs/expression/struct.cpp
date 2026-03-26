@@ -55,7 +55,7 @@ Struct::Struct(const BType& T, const string& script,
                const PreRequisites& requisites)
     : UnaryBType(T, script, requisites, "struct") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 std::shared_ptr<Abstract> Factory::Struct(const BType& T) {
   string script_pattern{};
@@ -77,4 +77,4 @@ std::shared_ptr<Abstract> Factory::Struct(const BType& T) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

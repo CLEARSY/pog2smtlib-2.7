@@ -31,7 +31,7 @@ std::shared_ptr<String> String::m_cache;
 String::String(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "STRING") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::String() {
   shared_ptr<Abstract> result = find(BConstruct::Expression::String::m_cache);
@@ -43,4 +43,4 @@ shared_ptr<Abstract> Factory::String() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

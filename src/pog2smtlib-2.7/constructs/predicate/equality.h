@@ -27,4 +27,4 @@ class Equality : public UnaryBType {
   static MapUnaryBType<Equality> m_cache;
 };
 
-};  // namespace BConstruct::Predicate
+}  // namespace BConstruct::Predicate

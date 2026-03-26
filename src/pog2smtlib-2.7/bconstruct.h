@@ -127,7 +127,7 @@ namespace Type {
 class Type;
 class PowerSet;
 class CartesianProduct;
-};  // namespace Type
+}  // namespace Type
 
 namespace Predicate {
 class SetMembership;
@@ -135,7 +135,7 @@ class Equality;
 class Inclusion;
 class StrictInclusion;
 class NumberComparison;
-};  // namespace Predicate
+}  // namespace Predicate
 
 namespace Expression {
 /* 5.1 Primary Expressions */
@@ -279,7 +279,7 @@ class Restrict_In_Front;
 class Restrict_At_Tail;
 class General_Concatenation;
 
-};  // namespace Expression
+}  // namespace Expression
 
 class Factory {
  public:
@@ -864,7 +864,7 @@ class NumberComparison : public Uniform {
  private:
 };
 
-};  // namespace Predicate
+}  // namespace Predicate
 
 /* 5 Classes for expressions */
 
@@ -896,7 +896,7 @@ class Multiplication : public Uniform {
   virtual ~Multiplication() = default;
 };
 
-};  // namespace Expression
+}  // namespace Expression
 
 class Abstract;
 
@@ -928,7 +928,7 @@ struct BConstructPtrEqual {
 
 using Context = std::unordered_set<std::shared_ptr<Abstract>, Abstract::PtrHash,
                                    Abstract::PtrEqual>;
-};  // namespace BConstruct
+}  // namespace BConstruct
 
 inline void initScriptPattern(std::string &script_pattern,
                               const std::string_view &declaration,

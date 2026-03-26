@@ -28,4 +28,4 @@ class String : public Uniform {
   static std::shared_ptr<String> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

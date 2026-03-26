@@ -29,4 +29,4 @@ class Perm : public UnaryBType {
   static MapUnaryBType<Perm> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

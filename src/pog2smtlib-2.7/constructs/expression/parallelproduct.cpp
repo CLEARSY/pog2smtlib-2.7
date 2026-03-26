@@ -72,7 +72,7 @@ Parallel_Product::Parallel_Product(const BType &T, const BType &U,
                                    const PreRequisites &requisites)
     : QuaternaryBType(T, U, V, W, script, requisites, "∥") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Parallel_Product(const BType &T, const BType &U,
                                                const BType &V, const BType &W) {
@@ -122,4 +122,4 @@ shared_ptr<Abstract> Factory::Parallel_Product(const BType &T, const BType &U,
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

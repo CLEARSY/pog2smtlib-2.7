@@ -29,4 +29,4 @@ class Front : public UnaryBType {
   static MapUnaryBType<Front> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

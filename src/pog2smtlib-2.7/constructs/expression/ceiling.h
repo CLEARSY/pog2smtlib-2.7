@@ -28,4 +28,4 @@ class Ceiling : public Uniform {
   static std::shared_ptr<Ceiling> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -49,7 +49,7 @@ shared_ptr<Int> Int::m_cache;
 Int::Int(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "INT") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Int() {
   static string script_pattern{};
@@ -71,4 +71,4 @@ shared_ptr<Abstract> Factory::Int() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

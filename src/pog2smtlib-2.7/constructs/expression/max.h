@@ -28,4 +28,4 @@ class Max : public Uniform {
   static std::shared_ptr<BConstruct::Expression::Max> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

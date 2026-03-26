@@ -29,4 +29,4 @@ class Seq : public UnaryBType {
   static MapUnaryBType<Seq> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

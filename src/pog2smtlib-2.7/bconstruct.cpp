@@ -55,11 +55,12 @@ bool TernaryBTypeEqual::operator()(const TernaryBType &lhs,
 }
 
 size_t QuadrupleBTypeHash::operator()(const QuadrupleBType &p) const {
-    {return p.at(3) -> hash_combine(p.at(2)->hash_combine(
-        p.at(1)->hash_combine(p.at(0)->hash_combine(0))));
+  {
+    return p.at(3)->hash_combine(
+        p.at(2)->hash_combine(p.at(1)->hash_combine(p.at(0)->hash_combine(0))));
+  }
 }
-}
-;
+
 bool QuadrupleBTypeEqual::operator()(const QuadrupleBType &lhs,
                                      const QuadrupleBType &rhs) const {
   return BTypeEqual()(lhs.at(0), rhs.at(0)) &&

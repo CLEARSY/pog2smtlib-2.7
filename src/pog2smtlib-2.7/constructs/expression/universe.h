@@ -24,4 +24,4 @@ namespace BConstruct::Expression {
 
 extern std::string universeScript(const std::string& name, const BType& T);
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

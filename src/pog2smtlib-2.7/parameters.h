@@ -26,6 +26,6 @@ extern struct encodingOptions_t {
   bool axiomTriggers;
 } encodingOptions;
 
-};  // namespace Parameters
+}  // namespace Parameters
 
 #endif  // PARAMETERS_H

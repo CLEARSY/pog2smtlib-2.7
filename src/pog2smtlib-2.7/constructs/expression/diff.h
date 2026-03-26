@@ -29,4 +29,4 @@ class Difference : public UnaryBType {
   static MapUnaryBType<Difference> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

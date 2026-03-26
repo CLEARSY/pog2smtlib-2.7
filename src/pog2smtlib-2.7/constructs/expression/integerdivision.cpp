@@ -69,7 +69,7 @@ IntegerDivision::IntegerDivision(const std::string &script,
                                  const PreRequisites &requisites)
     : Uniform(script, requisites, "/i") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::IntegerDivision() {
   static string script_pattern{};
@@ -87,4 +87,4 @@ shared_ptr<Abstract> Factory::IntegerDivision() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

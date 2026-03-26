@@ -60,7 +60,7 @@ Composition::Composition(const BType &T, const BType &U, const BType &V,
                          const string &script, const PreRequisites &requisites)
     : TernaryBType(T, U, V, script, requisites, ";") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Composition(const BType &T, const BType &U,
                                           const BType &V) {
@@ -99,4 +99,4 @@ shared_ptr<Abstract> Factory::Composition(const BType &T, const BType &U,
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

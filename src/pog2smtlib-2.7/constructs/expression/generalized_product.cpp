@@ -67,7 +67,7 @@ GeneralizedProduct::GeneralizedProduct(const std::string &script,
                                        const PreRequisites &requisites)
     : Uniform(script, requisites, "Π") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::GeneralizedProduct() {
   static string script_pattern{};
@@ -91,4 +91,4 @@ shared_ptr<Abstract> Factory::GeneralizedProduct() {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

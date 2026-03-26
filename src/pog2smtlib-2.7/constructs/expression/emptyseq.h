@@ -29,4 +29,4 @@ class EmptySeq : public UnaryBType {
   static MapUnaryBType<EmptySeq> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

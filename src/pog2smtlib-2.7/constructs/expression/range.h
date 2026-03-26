@@ -29,4 +29,4 @@ class Range : public BinaryBType {
   static MapBinaryBType<Range> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -29,4 +29,4 @@ class Concatenation : public UnaryBType {
   static MapUnaryBType<Concatenation> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

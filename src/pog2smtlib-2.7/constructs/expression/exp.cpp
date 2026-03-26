@@ -47,7 +47,7 @@ Exponentiation::Exponentiation(const std::string &script,
                                const PreRequisites &requisites)
     : Uniform(script, requisites, "**i") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Exponentiation() {
   shared_ptr<Abstract> result =
@@ -61,4 +61,4 @@ shared_ptr<Abstract> Factory::Exponentiation() {
   }
   return result;
 }
-};  // namespace BConstruct
+}  // namespace BConstruct

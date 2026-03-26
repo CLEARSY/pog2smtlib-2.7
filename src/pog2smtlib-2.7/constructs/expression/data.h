@@ -66,4 +66,4 @@ class Data : public std::enable_shared_from_this<Data>, public Uniform {
   static MapData m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

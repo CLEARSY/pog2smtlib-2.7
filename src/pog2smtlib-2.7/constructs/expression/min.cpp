@@ -61,7 +61,7 @@ std::shared_ptr<Min> Min::m_cache;
 Min::Min(const std::string &script, const PreRequisites &requisites)
     : Uniform(script, requisites, "min") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Min() {
   string script_pattern{};
@@ -80,4 +80,4 @@ shared_ptr<Abstract> Factory::Min() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

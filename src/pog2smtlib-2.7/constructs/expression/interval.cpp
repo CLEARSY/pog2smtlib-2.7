@@ -89,7 +89,7 @@ shared_ptr<Interval> Interval::m_cache;
 Interval::Interval(const std::string& script, const PreRequisites& requisites)
     : Uniform(script, requisites, "..") {}
 
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Interval() {
   static string script_pattern{};
@@ -113,4 +113,4 @@ shared_ptr<Abstract> Factory::Interval() {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct

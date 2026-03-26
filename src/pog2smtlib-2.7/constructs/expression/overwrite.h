@@ -29,4 +29,4 @@ class Overwrite : public BinaryBType {
   static MapBinaryBType<Overwrite> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

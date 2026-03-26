@@ -28,4 +28,4 @@ class Nat1 : public Uniform {
   static std::shared_ptr<Nat1> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

@@ -30,4 +30,4 @@ class Partial_Injection : public BinaryBType {
   static MapBinaryBType<Partial_Injection> m_cache;
 };
 
-};  // namespace BConstruct::Expression
+}  // namespace BConstruct::Expression

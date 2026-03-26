@@ -87,7 +87,7 @@ MapBinaryBType<Domain> Domain::m_cache;
 Domain::Domain(const BType &U, const BType &V, const std::string &script,
                const PreRequisites &requisites)
     : BinaryBType(U, V, script, requisites, "dom") {}
-};  // namespace Expression
+}  // namespace Expression
 
 shared_ptr<Abstract> Factory::Domain(const BType &U, const BType &V) {
   static string script_pattern{};
@@ -117,4 +117,4 @@ shared_ptr<Abstract> Factory::Domain(const BType &U, const BType &V) {
   return result;
 }
 
-};  // namespace BConstruct
+}  // namespace BConstruct
