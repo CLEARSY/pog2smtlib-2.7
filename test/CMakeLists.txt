@@ -52,6 +52,8 @@ add_cl_test("issue_clearsy_59_2" "--lasso")
 
 add_cl_test("issue_clearsy_64" "--lasso")
 
+add_cl_test("issue_clearsy_65" "--lasso")
+
 # Non regression
 
 add_cl_test("issue_clearsy_11" "--logic HO_ALL")

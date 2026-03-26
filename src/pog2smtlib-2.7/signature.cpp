@@ -419,6 +419,7 @@ void GetSignatureVisitor::visitIdent(const BType &type,
                                      const std::vector<std::string> &,
                                      const VarName &b) {
   SignatureReset(m_signature);
+  m_signature.m_types.emplace(std::make_shared<BType>(type));
   if (bindings_contains(b.show())) return;
   if (type.getKind() == BType::Kind::EnumeratedSet) {
     auto etype = type.toEnumeratedSetType();

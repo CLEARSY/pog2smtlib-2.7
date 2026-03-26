@@ -1,7 +1,7 @@
 (set-option :print-success false)
 (set-logic HO_ALL)
-(define-sort |REAL| () Real)
 (declare-sort P 1)
+(define-sort |REAL| () Real)
 (define-sort |POW REAL| () (P |REAL|))
 (declare-datatype C (par (T1 T2) ((maplet (fst T1) (snd T2)))))
 (declare-fun |set.in REAL| (|REAL| |POW REAL|) Bool)
