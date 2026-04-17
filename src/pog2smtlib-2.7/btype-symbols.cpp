@@ -55,8 +55,6 @@ const std::string BTypeSymbolVisitor::POW{"POW"};
 const std::string BTypeSymbolVisitor::PRODUCT{"x"};
 const std::string BTypeSymbolVisitor::STRUCT{"struct"};
 
-static BTypeSymbolVisitor visitor;
-
 void BTypeSymbolVisitor::visitINTEGER() { m_symbol += INTEGER; }
 void BTypeSymbolVisitor::visitBOOLEAN() { m_symbol += BOOLEAN; }
 void BTypeSymbolVisitor::visitREAL() { m_symbol += REAL; }
