@@ -163,7 +163,7 @@ template <> struct hash<BType> {
 }  // namespace std
 size_t MonomorphizedOperator::opHash() const {
   if (!m_hash_valid) {
-    size_t m_hash = 0;
+    m_hash = 0;
     m_hash ^= std::hash<BOperator>{}(m_operator) + 0x9e3779b9;
 
     for (const auto &type_ptr : m_types) {

@@ -107,11 +107,11 @@ static size_t argtoul(const char *arg) {
   size_t result;
   try {
     result = std::stoul(arg);
-  } catch (const std::invalid_argument &e) {
+  } catch (const std::invalid_argument &) {
     std::cerr << "Invalid argument " << arg
               << " (non-negative integer expected)" << std::endl;
     return EXIT_FAILURE;
-  } catch (const std::out_of_range &e) {
+  } catch (const std::out_of_range &) {
     std::cerr << "Invalid argument " << arg << " (too large)" << std::endl;
     return EXIT_FAILURE;
   }
