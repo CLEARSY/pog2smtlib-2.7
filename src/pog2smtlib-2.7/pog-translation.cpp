@@ -231,9 +231,9 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
         if (std::holds_alternative<Pred>(elem)) {
           const Pred *pred = &std::get<Pred>(elem);
           if (!pred->isPureTypingPredicate()) {
-            const Signature &signature =
+            const Signature &pred_signature =
                 m_pogSignatures.ofGlobalHypothesis(pred);
-            rest.push_back({pred, define.name, position, signature});
+            rest.push_back({pred, define.name, position, pred_signature});
           }
         }
         ++position;
