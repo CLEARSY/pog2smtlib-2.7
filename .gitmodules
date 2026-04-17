@@ -1,12 +1,11 @@
 [submodule "extern/tinyxml2"]
 	path = extern/tinyxml2
-	url = https://github.com/leethomason/tinyxml2.git
-
+	url = https://github.com/leethomason/tinyxml2
 [submodule "extern/BAST"]
 	path = extern/BAST
-	url = https://github.com/CLEARSY/BAST.git
-
+	url = ../BAST
+        branch = main
 [submodule "POGLIB"]
 	path = extern/POGLIB
-	url = https://github.com/CLEARSY/POGLIB
+	url = ../POGLIB
 	branch = main

@@ -14,6 +14,7 @@
 */
 #include "parameters.h"
 
+#include <cstdint>
 #include <limits>
 
 const std::string Parameters::MAXINT =
