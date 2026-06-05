@@ -1,0 +1,18 @@
+{
+    "@context": "https://w3id.org/codemeta/3.0",
+    "type": "SoftwareSourceCode",
+    "applicationCategory": "Computer Science",
+    "codeRepository": "https://github.com/CLEARSY/pog2smtlib-2.7",
+    "description": "Tool translating proof obligations from the POG format to SMT-LIB 2.7. The generated SMT-LIB problem includes the axiomatization of the B operators used in the proof obligation. The produced SMT-LIB problem is multi-sorted and monomorphization is applied to handle polymorphic operators such as ∈.",
+    "funder": {
+        "type": "Organization",
+        "name": "Agence Nationale de la Recherche"
+    },
+    "keywords": [
+        "formal verification",
+        "formal methods"
+    ],
+    "license": "https://spdx.org/licenses/GPL-3.0",
+    "name": "pog2smtlib-2.7",
+    "funding": "ANR-21-CE25-0010"
+}
