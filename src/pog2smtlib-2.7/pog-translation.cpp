@@ -231,9 +231,9 @@ string POGTranslations::ofGoal(const goal_t &goal, bool fixpoint,
         if (std::holds_alternative<Pred>(elem)) {
           const Pred *pred = &std::get<Pred>(elem);
           if (!pred->isPureTypingPredicate()) {
-            const Signature &signature =
+            const Signature &pred_signature =
                 m_pogSignatures.ofGlobalHypothesis(pred);
-            rest.push_back({pred, define.name, position, signature});
+            rest.push_back({pred, define.name, position, pred_signature});
           }
         }
         ++position;
@@ -576,18 +576,18 @@ const string &POGTranslations::defineScript(const std::string &name) {
   if ("B definitions" != name) {
     for (const auto &define : m_pog.defines) {
       if (define.name == name) {
-        size_t index = 1;
+        size_t position = 1;
         for (const auto &elem : define.contents) {
           if (std::holds_alternative<Pred>(elem)) {
             const Pred &pred = std::get<Pred>(elem);
             if (!pred.isPureTypingPredicate()) {
               const string &translation = translate(pred);
               const string &command =
-                  assertDefineHypothesisCommand(translation, name, index);
+                  assertDefineHypothesisCommand(translation, name, position);
               script.append(command);
             }
           }
-          ++index;
+          ++position;
         }
         break;
       }
